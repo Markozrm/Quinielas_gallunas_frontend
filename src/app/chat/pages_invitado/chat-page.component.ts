@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { apuestaService } from 'src/app/services/apuestas.service';
-import { ChatService } from '../services/chat.service';
+import { ChatService } from '../../services/chat.service'; // VERIFICAR ESTA RUTA
 import { UsersService } from 'src/app/services/users.service';
 import { QuinielaService } from 'src/app/services/quiniela.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http'; // AGREGAR ESTA LÍNEA
 import { Subscription } from 'rxjs';
 import { take, switchMap, filter } from 'rxjs/operators';
 import { MenuComponent } from '../../menu/menu.component';
@@ -18,6 +19,7 @@ import { ChatModalComponent } from '../components/chat-modal/chat-modal.componen
 import { RuletaService } from 'src/app/services/ruleta.service'; // Asegúrate de importar el servicio
 import { io, Socket } from 'socket.io-client';
 import { environment } from 'src/environments/environment';
+
 @Component({
   selector: 'app-chat-page',
   templateUrl: './chat-page.component.html',
@@ -264,9 +266,10 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
     private route: ActivatedRoute,
     private router: Router,
     private apuestaService: apuestaService,
-    private chatService: ChatService,
+    private chatService: ChatService, // VERIFICAR QUE ESTÉ AQUÍ
     private quinielaService: QuinielaService ,
-    private ruletaService: RuletaService
+    private ruletaService: RuletaService,
+    private http: HttpClient // AGREGAR ESTA LÍNEA
   ) {
     this.inicializarRuletaSocket();
   }
@@ -504,13 +507,26 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
   this.inicializarRuletaSocket();
   this.cargarPreciosRuleta(); // <--- AGREGA ESTA LÍNEA
   
-  // Escuchar el evento de imagen del stream
-  this.chatService.socket.on('stream_image_changed', (payload: { imageUrl: string }) => {
+  // CAMBIAR ESTAS LÍNEAS (quitar eventos Socket.IO):
+  // this.chatService.socket.on('stream_image_changed', (payload: { imageUrl: string }) => {
+  //   this.imagenStreamUrl = payload.imageUrl;
+  //   localStorage.setItem('imagenStreamUrl', payload.imageUrl);
+  // });
+
+  // this.chatService.socket.on('stream_image_removed', () => {
+  //   this.imagenStreamUrl = null;
+  //   localStorage.removeItem('imagenStreamUrl');
+  // });
+
+  // POR ESTOS EVENTOS DE POLLING:
+  this.chatService.streamImage$.subscribe((payload: { imageUrl: string }) => {
+    console.log('[POLLING] Imagen recibida:', payload);
     this.imagenStreamUrl = payload.imageUrl;
     localStorage.setItem('imagenStreamUrl', payload.imageUrl);
   });
 
-  this.chatService.socket.on('stream_image_removed', () => {
+  this.chatService.streamImageRemoved$.subscribe(() => {
+    console.log('[POLLING] Imagen removida');
     this.imagenStreamUrl = null;
     localStorage.removeItem('imagenStreamUrl');
   });

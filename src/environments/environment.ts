@@ -11,6 +11,7 @@ export const environment = {
   quiniela_PORT: '3449',
   apiUrl_quiniela: 'https://cheapservercaballos.com',
   apiUrl_ruleta: 'https://cheapservercaballos.com',
+  ruleta_PORT: '446'
 
 };
 /*

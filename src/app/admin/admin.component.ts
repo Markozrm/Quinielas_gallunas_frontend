@@ -6,9 +6,10 @@ import { QuinielaService } from '../services/quiniela.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http'; // AGREGAR ESTE IMPORT
+import { environment } from '../../environments/environment'; // AGREGAR ESTE IMPORT
 
 
-import { ChatService } from '../services/chat.service'; // Asegúrate de tener el servicio
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -22,8 +23,7 @@ export class AdminComponent {
     private usersService: UsersService,
     private route: ActivatedRoute,
     private quinielaService: QuinielaService,
-    private chatService: ChatService // <-- agrega tu servicio de socket
-   
+    private http: HttpClient // AGREGAR ESTE PARÁMETRO
   ) 
   {}
   irChats()
@@ -303,7 +303,7 @@ export class AdminComponent {
 
   eliminarRifa(rifa: any) {
     if (confirm(`¿Estás seguro de eliminar la rifa #${rifa.numeroRifa}?`)) {
-      this.quinielaService.eliminarRifa(rifa.numeroRifa).subscribe({ // Cambiado a quinielaService
+      this.quinielaService.eliminarRifa(rifa.numeroRifa).subscribe({ // Cambado a quinielaService
         next: () => {
           alert('Rifa eliminada');
           this.cargarRifasAdmin();
@@ -329,8 +329,7 @@ getTotalRecaudado(rifa: any): number {
   return numerosVendidos * (rifa.precioNumero || 0);
 }
 
- // Metodo para la imagen del stream
- // ...existing code...
+ // Propiedades necesarias:
 isImagenStreamModalOpen = false;
 imagenStreamUrl: string | null = null;
 
@@ -354,36 +353,65 @@ onImagenSeleccionada(event: Event) {
   }
 }
 
+subirImagenStream() {
+  if (this.imagenStreamUrl) {
+    const formData = new FormData();
+    
+    // Convertir base64 a blob
+    if (this.imagenStreamUrl.startsWith('data:')) {
+      const base64Data = this.imagenStreamUrl.split(',')[1];
+      const byteCharacters = atob(base64Data);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'image/png' });
+      formData.append('file', blob, `stream-overlay-${Date.now()}.png`);
+    }
+    
+    formData.append('tituloStream', 'Imagen Overlay Stream');
+
+    // USAR RUTA OVERLAY (NO setClave):
+    this.http.post(`http://localhost:444/api/streams/setImagenOverlay/1`, formData).subscribe({
+      next: (response: any) => {
+        console.log('Imagen overlay subida:', response);
+        alert('✅ Imagen enviada al stream de apuestas');
+        this.cerrarImagenStreamModal();
+      },
+      error: (error: any) => {
+        console.error('Error subiendo imagen overlay:', error);
+        alert('❌ Error al subir imagen overlay: ' + error.message);
+      }
+    });
+  } else {
+    alert('⚠️ Por favor selecciona una imagen primero');
+  }
+}
+
+resetearImagenStream() {
+  // USAR RUTA OVERLAY PARA QUITAR:
+  this.http.post(`http://localhost:444/api/streams/removeImagenOverlay/1`, {}).subscribe({
+    next: (response: any) => {
+      console.log('Imagen overlay removida:', response);
+      this.imagenStreamUrl = null;
+      localStorage.removeItem('imagenStreamUrlAdmin');
+      alert('✅ Imagen removida del stream de apuestas');
+      this.cerrarImagenStreamModal();
+    },
+    error: (error: any) => {
+      console.error('Error removiendo imagen overlay:', error);
+      alert('❌ Error al remover imagen overlay: ' + error.message);
+    }
+  });
+}
+
 // Al iniciar el componente, recupera la imagen si existe
 ngOnInit(): void {
   const savedImage = localStorage.getItem('imagenStreamUrlAdmin');
   if (savedImage) {
     this.imagenStreamUrl = savedImage;
   }
-}
-
-subirImagenStream() {
-  if (this.imagenStreamUrl) {
-    const room = 'global'; // O la sala que corresponda
-    const adminUsername = this.username;
-    this.chatService.socket.emit('stream_image_update', {
-      room,
-      imageUrl: this.imagenStreamUrl,
-      adminUsername
-    });
-    alert('Imagen enviada a los invitados');
-  }
-}
-
-resetearImagenStream() {
-  const room = 'global';
-  const adminUsername = this.username;
-  this.chatService.socket.emit('stream_image_remove', {
-    room,
-    adminUsername
-  });
-  this.imagenStreamUrl = null;
-  localStorage.removeItem('imagenStreamUrlAdmin');
 }
 }
 interface rifaData {
