@@ -1,0 +1,87 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Asegura que el modal esté por encima de otros elementos */
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  color: black;
+  border-radius: 10px;
+  text-align: center;
+  width: 90%; /* Ocupa el 90% del ancho en móviles */
+  max-width: 400px; /* Limita el ancho máximo en pantallas grandes */
+}
+
+.button-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Tres columnas para los botones de selección */
+  gap: 10px; /* Espacio entre botones */
+  margin-top: 20px;
+}
+
+.button-container .action-buttons {
+  grid-column: span 3; /* Los botones de acción ocupan toda la fila */
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+button {
+  margin: 0; /* Elimina el margen predeterminado */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button.red {
+  background-color: #ff4d4d; /* Rojo */
+  color: white;
+}
+
+button.red:hover {
+  background-color: #d43f3f; /* Rojo más oscuro al pasar el mouse */
+}
+
+button.green {
+  background-color: #4CAF50; /* Verde */
+  color: white;
+}
+
+button.green:hover {
+  background-color: #45a049; /* Verde más oscuro al pasar el mouse */
+}
+
+button.draw {
+  background-color: #f0ad4e; /* Amarillo */
+  color: white;
+}
+
+button.draw:hover {
+  background-color: #ec971f; /* Amarillo más oscuro al pasar el mouse */
+}
+
+button.close {
+  background-color: #ccc; /* Color neutral para el botón de cerrar */
+  color: black;
+}
+
+button.close:hover {
+  background-color: #bbb; /* Color neutral más oscuro al pasar el mouse */
+}
+
+button.selected {
+  background-color: #007BFF; /* Azul para el botón seleccionado */
+  color: white;
+}

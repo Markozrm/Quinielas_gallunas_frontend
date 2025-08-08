@@ -1,0 +1,82 @@
+<div class="main">
+  <div class="menuContainer">
+    <app-menu></app-menu>
+    <div>
+      <button class="btn-wrap" (click)="inicio()">
+        <img class="btn-submitLeft" src="../../../assets/home.svg" alt="Logo">
+      </button>
+    </div>
+    <div>
+      <button class="btn-wrap" (click)="toggleSidebar()">
+        <img class="btn-submit" src="../../../assets/profile.svg" alt="Logo">
+      </button>
+    </div>
+    <div class="sidebar-container" [ngClass]="{'sidebar-open': isSidebarOpen}">
+      <div class="sidebar">
+        
+        <button class="close-btn" (click)="closeSidebar()">&#9664;</button>
+        <div class="user-info">
+          <p>{{ username }}</p>
+          <img [src]="userPhoto" alt="User Photo" class="user-photo">
+          <button *ngIf="esInvitado()" class="saldo-btn" (click)="irRecargar()"> Mi Saldo </button>
+          <button class="logout-btn" (click)="logout()">Cerrar sesión</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-container"> 
+    <form (ngSubmit)="filtrar()" [formGroup]="formFiltro" class="users-type">
+      <div class="input-wrapper">
+        <input formControlName="message" type="text" placeholder="Escribe el código del stream...">
+        <button type="submit">Filtrar</button>
+      </div>
+    </form>
+  </div> 
+
+  <div class="apuesta-container">
+    <div class="apuestas-en-vivo">
+      <h3>Tabla de apuestas (Todas las rondas)</h3>
+      
+          <!--Muestra del resumen-->
+       <div class="total-cazado">
+       <p>Total cazado en stream: <strong>${{totalStream | number:'1.0-0'}}</strong></p>
+    </div>
+
+    <!-- Tabla de Resumen por Rondas -->
+      <table class="tabla-cazado">
+        <thead>
+          <tr>
+            <th *ngFor="let columna of columnasTabla">{{columna.nombre}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ronda of resumenRondas">
+            <td>Pelea {{ronda.ronda}}</td>
+            <td>${{ronda.cazado | number:'1.0-0'}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Mostrar mensaje si no hay apuestas -->
+      <div *ngIf="todasLasApuestas.length === 0" class="sin-apuestas">
+        No hay apuestas para mostrar en este stream.
+      </div>
+      
+      <!-- Lista de todas las apuestas de todas las rondas -->
+      <div class="lista-apuestas-container">
+        <h3>Apuestas de todas las rondas en detalle</h3>
+      <ul class="lista-apuestas" *ngIf="todasLasApuestas.length > 0">
+        <li *ngFor="let apuesta of todasLasApuestas" class="chat-message">
+          <span>{{ apuesta.username }}</span>
+          <span>{{ apuesta.cantidadTotal }}</span>
+          <span *ngIf="esVerde(apuesta.verde)">VERDE</span>
+          <span *ngIf="!esVerde(apuesta.verde)">ROJO</span>
+          <span class="estado-jugando">{{apuesta.estado}}</span>
+          <span class="ronda">Ronda: {{ apuesta.ronda || 'N/A' }}</span>
+        </li>
+      </ul> 
+      </div>
+    </div>
+  </div>
+</div>

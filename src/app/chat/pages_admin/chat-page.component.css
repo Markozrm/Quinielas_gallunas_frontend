@@ -1,0 +1,623 @@
+* {
+  box-sizing: border-box;
+}
+
+/* Estilos para el botón flotante arrastrable del chat */
+.chat-button-container {
+  position: fixed;
+  z-index: 1000;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.chat-button-container:active {
+  cursor: grabbing;
+}
+
+.chat-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  user-select: none;
+  touch-action: none;
+}
+
+.chat-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.chat-button:active {
+  transform: translateY(0);
+  cursor: grabbing;
+}
+
+.chat-button svg {
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+
+/* Indicador visual de que se puede arrastrar */
+.chat-button::before {
+  content: "⋮⋮";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.chat-button-container:hover .chat-button::before {
+  opacity: 1;
+}
+
+.main {
+  min-height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+}
+
+.menuContainer {
+
+  width: 100%;
+  height: 10%;
+  z-index: 9999;
+}
+
+.chat-container{
+  width: 100%;
+  height: 100%;
+ 
+ 
+}
+
+.videoContainer{
+  padding-top: 10% ;
+}
+
+.app-users-type{
+  width: 100%;
+  height: 100%;
+} 
+
+.btn-wrap{
+  border: none;
+  background: none;
+}
+.btn-submit,
+.btn-submitLeft {
+  font-size: var(--fontSizeMessage);
+  border: 0;
+  border-radius: 0.4rem;
+  position: fixed;
+  z-index: 9999;
+  width: 2.5rem;
+  height: auto;
+}
+.btn-submit {
+  right: 0;
+  top: 0;
+}
+
+.btn-submitLeft {
+
+  left: 0;
+  top: 0;
+
+}
+.live-admin{
+  display: flex;
+  flex-direction: row;
+}
+.live-status {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  background-color: rgb(128, 121, 121);
+  border-radius: 25%;
+  color: white;
+}
+
+.fa-eye {
+  margin-right: 5px;
+  color: #007BFF; /* Puedes ajustar el color según tu preferencia */
+}
+.input-container {
+  width: 100%;
+  justify-content: center;
+  padding: 0.5rem;
+  bottom: 0;
+  margin-top: auto;
+  position: fixed;
+}
+
+.users-type {
+  bottom: 0;
+  height: 5%;
+  margin-bottom: 0.4%;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000; /* Asegúrate de que esté por encima de otros elementos */
+}
+
+.popup {
+  background: black;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  width: 80%;
+  max-width: 500px;
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 0;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+ color: #f00;
+}
+
+.popup-content {
+  text-align: center;
+}
+
+.user-list {
+  margin-top: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.user-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.apuesta-container {
+  width: 90%;
+  margin: 20px auto;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  color: black;
+  text-align: center;
+
+}
+
+.match-info {
+  display: flex;
+  justify-content: space-around;
+}
+
+.team-red {
+  width: 45%;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: rgba(255, 0, 0, 0.7);
+  color: white;
+  border: 2px solid red;
+}
+
+.team-green {
+  width: 45%;
+  padding: 10px;
+  border-radius: 8px;
+  color: white;
+  background-color: rgba(0, 128, 0, 0.7);
+  border: 2px solid green;
+}
+
+
+.team-green:hover {
+  background-color: gold;
+} 
+.team-red:hover {
+  background-color: gold;
+} 
+.apuestas-en-vivo {
+  background-color: #333; /* Fondo oscuro */
+  padding: 10px;
+  border-radius: 5%;
+  color: white;
+  margin: 0 auto; /* Centrar el contenedor */
+  font-family: Arial, sans-serif;
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+.apuestas-en-vivo h3 {
+  text-align: center;
+  font-size: 1em;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.apuestas-en-vivo ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+
+}
+
+.apuestas-en-vivo ul li {
+  display: table-row; /* Cada fila de la tabla */
+  border-bottom: 1px solid #555; /* Línea divisoria */
+}
+
+.apuestas-en-vivo ul li span {
+  display: table-cell; /* Cada celda de la tabla */
+  padding: 10px;
+  text-align: center;
+}
+
+.estado-jugando {
+  color: #f00;
+  font-weight: bold;
+}
+.input-apuesta-container {
+  display: flex;
+  justify-content: center; /* Alinea el input horizontalmente */
+  align-items: center;     /* Alinea el input verticalmente si es necesario */
+  margin-top: 20px;
+}
+
+input[type="number"] {
+  padding: 10px;
+  width: 60%;              /* Ajusta el tamaño del input */
+  border: solid black; 
+  border-radius: 5px;
+  margin: 0 auto;          /* Asegura que esté centrado */
+}
+
+.boton-apostar {
+  width: 45%;
+  padding: 10px;
+  border-radius: 8px;
+  color: white;
+  background-color: #FE9C03;
+  border: 2px solid #f8b954;
+}
+.team-green p,.team-red p, .boton-apostar p{
+  margin: 5px 0;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+.boton-apostar:hover {
+  background-color: gold;
+}
+
+.rondas-espera {
+  margin-top: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.rondas-espera h4 {
+  color: white;
+  margin: 0 0 5px 0;
+  font-size: 14px;
+}
+
+.rondas-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.ronda-espera-btn {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ronda-espera-btn:hover {
+  background-color: #ff0000;
+  transform: scale(1.05);
+}
+
+@media screen and (max-width: 700px) {
+
+}
+
+.user-icon {
+  fill: rgba(0, 0, 0, 1);
+}
+
+.nueva-ronda-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-left: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.nueva-ronda-btn:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.escoger-ganador-btn {
+  background-color: #ff9800;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-left: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.escoger-ganador-btn:hover {
+  background-color: #e68a00;
+  transform: scale(1.05);
+}
+
+.escoger-actual-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-left: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.escoger-actual-btn:hover {
+  background-color: #c82333;
+  transform: scale(1.05);
+}
+
+/* Estilos para el contenedor de botones de administrador */
+.admin-buttons-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  gap: 10px;
+}
+
+/* Estilos para el contenedor de control de apuestas */
+.betting-control-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+/* Estilo base para todos los botones de administrador */
+.admin-btn {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  color: white;
+  box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+  min-width: 150px;
+  text-align: center;
+}
+
+/* Botón para ver usuarios conectados */
+.users-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background-color: #666;
+  height: 40px;
+  min-width: 40px;
+  padding: 0 10px;
+  border-radius: 50px;
+}
+
+.users-btn:hover {
+  background-color: #888;
+  transform: scale(1.05);
+}
+
+/* Botón para cerrar apuestas */
+.close-bets-btn {
+  background-color: #d9534f;
+}
+
+.close-bets-btn:hover {
+  background-color: #c9302c;
+  transform: scale(1.05);
+}
+
+/* Botón para abrir apuestas */
+.open-bets-btn {
+  background-color: #5cb85c;
+}
+
+.open-bets-btn:hover {
+  background-color: #449d44;
+  transform: scale(1.05);
+}
+
+/* Botón para seleccionar ganador */
+.select-winner-btn {
+  background-color: #f0ad4e;
+}
+
+.select-winner-btn:hover {
+  background-color: #ec971f;
+  transform: scale(1.05);
+}
+
+/* Botón para abrir nueva ronda */
+.new-round-btn {
+  background-color: #5bc0de;
+}
+
+.new-round-btn:hover {
+  background-color: #31b0d5;
+  transform: scale(1.05);
+}
+
+/* Estilos para las rondas en espera */
+.rondas-espera {
+  width: 100%;
+  margin-top: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.rondas-espera h4 {
+  color: white;
+  margin: 0 0 5px 0;
+  font-size: 14px;
+  text-align: center;
+}
+
+.rondas-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+}
+
+.ronda-espera-btn {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.ronda-espera-btn:hover {
+  background-color: #ff0000;
+  transform: scale(1.05);
+}
+
+.user-icon {
+  fill: white;
+}
+
+.admin-bet-box {
+  min-width: 220px;      /* Más ancho */
+  max-width: 320px;      /* Más ancho */
+  border: 3px solid;
+  border-radius: 22px;
+  padding: 10px 32px;    /* Más padding horizontal */
+  text-align: center;
+  background: #000;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Espaciado respecto a los botones */
+  margin-right: 32px;
+  margin-left: 0;
+}
+
+.admin-bet-box.red {
+  border-color: #ff2222 !important;
+}
+
+.admin-bet-box.green {
+  border-color: #22cc22 !important;
+}
+
+.betting-control-buttons > .admin-bet-box.red {
+  margin-right: 32px; /* separa el recuadro rojo del primer botón */
+  margin-left: 0;
+}
+
+.betting-control-buttons > .admin-bet-box.green {
+  margin-left: 32px;  /* separa el recuadro verde del último botón */
+  margin-right: 0;
+}
+
+@media (max-width: 900px) {
+  .admin-bet-box {
+    min-width: 140px;
+    max-width: 200px;
+    padding: 8px 10px;
+  }
+  .betting-control-buttons > .admin-bet-box.red {
+    margin-right: 12px;
+    border-color: red;
+  }
+  .betting-control-buttons > .admin-bet-box.green {
+    margin-left: 12px;
+    border-color: #22cc22;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-bet-box {
+    width: 95vw;
+    min-width: unset;
+    max-width: unset;
+    margin: 0 !important;
+    padding: 8px 0;
+  }
+}

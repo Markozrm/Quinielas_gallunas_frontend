@@ -1,0 +1,1572 @@
+/* Estilos para el botón flotante arrastrable de la ruleta */
+.ruleta-float-button-container {
+  position: fixed;
+  z-index: 1000;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.ruleta-float-button-container:active {
+  cursor: grabbing;
+}
+
+.ruleta-float-button {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  outline: none;
+  transition: box-shadow 0.2s, background 0.2s;
+}
+
+.ruleta-float-button:active {
+  box-shadow: 0 1px 4px rgba(0,0,0,0.22);
+}
+
+.ruleta-float-button canvas {
+  display: block;
+  border-radius: 50%;
+}
+* {
+  box-sizing: border-box;
+}
+
+/* Estilos para el botón flotante arrastrable del chat */
+.chat-button-container {
+  position: fixed;
+  z-index: 1000;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.chat-button-container:active {
+  cursor: grabbing;
+}
+
+.chat-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  user-select: none;
+  touch-action: none;
+}
+
+.chat-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.chat-button:active {
+  transform: translateY(0);
+  cursor: grabbing;
+}
+
+.chat-button svg {
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+
+/* Indicador visual de que se puede arrastrar */
+.chat-button::before {
+  content: "⋮⋮";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.chat-button-container:hover .chat-button::before {
+  opacity: 1;
+}
+
+
+.main {
+  min-height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+}
+
+.menuContainer {
+
+  width: 100%;
+  height: 10%;
+  z-index: 9999;
+}
+
+.chat-container{
+  width: 100%;
+  height: 100%;
+ 
+ 
+}
+
+.videoContainer{
+  padding-top: 1% ;
+  position: relative;
+}
+
+.app-users-type{
+  width: 100%;
+  height: 100%;
+} 
+
+.btn-wrap{
+  border: none;
+  background: none;
+}
+.btn-submit,
+.btn-submitLeft {
+  font-size: var(--fontSizeMessage);
+  border: 0;
+  border-radius: 0.4rem;
+  position: fixed;
+  z-index: 9999;
+  width: 2.5rem;
+  height: auto;
+}
+.btn-submit {
+  right: 0;
+  top: 0;
+   width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 2px solid gold;
+  cursor: pointer;
+  transition: transform 0.2
+}
+
+.btn-submitLeft {
+
+  left: 0;
+  top: 0;
+
+}
+
+.live-admin{
+  display: flex;
+  flex-direction: row;
+}
+.live-status {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  background-color: rgb(128, 121, 121);
+  border-radius: 25%;
+  color: white;
+}
+
+.fa-eye {
+  margin-right: 5px;
+  color: #007BFF; /* Puedes ajustar el color según tu preferencia */
+}
+.input-container {
+  width: 100%;
+  justify-content: center;
+  padding: 0.5rem;
+  bottom: 0;
+  margin-top: auto;
+  position: fixed;
+}
+
+.users-type {
+  bottom: 0;
+  height: 5%;
+  margin-bottom: 0.4%;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000; /* Asegúrate de que esté por encima de otros elementos */
+}
+
+.popup {
+  background: black;
+  padding: 2px;
+  border-radius: 10px;
+  position: relative;
+  width: 80%;
+  max-width: 500px;
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #f00;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.close-button:hover {
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+.close-button:active {
+  transform: scale(0.95);
+}
+
+.popup-content {
+  text-align: center;
+  margin: 0 !important;
+}
+
+/* Fondo para el popup de la ruleta */
+.ruleta-popup-content {
+  background-image: url('/assets/image/Fondo_apuestas.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+  margin: 0 !important;
+}
+
+.user-list {
+  margin-top: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.apuesta-container {
+  width: 100%;
+  margin: 0;
+  background-color: #000;
+  padding: 0;
+  color: white;
+  text-align: center;
+  border: 2px solid #333; 
+}
+
+.header-container {
+  background-color: #000;
+  padding: 8px 10px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 2px solid #333;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: black;
+  border: 3px solid white;
+  padding: 5px 15px;
+  border-radius: 20px;
+}
+
+.header-right, .header-right-cerradas {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  padding: 5px 15px;
+  background-color: rgba(255, 255, 255, 0);
+  border-radius: 25px;
+  font-size: 1.1em;
+}
+.header-right{
+  color: #FFA500;
+  border: 3px solid #FFA500;
+}
+.header-right-cerradas{
+  color: #a3a3a3;
+  border: 3px solid #a3a3a3;
+}
+
+
+.pelea-numero {
+  color: var(--color-secondary);
+  font-weight: bold;
+  font-family: 'Chromium', sans-serif;
+  letter-spacing: 2px; /* Aumenta el espacio entre letras */
+}
+
+.estado-apuestas {
+
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 1px; /* Aumenta el espacio entre letras */
+}
+
+.user-balance-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: white;
+}
+
+.match-info {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.team-red {
+  width: 48%;
+  border-radius: 45px;
+  color: WHITE;
+  border: 4px solid red;;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+.team-green {
+  width: 48%;
+  border-radius: 45px;
+  color: WHITE;
+  border: 4px solid green;;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+.team-red h3, .team-green h3{
+  margin: 0;
+  padding: 0;
+}
+.team-red {
+  background-color: #ee1b2900;
+}
+
+.team-green {
+  background-color: #009e4f00;
+}
+
+.bet-amount {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+input[type="number"] {
+  padding: 12px;
+  width: 70%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: white;
+  color: black;
+  margin: 10px auto;
+  text-align: center;
+  display: inline-block;
+}
+
+input[type="number"]::placeholder {
+  color: #999;
+}
+
+.quick-bets {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 10px auto;
+  width: 70%;
+}
+
+.quick-bet-button {
+  background-color: white;
+  color: black;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s;
+}
+
+.quick-bet-button:hover {
+  background-color: #f0f0f0;
+}
+.quick-bet-allIn{
+   background-color: black;
+  color: white;
+  border: 4px solid #FFA500;  /* Borde similar al diseño de apuestas */
+  border-radius: 20px;     /* Bordes redondeados */
+  padding: 10px 20px;
+  font-family: 'Bebas Neue', sans-serif; /* Fuente similar a la imagen */
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;     /* Evita saltos de línea */
+}
+.quick-bet-allIn:hover{
+  background-color: #333;
+}
+
+.boton-apostar {
+ width: 120px;            /* Ancho fijo para hacerlo circular */
+  height: 120px;           /* Altura igual al ancho para formar un círculo */
+  padding: 0;              /* Eliminar padding para evitar deformación */
+  border-radius: 50%;      /* Hacerlo completamente redondo */
+  color: white;
+  background-color: black;
+  border: 2px solid var(--colorSecondary);
+  font-size: 1.2em;
+  cursor: pointer;
+  display: flex;           /* Usar flexbox para centrar el texto */
+  align-items: center;     /* Centrar verticalmente */
+  justify-content: center; /* Centrar horizontalmente */
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  margin: 0 auto;          /* Centrar el botón en su contenedor */
+  transition: all 0.3s ease /* Transición suave para efectos hover */
+}
+
+.boton-apostar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+h2 {
+  color: white;
+  font-size: 1.2em;
+}
+
+.team-green:hover {
+   background-color: #098b32; /* Dorado al hover */
+  color: #000; 
+} 
+.team-red:hover {
+  background-color: rgb(188, 19, 19); /* Dorado al hover */
+  color: #000; 
+} 
+.apuestas-en-vivo {
+  background-color: #333; /* Fondo oscuro */
+  padding: 10px;
+  border-radius: 5%;
+  color: white;
+  margin: 0 auto; /* Centrar el contenedor */
+  font-family: Arial, sans-serif;
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+.apuestas-en-vivo h3 {
+  text-align: center;
+  font-size: 1em;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.apuestas-en-vivo ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+
+}
+
+.apuestas-en-vivo ul li {
+  display: table-row; /* Cada fila de la tabla */
+  border-bottom: 1px solid #555; /* Línea divisoria */
+}
+
+.apuestas-en-vivo ul li span {
+  display: table-cell; /* Cada celda de la tabla */
+  padding: 10px;
+  text-align: center;
+}
+
+.estado-jugando {
+  color: #f00;
+  font-weight: bold;
+}
+.input-apuesta-container {
+  display: flex;
+  justify-content: center; /* Alinea el input horizontalmente */
+  align-items: center;     /* Alinea el input verticalmente si es necesario */
+  margin-top: 20px;
+}
+
+.team-green p,.team-red p, .boton-apostar p{
+  margin: 5px 0;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+@media screen and (max-width: 700px) {
+
+}
+
+/* Header Styles */
+.header {
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  background-color: #222;
+  margin-bottom: 10px;
+}
+
+.ruleta-btn {
+  background: #111; /* negro por defecto */
+  color: #fff;      /* números blancos SIEMPRE */
+  border: 2px solid #ffcb05; /* borde dorado */
+  font-weight: bold;
+  font-size: 18px;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.ruleta-btn.green {
+  background: #1abc1a;
+  color: #fff;
+}
+
+.ruleta-btn.red {
+  background: #e53935;
+  color: #fff;
+}
+
+.ruleta-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.22);
+}
+.apuestas-status-cerradas{
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  color: #a3a3a3;
+  border-radius: 6px;
+  margin-bottom: 1px;
+  font-weight: 400;
+  font-family: 'Playfair Display', serif;
+}
+/* Betting Options */
+.betting-options {
+  width: 100%;
+  display: flex;
+
+}
+
+.bet-option {
+  width: 45%;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.bet-option.red {
+  background-color: rgba(255, 0, 0, 0.7);
+  border: 2px solid var(--color-primary);
+}
+
+.bet-option.green {
+  background-color: #fff;
+  border: 2px solid var(--color-secondary);
+}
+
+.apostar-button {
+  background-color: var(--color-gold);
+  color: black;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+/* Quick Bet Buttons */
+.quick-bets {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  justify-content: center;
+  gap: 8px;
+}
+
+.quick-bet-button {
+  background-color: white;
+  color: black;
+  border: 2px solid #333;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.quick-bet-button:hover {
+  background-color: var(--color-gold);
+  color: #333;
+}
+
+.current-bet {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 1.2em;
+  color: var(--color-gold);
+}
+
+/* Estilos para el botón de historial de notificaciones */
+.historial-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 9000;
+  transition: transform 0.3s, background-color 0.3s;
+}
+
+.historial-btn:hover {
+  transform: scale(1.1);
+  background-color: #0D47A1;
+}
+
+.historial-btn:active {
+  transform: scale(0.95);
+}
+
+.historial-icon {
+  font-size: 30px;
+}
+
+/* Estilos para el historial de notificaciones */
+.historial-container {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 300px;
+  max-height: 400px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 9000;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.historial-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.historial-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.historial-content {
+  padding: 10px;
+  overflow-y: auto;
+  max-height: 350px;
+}
+
+.no-notificaciones {
+  text-align: center;
+  color: #777;
+  padding: 20px 0;
+}
+
+.historial-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  border-left: 4px solid #9E9E9E;
+}
+
+.historial-item-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.historial-item-tipo {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.historial-item-fecha {
+  font-size: 12px;
+  color: #777;
+}
+
+.historial-item-mensaje {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Estilos según el tipo de notificación */
+.historial-item.notificacion-ganancia {
+  border-left-color: #4CAF50;
+}
+
+.historial-item.notificacion-ganancia .historial-item-tipo {
+  color: #2E7D32;
+}
+
+.historial-item.notificacion-perdida {
+  border-left-color: #F44336;
+}
+
+.historial-item.notificacion-perdida .historial-item-tipo {
+  color: #C62828;
+}
+
+.historial-item.notificacion-informacion {
+  border-left-color: #2196F3;
+}
+
+.historial-item.notificacion-informacion .historial-item-tipo {
+  color: #0D47A1;
+}
+
+/* Estilos para dispositivos móviles */
+@media (max-width: 768px) {
+  .historial-container {
+    width: calc(100% - 40px);
+    right: 10px;
+    left: 10px;
+    bottom: 70px;
+  }
+  
+  .historial-btn {
+    bottom: 10px;
+    right: 10px;
+  }
+}
+
+.betting-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.input-bet-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin: 10px auto;
+
+}
+
+input[type="number"] {
+  padding: 12px;
+  width: 65%;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background-color: white;
+  color: black;
+  text-align: center;
+  margin: 0;
+  font-size: 1.2em;
+}
+
+input[type="number"]::placeholder {
+  color: #999;
+  font-size: 1.2em;
+}
+
+.boton-apostar {
+  width: 35%;
+  border-radius: 30px;
+  color: white;
+  background-color: black;
+  border: 5px solid var(--colorSecondary);
+  font-size: 1.3em;
+  font-weight: bold;
+  margin: 0;
+  cursor: pointer;
+  height: 100%;
+}
+
+.team-points {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 5px 0;
+  padding: 2px 5px;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.2);
+  display: inline-block;
+  color: white;
+}
+
+.test-notification-btn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 12px;
+}
+
+.test-notification-btn:hover {
+  background-color: #388e3c;
+}
+
+/* Estilos para los indicadores de apuestas */
+.user-bets-status {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  margin-bottom: 15px;
+}
+
+.bet-status-indicator {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin: 0 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.bet-status-indicator.waiting {
+  background-color: #ff990000;
+  border: 2px solid #fff; 
+  color: white;
+}
+
+.bet-status-indicator.caught {
+  background-color:#ff990000;
+  border: 2px solid #fff;
+  color: white;
+}
+
+.bet-red {
+  background-color: #d9534f !important; /* Rojo */
+}
+
+.bet-green {
+  background-color: #5cb85c !important; /* Verde */
+}
+
+.bet-mixed {
+  background-color: white !important; /* Morado para ambos colores */
+}
+
+.bet-status-label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.bet-status-amount {
+  font-size: 16px;
+  margin-left: 5px;
+}
+
+/* Estilos para mostrar múltiples colores de apuestas */
+.bet-status-multi {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+}
+
+.bet-status-multi-line {
+  font-size: 14px;
+  font-weight: bold;
+  width: 100%;
+  line-height: 1.2;
+}
+
+.bet-red-text {
+  color: #ff6b6b;
+}
+
+.bet-green-text {
+  color: #176117;
+}
+
+/* Ajustar el tamaño del contenedor para que quepa bien */
+.bet-status-indicator.caught {
+  min-height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Ajustar el espaciado cuando hay múltiples líneas */
+.bet-status-indicator.caught .bet-status-multi {
+  margin-left: auto;
+}
+/* Estilos para el popup del casino */
+.popup-overlay.casino-overlay {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.popup.casino-popup {
+  background-color: #1a1a1a;
+  border: 3px solid #ffcb05;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 350px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.popup.casino-popup .popup-content {
+  padding: 0;
+}
+
+.casino-header {
+  background-color: #000;
+  padding: 15px;
+  text-align: center;
+  border-bottom: 2px solid #ffcb05;
+}
+
+.casino-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffcb05;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.casino-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px;
+}
+
+.casino-option {
+  background-color: #2a2a2a;
+  border: 2px solid #444;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.casino-option:hover {
+  background-color: #333;
+  transform: translateY(-3px);
+}
+
+.option-main {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.option-sub {
+  font-size: 14px;
+  color: #aaa;
+}
+
+.casino-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 15px;
+  border-top: 1px solid #333;
+}
+
+.casino-action {
+  flex: 1;
+  min-width: 120px;
+  background-color: #2a2a2a;
+  border: 2px solid #444;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.casino-action:hover {
+  background-color: #333;
+}
+
+.casino-close-btn {
+  flex: 1;
+  min-width: 120px;
+  background-color: #d9534f;
+  border: 2px solid #d43f3a;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: bold;
+}
+
+.casino-close-btn:hover {
+  background-color: #c9302c;
+}
+
+/* Estilos para el botón del casino en el header */
+.header-casino {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.casino-button {
+  background-color: #ffcb05;
+  color: #000;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.casino-button:hover {
+  background-color: #f1c40f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.casino-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+@media screen and (min-width: 600px) {
+  .bet-status-multi-line {
+    font-size: 18px;
+  }
+  .bet-status-label{
+    font-size: 18px;
+  }
+}
+
+/* Estilos para el modal de rifa */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.modal-rifa {
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content {
+  padding: 20px;
+}
+
+.modal-content h3 {
+  margin: 0 0 20px 0;
+  color: #333;
+  text-align: center;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #999;
+  z-index: 1;
+}
+
+.close-button:hover {
+  color: #333;
+}
+
+.loading-rifas {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+.no-rifas {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+}
+
+.rifas-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.rifa-card-modal {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  background: #f9f9f9;
+}
+
+.rifa-info h4 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.rifa-estado, .rifa-total, .rifa-ganador {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.rifa-estado .abierta {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.rifa-estado .cerrada {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.rifa-total strong {
+  color: #FDA500;
+}
+
+.rifa-compra {
+  margin-top: 15px;
+}
+
+.btn-ver-numeros {
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.btn-ver-numeros:hover {
+  background: #0056b3;
+}
+
+.numeros-disponibles {
+  margin-top: 15px;
+  padding: 15px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.numeros-disponibles h5 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.numeros-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.numero-btn {
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.numero-btn:hover {
+  background: #218838;
+}
+
+.numero-btn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
+.numeros-vendidos {
+  margin-top: 15px;
+}
+
+.numeros-vendidos h5 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.vendidos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.numero-vendido {
+  background: #f8f9fa;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  border: 1px solid #dee2e6;
+}
+
+.ventas-cerradas {
+  margin-top: 15px;
+  padding: 15px;
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 6px;
+}
+
+.ventas-cerradas p {
+  margin: 0 0 15px 0;
+  color: #856404;
+  font-weight: bold;
+}
+
+/* Diseño uniforme para los botones del popup de casino */
+.options-list button {
+  background: linear-gradient(135deg, #fd9e00, #ffb300);
+  color: #222;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  margin: 8px 0;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+  outline: none;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.options-list button:hover,
+.options-list button:focus {
+  background: linear-gradient(135deg, #ffb300, #fd9e00);
+  color: #fff;
+  transform: translateY(-2px) scale(1.03);
+}
+
+
+.ruleta-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  justify-items: center;
+  margin: 16px 0;
+}
+
+.ruleta-btn {
+  width: 48px;
+  height: 48px;
+  font-weight: bold;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  color: #fff;
+}
+
+.ruleta-btn.green {
+  background: linear-gradient(135deg, #28a745, #218838);
+}
+
+.ruleta-btn.red {
+  background: linear-gradient(135deg, #dc3545, #b52a37);
+}
+
+.ruleta-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+}
+
+.numero-ruleta-seleccionado {
+  margin-top: 10px;
+  color: gold;
+  font-size: 1.2em;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Ruleta canvas and controls */
+#spinWheel {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#wheel {
+  display: block;
+  margin: 0 auto;
+  background: transparent;
+}
+
+#spin {
+  margin-top: 10px;
+  font-size: 1.2em;
+  padding: 10px 30px;
+  border-radius: 50%;
+  background: #333;
+  color: #fff;
+  border: none;
+  box-shadow: 0 0 0 4px #333, 0 0px 10px 5px rgba(0,0,0,0.6);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+#spin:hover {
+  background: #444;
+  box-shadow: 0 0 0 4px #444, 0 0px 14px 7px rgba(0,0,0,0.7);
+}
+
+.ruleta-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.ruleta-btn {
+  width: 48px;
+  height: 48px;
+  font-weight: bold;
+  font-size: 18px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  color: #fff;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.ruleta-btn.dorado {
+  background: #fd9e00;   /* dorado */
+  color: #000;           /* texto negro */
+}
+
+.ruleta-btn.negro {
+  background: #111;      /* negro */
+  color: #fff;           /* texto blanco */
+}
+
+.ruleta-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.22);
+}
+
+.ruleta-btn.green {
+  background: #43a047;
+}
+.ruleta-btn.red {
+  background: #b71c1c;
+}
+.ruleta-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.22);
+}
+.ruleta-spin-btn {
+  margin-top: 10px;
+  font-size: 1.2em;
+  padding: 10px 30px;
+  border-radius: 50%;
+  background: #333;
+  color: #fff;
+  border: none;
+  box-shadow: 0 0 0 4px #333, 0 0px 10px 5px rgba(0,0,0,0.6);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.ruleta-spin-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 0 6px #333, 0 2px 16px 8px rgba(0,0,0,0.18);
+}
+/* Agrega esto a tu CSS para que los botones deshabilitados se vean más claros */
+.ruleta-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+/* Estilos para la sección de números comprados */
+.numeros-comprados-section {
+  width: 100%;
+  margin: 20px 0;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  border: 2px solid #ffcb05;
+}
+
+.numeros-comprados-section h3 {
+  color: #ffcb05;
+  text-align: center;
+  margin: 0 0 10px 0;
+  font-size: 1.2em;
+}
+
+.numeros-comprados-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.numero-comprado-chip {
+  position: relative;
+  background: linear-gradient(135deg, #ffcb05, #fd9e00);
+  color: #000;
+  border-radius: 20px;
+  padding: 8px 15px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.precio-chip {
+  position: absolute;
+  bottom: -8px;
+  right: -8px;
+  background: #000;
+  color: #fff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6em;
+  border: 1px solid #ffcb05;
+}
+
+/* Estilos para el mensaje cuando no hay números comprados */
+.no-numeros-mensaje {
+  color: #aaa;
+  text-align: center;
+  font-style: italic;
+  padding: 10px;
+}
+
+.imagen-stream-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none; /* Para que no bloquee el video */
+}
+
+.videoContainer {
+  position: relative;
+}
+.imagen-stream-overlay img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+  box-shadow: none;
+}

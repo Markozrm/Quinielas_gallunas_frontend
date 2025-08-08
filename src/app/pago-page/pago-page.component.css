@@ -1,0 +1,467 @@
+.body {
+  font-family: Arial, sans-serif;
+    background-image: url('../../assets/image/bg.jpg');
+    background-size: cover; /* Cubre todo el área */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que se repita */
+    background-attachment: fixed; /* Fija la imagen al desplazarse */
+    background-color: #FDA500; /* Color de respaldo (mismo que tu imagen) */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    margin: 10;
+    min-height: 100vh;
+    width: 100vw;
+    position: relative; /* Necesario para capas superiores */
+}
+
+.vip-membership h2 {
+  padding-top: 15%;
+    font-size: 35px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.price-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+     font-weight: bold;
+}
+
+.price-label {
+   font-weight: bold;
+   color: #000000;
+    font-size: 25px;
+    margin-bottom: 10px;
+    font-weight: normal;
+     font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 1px;
+     margin: 50px 0 -22px; /* Manteniendo los márgenes especificados */
+    white-space: nowrap; /* Evita saltos de línea */
+    line-height: 1.2; /* Controla la altura de línea */
+}
+
+.price-value {
+  
+    background-color: #000000;
+    color: #FFFF;
+    font-size: 25px;
+    font-weight: bold;
+    padding: 1px 35px;
+    border-radius: 10px;
+    display: inline-block;
+    border: 2px solid #FD9E00;
+    font-family: 'Arial', sans-serif;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    margin-left: 170PX;
+    margin-top: -250px;
+}
+
+.btn-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.benefits {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.benefits li {
+    margin: 10px 0;
+}
+
+.btn {
+    background: #fff !important;      /* Fondo blanco */
+    color: #000 !important;           /* Texto negro */
+    padding: 46px 25px;
+    border: 2px solid black;
+    border-radius: 100px;
+    cursor: pointer;
+    font-weight: 1000;
+    font-size: 50px;
+    text-transform: uppercase;
+    font-family: Arial, sans-serif;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    min-width: 180px;
+    margin: 40px 0 -22px;
+}
+
+/* Efecto hover */
+.btn:hover {
+    background-color: #0000; /* Naranja más oscuro al pasar mouse */
+    transform: translateY(-2px); /* Efecto de elevación */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Efecto al hacer clic */
+.btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ESTILOS MODIFICADOS (SOLO ESTA SECCIÓN HA CAMBIADO) */
+.payment-options {
+    width: 100%;
+    max-width: 400px;
+    color: white;
+}
+
+.payment-option {
+    background: linear-gradient(180deg, #181818 80%, #444 100%);
+    border: none;
+    border-radius: 22px;
+    padding: 22px 18px 18px 18px;
+    margin-bottom: 18px;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.payment-option h3 {
+    margin-top: 0;
+    font-size: 1.2em;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.payment-option p {
+    margin: 5px 0;
+    font-size: 1em;
+    color: #fff;
+}
+
+.payment-option-actions {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 8px;
+}
+
+/* Oculta solo el recuadro de Bancoppel, pero mantiene el diseño para los demás */
+.payment-option[data-banco="BANCOPPEL"] {
+    display: none !important;
+}
+/* FIN DE ESTILOS MODIFICADOS */
+
+.copy-btn {
+    background: #fff;
+    color: #181818;
+    border: none;
+    border-radius: 18px;
+    padding: 7px 28px;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-block;
+    text-transform: capitalize;
+    font-size: 1.1em;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.10);
+    transition: background 0.2s, color 0.2s;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-right: 0;
+}
+
+.copy-btn:hover {
+    background: #FDA500;
+    color: #181818;
+}
+
+.payment-logos {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.payment-logos img {
+    width: 50px;
+    height: auto;
+}
+
+
+.btn:hover {
+    background-color: #FFA500;
+}
+.btn-submitLeft {
+    background-color: #FD9E00;
+    color: #fff;
+    position: fixed;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    top: 0;
+    z-index: 10000;
+    padding: 10px 10px;
+}
+  
+.btn-submitLeft:hover {
+    background-color: #45a049;
+  }
+
+.edit-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-left: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.edit-btn:hover {
+  background-color: #0056b3;
+}
+
+.payment-editor {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.edit-field {
+  margin-bottom: 12px;
+}
+
+.edit-field label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.edit-field input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+  gap: 10px;
+}
+
+.save-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.save-btn:hover {
+  background-color: #218838;
+}
+
+.cancel-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.cancel-btn:hover {
+  background-color: #c82333;
+}
+
+.bank-data-container {
+    background: linear-gradient(180deg, #181818 80%, #444 100%);
+    border: none;
+    border-radius: 22px;
+    padding: 22px 18px 18px 18px;
+    margin-top: 30px;
+    width: 100%;
+    max-width: 370px;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+    margin-bottom: 18px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.bank-data-actions {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 8px;
+}
+
+.bank-data-item {
+    margin-bottom: 10px;
+    display: block;
+}
+
+.bank-data-label {
+    font-weight: bold;
+    color: #fff;
+    font-size: 1.05em;
+    margin-bottom: 2px;
+    display: inline;
+}
+
+.bank-data-value {
+    color: #fff;
+    font-size: 1em;
+    margin-left: 4px;
+    display: inline;
+}
+
+/* Estilo para NU */
+.nu-card {
+    background: linear-gradient(180deg, #181818 80%, #444 100%);
+    border-radius: 22px;
+    padding: 22px 18px 18px 18px;
+    margin-bottom: 18px;
+    color: #fff;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+}
+
+/* Estilo para Bancoppel */
+.bancoppel-card {
+    background: linear-gradient(180deg, #181818 80%, #ffe600 100%);
+    border-radius: 22px;
+    padding: 22px 18px 18px 18px;
+    margin-bottom: 18px;
+    color: #181818;
+    box-shadow: 0 6px 24px rgba(255,230,0,0.15);
+    /* Puedes personalizar más aquí */
+}
+
+/* Si quieres ocultar solo el recuadro de Bancoppel: */
+.bancoppel-card {
+    display: none !important;
+}
+
+/* Media Queries para responsive */
+@media (max-width: 768px) {
+    .body {
+        padding: 30px;
+        background-attachment: scroll; /* Mejor rendimiento en móviles */
+    }
+
+    .vip-membership h2 {
+        font-size: 28px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .price-container {
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .price-label {
+        font-size: 20px;
+        margin: 40px 0 15px 0;
+        text-align: center;
+    }
+
+    .price-value {
+        font-size: 20px;
+        margin: 10px 0 0 0;
+        padding: 10px 20px;
+        width: auto;
+        display: block;
+        text-align: center;
+    }
+
+    .btn {
+        padding: 20px 15px;
+        font-size: 22px;
+        min-width: 160px;
+        margin: 25px 0;
+        border-radius: 50px;
+    }
+
+    .benefits {
+        font-size: 14px;
+    }
+
+    .benefits li {
+        margin: 8px 0;
+    }
+
+    /* Ajustes para el recuadro de datos bancarios */
+    .bank-data-container {
+        margin-top: 30px;
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    .bank-data-item {
+        flex-direction: column;
+        margin-bottom: 12px;
+    }
+
+    .bank-data-label {
+        min-width: 100%;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+
+    .bank-data-value {
+        text-align: left;
+        padding-left: 0;
+        font-size: 14px;
+    }
+
+    .copy-btn {
+        padding: 10px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .vip-membership h2 {
+        font-size: 24px;
+    }
+
+    .price-label, .price-value {
+        font-size: 18px;
+    }
+
+    .btn {
+        padding: 18px 12px;
+        font-size: 15px;
+    }
+
+    .btn-submitLeft {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}

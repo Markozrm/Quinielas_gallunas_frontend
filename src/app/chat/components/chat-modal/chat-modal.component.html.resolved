@@ -1,0 +1,84 @@
+<div class="modal-overlay" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>
+        <span *ngIf="currentView === 'general'">Chat</span>
+        <span *ngIf="currentView === 'private' && !selectedUser">Chat</span>
+        <span *ngIf="currentView === 'private' && selectedUser">Chat con {{selectedUser.name}}</span>
+      </h3>
+      <div class="chat-mode-tabs">
+        <span (click)="switchToGeneralChat()" [class.active]="currentView === 'general'">General</span>
+        <span (click)="handlePrivateChat()" [class.active]="currentView === 'private'">Privado</span>
+      </div>
+      <button class="close-button" (click)="onClose()">×</button>
+    </div>
+
+    <div class="modal-body">
+
+      <!-- Vista General -->
+      <div *ngIf="currentView === 'general'">
+        <div class="chat-messages-container">
+          <app-users-chat></app-users-chat>
+        </div>
+        <div class="input-container">
+          <app-users-type></app-users-type>
+        </div>
+      </div>
+
+      <!-- Vista Privado -->
+      <div *ngIf="currentView === 'private'">
+        <div *ngIf="!selectedUser">
+          <div class="chat-messages-container">
+            <div class="private-users-list">
+              <div *ngIf="isLoadingUsers" class="loading-users">
+                <div class="loading-spinner"></div>
+                Cargando usuarios...
+              </div>
+
+              <div *ngIf="!isLoadingUsers && availableAdmins.length === 0" class="no-users">
+                {{noUsersMessage}}
+              </div>
+
+              <!-- Lista de administradores conectados -->
+              <div *ngFor="let user of availableAdmins" class="private-user-item" (click)="startPrivateChat(user)">
+                <div class="private-user-header">
+                  <div class="private-user-avatar">
+                    <div *ngIf="!user.avatar || user.avatar === ''" class="avatar-initials">
+                      {{getInitials(user.name)}}
+                    </div>
+                    <img *ngIf="user.avatar && user.avatar !== ''" 
+                         [src]="user.avatar" 
+                         (error)="handleImageError($event)"
+                         alt="{{user.name}}">
+                  </div>
+                  <div class="private-user-info">
+                    <span class="private-username">{{user.name}}</span>
+                    <span class="private-user-status" [class.online]="user.isOnline">
+                      ● {{user.isOnline ? 'En línea' : 'Desconectado'}}
+                    </span>
+                  </div>
+                </div>
+                <div class="private-user-actions">
+                  <button class="private-chat-btn">Chat</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vista de chat privado -->
+        <div *ngIf="selectedUser">
+          <div class="private-chat-header">
+            <button class="back-button" (click)="backToUserList()">← Volver</button>
+          </div>
+          <div class="chat-messages-container">
+            <app-users-chat [isPrivate]="true" [targetUser]="selectedUser"></app-users-chat>
+          </div>
+          <div class="input-container">
+            <app-users-type [isPrivate]="true" [targetUser]="selectedUser"></app-users-type>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

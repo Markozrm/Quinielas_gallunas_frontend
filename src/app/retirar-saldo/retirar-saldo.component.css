@@ -1,0 +1,199 @@
+.retirar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+}
+
+.menuContainer {
+  width: 100%;
+  height: 10%;
+  z-index: 9999;
+  position: relative;
+}
+
+.btn-volver {
+  background-color: #FFA500;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 10000;
+}
+
+.retirar-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  background-color: #FFA500;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  margin: 30px 0;
+  background-image: url('../../assets/image/bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-color: #FFA500;
+}
+
+.titulo {
+  color: #FFF;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+  text-transform: uppercase;
+}
+
+.saldo-info {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.saldo-label {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+  color: #FFF;
+}
+
+.saldo-valor {
+  background-color: #000;
+  color: #FFF;
+  padding: 10px 15px;
+  border-radius: 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.mensaje-exito {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.mensaje-error {
+  width: 100%;
+  padding: 10px;
+  background-color: #f44336;
+  color: white;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.retiro-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+label {
+  color: #FFF;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.input-field {
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background-color: #FFF;
+  font-size: 1rem;
+}
+
+.error-msg {
+  color: #f44336;
+  font-size: 0.85rem;
+  margin-top: 5px;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 3px 8px;
+  border-radius: 5px;
+}
+
+.btn-solicitar {
+  background-color: #000;
+  color: #FFF;
+  border: none;
+  border-radius: 20px;
+  padding: 12px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  margin-top: 10px;
+  transition: background-color 0.3s;
+}
+
+.btn-solicitar:hover:not([disabled]) {
+  background-color: #333;
+}
+
+.btn-solicitar[disabled] {
+  background-color: #666;
+  cursor: not-allowed;
+}
+
+.info-adicional {
+  width: 100%;
+  margin-top: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 15px;
+  border-radius: 10px;
+  color: #FFF;
+}
+
+.info-adicional h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #FFA500;
+}
+
+.info-adicional ul {
+  padding-left: 20px;
+}
+
+.info-adicional li {
+  margin-bottom: 8px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .retirar-content {
+    width: 90%;
+    padding: 15px;
+  }
+  
+  .titulo {
+    font-size: 1.7rem;
+  }
+  
+  .input-field {
+    padding: 10px;
+  }
+}

@@ -1,0 +1,256 @@
+#video-container {
+  position: relative;
+  width: 100%;
+  background-color: black;
+  height: 100vh; /* Asegura que el contenedor ocupe toda la altura de la vista */
+  overflow: hidden; /* Evita que el video sobresalga */
+  background-color: transparent;
+}
+
+#video-container::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 150px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
+  z-index: 0;
+}
+
+.background-video {
+  width: 100%;
+   height: 100%;
+  object-fit: cover; /* Asegura que el video cubra todo el espacio manteniendo proporciones */
+  position: absolute; /* Fija el video como fondo */
+  top: 0;
+  left: 0;
+  z-index: -1000; /* Permite que otros elementos se superpongan */
+}
+.espaciador {
+  height:400px;
+}
+
+.streams {
+ position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2; /* Mayor que el video */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* Alinea al fondo */
+  padding-bottom: 50px; /* Espacio desde abajo */
+}
+
+.eventos-container {
+display: flex;
+  justify-content: space-between; /* Distribuye espacio entre los botones */
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+.streams h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.header-content {
+  
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color:  rgba(17, 17, 17, 0.3);
+  color: #ffffff;
+  z-index: 20;
+  width: 100%;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  
+
+}
+.menu{
+  position: absolute;
+  right: 0;
+  z-index: 9999;
+
+}
+.menu a{
+  font-size: 36px;
+  color: var(--colorSecondary);
+}
+.header-content h1{
+  margin: 4%;
+  margin-left: 4%;
+  font-family: 'Josefin', sans-serif;
+  font-weight: 600;
+    z-index: 10;
+}
+.menu {
+  float: right;
+  font-size: 24px; /* Tamaño del menú hamburguesa */
+  margin-top: 5px;
+  margin-right: 10px;
+}
+
+.items {
+  font-family: 'ChunkFive', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 30%;
+  background-color: black;
+  
+}
+.items h1{
+  font-size: 270%;
+}
+.item {
+  margin: 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 30%;
+  max-width: 500px;
+}
+
+.item img {
+  width: 100%; /* Ajusta el tamaño */
+  height: auto;
+   max-height: 180px;
+  border: 2px solid #ffffff; /* Añade un borde blanco de 5px */
+  border-radius: 10px; /* Añade bordes redondeados */
+  transition: transform 0.3s ease; /* Agregamos transición para hover */
+}
+.item img:hover {
+  transform: scale(1.05); /* Efecto de hover sutil */
+}
+
+.item h2 {
+  font-size: 1.5rem;
+}
+.item h3{
+
+  font-family: 'Josefin', sans-serif;
+  font-size: 200%;
+  font-weight: 400;
+  
+  
+}
+.item a {
+  color: #e5e6e0; /* Color rojo para los enlaces */
+  cursor: pointer;
+  display: block;
+  width: 100%;
+}
+footer {
+  position:absolute;
+  background-color: #171717;
+  color: rgb(195, 195, 195);
+  text-align: center;
+  
+
+  bottom: 0;
+  
+
+  width: 100%;
+
+}
+footer p{
+  font-family: 'Josefin', sans-serif;
+  margin: 5%;
+}
+.mobile-video {
+  display: none; /* Oculto por defecto */
+}
+
+
+@media screen and (max-width: 768px) {
+    .background-video {
+    display: none; /* Oculta el video de desktop en móviles */
+  }
+   .mobile-video {
+    display: block; /* Muestra el video móvil */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1000;
+  }
+  .header-content h1{
+    font-size: 150%;
+  }
+  .items h1{
+    font-size: 100%;
+  }
+  .item h2{
+    font-size: 70%;
+  }
+  .item {
+    width: 45%;
+    min-width: 150px;
+  }
+  .item h1 {
+    font-size: 120%;
+  }
+  footer p{
+    font-size: 60%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header-content h1{
+    font-size: 150%;
+  }
+  .items h1{
+    font-size: 100%;
+  }
+  .item h2{
+    font-size: 70%;
+  }
+  
+  .item {
+ margin: 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 30%;
+  max-width: 500px;
+  background-color: transparent; /* Fondo transparente */
+  border: none; /* Elimina bordes si los hay */
+  }
+  .espaciador {
+    height: 150px; /* Reducimos el espaciador en móvil */
+  }
+  
+  .streams {
+     top: 30%; /* Centrado vertical */
+    transform: translateY(-50%);
+    padding-bottom: 30px;
+  }
+  .item h1 {
+    font-size: 100%;
+    margin: 5px 0;
+  }
+  .eventos-container {
+      display: flex;
+  justify-content: space-between;
+  width: 95%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 0;
+  background-color: transparent; /* Fondo transparente */
+  }
+  footer p{
+    font-size: 60%;
+  }
+
+}

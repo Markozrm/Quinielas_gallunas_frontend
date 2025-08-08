@@ -1,0 +1,172 @@
+body, :host {
+  background: #000;
+  min-height: 100vh;
+  color: #fff;
+  font-family: 'Arial Black', Arial, sans-serif;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centra el contenido horizontalmente */
+  padding: 30px 0 0 0;    /* Elimina el padding izquierdo para centrar */
+  position: relative;
+  width: 100%;
+}
+
+.inicio-btn {
+  position: absolute;
+  left: 40px;
+  top: 30px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-right: 40px;
+  text-shadow: 2px 2px 4px #000;
+  transition: color 0.2s;
+}
+.inicio-btn:hover {
+  color: #ffcc00;
+}
+
+.titulo {
+  font-size: 2.5rem;
+  color: #ffcc33;
+  font-family: 'Georgia', serif;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-shadow: 0 0 15px #ffcc33, 0 0 5px #fff;
+  margin-left: 0;
+  margin-right: 0;
+  text-align: center;
+  flex: 0 1 auto;
+  width: auto;
+}
+
+.linea {
+  border-bottom: 3px solid #ffcc33;
+  margin: 10px 0 0 0;
+  width: 100%;
+}
+
+.subtitulo {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 1.7rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.botones-contenedor {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin-top: 100px;
+}
+
+.server-btn {
+  min-width: 340px;           /* Un poco más ancho */
+  min-height: 100px;          /* Un poco más alto */
+  border-radius: 50px;        /* Más redondeado */
+  border: 5px solid #fff;     /* Borde más grueso */
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #fff;
+  box-shadow: 0 0 16px #000;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+  outline: none;
+  letter-spacing: 0.5px;      /* Menos espacio entre letras */
+  padding: 32px 40px;         /* Más espacio interno arriba/abajo y a los lados */
+  margin-bottom: 48px;        /* Más espacio entre botones */
+  line-height: 1.2;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.server-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 0 5px #000;
+}
+
+.server-btn.rojo {
+  background: linear-gradient(180deg, #c00 0%, #900 100%);
+  border-color: #fff;
+}
+
+.server-btn.dorado {
+  background: linear-gradient(180deg, #ffcc33 0%, #b8860b 100%);
+  border-color: #fff;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .botones-contenedor {
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    margin-top: 60px;
+  }
+  .server-btn {
+    min-width: 240px;
+    min-height: 80px;
+    font-size: 1.5rem;
+    border-radius: 38px;
+    border-width: 4px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+    letter-spacing: 0.5px;
+  }
+  .header {
+    padding: 20px 0 0 0;
+  }
+  .inicio-btn {
+    left: 20px;
+    top: 20px;
+    font-size: 1.5rem;
+    margin-right: 0;
+  }
+  .titulo {
+    font-size: 2rem;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .header {
+    padding: 10px 0 0 0;
+  }
+  .inicio-btn {
+    left: 10px;
+    top: 10px;
+    font-size: 1.1rem;
+  }
+  .titulo {
+    font-size: 1.1rem;
+    text-shadow: 0 0 8px #ffcc33, 0 0 2px #fff;
+  }
+  .subtitulo {
+    font-size: 1.1rem;
+    margin-top: 20px;
+  }
+  .botones-contenedor {
+    gap: 25px;
+    margin-top: 40px;
+  }
+  .server-btn {
+    min-width: 130px;
+    min-height: 48px;
+    font-size: 1rem;
+    border-radius: 22px;
+    border-width: 3px;
+    padding: 10px 10px;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+  }
+  .linea {
+    border-bottom-width: 2px;
+  }
+}

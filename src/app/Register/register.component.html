@@ -1,0 +1,42 @@
+  <!-- <div class="block-left">
+    <app-users-rooms></app-users-rooms> -->
+
+    <div class="main">
+      <div class="menuContainer">
+        <app-menu></app-menu>
+        
+      </div>
+      <button (click)="volver()" class="btn-volver">Volver</button>
+      <div class="formContainer">
+        <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
+          <h2>Registro</h2>
+
+           <!-- Nuevo campo para la imagen -->
+        <label for="userImage">Imagen de perfil:</label>
+        <input type="file" id="userImage" name="userImage" accept="image/*" required (change)="handleImageChange($event)" formControlName ="image">
+        <div *ngIf="imagePreview" class="image-preview-container">
+          <img [src]="imagePreview" alt="Vista previa de la imagen" class="profile-image" >
+        </div>
+
+
+          <label for="username">Usuario:</label>
+          <input type="text" id="username" name="username" required formControlName ="username">
+
+          <label for="password">Contraseña:</label>
+          <input type="password" id="password" name="password" required formControlName ="password">
+
+          <select id="tipoUsuario" required formControlName="tipoUsuario" >
+            <option value="usuario">usuario</option>
+            <option value="administrador">administrador</option>
+            <option value="invitado">invitado</option>
+            <option value="superUsuario">superUsuario</option>
+            <option value="controladorBanca">controladorBanca</option>
+          </select>
+
+          <button type="submit" class="btn-iniciar">Registrar</button>
+        </form>
+      </div>
+    </div>
+
+
+

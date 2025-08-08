@@ -1,0 +1,41 @@
+<div id="video-container">
+  <div class="header-content">
+    <h1></h1><!-- <h1>Plumass EN VIVO</h1> -->
+    <div class="menu"><a (click)="irPanel()">☰</a></div>
+  </div>
+
+  <!-- Video de fondo -->
+  <video #backgroundVideo autoplay="autoplay" loop="loop" muted defaultMuted playsinline preload="auto" class="background-video">
+    <source src="../../assets/PLUMASS-FONDO.mp4" type="video/mp4">
+    <source src="../../assets/plumass_index.webm" type="video/webm">
+  </video>
+    <!-- Video de fondo para móviles -->
+  <video #mobileVideo autoplay="autoplay" loop="loop" muted defaultMuted playsinline preload="auto" class="mobile-video">
+    <source src="../../assets/plumass_index.mp4" type="video/mp4">
+  </video>
+
+
+  <!-- Streams - MOVIDOS FUERA DE <video> -->
+  <div class="streams">
+    <!-- <h1>Eventos</h1> -->
+     <div class="espaciador"></div>
+    <div class="eventos-container">
+      <div class="item">
+        <h1>{{titulo1}}</h1>
+        <a (click)="irStream1()"><img [src]="imagen1" alt="Imagen 1"></a>
+      </div>
+      <div class="item">
+        <h1>{{titulo2}}</h1>
+        <a (click)="irStream2()"><img [src]="imagen2" alt="Imagen 2"></a>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+<!--cambios-->
+
+<!-- <footer>
+  <p>Copyright © 2024 Plumass en VIVO - Todos los derechos reservados.</p>
+  <p>Powered by Plumass</p>
+</footer> -->

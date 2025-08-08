@@ -1,0 +1,85 @@
+<app-menu></app-menu>
+<button class="btn-submitLeft" (click)="Volver()">
+    Volver
+  </button>
+
+ 
+<div class="body">
+    <div class="vip-membership">
+        <h2>Recarga tu saldo</h2>
+        <div class="price">
+            <div class="price-label">MI SALDO:</div>
+             <div class="price-value">{{saldo}}</div>
+       <!-- </div>
+        <ul class="benefits">
+            Disfruta de:
+            <li>Contenido en Vivo</li>
+            <li>Apuestas en Vivo</li>
+            <li>Los Mejores Eventos</li>
+        </ul>-->
+        <div class="btn-container">
+            <button (click)="irEnviarRecibo()" class="btn">SUBIR COMPROBANTE</button>
+        </div>
+    </div>
+
+    <div class="payment-options">
+        <div
+  *ngFor="let payment of paymentInfo"
+  class="payment-option"
+  [ngClass]="{
+    'nu-card': payment.banco && payment.banco.toUpperCase().includes('NU'),
+    'bancoppel-card': payment.banco && payment.banco.toUpperCase().includes('BANCOPPEL')
+  }"
+  [attr.data-banco]="payment.banco"
+>
+            <!-- Modo visualización -->
+            <div *ngIf="editingPayment?.id !== payment.id && payment.banco !== 'BANCOPPEL'">
+                <h3>Beneficiario: {{ payment.beneficiario }}</h3>
+                <p>CLABE: {{ payment.clabe }}</p>
+                <p>Número de tarjeta: {{ payment.numeroCuenta }}</p>
+                <p>Banco: {{ payment.banco }}</p>
+                <p *ngIf="payment.concepto">Concepto: {{ payment.concepto }}</p>
+                <button (click)="copiarTexto('Beneficiario: ' + payment.beneficiario + '\nCLABE: ' + payment.clabe + '\nNúmero de tarjeta: ' + payment.numeroCuenta + '\nBanco: ' + payment.banco + (payment.concepto ? '\nConcepto: ' + payment.concepto : ''))" class="copy-btn">Copiar</button>
+                <button *ngIf="esAdmin()" (click)="startEditing(payment)" class="edit-btn">Editar</button>
+            </div>
+        
+            <!-- Modo edición (solo visible para admins) -->
+            <div *ngIf="editingPayment?.id === payment.id" class="payment-editor">
+                <div class="edit-field">
+                    <label>Beneficiario:</label>
+                    <input type="text" [(ngModel)]="editingPayment.beneficiario">
+                </div>
+                <div class="edit-field">
+                    <label>CLABE:</label>
+                    <input type="text" [(ngModel)]="editingPayment.clabe">
+                </div>
+                <div class="edit-field">
+                    <label>Número de tarjeta:</label>
+                    <input type="text" [(ngModel)]="editingPayment.numeroCuenta">
+                </div>
+                <div class="edit-field">
+                    <label>Banco:</label>
+                    <input type="text" [(ngModel)]="editingPayment.banco">
+                </div>
+                <div class="edit-field">
+                    <label>Concepto (opcional):</label>
+                    <input type="text" [(ngModel)]="editingPayment.concepto" placeholder="Ingrese un concepto (opcional)">
+                </div>
+                <div class="edit-actions">
+                    <button (click)="savePaymentChanges()" class="save-btn">Guardar</button>
+                    <button (click)="cancelEditing()" class="cancel-btn">Cancelar</button>
+                </div>
+            </div>
+            
+            <!-- Logos de establecimientos (solo en la segunda opción de pago) 
+            <div *ngIf="payment.id === 'payment2'" class="payment-logos">
+                <img src="https://seeklogo.com/images/O/Oxxo-logo-0125669E96-seeklogo.com.png" alt="OXXO">
+                <img src="https://images.seeklogo.com/logo-png/0/1/7-eleven-logo-png_seeklogo-1127.png" alt="7-Eleven">
+                <img src="https://seeklogo.com/images/S/soriana-logo-84CD31F0C3-seeklogo.com.png" alt="Soriana">
+                <img src="https://seeklogo.com/images/E/extra-logo-63D58EACBA-seeklogo.com.png" alt="Extra">
+            </div>
+        </div>
+    </div>-->
+
+   <!-- <app-membership-modal *ngIf="showModal" (closeModal)="closeModal()"></app-membership-modal>-->
+</div>

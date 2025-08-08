@@ -1,0 +1,126 @@
+<div class="historial-container">
+  <h2>Historial de Registros de Saldos</h2>
+  
+  <!-- Filters Section -->
+  <div class="filters-section">
+    <h3>Filtros</h3>
+    
+    <div class="filters-row">
+      <div class="filter-group">
+        <label for="startDate">Fecha Inicio:</label>
+        <input type="date" id="startDate" [(ngModel)]="startDate" (change)="onDateChange()">
+      </div>
+      
+      <div class="filter-group">
+        <label for="endDate">Fecha Fin:</label>
+        <input type="date" id="endDate" [(ngModel)]="endDate" (change)="onDateChange()">
+      </div>
+      
+      <div class="filter-group">
+        <label for="userSelect">Usuario:</label>
+        <select id="userSelect" [(ngModel)]="selectedUser" (change)="loadRecords()">
+          <option value="">Todos los usuarios</option>
+          <option *ngFor="let user of uniqueUsers" [value]="user">{{user}}</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label for="typeSelect">Tipo:</label>
+        <select id="typeSelect" [(ngModel)]="selectedType" (change)="applyFilters()">
+          <option value="">Todos los tipos</option>
+          <option *ngFor="let type of uniqueTypes" [value]="type">{{getTypeDisplayName(type)}}</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <button class="reset-btn" (click)="resetFilters()">Limpiar Filtros</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Summary -->
+  <div class="results-summary" *ngIf="!loading && filteredRecords.length > 0">
+    <div class="summary-stats">
+      <div class="stat-item">
+        <span class="stat-label">Total de Registros:</span>
+        <span class="stat-value">{{filteredRecords.length}}</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Total de Saldos:</span>
+        <span class="stat-value total-balance">${{getTotalBalance().toLocaleString()}}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading and Error States -->
+  <div *ngIf="loading" class="loading">Cargando registros...</div>
+  <div *ngIf="error" class="error-message">{{error}}</div>
+
+  <!-- Records Table -->
+  <div *ngIf="!loading && paginatedRecords.length > 0" class="records-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Usuario</th>
+          <th>Saldo</th>
+          <th>Tipo</th>
+          <th>Concepto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let record of paginatedRecords" [class]="'record-type-' + record.tipo">
+          <td class="date-cell">{{formatDate(record.fecha)}}</td>
+          <td class="user-cell">{{record.usuario}}</td>
+          <td class="saldo-cell">
+            <span [class]="getDisplaySaldo(record) >= 0 ? 'positive' : 'negative'">
+              ${{getDisplaySaldo(record).toLocaleString()}}
+            </span>
+          </td>
+          <td class="type-cell">
+            <span class="type-badge" [class]="'type-' + record.tipo">
+              {{getTypeDisplayName(record.tipo)}}
+            </span>
+          </td>
+          <td class="concept-cell">{{record.concepto || 'Sin concepto'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div *ngIf="!loading && filteredRecords.length > 0" class="pagination">
+    <div class="pagination-info">
+      Mostrando {{((currentPage - 1) * itemsPerPage) + 1}} - {{Math.min(currentPage * itemsPerPage, filteredRecords.length)}} de {{filteredRecords.length}} registros
+    </div>
+    
+    <div class="pagination-controls" *ngIf="totalPages > 1">
+      <button 
+        class="page-btn" 
+        (click)="previousPage()" 
+        [disabled]="currentPage === 1">
+        ← Anterior
+      </button>
+      
+      <button 
+        *ngFor="let page of getPageNumbers()" 
+        class="page-btn" 
+        [class.active]="page === currentPage"
+        (click)="goToPage(page)">
+        {{page}}
+      </button>
+      
+      <button 
+        class="page-btn" 
+        (click)="nextPage()" 
+        [disabled]="currentPage === totalPages">
+        Siguiente →
+      </button>
+    </div>
+  </div>
+
+  <!-- No Results -->
+  <div *ngIf="!loading && filteredRecords.length === 0" class="no-results">
+    <p>No se encontraron registros con los filtros seleccionados.</p>
+  </div>
+</div> 

@@ -1,0 +1,132 @@
+<div class="rifa-main-container">
+  <div class="rifa-header">
+    <h2>Rifas del Stream</h2>
+    <button class="btn-volver" (click)="volver()">Volver</button>
+  </div>
+
+  <div *ngIf="loading" class="loading">Cargando rifas...</div>
+
+  <div *ngIf="!loading && rifas.length === 0" class="no-rifas">
+    No hay rifas activas en este stream.
+  </div>
+
+  <div *ngFor="let rifa of rifas" class="rifa-card">
+    <div class="rifa-info">
+      <h3>Rifa #{{ rifa.numeroRifa }}</h3>
+      <div>
+        <span>Estado: </span>
+        <span [ngClass]="{'abierta': rifa.estadoVentas, 'cerrada': !rifa.estadoVentas}">
+          {{ rifa.estadoVentas ? 'Ventas abiertas' : 'Ventas cerradas' }}
+        </span>
+      </div>
+      <div>
+        <span>Total recaudado: </span>
+        <b>${{ rifa.totalRecaudado }}</b>
+      </div>
+      <div>
+        <span>Ganador: </span>
+        <b *ngIf="rifa.ganador !== null">{{ rifa.ganador }}</b>
+        <span *ngIf="rifa.ganador === null">Aún no hay ganador</span>
+      </div>
+    </div>
+
+    <!-- Vista para USUARIOS NORMALES -->
+    <div *ngIf="!isAdmin" class="rifa-user-view">
+      <div class="user-actions">
+        <button *ngIf="rifa.estadoVentas"
+                [disabled]="comprando"
+                (click)="abrirModalCompra(rifa)"
+                class="btn-comprar">
+          Comprar número
+        </button>
+        <div *ngIf="!rifa.estadoVentas" class="ventas-cerradas">
+          Ventas cerradas
+        </div>
+      </div>
+      <div class="numeros-vendidos">
+        <div class="vendidos-title">Números vendidos:</div>
+        <div class="vendidos-list">
+          <span *ngFor="let vendido of getNumerosVendidos(rifa)">
+            {{ vendido.numero }} - <b>{{ vendido.username }}</b>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vista para ADMINISTRADORES -->
+    <div *ngIf="isAdmin" class="rifa-admin-view">
+      <div class="rifa-numeros">
+        <div class="numeros-title">Números disponibles:</div>
+        <div class="numeros-list">
+          <button *ngFor="let num of rifa.numerosDisponibles"
+                  [disabled]="!rifa.estadoVentas || comprando"
+                  (click)="comprarNumero(rifa, num)">
+            {{ num }}
+          </button>
+        </div>
+        <div class="numeros-vendidos">
+          <div class="vendidos-title">Números vendidos:</div>
+          <div class="vendidos-list">
+            <span *ngFor="let vendido of getNumerosVendidos(rifa)">
+              {{ vendido.numero }} - <b>{{ vendido.username }}</b>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="rifa-actions">
+        <button *ngIf="rifa.estadoVentas"
+                (click)="cerrarVentas(rifa)">
+          Cerrar ventas
+        </button>
+        <button *ngIf="!rifa.estadoVentas && rifa.ganador === null"
+                (click)="abrirSeleccionarGanador(rifa)">
+          Seleccionar ganador
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para usuarios normales - Comprar número -->
+  <div *ngIf="modalCompraAbierto" class="modal-overlay">
+    <div class="modal-content">
+      <h3>Comprar número para rifa #{{ rifaSeleccionada?.numeroRifa }}</h3>
+      <div class="modal-info">
+        <p><strong>Total recaudado:</strong> ${{ rifaSeleccionada?.totalRecaudado }}</p>
+      </div>
+      <div class="numeros-disponibles">
+        <div class="numeros-title">Selecciona un número:</div>
+        <div class="numeros-list">
+          <button *ngFor="let num of rifaSeleccionada?.numerosDisponibles"
+                  [disabled]="comprando"
+                  (click)="comprarNumero(rifaSeleccionada, num)"
+                  class="numero-disponible">
+            {{ num }}
+          </button>
+        </div>
+      </div>
+      <div class="numeros-vendidos">
+        <div class="vendidos-title">Números ya vendidos:</div>
+        <div class="vendidos-list">
+          <span *ngFor="let vendido of getNumerosVendidos(rifaSeleccionada)">
+            {{ vendido.numero }} - <b>{{ vendido.username }}</b>
+          </span>
+        </div>
+      </div>
+      <button class="btn-cerrar" (click)="cerrarModalCompra()">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- Modal para administradores - Seleccionar ganador -->
+  <div *ngIf="modalGanadorAbierto" class="modal-overlay">
+    <div class="modal-content">
+      <h3>Seleccionar ganador para rifa #{{ rifaSeleccionada?.numeroRifa }}</h3>
+      <div class="numeros-list">
+        <button *ngFor="let vendido of getNumerosVendidos(rifaSeleccionada)"
+                (click)="seleccionarGanador(rifaSeleccionada, +vendido.numero)">
+          {{ vendido.numero }} - {{ vendido.username }}
+        </button>
+      </div>
+      <button class="btn-cerrar" (click)="cerrarModalGanador()">Cerrar</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,75 @@
+<div class="retirar-container">
+  <div class="menuContainer">
+    <app-menu></app-menu>
+    <div>
+      <button class="btn-volver" (click)="volver()">
+        Volver
+      </button>
+    </div>
+  </div>
+
+  <div class="retirar-content">
+    <h1 class="titulo">Retirar Saldo</h1>
+    
+    <div class="saldo-info">
+      <p class="saldo-label">Saldo Disponible:</p>
+      <div class="saldo-valor">{{saldoActual | number:'1.2-2'}}$</div>
+    </div>
+
+    <div class="mensaje-exito" *ngIf="mensajeExito">
+      {{mensajeExito}}
+    </div>
+
+    <div class="mensaje-error" *ngIf="mensajeError">
+      {{mensajeError}}
+    </div>
+
+    <form [formGroup]="retiroForm" (ngSubmit)="onSubmit()" class="retiro-form">
+      <div class="form-group">
+        <label for="banco">Banco</label>
+        <input type="text" id="banco" formControlName="banco" class="input-field" placeholder="Nombre del banco">
+        <div class="error-msg" *ngIf="retiroForm.get('banco')?.invalid && retiroForm.get('banco')?.touched">
+          Por favor ingresa el nombre del banco
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="cantidad">Cantidad a retirar</label>
+        <input type="number" id="cantidad" formControlName="cantidad" class="input-field" placeholder="Cantidad en $">
+        <div class="error-msg" *ngIf="retiroForm.get('cantidad')?.invalid && retiroForm.get('cantidad')?.touched">
+          Por favor ingresa una cantidad válida mayor a 0
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="nombreTitular">Nombre del titular</label>
+        <input type="text" id="nombreTitular" formControlName="nombreTitular" class="input-field" placeholder="Nombre completo del titular">
+        <div class="error-msg" *ngIf="retiroForm.get('nombreTitular')?.invalid && retiroForm.get('nombreTitular')?.touched">
+          Por favor ingresa el nombre del titular
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="numeroTarjeta">Número de tarjeta o CLABE</label>
+        <input type="text" id="numeroTarjeta" formControlName="numeroTarjeta" class="input-field" placeholder="Número de tarjeta o CLABE">
+        <div class="error-msg" *ngIf="retiroForm.get('numeroTarjeta')?.invalid && retiroForm.get('numeroTarjeta')?.touched">
+          Por favor ingresa el número de tarjeta o CLABE
+        </div>
+      </div>
+
+      <button type="submit" class="btn-solicitar" [disabled]="retiroForm.invalid || loading">
+        <span *ngIf="!loading">Solicitar Retiro</span>
+        <span *ngIf="loading">Procesando...</span>
+      </button>
+    </form>
+
+    <div class="info-adicional">
+      <h3>Información importante</h3>
+      <ul>
+        <li>Las solicitudes de retiro se procesan en un plazo de 1-3 días hábiles.</li>
+        <li>La cantidad mínima para retirar es de $100.</li>
+        <li>Por favor verifica que la información bancaria sea correcta.</li>
+      </ul>
+    </div>
+  </div>
+</div>

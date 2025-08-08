@@ -1,0 +1,213 @@
+.ruleta-admin-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.controls-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: flex-end;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.price-control {
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+}
+
+label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+select, input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.save-btn {
+  background-color: #4CAF50;
+  color: white;
+  height: 36px;
+}
+
+.save-btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.reset-btn {
+  background-color: #f44336;
+  color: white;
+  padding: 10px 20px;
+}
+
+.reset-section {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.price-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 15px;
+}
+
+.price-item {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.price-item:hover {
+  background-color: #f0f0f0;
+}
+
+.price-item.selected {
+  background-color: #e3f2fd;
+  border-color: #2196F3;
+}
+
+.number {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.price {
+  color: #2e7d32;
+}
+
+h2, h3 {
+  color: #333;
+  text-align: center;
+}
+
+h3 {
+  margin-top: 0;
+  color: #666;
+}
+
+#spinWheel {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#wheel {
+  display: block;
+  margin: 0 auto;
+  background: transparent;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+
+.ruleta-spin-btn, #spin {
+  margin-top: 10px;
+  font-size: 1.2em;
+  padding: 10px 30px;
+  border-radius: 50%;
+  background: #333;
+  color: #fff;
+  border: none;
+  box-shadow: 0 0 0 4px #333, 0 0px 10px 5px rgba(0,0,0,0.6);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.ruleta-spin-btn:hover, #spin:hover {
+  background: #444;
+  box-shadow: 0 0 0 4px #444, 0 0px 14px 7px rgba(0,0,0,0.7);
+}
+
+.ruleta-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  justify-items: center;
+  margin: 16px 0;
+}
+
+.ruleta-btn {
+  width: 48px;
+  height: 48px;
+  font-weight: bold;
+  font-size: 18px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  color: #fff;
+  border: 2px solid #fff;
+}
+.ruleta-btn.dorado {
+  background: #fd9e00;
+  color: #000;
+}
+.ruleta-btn.negro {
+  background: #111;
+  color: #fff;
+}
+.ruleta-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.22);
+}
+
+.numero-ruleta-seleccionado {
+  margin-top: 10px;
+  color: gold;
+  font-size: 1.2em;
+  font-weight: bold;
+  text-align: center;
+}
+
+.open-ruleta-btn {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0;
+}
+.tabla-numeros-comprados-admin {
+  margin: 20px 0;
+}
+.tabla-numeros-comprados-admin table {
+  width: 100%;
+  background: #fff;
+  border-radius: 8px;
+  border-collapse: collapse;
+}
+.tabla-numeros-comprados-admin th,
+.tabla-numeros-comprados-admin td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+.tabla-numeros-comprados-admin th {
+  background: #f7f7f7;
+  font-weight: bold;
+}
+.tabla-numeros-comprados-admin tr:last-child td {
+  border-bottom: none;
+}
+.admin-ruleta-table, .admin-ruleta-table td, .admin-ruleta-table th {
+  color: #222; 
+  background: #fff;
+}

@@ -1,0 +1,5 @@
+<div *ngFor="let video of videos">
+  <h3>Stream de la fecha y hora: {{video.name}}</h3>
+  <button class="confirm-button" (click)="viewVideo(video.folder, video.name)">Ver</button>
+  <button class="cancel-button" (click)="deleteVideo(video.folder, video.name)">Borrar</button>
+</div>

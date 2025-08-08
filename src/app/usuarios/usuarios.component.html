@@ -1,0 +1,109 @@
+<!-- Agrega el siguiente código al principio del archivo -->
+<button (click)="volver()" >Volver</button>
+
+<!-- Contador de usuarios -->
+<div class="user-counter">
+  Total de usuarios: {{ users.length }}
+</div>
+<!--Template para saldo Global -->
+<div class="saldo-global-container">
+  <h2>USUARIOS: {{ users.length }} | SALDO GLOBAL: ${{ saldoTotal | number:'1.2-2' }}</h2>
+</div>
+<!-- Barra de búsqueda y selector de ordenamiento -->
+<div class="search-container">
+  <input
+    type="text"
+    placeholder="Buscar usuarios..."
+    [(ngModel)]="searchTerm"
+    (input)="filterUsers()"
+    class="search-bar"
+  />
+  <select [(ngModel)]="sortOrder" (change)="sortUsers()" class="sort-selector">
+    <option value="default">Ordenar por nombre</option>
+    <option value="highToLow">Saldo: Mayor a menor</option>
+    <option value="lowToHigh">Saldo: Menor a mayor</option>
+  </select>
+</div>
+
+<!-- Pagination controls -->
+<div class="pagination-controls">
+  <div class="pagination-info">
+    <span>Mostrando {{ ((currentPage - 1) * itemsPerPage) + 1 }} - {{ Math.min(currentPage * itemsPerPage, filteredUsers.length) }} de {{ filteredUsers.length }} usuarios</span>
+  </div>
+  
+  <div class="pagination-buttons">
+    <button [disabled]="currentPage === 1" (click)="previousPage()" class="pagination-btn">« Anterior</button>
+    
+    <button 
+      *ngFor="let page of getPaginationArray()" 
+      [class.active]="page === currentPage"
+      (click)="goToPage(page)"
+      class="pagination-btn page-btn">
+      {{ page }}
+    </button>
+    
+    <button [disabled]="currentPage === totalPages" (click)="nextPage()" class="pagination-btn">Siguiente »</button>
+  </div>
+</div>
+
+<div class="users-list">
+    <div *ngFor="let user of paginatedUsers" class="user-item">
+      <h3 class="username">{{ user.username }}</h3>
+      <h3 class="username">Saldo: {{ user.saldo }}</h3>
+      <!-- <h3 class="username">Saldo: {{ user.saldo !== undefined ? user.saldo : 'Cargando...' }}</h3> -->
+      <div class="user-info">
+        <img [src]="getImage(user.username)" alt="User Image" class="user-image">
+        <div class="user-details">
+          <!-- Otros campos del usuario -->
+        </div>
+      </div>
+      <button (click)="openEditMenu(user)" class="edit-button">Editar</button>
+      <button (click)="openSaldoModal(user)" class="saldo-button">Modificar Saldo</button>
+      <button (click)="verHistorial(user)" class="historial-button">Ver Historial</button>
+      <div *ngIf="editingUser === user" class="edit-menu">
+        <input type="file" id="userImage" name="userImage" accept="image/*" (change)="handleImageChange($event)" >
+        <label for="editedUsername">Nombre de Usuario:</label>
+        <input type="text" id="editedUsername" [(ngModel)]="editedUser.username">
+        <label for="newPassword">Nueva Contraseña:</label>
+        <input type="password" id="newPassword" [(ngModel)]="editedUser.newPassword" placeholder="Nueva Contraseña">
+        
+        <button (click)="saveChanges(user)" class="save-button">Guardar</button>
+        <button (click)="cancelEdit()" class="cancel-button">Cancelar</button>
+      </div>
+      <button (click)="banearUsuario(user)" class="cancel-button">{{estadoBan(user)}}</button>
+      <button (click)="openDeleteConfirm(user)" class="borrar-btn">Borrar</button>
+    </div>
+  </div>
+  
+  <!-- Modal de confirmación -->
+<div class="modal-overlay" *ngIf="showDeleteModal">
+  <div class="modal-content">
+    <h3>Confirmar Eliminación</h3>
+    <p>¿Estás seguro de que deseas eliminar el usuario {{ selectedUser?.username }}?</p>
+    <button (click)="confirmDelete()" class="confirm-button">Eliminar</button>
+    <button (click)="closeDeleteModal()" class="cancel-btn-borrar">Cancelar</button>
+  </div>
+</div>
+
+<!-- Modal para modificar saldo -->
+<div class="modal-overlay" *ngIf="showSaldoModal">
+  <div class="modal-content">
+    <h3>Modificar Saldo</h3>
+    <p>Usuario: {{ selectedUser?.username }} - Saldo actual: {{ selectedUser?.saldo }}</p>
+    
+    <div class="saldo-input-container">
+      <label for="saldoAmount">Cantidad:</label>
+      <input type="number" id="saldoAmount" [(ngModel)]="saldoAmount" class="saldo-input">
+    </div>
+    <div class="saldo-input-container">
+      <label for="conceptoSaldo">Concepto:</label>
+      <input type="text" id="conceptoSaldo" [(ngModel)]="conceptoSaldo" class="saldo-input">
+    </div>
+    
+    <div class="saldo-buttons">
+      <button (click)="addSaldo()" class="add-saldo-button">Agregar</button>
+      <button (click)="subtractSaldo()" class="subtract-saldo-button">Restar</button>
+      <button (click)="closeSaldoModal()" class="cancel-btn-borrar">Cancelar</button>
+    </div>
+  </div>
+</div>

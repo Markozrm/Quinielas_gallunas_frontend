@@ -1,0 +1,233 @@
+* {
+  box-sizing: border-box;
+}
+
+.main{
+
+  min-height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: top;
+  padding-top:10%;
+  justify-content: bottom;
+  height: 100dvh;
+
+}
+
+.menu-container{
+  margin-top: 30rem;
+  width: 100%;
+  height: 100%;
+}
+.chat-container{
+
+justify-content: center;
+align-items: center;
+height: 100%;
+width: 100%;
+
+
+}
+.video-container{
+
+  width: 100%;
+  height: 100%;
+
+
+}
+
+.app-users-type {
+
+  height: 500%;
+  width: 100%;
+}
+.input-container {
+  width: 100%;
+  justify-content: center;
+  padding: 0.5rem;
+ 
+
+}
+
+
+
+
+.btn-submit{
+  font-size: var(--fontSizeMessage);
+  background-color: var(--colorSecondary);
+  border:0;
+  border-radius: 0.4rem;
+  position:fixed;
+  right: 0;
+  top:0;
+  z-index: 9999;
+  height: 4%;
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+
+}
+.btn-submitLeft{
+  font-size: var(--fontSizeMessage);
+  color:white;
+  background-color: #FD9E00;
+  border:0;
+  border-radius: 0.4rem;
+  position:fixed;
+  left: 0;
+  top:0;
+  z-index: 9999;
+  height: 4%;
+  width: 4rem;
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+}
+.btn-default{
+  background-color: var(--colorFourd);
+  font-size: var(--fontSizeSecondary);
+}
+.btn-volver{
+  background-color: #FD9E00;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 10000;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.sidebar-container {
+  position: fixed;
+  top: 0;
+  z-index: 9999;
+  right: -300px; /* Oculta inicialmente la barra lateral fuera de la pantalla */
+  width: 300px;
+  height: 100%;
+  background-color: #f0f0f0;
+  transition: right 0.3s ease;
+}
+
+.sidebar {
+  padding: 20px;
+  margin-top: 20%;
+}
+
+.user-info {
+  font-size: var(--fontSizeMessage);
+  text-align: center;
+  color:black;
+  display:flex;
+  flex-direction: column ;
+  align-items: center;
+}
+.p{
+  color:black;
+}
+
+.user-photo {
+  width: 50px; /* Ajusta el tamaño de la foto según tus necesidades */
+  height: 50px;
+  border-radius: 50%;
+  margin-top: 10px; /* Espacio entre el nombre y la foto */
+}
+.logout-btn {
+  margin-top: 20%;
+  background-color: #f00; /* Color de fondo del botón, ajusta según tus preferencias */
+  color: #fff; /* Color del texto del botón, ajusta según tus preferencias */
+  padding: 8px 16px; /* Ajusta el espaciado del botón según tus necesidades */
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+
+}
+
+.sidebar-open {
+  right: 0; /* Muestra la barra lateral al cambiar la posición a 0 */
+}
+.input-container {
+  display: flex;
+  justify-content: center; /* Alinea los elementos al final del contenedor */
+  width: inherit; /* O ajusta el ancho según tus necesidades */
+
+  bottom: 0;
+}
+
+.users-type {
+  width: 100%; /* O ajusta el ancho según tus necesidades */
+}
+
+.input-wrapper {
+  display: flex;
+
+}
+
+.input-wrapper input {
+  border:0;
+  margin-left: 20%;
+
+  border-radius: 0.4rem;
+  width: 85%;
+  word-wrap: break-word;
+
+}
+.input-wrapper button {
+
+  border:0;
+  margin-right: 20%;
+
+  width: 10%;
+  height: 2rem;
+  color: white;
+  font-weight: 500;
+  font-size: var(--fontSizeSecondary);
+  background-color: rgb(63 102 89);/* Ajusta el margen entre el input y el botón según tus necesidades */
+  border-radius: 0.4rem;
+
+
+
+}
+
+@media screen and (max-width: 600px) {
+
+  .input-wrapper input {
+    margin-right: 0;
+    margin-left: 0;/* Ajusta el margen entre el input y el botón según tus necesidades */
+    width: 85%;
+  }
+  .input-wrapper button {
+    margin-right: 0;
+    width: 30%;
+  }
+
+
+}
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	
+	.input-wrapper input:focus{
+		font-size: 16px;
+	}
+}
+@media screen and (max-width: 700px) {
+  .main{
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10%;
+  }
+  .app-users-type {
+
+
+    align-self: center;
+
+
+  }
+  .chat-container{
+    padding-bottom: 5%;
+  }
+}

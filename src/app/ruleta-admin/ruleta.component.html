@@ -1,0 +1,96 @@
+<div class="ruleta-admin-container">
+  <h2>Panel de Control - Ruleta</h2>
+  <h3>Sala: {{ salaActual | uppercase }}</h3>
+  
+  <div class="controls-section">
+    <div class="price-control">
+      <label>Número:</label>
+      <select [(ngModel)]="numeroSeleccionado" (change)="nuevoPrecio = ''">
+        <option *ngFor="let num of [1,2,3,4,5,6,7,8,9,10,11,12,13,14]" [value]="num">
+          N° {{num}}
+        </option>
+      </select>
+    </div>
+
+    <div class="price-control">
+      <label>Nuevo Precio ($):</label>
+      <input 
+        type="number" 
+        [(ngModel)]="nuevoPrecio"
+        [placeholder]="precios[numeroSeleccionado] ? 'Actual: $' + precios[numeroSeleccionado].toFixed(2) : 'Sin precio'"
+        min="1"
+        step="0.01"
+      >
+    </div>
+
+    <button 
+      (click)="guardarPrecio()" 
+      [disabled]="!nuevoPrecio || isNaN(parseFloat(nuevoPrecio)) || parseFloat(nuevoPrecio) <= 0"
+      class="save-btn"
+    >
+      Guardar Precio
+    </button>
+  </div>
+
+  <div class="reset-section">
+    <button class="reset-btn" (click)="resetRuleta()">
+      Resetear Ruleta Completa
+    </button>
+    <button *ngIf="esAdmin" (click)="iniciarNuevaRondaRuleta()">Nueva ronda</button>
+  </div>
+
+  <h3>Precios Actuales</h3>
+  <div class="price-grid">
+    <div *ngFor="let num of [1,2,3,4,5,6,7,8,9,10,11,12,13,14]" 
+         class="price-item"
+         [class.selected]="num === numeroSeleccionado"
+         (click)="numeroSeleccionado = num">
+      <div class="number">N° {{num}}</div>
+      <div class="price">{{formatPrice(precios[num])}}</div>
+    </div>
+  </div>
+</div>
+
+<!-- Botón para abrir la ruleta -->
+<div style="display: flex; justify-content: center;">
+  <button class="open-ruleta-btn" (click)="abrirPopupRuleta()">
+    Abrir Ruleta
+  </button>
+</div>
+
+<!-- Popup de la ruleta -->
+<div *ngIf="mostrarPopupRuleta" class="popup-overlay">
+  <div class="popup">
+    <button class="close-button" (click)="cerrarPopupRuleta()">×</button>
+    <div class="popup-content ruleta-popup-content">
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <div id="spinWheel" style="margin-bottom: 20px;">
+          <canvas #ruletaCanvas id="wheel" width="300" height="300"></canvas>
+          <button
+            *ngIf="esAdmin"
+            id="spin"
+            class="ruleta-spin-btn"
+            (click)="girarRuleta()"
+          >GIRAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Puedes colocar esto dentro del modal de casino admin, donde veas conveniente -->
+<div class="tabla-numeros-comprados-admin" style="margin: 20px 0;">
+  <h4>Números Comprados (Ruleta)</h4>
+  <table class="admin-ruleta-table" style="width:100%; background: #fff; border-radius: 8px;">
+    <tr>
+      <th>Número</th>
+      <th>Comprador</th>
+      <th>Monto</th>
+    </tr>
+    <tr *ngFor="let num of getNumeros()">
+      <td>{{ num }}</td>
+      <td>{{ numerosComprados[num]?.buyer || '-' }}</td>
+      <td>{{ numerosComprados[num]?.amount || '-' }}</td>
+    </tr>
+  </table>
+</div>

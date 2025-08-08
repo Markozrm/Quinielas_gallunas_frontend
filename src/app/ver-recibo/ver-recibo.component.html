@@ -1,0 +1,110 @@
+<button class="btn-submitLeft" (click)="volver()">Volver</button>
+
+<div class="recibos-container">
+  <div class="tabla-responsive">
+    <table class="recibos-table">
+      <thead>
+        <tr>
+          <th>FECHA</th>
+          <th>HORA</th>
+          <th>USUARIO</th>
+          <th>CANTIDAD</th>
+          <th>BANCO</th>
+          <th>VER RECIBO</th>
+          <th>ESTADO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let recipe of recipes">
+          <td>{{ recipe.fecha | date:'dd/MM/yy' }}</td>
+          <td>{{ recipe.fecha | date:'HH:mm' }}</td>
+          <td>{{ recipe.username }}</td>
+          <td>${{ recipe.monto | number:'1.2-2' }}</td>
+          <td>{{ recipe.banco }}</td>
+          <td>
+            <button class="ver-recibo-btn" (click)="verRecibo(recipe)">Ver Recibo</button>
+          </td>
+          <td>
+            <span *ngIf="recipe.estado; else pendiente"
+              [ngClass]="{
+                'estado-aprobado': recipe.estado === 'aprobado',
+                'estado-rechazado': recipe.estado === 'rechazado'
+              }">
+              {{ recipe.estado | titlecase }}
+            </span>
+            <ng-template #pendiente>
+              <span class="estado-pendiente">Pendiente</span>
+            </ng-template>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal para mostrar la imagen del recibo -->
+<div *ngIf="modalVisible" class="modal-overlay" (click)="cerrarModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Recibo</h3>
+    <img [src]="modalImageUrl" alt="Recibo" style="max-width:100%;max-height:400px;">
+    <br>
+    <button class="save-button"
+            *ngIf="selectedUser?.estado === 'pendiente'"
+            (click)="aceptar(selectedUser.username, selectedUser._id, selectedUser.monto)">
+      Aceptar
+    </button>
+    <button class="borrar-btn"
+            *ngIf="selectedUser?.estado === 'pendiente'"
+            (click)="rechazar(selectedUser._id)">
+      Rechazar
+    </button>
+    <button class="cancel-btn-borrar" (click)="cerrarModal()">Cerrar</button>
+  </div>
+</div>
+
+<div class="resumen-recibos">
+  <div class="resumen-item aceptados">
+    <div class="resumen-titulo">Aceptados</div>
+    <div class="resumen-numero">${{ recibosAceptados | number:'1.2-2'}}</div>
+  </div>
+  <div class="resumen-item rechazados">
+    <div class="resumen-titulo">Rechazados</div>
+    <div class="resumen-numero">${{ recibosRechazados | number:'1.2-2' }}</div>
+  </div>
+  <div class="resumen-item monto">
+    <div class="resumen-titulo">Pendiente por aceptar</div>
+    <div class="resumen-numero">${{ montoAcumulado | number:'1.2-2' }}</div>
+  </div>
+</div>
+
+<!-- Tabla de historial de recibos aceptados -->
+<div class="historial-recibos">
+  <h3>Historial de Recibos Aceptados</h3>
+  <button (click)="resetHistorialAceptados()" class="borrar-btn" style="margin-bottom: 12px;">Reset historial</button>
+  <table>
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Usuario</th>
+        <th>Cantidad</th>
+        <th>Banco</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let recibo of recibosPaginados">
+        <td data-label="Fecha">{{ recibo.fecha | date:'dd/MM/yyyy' }}</td>
+        <td data-label="Hora">{{ recibo.fecha | date:'HH:mm:ss' }}</td>
+        <td data-label="Usuario">{{ recibo.username }}</td>
+        <td data-label="Cantidad">{{ recibo.monto }}</td>
+        <td data-label="Banco">{{ recibo.banco }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- Controles de paginación -->
+  <div class="paginacion-historial">
+    <button (click)="cambiarPagina(paginaActual - 1)" [disabled]="paginaActual === 1">Anterior</button>
+    <span>Página {{paginaActual}} de {{totalPaginas}}</span>
+    <button (click)="cambiarPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">Siguiente</button>
+  </div>
+</div>

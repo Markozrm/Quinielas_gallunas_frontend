@@ -1,0 +1,79 @@
+<div class="chat-div">
+  <div #chatContainer class="chat-index">
+    <div class="mensajes-padding">
+  <ng-container *ngIf="!isPrivate && (chat$ | async) as messages">
+    <div class="chat-debug-info">
+      <strong>Mensajes recibidos:</strong> {{ getPublicMessagesCount(messages) }}
+    </div>
+    <ul>
+      <ng-container *ngFor="let chat of messages">
+        <li *ngIf="!isPrivateMessage(chat.message)" class="chat-message">
+          <img [src]="getImage(chat.user.name)" alt="">
+          <div class="message-content">
+            <div class="user-info">
+              <h1>{{ chat.user.name }}</h1>
+              <p class="date">{{ formatDate(chat.date) }} </p>
+            </div>
+            <div class="message-link" *ngIf="isValidLink(chat.message); else notALink">
+              <a class="message-link-content" [href]='sanitizeMessage(chat.message)' target="_blank">{{sanitizeMessage(chat.message)}}</a>
+            </div>
+            <ng-template #notALink>
+              {{ chat.message }}
+            </ng-template>
+            <div *ngIf="chat.validImage">
+              <img class="img-content-msg" [src]="getImageMsj(chat.user.id)" alt="">
+            </div>
+            <div class="delete-container" *ngIf="puedeEliminarMensajes()">
+              <a href="javascript:void(0)" (click)="openDeleteConfirm(chat.user.id)" class="delete-link" >Eliminar</a>
+            </div>
+          </div>
+        </li>
+      </ng-container>
+    </ul>
+    <div *ngIf="getPublicMessagesCount(messages) === 0" class="no-messages">
+      <em>No hay mensajes para mostrar.</em>
+    </div>
+  </ng-container>
+
+  <!-- Chat privado -->
+  <ng-container *ngIf="isPrivate && (privateChat$ | async) as privateMessages">
+    <div class="chat-debug-info">
+      <strong>Mensajes privados:</strong> {{ privateMessages.length }}
+    </div>
+    <ul>
+      <li *ngFor="let chat of privateMessages" class="chat-message">
+        <img [src]="getImage(chat.user.name)" alt="">
+        <div class="message-content">
+          <div class="user-info">
+            <h1>{{ chat.user.name }}</h1>
+            <p class="date">{{ formatDate(chat.date) }} </p>
+          </div>
+          <div class="message-text">
+            {{ getCleanPrivateMessage(chat.message) }}
+          </div>
+          <div class="delete-container" *ngIf="puedeEliminarMensajes()">
+            <a href="javascript:void(0)" (click)="openDeleteConfirm(chat.user.id)" class="delete-link" >Eliminar</a>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <div *ngIf="privateMessages.length === 0" class="no-messages">
+      <em>No hay mensajes privados para mostrar.</em>
+    </div>
+  </ng-container>
+</div>
+</div>
+
+  <!-- Modal de confirmación -->
+  <div class="modal-overlay" *ngIf="showDeleteModal">
+    <div class="modal-content">
+      <h3>Confirmar Eliminación</h3>
+      <p>¿Estás seguro de que deseas eliminar el mensaje?</p>
+      <button (click)="confirmDelete()" class="confirm-button">Eliminar</button>
+      <button (click)="closeDeleteModal()" class="cancel-button">Cancelar</button>
+    </div>
+  </div>
+
+
+
+

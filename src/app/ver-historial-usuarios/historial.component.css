@@ -1,0 +1,576 @@
+/*Eliminaación de Frame Work en HTML-Para diseño puro en CSS*/
+/* Estilos base - Tema oscuro */
+.historial-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #000000;
+  border-radius: 10px;
+  color: #ffffff;
+  font-family: 'Arial', sans-serif;
+  box-sizing: border-box;
+}
+
+/* Encabezado principal */
+.header-section {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 15px 0;
+  border-bottom: 1px solid #333;
+}
+
+.main-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #ffffff;
+  margin: 0 0 15px 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  letter-spacing: 1px;
+}
+
+.user-balance {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #222 0%, #333 100%);
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+.username {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffd700;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.balance {
+  font-size: 20px;
+  font-weight: bold;
+  color: #00ff88;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* Búsqueda */
+.search-section {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.search-input {
+  padding: 10px 18px;
+  width: 280px;
+  max-width: 100%;
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  border-color: #ffd700;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+}
+
+.search-input::placeholder {
+  color: #999;
+}
+
+/* Estados de carga y error */
+.loading-state {
+  text-align: center;
+  padding: 50px 0;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 215, 0, 0.2);
+  border-top-color: #ffd700;
+  border-radius: 50%;
+  margin: 0 auto;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  margin-top: 12px;
+  color: #ccc;
+  font-size: 14px;
+}
+
+.error-message {
+  padding: 12px;
+  background: linear-gradient(90deg, #ff4444 0%, #cc0000 100%);
+  color: #fff;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.no-results {
+  padding: 30px;
+  background: linear-gradient(90deg, #333 0%, #444 100%);
+  color: #ffd700;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Tabla principal */
+.table-container {
+  background: #000000;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  margin-bottom: 20px;
+  border: 1px solid #333;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.historial-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 600px;
+}
+
+.historial-table th {
+  color: #ffffff;
+  padding: 12px 8px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  border: none;
+  text-transform: uppercase;
+  border-bottom: 1px solid #222;
+}
+
+.historial-table td {
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #222;
+  background: #000000;
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.historial-table tr:hover td {
+  background: #111111;
+}
+
+/* Celdas específicas */
+.concepto-cell {
+  text-align: left !important;
+  padding-left: 15px !important;
+  width: 25%;
+  min-width: 150px;
+}
+
+.round {
+  font-size: 13px;
+  font-weight: normal;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.cantidad-cell, .cantidad-final-cell {
+  font-weight: bold;
+  color: #ffffff;
+  font-size: 13px;
+  width: 18%;
+  min-width: 80px;
+}
+
+.color-cell {
+  width: 15%;
+  min-width: 60px;
+}
+
+.resultado-cell {
+  width: 15%;
+  min-width: 60px;
+}
+
+/* Colores */
+.color-rojo {
+  color: #ff0000;
+  font-weight: bold;
+  font-size: 13px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.color-verde {
+  color: #00ff00;
+  font-weight: bold;
+  font-size: 13px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Resultados */
+.result-gana {
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.result-pierde {
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.result-tablas {
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+/* Paginación */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 25px;
+  padding: 0 15px;
+  flex-wrap: wrap;
+}
+
+.pagination-btn {
+  padding: 10px 14px;
+  background: linear-gradient(90deg, #ffd700 0%, #ffed4e 100%);
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+  transition: all 0.3s ease;
+  min-width: 70px;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: linear-gradient(90deg, #ffed4e 0%, #ffd700 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(255, 215, 0, 0.4);
+}
+
+.pagination-btn:disabled {
+  background: #444;
+  color: #777;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.close-btn {
+  padding: 10px 14px;
+  background: linear-gradient(90deg, #ff4444 0%, #ff6666 100%);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+  transition: all 0.3s ease;
+  min-width: 70px;
+  margin-left: 5px;
+}
+
+.close-btn:hover {
+  background: linear-gradient(90deg, #ff6666 0%, #ff4444 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(255, 68, 68, 0.4);
+}
+
+.page-info {
+  font-size: 13px;
+  color: #ffd700;
+  font-weight: bold;
+  padding: 0 12px;
+}
+
+/* Superuser - Ganancias */
+.superuser-ganancias {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-weight: bold;
+  background: #f5f5f5;
+  padding: 8px 16px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  font-size: 14px;
+  color: #111;
+}
+
+.superuser-ganancias .positivo { color: #2e7d32; }
+
+.superuser-ganancias .negativo {
+  color: #e53935;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .historial-container {
+    margin: 15px;
+    padding: 15px;
+    max-width: calc(100% - 30px);
+  }
+  
+  .main-title {
+    font-size: 22px;
+    margin-bottom: 12px;
+  }
+  
+  .user-balance {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+    padding: 12px 15px;
+  }
+  
+  .username {
+    font-size: 16px;
+  }
+  
+  .balance {
+    font-size: 18px;
+  }
+  
+  .search-input {
+    width: calc(100% - 20px);
+    max-width: 300px;
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+  
+  .table-container {
+    margin: 0 -5px 20px -5px;
+    border-radius: 8px;
+  }
+  
+  .historial-table {
+    font-size: 12px;
+    min-width: 550px;
+  }
+  
+  .historial-table th {
+    padding: 10px 6px;
+    font-size: 12px;
+  }
+  
+  .historial-table td {
+    padding: 8px 6px;
+    font-size: 12px;
+  }
+  
+  .concepto-cell {
+    padding-left: 10px !important;
+    min-width: 140px;
+  }
+  
+  .round {
+    font-size: 12px;
+  }
+  
+  .cantidad-cell, .cantidad-final-cell {
+    font-size: 12px;
+    min-width: 75px;
+  }
+  
+  .color-rojo, .color-verde {
+    font-size: 12px;
+  }
+  
+  .result-gana, .result-pierde {
+    font-size: 12px;
+  }
+  
+  .pagination-controls {
+    gap: 12px;
+    padding: 0 15px;
+    flex-wrap: wrap;
+  }
+  
+  .pagination-btn {
+    min-width: 70px;
+    font-size: 12px;
+    padding: 10px 14px;
+  }
+  
+  .close-btn {
+    min-width: 70px;
+    font-size: 12px;
+    padding: 10px 14px;
+    margin-left: 5px;
+  }
+  
+  .page-info {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .historial-container {
+    margin: 10px;
+    padding: 12px;
+    max-width: calc(100% - 20px);
+  }
+  
+  .main-title {
+    font-size: 20px;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+  
+  .header-section {
+    padding: 12px 0;
+    margin-bottom: 15px;
+  }
+  
+  .user-balance {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  
+  .username {
+    font-size: 15px;
+  }
+  
+  .balance {
+    font-size: 17px;
+  }
+  
+  .search-section {
+    margin-bottom: 15px;
+  }
+  
+  .search-input {
+    width: calc(100% - 10px);
+    padding: 9px 12px;
+    font-size: 13px;
+  }
+  
+  .table-container {
+    margin: 0 -2px 15px -2px;
+  }
+  
+  .historial-table {
+    min-width: 480px;
+    font-size: 11px;
+  }
+  
+  .historial-table th {
+    padding: 8px 4px;
+    font-size: 11px;
+  }
+  
+  .historial-table td {
+    padding: 6px 4px;
+    font-size: 11px;
+  }
+  
+  .concepto-cell {
+    padding-left: 8px !important;
+    min-width: 120px;
+  }
+  
+  .round {
+    font-size: 10px;
+    line-height: 1.2;
+  }
+  
+  .cantidad-cell, .cantidad-final-cell {
+    font-size: 11px;
+    min-width: 65px;
+  }
+  
+  .color-rojo, .color-verde {
+    font-size: 11px;
+  }
+  
+  .result-gana, .result-pierde {
+    font-size: 11px;
+  }
+  
+  .pagination-controls {
+    gap: 10px;
+    padding: 0 10px;
+  }
+  
+  .pagination-btn {
+    font-size: 11px;
+    padding: 8px 12px;
+    min-width: 60px;
+  }
+  
+  .close-btn {
+    font-size: 11px;
+    padding: 8px 12px;
+    min-width: 60px;
+  }
+  
+  .page-info {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .historial-container {
+    margin: 8px;
+    padding: 10px;
+    max-width: calc(100% - 16px);
+  }
+  
+  .main-title {
+    font-size: 18px;
+  }
+  
+  .search-input {
+    width: calc(100% - 5px);
+  }
+  
+  .historial-table {
+    min-width: 420px;
+    font-size: 10px;
+  }
+  
+  .historial-table th {
+    padding: 6px 3px;
+    font-size: 10px;
+  }
+  
+  .historial-table td {
+    padding: 5px 3px;
+    font-size: 10px;
+  }
+  
+  .concepto-cell {
+    min-width: 100px;
+    padding-left: 6px !important;
+  }
+  
+  .round {
+    font-size: 9px;
+  }
+  
+  .cantidad-cell, .cantidad-final-cell {
+    font-size: 10px;
+    min-width: 55px;
+  }
+}

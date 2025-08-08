@@ -1,0 +1,407 @@
+.perfil-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.menuContainer {
+  width: 100%;
+  height: 10%;
+  z-index: 9999;
+}
+.btn-submitLeft {
+  font-size: var(--fontSizeMessage);
+  border: 0;
+  border-radius: 0.4rem;
+  position: fixed;
+  z-index: 9999;
+  width: 2.5rem;
+  height: auto;
+  left: 0;
+  top: 0;
+}
+
+.btn-volver {
+  background-color: #FFA500;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.perfil-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  background-color: #FFA500;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  margin: 30px 0;
+  background-image: url('../../assets/image/bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-color: #FFA500;
+}
+
+.titulo {
+  color: #FFF;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+  text-transform: uppercase;
+}
+
+.perfil-imagen {
+  margin-bottom: 15px;
+}
+
+.gallo-circulo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border: 3px solid #FFF;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.gallo-circulo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.saldo-info {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.saldo-label {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+}
+
+.saldo-valor {
+  background-color: #000;
+  color: #FFF;
+  padding: 10px 15px;
+  border-radius: 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.botones-acciones {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.btn-accion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background-color: #000;
+  color: #FFF;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 15px;
+  font-weight: bold;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.btn-ir {
+  background-color: #FFA500;
+  color: #000;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.cambio-password {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.password-text {
+  margin-bottom: 15px;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.password-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.btn-nueva-password {
+  background-color: #000;
+  color: #FFF;
+  border: none;
+  border-radius: 20px;
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.input-password {
+  width: 100%;
+  padding: 10px;
+  border-radius: 20px;
+  border: none;
+  margin-bottom: 10px;
+  background-color: #FFF;
+  color: #000;
+}
+
+.btn-aceptar {
+  background-color: #000;
+  color: #FFF;
+  border: none;
+  border-radius: 20px;
+  padding: 10px;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.whatsapp-btn-container {
+  width: 100%;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.btn-whatsapp {
+  background-color: #25D366; /* Verde de WhatsApp */
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 12px 25px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.btn-whatsapp:hover {
+  background-color: #128C7E; /* Verde más oscuro al hover */
+  transform: translateY(-2px);
+}
+.user-actions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  max-width: 400px;
+  margin-top: 20px;
+}
+
+.btn-logout {
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 12px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-change-password {
+  background-color: #FFA500;
+  color: #000;
+  border: none;
+  border-radius: 20px;
+  padding: 12px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-change-password:hover {
+  background-color: #E69500;
+  transform: translateY(-2px);
+}
+
+.btn-logout:hover {
+  background-color: #cc0000;
+  transform: translateY(-2px);
+}
+/* Estilos para el hover effect */
+.gallo-circulo {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.change-photo-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gallo-circulo:hover .change-photo-overlay {
+  opacity: 1;
+}
+
+.change-photo-overlay i {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.change-photo-overlay span {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Estilos para el formulario de cambio de foto */
+.photo-change-container {
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.photo-preview {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 15px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #FFA500;
+}
+
+.photo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.btn-select-photo {
+  display: inline-block;
+  padding: 10px 15px;
+  background: #FFA500;
+  color: #000;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.btn-select-photo:hover {
+  background: #E69500;
+}
+
+.photo-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-upload {
+  padding: 10px 20px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-upload:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
+
+.btn-cancel {
+  padding: 10px 20px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .perfil-content {
+    width: 95%;
+  }
+  
+  .gallo-circulo {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .titulo {
+    font-size: 1.8rem;
+  }
+  
+  .user-actions-container {
+    width: 95%;
+  }
+  
+  .btn-logout,
+  .btn-change-password {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+  }
+  
+}

@@ -1,0 +1,39 @@
+<div class="main">
+  <div class="menuContainer">
+    <button class="btn-submitLeft" (click)="Volver()">
+      Volver
+    </button>
+    <app-menu></app-menu>
+  </div>
+
+  <div class="login-form">
+    <h2>Iniciar sesión</h2>
+    
+    <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="username">Escribe tu usuario</label>
+        <input type="text" formControlName="username" required placeholder="Usuario">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Escribe tu contraseña</label>
+        <input type="password" formControlName="password" required placeholder="Contraseña">
+      </div>
+
+      <button type="submit" class="btn-iniciar">INICIAR</button>
+      
+      <!-- <div class="forgot-password">
+        <a href="#">Olvidé mi contraseña</a>
+      </div> -->
+    </form>
+    
+    <div class="new-user">
+      <p>¿ERES NUEVO?</p>
+      <p>¡Crea una cuenta ahora!</p>
+      <button (click)="Regitro()" class="btn-crear">Crear Cuenta</button>
+    </div>
+  </div>
+</div>
+
+
+

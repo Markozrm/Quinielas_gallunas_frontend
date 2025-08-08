@@ -1,0 +1,163 @@
+<div class="main">
+  <div class="menuContainer">
+    <app-menu></app-menu>
+    <div>
+      <button class="btn-wrap" (click)="inicio()">
+        <img class="btn-submitLeft" src="../../../assets/image/granero_logo.jpg" alt="Logo">
+      </button>
+    </div>
+
+    <div>
+      <button class="btn-wrap" (click)="irMiPerfil()">
+        <img class="btn-submit" src="{{userPhoto}}" alt="Foto de perfil">
+      </button>
+    </div>
+    
+
+  <div class="videoContainer">
+    <app-video-player></app-video-player>
+  </div>
+
+  <!-- Botón flotante arrastrable para abrir el chat modal -->
+  <div class="chat-button-container" 
+       [style.left.px]="buttonPosition.x" 
+       [style.top.px]="buttonPosition.y"
+       (mousedown)="onMouseDown($event)"
+       (mousemove)="onMouseMove($event)"
+       (mouseup)="onMouseUp()"
+       (touchstart)="onTouchStart($event)"
+       (touchmove)="onTouchMove($event)"
+       (touchend)="onTouchEnd()">
+    <button class="chat-button" (click)="openChatModal()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+      </svg>
+      <span>Chat</span>
+    </button>
+  </div>
+
+  <div *ngIf="esAdmin()" class="admin-buttons-container">
+    <!-- Botón de usuarios conectados - siempre visible -->
+    <button class="admin-btn users-btn" (click)="openPopup()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="user-icon">
+        <path d="M7.5 6.5C7.5 8.981 9.519 11 12 11s4.5-2.019 4.5-4.5S14.481 2 12 2 7.5 4.019 7.5 6.5zM20 21h1v-1c0-3.859-3.141-7-7-7h-4c-3.86 0-7 3.141-7 7v1h17z"></path>
+      </svg>
+      <span>{{ connectedUsers }}</span>
+    </button>
+    
+    <!-- Contenedor de botones de control de apuestas -->
+    <div class="betting-control-buttons">
+      <div class="admin-bet-box red">
+        <div class="admin-bet-title">{{ redTeamName || 'Rojo' }}</div>
+        <div class="admin-bet-amount">{{ cantidadApostadaRojo }}$</div>
+        <div class="admin-bet-points">PTS: {{ redPoints }}</div>
+      </div>
+
+      <!-- Botón principal para abrir/cerrar apuestas cuando corresponda -->
+      <button *ngIf="estadoApuesta" 
+              class="admin-btn close-bets-btn" 
+              (click)="toggleBooleanState()">
+        Cerrar Apuestas
+      </button>
+      
+      <button *ngIf="!estadoApuesta && textButton === 'Abrir Apuestas'" 
+              class="admin-btn open-bets-btn" 
+              (click)="toggleBooleanState()">
+        Abrir Apuestas
+      </button>
+      
+      <!-- Cuando las apuestas están cerradas y hay que seleccionar ganador -->
+      <button *ngIf="!estadoApuesta && textButton === 'Escoger Ganador'" 
+              class="admin-btn select-winner-btn" 
+              (click)="toggleBooleanState()">
+        Escoger Ganador ronda {{ this.numeroPelea }}
+      </button>
+      
+      <!-- Botón para abrir una nueva ronda sin seleccionar ganador (solo aparece cuando está cerrada la ronda) -->
+      <button *ngIf="!estadoApuesta && textButton === 'Escoger Ganador'" 
+              class="admin-btn new-round-btn" 
+              (click)="abrirNuevaRonda()">
+        Abrir Nueva Ronda
+      </button>
+
+      <div class="admin-bet-box green">
+        <div class="admin-bet-title">{{ greenTeamName || 'Verde' }}</div>
+        <div class="admin-bet-amount">{{ cantidadApostadaVerde }}$</div>
+        <div class="admin-bet-points">PTS: {{ greenPoints }}</div>
+      </div>
+    </div>
+    
+    <!-- Sección para rondas en espera -->
+    <div *ngIf="rondasEnEspera.length > 0" class="rondas-espera">
+      <h4>Rondas pendientes de ganador:</h4>
+      <div class="rondas-list">
+        <button *ngFor="let ronda of rondasEnEspera" 
+                class="ronda-espera-btn" 
+                (click)="seleccionarRonda(ronda)">
+          Ronda {{ronda}}
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modales -->
+  <app-open-bet-modal *ngIf="isOpenBetModalOpen" (onOpenBets)="handleOpenBets($event)" (onClose)="closeOpenBetModal()"></app-open-bet-modal>
+  <app-close-bet-modal *ngIf="isCloseBetModalOpen" [numeroPelea]="this.numeroPelea" (onCloseBets)="handleCloseBets()" (onClose)="closeCloseBetModal()"></app-close-bet-modal>
+  <app-choose-winner-modal *ngIf="isChooseModalOpen" [numeroPelea]="this.rondaSeleccionada" (onCloseBets)="handleChooseWinner($event)" (onClose)="closeChooseModal()"></app-choose-winner-modal>
+
+  <!-- Sección de apuestas -->
+  <div class="apuesta-container">
+    <div *ngIf="esInvitado()">
+      <input #cantidadApuesta type="number" placeholder="Ingresar cantidad" />
+      <div class="match-info">
+        <button class="team-red" 
+                [class.selected]="selectedTeam === 'rojo'" 
+                (click)="selectTeam('rojo')">
+          <p>Voy Rojo</p>
+        </button>
+        <button class="team-green" 
+                [class.selected]="selectedTeam === 'verde'" 
+                (click)="selectTeam('verde')">
+          <p>Voy Verde</p>
+        </button>
+      </div>
+      
+      <button (click)="apostar(cantidadApuesta.value)" class="boton-apostar">
+        <p>Apostar</p>
+      </button>
+    </div>
+    
+    <div class="apuestas-en-vivo">
+      <h3>Tabla de apuestas</h3>
+      <ul>
+        <li *ngFor="let chat of chat$ | async" class="chat-message">
+          <span>{{ chat.user.name }}</span>
+          <span>{{ chat.cantidad }}</span>
+          <span *ngIf="esVerde(chat.verde)">VERDE</span>
+          <span *ngIf="!esVerde(chat.verde)">ROJO</span>
+          <span class="estado-jugando">{{chat.estado}}</span>
+          <span>Ronda: {{chat.ronda}}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Pop-up -->
+  <div *ngIf="isPopupOpen" class="popup-overlay">
+    <div class="popup">
+      <button class="close-button" (click)="closePopup()">&#10005;</button>
+      <div class="popup-content">
+        <h3>Usuarios Conectados</h3>
+        <div class="user-list">
+          <div *ngFor="let user of users" class="user-item">
+            <img [src]="getUserPhoto(user.name)" alt="User Photo" class="user-photo">
+            <p>{{ user.name }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal del chat -->
+  <app-chat-modal *ngIf="isChatModalOpen" (closeModal)="closeChatModal()"></app-chat-modal>
+</div>

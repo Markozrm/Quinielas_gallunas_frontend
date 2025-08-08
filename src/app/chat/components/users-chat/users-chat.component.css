@@ -1,0 +1,207 @@
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #000000;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.modal-content h3 {
+  margin-bottom: 15px;
+}
+
+.modal-content p {
+  margin-bottom: 20px;
+}
+
+.confirm-button, .cancel-button {
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.confirm-button {
+  background-color: #f44336; /* Rojo para eliminar */
+}
+.cancel-button {
+  background-color: #FD9E00; /* Rojo para eliminar */
+}
+.chat-div {
+  display: flex;
+  flex-direction: column;
+  width: 96%;
+  min-height: 250px;
+  max-height: 60vh;
+  overflow: hidden;
+  background: #242526;
+  border-radius: 16px;
+  margin: 32px auto 0 auto;
+  padding: 0;
+}
+
+.chat-index {
+  flex: 1;
+  overflow-y: auto;
+  background-color: #242526;
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  scrollbar-width: thin;
+  scrollbar-color: #666 #242526;
+}
+
+/* Estilos para la barra de scroll en WebKit */
+.chat-index::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-index::-webkit-scrollbar-track {
+  background: #242526;
+}
+
+.chat-index::-webkit-scrollbar-thumb {
+  background: #666;
+  border-radius: 3px;
+}
+
+.chat-index::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+
+.delete-container{
+  justify-content: flex-end;
+}
+.delete-link {
+  color: red;
+  cursor: pointer;
+
+  margin-right: 0;
+}
+
+.mensajes-padding{
+  padding: 10px;
+  height: 100%;
+}
+
+.mensajes-padding ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+.mensajes-padding img{
+  border-radius: 100%;
+  height: 50px;
+  width: 50px;
+}
+.mensajes-padding li {
+  display: flex;
+  flex-direction: row;
+  margin: 2%;
+
+}
+.message-content{
+  width: 100%;
+  height: 25%;
+  margin-left: 2%;
+  margin-left: 2%;
+
+  overflow-wrap: break-word;
+  overflow-y: auto;
+
+
+
+}
+
+.user-info{
+
+  display: flex;
+  justify-content: space-between;
+  align-items: top;
+}
+.user-info p{
+  margin-top: 0;
+}
+
+.chat-message {
+
+
+  font-size: var(--fontSizeMessage);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  background-color: #3a3b3c; /* Color de fondo de cada mensaje */
+  border-radius: 8px; /* Bordes redondeados para los mensajes */
+  word-wrap: break-word; /* Permite que las palabras largas se dividan en líneas */
+  overflow-wrap: break-word;
+}
+.chat-message h1{
+
+  font-size: 1rem;
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+.message-link-content {
+  /* Agrega los estilos personalizados para tus enlaces aquí */
+  color: #00ff33 !important; /* Color de texto rojo */
+  text-decoration: underline; /* Subrayado opcional */
+}
+
+
+.mensajes-padding .img-content-msg{
+  border-radius: 0%;
+  height: 100%;
+  width: 100%;
+}
+
+ * {
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 600px){
+  .body{
+    background-color: #242526;
+  }
+  .chat-index{
+    margin-top: 2%;
+    margin-left: 0%;
+    margin-right: 0%;
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+
+  }
+  .chat-message h1{
+    font-size: 0.7rem;
+
+  }
+  .mensajes-padding img{
+
+    height: 15%;
+    width: 15%;
+  }
+  .chat-div{
+  
+    margin-left: 2%;
+    margin-right: 2%;
+  
+  }
+  
+}

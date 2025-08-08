@@ -1,0 +1,29 @@
+
+  <!-- <div class="block-left">
+    <app-users-rooms></app-users-rooms> -->
+    <div class="menuContainer">
+      <app-menu></app-menu>
+    </div>
+
+    <button (click)="volver()" class="btn-volver">Volver</button>
+  <div class="main">
+
+    <div class="input-container"> 
+      <form (ngSubmit)="filtrar()" [formGroup]="formFiltro" class="users-type">
+        <div class="input-wrapper">
+          <input formControlName="message"
+          type="text" placeholder="Escribe el codigo del stream..">
+          <button type="submit">Filtrar</button>
+        </div>
+      </form>
+    </div> 
+
+   <div class="chat-container">
+
+    <app-users-chat></app-users-chat>
+
+  </div>
+
+</div>
+
+

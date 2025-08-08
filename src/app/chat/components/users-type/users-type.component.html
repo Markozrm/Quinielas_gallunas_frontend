@@ -1,0 +1,11 @@
+<form (ngSubmit)="sendMessage()" [formGroup]="formMessage" class="users-type">
+  <div class="input-wrapper">
+    <input formControlName="message" type="text" placeholder="Escribe un mensaje...">
+    
+    <!-- File input siempre presente pero oculto si no es admin -->
+    <input type="file" #fileInput (change)="onFileSelected($event)" style="display: none;" />
+    <button *ngIf="esAdmin()" type="button" class="attach-btn" (click)="selectFile()">📷</button>
+    
+    <button type="submit" class="submit-btn">Enviar</button>
+  </div>
+</form>

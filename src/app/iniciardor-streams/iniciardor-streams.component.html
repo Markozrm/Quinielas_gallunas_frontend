@@ -1,0 +1,49 @@
+
+
+<div class="main">
+
+  <div class="menuContainer">
+    <app-menu></app-menu>
+    <div>
+      <button class="btn-submitLeft" (click)="Volver()">
+        Volver
+      </button>
+    </div>
+
+  </div>
+
+    <div class="formContainer">
+      <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
+        <h2>Inicio de Stream</h2>
+        <label for="tituloStream">Título del Stream:</label>
+        <input type="text" formControlName="tituloStream" id="tituloStream" required>
+
+        <label for="userImage">Minuatura del stream:</label>
+        <input type="file" id="userImage" name="userImage" accept="image/*" required (change)="handleImageChange($event)" formControlName ="image">
+        <div *ngIf="imagePreview" class="image-preview-container">
+          <img [src]="imagePreview" alt="Vista previa de la imagen" class="profile-image" >
+        </div>
+
+        <label for="numeroStream">Número del Stream:</label>
+        <select formControlName="numeroStream" id="numeroStream" required>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <!-- <option value="3">3</option> -->
+        </select>
+        <label for="esVIP">Es VIP:</label>
+        <input type="checkbox" formControlName="esVIP" id="esVIP" required>
+  
+        <button type="submit" class="btn-iniciar">Iniciar Stream</button>
+      </form>
+  
+      <label>El URL para el Stream es:</label>
+      <textarea readonly>{{ urlStream }}</textarea>
+  
+      <label>La clave del Stream es:</label>
+      <textarea readonly>{{ claveStream }}</textarea>
+    </div>
+  </div>
+  
+
+
+

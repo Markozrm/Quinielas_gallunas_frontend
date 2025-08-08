@@ -1,0 +1,86 @@
+<div class="perfil-container">
+  <div class="menuContainer">
+    <app-menu></app-menu>
+    <div>
+      <button class="btn-wrap" (click)="volver()">
+        <img class="btn-submitLeft" src="../../../assets/image/granero_logo.jpg" alt="Logo">
+      </button>
+    </div>
+  </div>
+  <div class="perfil-content">
+    <h1 class="titulo">{{ nombreUsuario }}</h1>
+    
+    <div class="perfil-imagen">
+      <div class="gallo-circulo"(mouseenter)="showChangePhoto = true" (mouseleave)="showChangePhoto = false">
+        <img [src]="userPhoto" alt="Foto de usuario">
+        <!-- Overlay para cambiar foto -->
+            <div class="change-photo-overlay" *ngIf="showChangePhoto" (click)="toggleCambioFoto()">
+              <i class="fas fa-camera"></i>
+              <span>Cambiar foto</span>
+            </div>
+      </div>
+    </div>
+    <!-- Formulario para cambiar foto -->
+<div *ngIf="mostrarCambioFoto" class="photo-change-container">
+  <div class="photo-preview" *ngIf="previewFoto">
+    <img [src]="previewFoto" alt="Vista previa">
+  </div>
+  
+  <input type="file" id="photoInput" accept="image/*" (change)="onFileSelected($event)" hidden>
+  <label for="photoInput" class="btn-select-photo">Seleccionar foto</label>
+  
+  <div class="photo-actions">
+    <button class="btn-upload" (click)="cambiarFoto()" [disabled]="!fotoSeleccionada">
+      Subir foto
+    </button>
+    <button class="btn-cancel" (click)="toggleCambioFoto()">
+      Cancelar
+    </button>
+  </div>
+</div>
+    
+    <div class="saldo-info">
+      <p class="saldo-label">Mi Saldo:</p>
+      <div class="saldo-valor">{{saldoUsuario}}</div>
+    </div>
+    
+    <div class="botones-acciones">
+      <button class="btn-accion" (click)="irARecargar()">RECARGAR SALDO <span class="btn-ir">IR</span></button>
+      <button class="btn-accion" (click)="retirarSaldo()">RETIRAR SALDO <span class="btn-ir">IR</span></button>
+      <button class="btn-accion" (click)="verHistorialApuestas()">HISTORIAL APUESTAS <span class="btn-ir">IR</span></button>
+    </div>
+    <!-- Botón de WhatsApp separado y centrado -->
+<div class="whatsapp-btn-container">
+  <button class="btn-whatsapp" (click)="contactarWhatsApp()">UNIRME AL GRUPO DE WHATSAPP</button>
+</div>
+    <!-- <div class="cambio-password">
+      <p class="password-text" (click)="toggleCambioPassword()">Restablecer contraseña</p>
+      
+      <div *ngIf="mostrarCambioPassword" class="password-form">
+        <form [formGroup]="cambioPasswordForm" (submit)="cambiarPassword()">
+          <button type="button" class="btn-nueva-password">Nueva contraseña</button>
+          <input 
+            type="password" 
+            formControlName="nuevaPassword" 
+            class="input-password"
+            placeholder="Nueva contraseña">
+          <button type="submit" class="btn-aceptar">ACEPTAR</button>
+        </form>
+      </div>
+      
+      <button *ngIf="!mostrarCambioPassword" class="btn-nueva-password" (click)="toggleCambioPassword()">Nueva contraseña</button>
+      <button *ngIf="!mostrarCambioPassword" class="btn-aceptar">ACEPTAR</button>
+    </div> -->
+  </div>
+
+  <!-- Botones de acciones del usuario -->
+  <div class="user-actions-container">
+    <button class="btn-change-password" (click)="cambiarContrasena()">
+      <i class="fas fa-key"></i> CAMBIAR CONTRASEÑA
+    </button>
+    <button class="btn-logout" (click)="logout()">
+      <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+    </button>
+
+  </div>
+

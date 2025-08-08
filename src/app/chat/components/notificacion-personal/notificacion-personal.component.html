@@ -1,0 +1,35 @@
+<div *ngIf="notificacion" 
+     class="notificacion-container" 
+     [ngClass]="getTipoClase()"
+     [@notificacionState]="animationState">
+  <div class="notificacion-header">
+    <span class="notificacion-icono">{{ getTipoIcono() }}</span>
+    <button class="notificacion-cerrar" (click)="cerrar()" aria-label="Cerrar notificación">×</button>
+  </div>
+  <div class="notificacion-contenido">
+    <h3 class="notificacion-titulo">{{ notificacion.tipo | titlecase }}</h3>
+    <p class="notificacion-mensaje">{{ notificacion.mensaje }}</p>
+    <div class="notificacion-detalles" *ngIf="notificacion.detalles">
+      <div *ngIf="notificacion.detalles.cantidadOriginal && notificacion.detalles.cantidadDevuelta">
+        <p>
+          <strong>Monto original:</strong> ${{ notificacion.detalles.cantidadOriginal | number:'1.0-2' }}
+        </p>
+        <p>
+          <strong>Monto cazado:</strong> ${{ notificacion.detalles.cantidadCazada | number:'1.0-2' }}
+        </p>
+        <p>
+          <strong>Monto devuelto:</strong> ${{ notificacion.detalles.cantidadDevuelta | number:'1.0-2' }}
+        </p>
+      </div>
+      <p *ngIf="!notificacion.detalles.cantidadDevuelta && notificacion.detalles.cantidad">
+        <strong>Cantidad:</strong> ${{ notificacion.detalles.cantidad | number:'1.0-2' }}
+      </p>
+      <p *ngIf="notificacion.detalles.ronda">
+        <strong>Ronda:</strong> {{ notificacion.detalles.ronda }}
+      </p>
+      <p *ngIf="notificacion.detalles.sala">
+        <strong>Sala:</strong> {{ notificacion.detalles.sala }}
+      </p>
+    </div>
+  </div>
+</div> 

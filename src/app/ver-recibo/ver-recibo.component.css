@@ -1,0 +1,437 @@
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background: #000000;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  .modal-content h3 {
+    margin-bottom: 15px;
+  }
+  
+  .modal-content p {
+    margin-bottom: 20px;
+  }
+  
+  .confirm-button, .cancel-button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .confirm-button {
+    background-color: #f44336; /* Rojo para eliminar */
+  }
+  
+  .cancel-btn-borrar {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    background-color: #FD9E00; /* Verde para cancelar */
+  }
+  
+  .users-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .user-item {
+      margin: 10px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      position: relative;
+    /* Limitar el ancho para una mejor adaptabilidad */
+    }
+    
+    .username {
+      text-align: center;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .user-image {
+      width: 100%;
+      height: 100%;
+
+      margin-bottom: 10px;
+    }
+    
+    .edit-button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    
+    .edit-menu {
+      width: 100%;
+      background-color: #fff;
+      padding: 10px;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
+    
+    .edit-menu label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    
+    .edit-menu input {
+      width: calc(100% - 20px);
+      padding: 8px;
+      margin-bottom: 10px;
+    }
+    
+    .save-button,
+    .cancel-button {
+      width: 48%;
+      padding: 8px;
+      margin-right: 2%;
+      cursor: pointer;
+    }
+    
+    .save-button {
+      background-color: #FD9E00;
+      color: #fff;
+      border: none;
+    }
+    
+    .cancel-button {
+      background-color: #f44336;
+      color: #fff;
+      border: none;
+    }
+    .username {
+      color:white;
+    }
+    .borrar-btn {
+      padding: 8px;
+      width: 45%;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      background-color:  #f44336; /* Verde para cancelar */
+    }
+    
+    @media screen and (-webkit-min-device-pixel-ratio:0) {
+  
+      .edit-menu input:focus {
+          font-size: 13px;
+      }
+  }
+  
+  .recibos-container {
+    margin: 30px auto;
+    max-width: 1100px;
+    background: #111;
+    border-radius: 15px;
+    padding: 20px;
+    border: 2px solid #FD9E00;
+  }
+  
+  .recibos-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #fff;
+    font-size: 1.1em;
+  }
+  
+  .recibos-table th, .recibos-table td {
+    padding: 12px 8px;
+    border-bottom: 1px solid #FD9E00;
+    text-align: center;
+  }
+  
+  .recibos-table th {
+    background: #222;
+    color: #FD9E00;
+    font-weight: bold;
+  }
+  
+  .ver-recibo-btn {
+    background: linear-gradient(90deg, #FD9E00 60%, #fff700 100%);
+    color: #222;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .ver-recibo-btn:hover {
+    background: linear-gradient(90deg, #fff700 60%, #FD9E00 100%);
+  }
+  .estado-aprobado {
+    background: #1abc9c;
+    color: #fff;
+    padding: 6px 16px;
+    border-radius: 10px;
+    font-weight: bold;
+    display: inline-block;
+  }
+  .estado-rechazado {
+    background: #e74c3c;
+    color: #fff;
+    padding: 6px 16px;
+    border-radius: 10px;
+    font-weight: bold;
+    display: inline-block;
+  }
+  .estado-pendiente {
+    background: #f1c40f;
+    color: #222;
+    padding: 6px 16px;
+    border-radius: 10px;
+    font-weight: bold;
+    display: inline-block;
+  }
+/* Contenedor para scroll horizontal en pantallas pequeñas */
+.tabla-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Ajustes para la tabla */
+.recibos-table {
+  min-width: 700px; /* Puedes ajustar este valor según tus columnas */
+}
+
+/* Media query para pantallas pequeñas */
+@media (max-width: 800px) {
+  .recibos-container {
+    padding: 8px;
+    max-width: 100vw;
+  }
+  .recibos-table th, .recibos-table td {
+    padding: 8px 4px;
+    font-size: 0.95em;
+  }
+  .recibos-table {
+    font-size: 0.95em;
+  }
+}
+
+/* Opcional: para que los botones no se desborden */
+@media (max-width: 500px) {
+  .ver-recibo-btn,
+  .save-button,
+  .borrar-btn,
+  .cancel-btn-borrar {
+    padding: 6px 8px;
+    font-size: 0.9em;
+    width: 100%;
+    margin-bottom: 4px;
+  }
+}
+.resumen-recibos {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin: 24px auto 32px auto;
+  max-width: 700px;
+}
+
+.resumen-item {
+  background: #181818;
+  border-radius: 12px;
+  padding: 18px 24px;
+  min-width: 140px;
+  text-align: center;
+  box-shadow: 0 2px 8px #0006;
+  border: 2px solid #FD9E00;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.resumen-titulo {
+  font-size: 1.1em;
+  color: #FD9E00;
+  margin-bottom: 8px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.resumen-numero {
+  font-size: 2em;
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.resumen-item.aceptados .resumen-numero {
+  color: #1abc9c;
+}
+.resumen-item.rechazados .resumen-numero {
+  color: #e74c3c;
+}
+.resumen-item.monto .resumen-numero {
+  color: #FD9E00;
+}
+
+@media (max-width: 700px) {
+  .resumen-recibos {
+    flex-direction: column;
+    gap: 12px;
+    max-width: 98vw;
+  }
+  .resumen-item {
+    width: 100%;
+    min-width: unset;
+  }
+}
+
+/* Tabla de historial de recibos aceptados */
+.historial-recibos {
+  margin: 32px auto 0 auto;
+  max-width: 1100px;
+  background: #111;
+  border-radius: 15px;
+  padding: 20px;
+  border: 2px solid #FD9E00;
+  box-shadow: 0 2px 8px #0006;
+  overflow-x: auto;
+}
+
+.historial-recibos h3 {
+  color: #FD9E00;
+  text-align: center;
+  margin-bottom: 18px;
+  font-size: 1.25em;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.historial-recibos table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 650px;
+  color: #fff;
+  background: transparent;
+}
+
+.historial-recibos th, .historial-recibos td {
+  padding: 12px 8px;
+  text-align: center;
+  border-bottom: 1px solid #FD9E00;
+}
+
+.historial-recibos th {
+  background: #222;
+  color: #FD9E00;
+  font-weight: bold;
+  font-size: 1.05em;
+}
+
+.historial-recibos tr:last-child td {
+  border-bottom: none;
+}
+
+.historial-recibos td {
+  font-size: 1em;
+  color: #fff;
+}
+
+/* Responsive: scroll horizontal en pantallas medianas */
+@media (max-width: 800px) {
+  .historial-recibos {
+    padding: 10px;
+    max-width: 100vw;
+  }
+  .historial-recibos table {
+    min-width: 500px;
+    font-size: 0.97em;
+  }
+  .historial-recibos th, .historial-recibos td {
+    padding: 8px 4px;
+  }
+}
+
+/* Responsive: tabla en bloque para móviles */
+@media (max-width: 500px) {
+  .historial-recibos table,
+  .historial-recibos thead,
+  .historial-recibos tbody,
+  .historial-recibos th,
+  .historial-recibos td,
+  .historial-recibos tr {
+    display: block;
+  }
+  .historial-recibos thead tr {
+    display: none;
+  }
+  .historial-recibos tr {
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    background: #181818;
+    padding: 0.5rem;
+  }
+  .historial-recibos td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+  .historial-recibos td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    width: 40%;
+    padding-right: 10px;
+    text-align: left;
+    font-weight: bold;
+    color: #FD9E00;
+  }
+}
+.paginacion-historial {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  margin: 18px 0 0 0;
+}
+
+.paginacion-historial button {
+  background: #FD9E00;
+  color: #222;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.paginacion-historial button:disabled {
+  background: #ccc;
+  color: #888;
+  cursor: not-allowed;
+}

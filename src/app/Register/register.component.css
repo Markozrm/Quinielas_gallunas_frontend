@@ -1,0 +1,88 @@
+.main{
+
+  min-height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.menu-container{
+
+  width: 100%;
+  height: 100%;
+}
+
+form {
+  width: 100%;
+  height: 100%;
+  background-color: #474747;
+  padding: 10%;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column; /* Cambia la dirección del flujo a vertical */
+  align-items: center; /* Alinea los elementos en el centro vertical */
+}
+.formContainer{
+  margin: 15%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  max-width: min(80%,50vh);
+}
+form btn-iniciar{
+
+  color: var(--colorPrimary);
+}
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+}
+.btn-volver{
+  background-color: #FD9E00;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 10000;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+button {
+  background-color: #FD9E00;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.image-preview-container {
+  width: 300px; /* Ancho fijo del contenedor */
+  height: 300px; /* Altura fija del contenedor */
+  overflow: hidden; /* Oculta el contenido adicional */
+}
+
+.profile-image {
+  width: 100%; /* La imagen ocupa el 100% del contenedor */
+  height: 100%; /* La altura ocupa el 100% del contenedor */
+  object-fit: cover; /* Ajusta la imagen para cubrir el contenedor manteniendo la relación de aspecto */
+}

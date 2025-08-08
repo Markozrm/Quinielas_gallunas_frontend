@@ -1,0 +1,346 @@
+.screenshots-container {
+  max-width: 1400px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  color: #2c3e50;
+  margin-top: 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-end;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 200px;
+}
+
+label {
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+input, select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  flex: 0 0 auto;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+.loading {
+  padding: 10px;
+  text-align: center;
+  color: #7f8c8d;
+}
+
+.error-message {
+  color: #e74c3c;
+  padding: 10px;
+  background-color: #fadbd8;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+/* Comparison Summary */
+.comparison-summary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.summary-stats {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.summary-stats.secondary-stats {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stat-item {
+  text-align: center;
+  flex: 1;
+  min-width: 120px;
+}
+
+.stat-label {
+  display: block;
+  font-size: 12px;
+  opacity: 0.9;
+  margin-bottom: 5px;
+}
+
+.stat-value {
+  display: block;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.stat-value.positive {
+  color: #2ecc71;
+}
+
+.stat-value.negative {
+  color: #e74c3c;
+}
+
+.stat-value.exact {
+  color: #f39c12;
+}
+
+/* Comparison Table */
+.comparison-table {
+  overflow-x: auto;
+  margin-bottom: 30px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  min-width: 1200px;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-color: #34495e;
+}
+
+thead th {
+  background-color: #34495e;
+  color: white;
+  padding: 12px 8px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  white-space: nowrap;
+  border-bottom: 2px solid #2c3e50;
+}
+
+tbody tr {
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+tbody tr.highlight-discrepancy {
+  background-color: #ffe58e !important;
+  border-left: 4px solid #ffc107;
+}
+
+tbody tr.highlight-discrepancy:hover {
+  background-color: #fdd03d !important;
+}
+
+tbody tr.highlight-discrepancy:nth-child(even) {
+  background-color:  #ffe58e !important;
+}
+
+tbody tr.highlight-no-bets {
+  background-color: #72c4ff !important;
+  border-left: 4px solid #2196f3;
+}
+
+tbody tr.highlight-no-bets:hover {
+  background-color: #bbdefb !important;
+}
+
+tbody tr.highlight-no-bets:nth-child(even) {
+  background-color: #72c4ff !important;
+}
+
+td {
+  padding: 10px 8px;
+  vertical-align: middle;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.user-cell {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.saldo-cell {
+  font-weight: bold;
+  text-align: right;
+}
+
+.saldo-cell.inicio {
+  color: #3498db;
+}
+
+.saldo-cell.final {
+  color: #2c3e50;
+}
+
+.saldo-cell.diferencia {
+  font-size: 14px;
+}
+
+.saldo-cell.diferencia.positive {
+  color: #27ae60;
+}
+
+.saldo-cell.diferencia.negative {
+  color: #e74c3c;
+}
+
+.saldo-cell.resultado-esperado {
+  font-size: 14px;
+}
+
+.saldo-cell.resultado-esperado.positive {
+  color: #27ae60;
+}
+
+.saldo-cell.resultado-esperado.negative {
+  color: #e74c3c;
+}
+
+.saldo-cell.apostado {
+  color: #9b59b6;
+}
+
+.saldo-cell.ganado {
+  color: #27ae60;
+}
+
+.saldo-cell.perdido {
+  color: #e74c3c;
+}
+
+.saldo-cell.comision {
+  color: #f39c12;
+}
+
+.gana-pierde-cell {
+  font-weight: bold;
+  text-align: center;
+  font-size: 14px;
+}
+
+.gana-pierde-cell.positive {
+  color: #27ae60;
+}
+
+.gana-pierde-cell.negative {
+  color: #e74c3c;
+}
+
+.gana-pierde-cell.exact {
+  color: #f39c12;
+}
+
+.difference-indicator {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.timestamp-cell {
+  font-size: 10px;
+  color: #7f8c8d;
+  white-space: nowrap;
+}
+
+.no-results {
+  padding: 20px;
+  text-align: center;
+  color: #7f8c8d;
+}
+
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+  }
+  
+  .form-group {
+    width: 100%;
+  }
+  
+  button {
+    width: 100%;
+  }
+  
+  .summary-stats {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .summary-stats.secondary-stats {
+    margin-top: 15px;
+    padding-top: 15px;
+  }
+  
+  .stat-item {
+    min-width: auto;
+  }
+  
+  .comparison-table {
+    font-size: 10px;
+  }
+  
+  td, th {
+    padding: 6px 4px;
+  }
+  
+  .timestamp-cell {
+    display: none;
+  }
+  
+  .saldo-cell.comision,
+  .saldo-cell.apostado {
+    display: none;
+  }
+}

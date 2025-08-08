@@ -1,0 +1,881 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.admin-panel {
+    text-align: center;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#go-to {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 0 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #fff;
+    transition: background-color 0.3s;
+}
+
+.btn-red {
+    background-color: #ff5555;
+}
+
+.btn-green {
+    background-color: #55cc55;
+}
+.btn-submit,
+.btn-submitLeft {
+  font-size: var(--fontSizeMessage);
+  border: 0;
+  border-radius: 0.4rem;
+  position: fixed;
+  z-index: 9999;
+  height: 4%;
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+}
+
+.btn-submit {
+  background-color: var(--colorSecondary);
+  right: 0;
+  top: 0;
+}
+
+.btn-submitLeft {
+  color: white;
+  background-color: #FD9E00;
+  left: 0;
+  top: 0;
+  width: 4rem;
+}
+
+.btn-default {
+  background-color: var(--colorFourd);
+  font-size: var(--fontSizeSecondary);
+}
+
+.sidebar-container {
+  position: fixed;
+  top: 0;
+  z-index: 9999;
+  right: -300px;
+  width: 300px;
+  height: 100%;
+  background-color: #f0f0f0;
+  transition: right 0.3s ease;
+}
+
+.sidebar {
+  padding: 20px;
+  margin-top: 20%;
+}
+
+.user-info {
+  font-size: var(--fontSizeMessage);
+  text-align: center;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-top: 10px;
+}
+
+.logout-btn {
+  margin-top: 20%;
+  background-color: #f00;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.sidebar-open {
+  right: 0;
+}
+
+/* Estilos para el botón CASINO */
+.btn-yellow {
+    background-color: #ffcb05;
+    color: #000;
+}
+
+.btn-yellow:hover {
+    background-color: #f1c40f;
+}
+
+/* Estilos para el modal de casino admin */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.modal-casino-admin {
+    background: white;
+    border-radius: 12px;
+    width: 95%;
+    max-width: 1200px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal-ganador-admin {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content {
+    padding: 20px;
+}
+
+.modal-content h2 {
+    margin: 0 0 20px 0;
+    color: #333;
+    text-align: center;
+    font-size: 24px;
+}
+
+.modal-content h3 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 18px;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+    z-index: 1;
+}
+
+.close-button:hover {
+    color: #333;
+}
+
+/* Estilos para el menú de opciones del casino */
+.casino-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+.casino-option {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 12px;
+    padding: 30px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.casino-option:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.option-text {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Estilos para el panel de rifas */
+.rifa-panel-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+
+.btn-back {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-back:hover {
+    background: #5a6268;
+}
+
+/* Estilos para la selección de stream */
+.stream-selection {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-stream {
+    padding: 10px 20px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    background: #f8f9fa;
+    color: #333;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-stream:hover {
+    border-color: #007bff;
+    background: #e3f2fd;
+}
+
+.btn-stream.selected {
+    border-color: #007bff;
+    background: #007bff;
+    color: white;
+}
+
+.stream-selected {
+    font-size: 12px;
+    color: #28a745;
+    margin-top: 5px;
+}
+
+/* Sección de nueva rifa */
+.nueva-rifa-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.nueva-rifa-section h4 {
+    margin: 0 0 15px 0;
+    color: #333;
+}
+
+.rifa-config {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.config-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.config-item label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.config-item input {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.btn-crear-rifa {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.btn-crear-rifa:hover {
+    background: #218838;
+}
+
+/* Sección de rifas activas */
+.rifas-activas-section {
+    margin-top: 20px;
+}
+
+.rifas-activas-section h4 {
+    margin: 0 0 15px 0;
+    color: #333;
+}
+
+.loading {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}
+
+.no-rifas {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-style: italic;
+}
+
+/* Card de rifa admin */
+.rifa-admin-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background: #fff;
+}
+
+.rifa-admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.rifa-admin-header h5 {
+    margin: 0;
+    color: #333;
+    font-size: 18px;
+}
+
+.rifa-status {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-abierta {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-cerrada {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.rifa-admin-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.info-item span {
+    color: #666;
+}
+
+.info-item strong {
+    color: #333;
+}
+
+/* Números vendidos en admin */
+.numeros-vendidos-admin {
+    margin-bottom: 20px;
+}
+
+.numeros-vendidos-admin h6 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.vendidos-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.numero-vendido-admin {
+    background: #e9ecef;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.numero-vendido-admin .numero {
+    font-weight: bold;
+    color: #333;
+}
+
+.numero-vendido-admin .usuario {
+    color: #666;
+    font-size: 10px;
+}
+
+/* Acciones de rifa */
+.rifa-admin-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-action {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.btn-cerrar {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-cerrar:hover {
+    background: #c82333;
+}
+
+.btn-abrir {
+    background: #28a745;
+    color: white;
+}
+
+.btn-abrir:hover {
+    background: #218838;
+}
+
+.btn-ganador {
+    background: #ffc107;
+    color: #212529;
+}
+
+.btn-ganador:hover {
+    background: #e0a800;
+}
+
+.btn-eliminar {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-eliminar:hover {
+    background: #5a6268;
+}
+
+/* Modal de selección de ganador */
+.ganador-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ganador-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.ganador-option:hover {
+    border-color: #007bff;
+    background: #f8f9fa;
+}
+
+.numero-ganador {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.usuario-ganador {
+    font-size: 16px;
+    color: #666;
+}
+
+/* Panel admin tipo casino */
+.admin-panel-casino {
+    background: #070707;
+    color: #fff;
+    border-radius: 12px;
+    padding: 30px 20px 80px 20px;
+    max-width: 1200px;
+    margin: 40px auto 0 auto;
+    box-shadow: 0 0 24px #000a;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    position: relative;
+}
+
+.admin-panel-casino h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+}
+
+.admin-panel-casino-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 30px;
+}
+
+.admin-panel-casino-col {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 180px;
+}
+
+.admin-panel-casino-col h3 {
+    font-size: 1.2rem;
+    margin-bottom: 18px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 2px #000;
+}
+
+/* Botones casino con degradado y borde blanco */
+.casino-btn {
+    width: 220px;
+    margin-bottom: 18px;
+    padding: 12px 0 10px 0;
+    border: 2px solid #fff;
+    border-radius: 22px;
+    font-size: 1.18rem;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 2px 8px #0008;
+    transition: transform 0.1s, box-shadow 0.2s, filter 0.2s;
+    outline: none;
+    letter-spacing: 1px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    text-shadow: 1px 1px 2px #000;
+}
+
+/* Azul degradado */
+.casino-btn-blue {
+    background: linear-gradient(180deg, #2196f3 0%, #005fa3 100%);
+    color: #fff;
+}
+.casino-btn-blue:hover {
+    filter: brightness(1.15);
+}
+
+/* Verde degradado */
+.casino-btn-green {
+    background: linear-gradient(180deg, #b6d200 0%, #7a9600 100%);
+    color: #fff;
+}
+.casino-btn-green:hover {
+    filter: brightness(1.15);
+}
+
+/* Morado degradado */
+.casino-btn-purple {
+    background: linear-gradient(180deg, #a259e6 0%, #5e1e8c 100%);
+    color: #fff;
+}
+.casino-btn-purple:hover {
+    filter: brightness(1.15);
+}
+
+/* Rojo degradado */
+.casino-btn-red {
+    background: linear-gradient(180deg, #ff5555 0%, #a80000 100%);
+    color: #fff;
+}
+.casino-btn-red:hover {
+    filter: brightness(1.15);
+}
+
+/* Naranja degradado */
+.casino-btn-orange {
+    background: linear-gradient(180deg, #ffcb05 0%, #b97a13 100%);
+    color: #fff;
+}
+.casino-btn-orange:hover {
+    filter: brightness(1.15);
+}
+
+/* Botón Casino central */
+.casino-central-btn {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 24px;
+    background: linear-gradient(180deg, #ffcb05 0%, #b97a13 100%);
+    color: #222;
+    border: 2px solid #fff;
+    border-radius: 22px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 16px 60px;
+    box-shadow: 0 2px 12px #0008;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s, filter 0.2s;
+    z-index: 10;
+    text-shadow: 1px 1px 2px #fff8;
+}
+.casino-central-btn:hover {
+    filter: brightness(1.15);
+    transform: translateX(-50%) scale(1.04);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .admin-panel-casino-row {
+        gap: 10px;
+    }
+    .admin-panel-casino-col {
+        min-width: 140px;
+    }
+}
+@media (max-width: 900px) {
+    .admin-panel-casino_row {
+        flex-direction: column;
+        gap: 18px;
+    }
+    .casino-central-btn {
+        padding: 12px 30px;
+        font-size: 1rem;
+    }
+}
+@media (max-width: 1100px) {
+    .admin-panel-casino-row {
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+    .admin-panel-casino-col {
+        min-width: 220px;
+        flex: 1 1 45%;
+        margin-bottom: 10px;
+    }
+}
+@media (max-width: 700px) {
+    .admin-panel-casino-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    .admin-panel-casino-col {
+        width: 100%;
+        min-width: unset;
+        max-width: 350px;
+        margin: 0 auto 10px auto;
+    }
+    .casino-btn {
+        width: 100%;
+        min-width: 140px;
+        font-size: 1rem;
+        padding: 14px 0 12px 0;
+    }
+    .casino-central-btn {
+        width: 90%;
+        min-width: 140px;
+        padding: 14px 0;
+        font-size: 1.05rem;
+        left: 5%;
+        transform: none;
+    }
+    .admin-panel-casino {
+        padding-bottom: 100px;
+    }
+}
+
+@media (max-width: 768px) {
+    .modal-casino-admin {
+        width: 98%;
+        max-height: 95vh;
+    }
+    
+    .casino-options {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    .casino-option {
+        padding: 25px 15px;
+    }
+    
+    .option-text {
+        font-size: 16px;
+    }
+    
+    .rifa-config {
+        grid-template-columns: 1fr;
+    }
+    
+    .rifa-admin-info {
+        grid-template-columns: 1fr;
+    }
+    
+    .rifa-admin-actions {
+        flex-direction: column;
+    }
+    
+    .rifa-panel-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .stream-selection {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .btn-stream {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+}
+
+/* Estilos para mejorar la visualización de números vendidos */
+.no-vendidos-message {
+    padding: 10px;
+    text-align: center;
+    background: #f8f9fa;
+    border-radius: 6px;
+    margin: 10px 0;
+}
+
+.numero-vendido-admin {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 10px;
+    margin: 3px 0;
+    background: #f8f9fa;
+    border-radius: 4px;
+    border-left: 3px solid #007bff;
+}
+
+.numero-vendido-admin .numero {
+    font-weight: bold;
+    color: #007bff;
+    min-width: 40px;
+}
+
+.numero-vendido-admin .usuario {
+    flex: 1;
+    color: #333;
+}
+
+.numero-vendido-admin .orden {
+    font-size: 12px;
+    color: #666;
+    font-style: italic;
+}
+
+/* Mejorar botones de acción */
+.btn-eliminar {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-eliminar:hover {
+    background: #c82333;
+    transform: translateY(-1px);
+}
+
+.btn-eliminar:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.modal-content-imagen-stream {
+    position: fixed;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: rgb(0, 0, 0);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    height: 500px;
+    width: 500px;
+}
+
+.modal-content-imagen-stream input[type="file"] {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: #020101;
+}
+
+.modal-buttons-imagen-stream button {
+  padding: 8px 18px 10px ;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  background: #22ff05;
+  color: #222;
+  transition: background 0.2s;
+}

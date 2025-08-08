@@ -1,0 +1,603 @@
+* {
+  box-sizing: border-box;
+}
+
+.main{
+    min-height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: top;
+    padding-top: 0;
+    justify-content: bottom;
+    height: 100dvh;
+}
+  
+.chat-container{
+  
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  
+  
+}
+  
+.app-users-type {
+  
+    height: 500%;
+    width: 100%;
+  }
+  .input-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    flex-shrink: 0;
+  }
+.menuContainer {
+
+  width: 100%;
+
+  z-index: 9999;
+  flex-shrink: 0;
+}
+
+.chat-container{
+  width: 100%;
+  height: 100%;
+ 
+ 
+}
+
+
+.app-users-type{
+  width: 100%;
+  height: 100%;
+} 
+
+.btn-wrap{
+  border: none;
+  background: none;
+}
+.btn-submit,
+.btn-submitLeft {
+  font-size: var(--fontSizeMessage);
+  border: 0;
+  border-radius: 0.4rem;
+  position: fixed;
+  z-index: 9999;
+  width: 2.5rem;
+  height: auto;
+}
+.btn-submit {
+  right: 0;
+  top: 0;
+}
+
+.btn-submitLeft {
+
+  left: 0;
+  top: 0;
+
+}
+
+
+.sidebar-container {
+  position: fixed;
+  top: 0;
+  z-index: 9999;
+  right: -300px;
+  width: 300px;
+  height: 100%;
+  background-color: #f0f0f0;
+  transition: right 0.3s ease;
+}
+
+.sidebar {
+  padding: 20px;
+  margin-top: 20%;
+}
+
+.user-info {
+  font-size: var(--fontSizeMessage);
+  text-align: center;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-top: 10px;
+}
+.saldo-btn {
+  margin-top: 20%;
+  background-color: var(--colorSecondary);
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+.logout-btn {
+  margin-top: 20%;
+  background-color: #f00;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+.live-admin{
+  display: flex;
+  flex-direction: row;
+}
+.live-status {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  background-color: rgb(128, 121, 121);
+  border-radius: 25%;
+  color: white;
+}
+
+.fa-eye {
+  margin-right: 5px;
+  color: #007BFF; /* Puedes ajustar el color según tu preferencia */
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.sidebar-open {
+  right: 0;
+}
+
+
+.users-type {
+  width: 100%;
+
+}
+
+.input-wrapper {
+  display: flex;
+  width: 100%;
+  max-width: 600px;
+}
+
+.input-wrapper input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  font-size: 16px;
+}
+
+.input-wrapper button {
+  padding: 10px 15px;
+  background-color: var(--colorSecondary, #007BFF);
+  color: white;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.input-wrapper button:hover {
+  background-color: var(--colorPrimary, #0056b3);
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000; /* Asegúrate de que esté por encima de otros elementos */
+}
+
+.popup {
+  background: black;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  width: 80%;
+  max-width: 500px;
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 0;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+ color: #f00;
+}
+
+.popup-content {
+  text-align: center;
+}
+
+.user-list {
+  margin-top: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.user-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.apuesta-container {
+  width: 90%;
+  margin: 0 auto 20px;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  color: black;
+  text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.match-info {
+  display: flex;
+  justify-content: space-around;
+}
+
+.team-red {
+  width: 45%;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: rgba(255, 0, 0, 0.7);
+  color: white;
+  border: 2px solid red;
+}
+
+.team-green {
+  width: 45%;
+  padding: 10px;
+  border-radius: 8px;
+  color: white;
+  background-color: rgba(0, 128, 0, 0.7);
+  border: 2px solid green;
+}
+
+
+.team-green:hover {
+  background-color: gold;
+} 
+.team-red:hover {
+  background-color: gold;
+} 
+.apuestas-en-vivo {
+  background-color: #333; /* Fondo oscuro */
+  padding: 10px;
+  border-radius: 5%;
+  color: white;
+  font-family: Arial, sans-serif;
+  overflow-y: auto;
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.apuestas-en-vivo h3 {
+  text-align: center;
+  font-size: 1em;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.apuestas-en-vivo ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.apuestas-en-vivo ul li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.apuestas-en-vivo ul li span {
+  margin: 0 5px;
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+.estado-jugando {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.ronda {
+  color: #ff6600;
+  margin-left: 5px;
+  font-weight: bold;
+}
+
+.input-apuesta-container {
+  display: flex;
+  justify-content: center; /* Alinea el input horizontalmente */
+  align-items: center;     /* Alinea el input verticalmente si es necesario */
+  margin-top: 20px;
+}
+
+input[type="number"] {
+  padding: 10px;
+  width: 60%;              /* Ajusta el tamaño del input */
+  border: solid black; 
+  border-radius: 5px;
+  margin: 0 auto;          /* Asegura que esté centrado */
+}
+
+.boton-apostar {
+  width: 45%;
+  padding: 10px;
+  border-radius: 8px;
+  color: white;
+  background-color: #FE9C03;
+  border: 2px solid #f8b954;
+}
+.team-green p,.team-red p, .boton-apostar p{
+  margin: 5px 0;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+.boton-apostar:hover {
+  background-color: gold;
+}
+.resumen-stream {
+  background-color: #444;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  color: white;
+}
+
+.resumen-stream p {
+  margin: 5px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.resumen-stream strong {
+  color: gold;
+}
+
+.equipo-verde {
+  color: #00ff00;
+  font-weight: bold;
+}
+
+.equipo-rojo {
+  color: #ff0000;
+  font-weight: bold;
+}
+
+@media screen and (max-width: 700px) {
+  .apuestas-en-vivo ul li {
+    padding: 8px 5px;
+    font-size: 1.3em;
+  }
+  
+  .apuestas-en-vivo ul li span {
+    margin: 2px 3px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .apuestas-en-vivo ul li {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 10px 5px;
+  }
+  
+  .apuestas-en-vivo ul li span {
+    margin: 3px 0;
+  }
+}
+
+.lista-apuestas {
+  min-height: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.sin-apuestas {
+  padding: 20px;
+  color: #fff;
+  text-align: center;
+  font-size: 1.2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  border: 1px dashed #555;
+  margin: 20px;
+  border-radius: 8px;
+}
+
+.chat-message {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.05);
+  transition: background-color 0.3s;
+}
+
+.chat-message:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.chat-message span {
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin: 2px 5px;
+  font-weight: 500;
+}
+/* Estilos para la tabla simplificada */
+.tabla-cazado {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 15px 0;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.tabla-cazado thead {
+  background-color: #1a1a1a;
+}
+.tabla-cazado th {
+ padding: 12px 15px;
+  text-align: center;
+  color: gold;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #444;
+}
+
+.tabla-cazado td {
+   padding: 10px 15px;
+  text-align: center;
+  color: #fff;
+  border-bottom: 1px solid #444;
+}
+.tabla-cazado tr:last-child td {
+  border-bottom: none;
+}
+
+.tabla-cazado tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.tabla-cazado tr:hover {
+  background-color: rgba(255, 215, 0, 0.1);
+}
+
+/* Estilo para la celda de monto */
+.tabla-cazado td:nth-child(2) {
+  font-weight: bold;
+  color: gold;
+  font-family: 'Courier New', monospace;
+}
+
+/* Estilo para el encabezado del resumen */
+.resumen-stream {
+  background: linear-gradient(to right, #333, #222);
+  padding: 12px;
+  border-radius: 8px;
+  margin: 15px 0;
+  color: white;
+  text-align: center;
+  border-left: 4px solid gold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.resumen-stream p {
+  margin: 0;
+  font-size: 1.1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.resumen-stream strong {
+ color: gold;
+  font-size: 1.3em;
+  font-weight: 700;
+}
+.tabla-cazado tr {
+  transition: all 0.2s ease;
+}
+
+/* Efecto de borde sutil */
+.tabla-cazado {
+  position: relative;
+}
+
+.tabla-cazado::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 8px;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 215, 0, 0.2);
+}
+/* Estilos para el detalle de apuestas */
+.lista-apuestas {
+  margin-top: 20px;
+}
+
+.chat-message {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  margin-bottom: 5px;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.equipo-verde {
+  color: #00ff00;
+}
+
+.equipo-rojo {
+  color: #ff0000;
+}
+
+.ronda {
+  color: #ff9900;
+}

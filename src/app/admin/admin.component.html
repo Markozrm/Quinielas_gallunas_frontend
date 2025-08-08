@@ -1,0 +1,283 @@
+<div class="menuContainer">
+  <app-menu></app-menu>
+  <div>
+    <button class="btn-submitLeft" (click)="inicio()">
+      Inicio
+    </button>
+  </div>
+  <div>
+    <button class="btn-submit" (click)="toggleSidebar()">
+      Mi perfil
+    </button>
+  </div>
+  <div class="sidebar-container" [ngClass]="{'sidebar-open': isSidebarOpen}">
+    <div class="sidebar">
+      <button class="close-btn" (click)="closeSidebar()">
+        &#9664; 
+      </button>
+      <div class="user-info">
+        <p>{{ username }}</p>
+        <img [src]="userPhoto" alt="User Photo" class="user-photo">
+        <button class="logout-btn" (click)="logout()">Cerrar sesión</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+ <!--
+<div class="admin-panel">
+    <div id="go-to">Ir a:</div>
+    <a  (click)="irIniciarStream()" class="btn btn-green">Iniciar Stream</a>
+    <a  (click)="irPM2()" class="btn btn-red">Reiniciar Servidor</a>
+    <a  (click)="irChats()" class="btn btn-green">Ver Chats</a>
+    <a *ngIf="isSuperAdmin()" (click)="irRegistro()" class="btn btn-red">Registrar Usuarios</a>
+    <a *ngIf="isSuperAdmin()" (click)="irUsuarios()" class="btn btn-green">Ver Usuarios</a>
+    <a (click)="irVideos()" class="btn btn-red">Ver Streams</a>
+    <a (click)="irRecibos()" class="btn btn-green">Ver Recibos</a>
+    <a (click)="irRetiros()" class="btn btn-red">Ver Retiros</a>
+    <a (click)="irApuestas()" class="btn btn-green">Ver Apuestas</a> 
+    <a (click)="irScreenshots()" class="btn btn-green">Ver Screenshots</a>
+    <a (click)="irHistorialSaldos()" class="btn btn-red">Historial de Saldos</a>
+    <a (click)="abrirCasinoAdmin()" class="btn btn-yellow">CASINO</a>
+    
+
+  </div>-->
+
+<!-- Modal de Casino Admin -->
+<div *ngIf="isCasinoAdminOpen" class="modal-overlay">
+  <div class="modal-casino-admin">
+    <button class="close-button" (click)="cerrarCasinoAdmin()">×</button>
+    
+    <!-- Menú de opciones del casino -->
+    <div *ngIf="!showRifaPanel" class="modal-content">
+      <h2>CASINO</h2>
+      
+      <div class="casino-options">
+        <button class="casino-option" (click)="irRifaAdmin()">
+          <span class="option-text">Quiniela</span>
+        </button>
+        <button class="casino-option" (click)="irRuletaAdmin()">
+          <span class="option-text">Ruleta</span>
+        </button>
+        <button class="casino-option" (click)="irQuinielaAdmin()">
+          <span class="option-text">RIFA</span>
+        </button>
+        <button class="casino-option" (click)="irVentajaAdmin()">
+          <span class="option-text">VENTAJA</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Panel de gestión de rifas -->
+    <div *ngIf="showRifaPanel" class="modal-content">
+      <div class="rifa-panel-header">
+        <button class="btn-back" (click)="volverAlMenu()">← Volver al menú</button>
+        <h2>Gestión de Quinielas</h2>
+      </div>
+      
+      <!-- Sección para crear nueva rifa -->
+      <div class="nueva-rifa-section">
+        <h4>Crear Nueva Quiniela</h4>
+        <div class="rifa-config">
+          <div class="config-item">
+            <label>Número de Rifa:</label>
+            <input type="number" [(ngModel)]="nuevaRifa.numeroRifa" placeholder="Ej: 1">
+          </div>
+          <div class="config-item">
+            <label>Cantidad de Números:</label>
+            <input type="number" [(ngModel)]="nuevaRifa.cantidadNumeros" placeholder="Ej: 70">
+          </div>
+          <div class="config-item">
+            <label>Precio por Número:</label>
+            <input type="number" [(ngModel)]="nuevaRifa.precioNumero" placeholder="Ej: 10">
+          </div>
+        </div>
+        <button class="btn-crear-rifa" (click)="crearRifa()">Crear Quiniela</button>
+      </div>
+
+      <!-- Sección de rifas activas -->
+      <div class="rifas-activas-section">
+        <h4>Quinielas Activas</h4>
+        
+        <div *ngIf="loadingRifasAdmin" class="loading">
+          Cargando quinielas...
+        </div>
+        
+        <div *ngIf="!loadingRifasAdmin && rifasAdmin.length === 0" class="no-rifas">
+          No hay quinielas activas
+        </div>
+        
+        <div *ngFor="let rifa of rifasAdmin" class="rifa-admin-card">
+          <div class="rifa-admin-header">
+            <h5>Quiniela #{{ rifa.numeroRifa }}</h5>
+            <span class="rifa-status" [ngClass]="{'status-abierta': rifa.estadoVentas, 'status-cerrada': !rifa.estadoVentas}">
+              {{ rifa.estadoVentas ? 'Abierta' : 'Cerrada' }}
+            </span>
+          </div>
+          
+          <div class="rifa-admin-info">
+            <div class="info-item">
+              <span>Stream:</span>
+              <strong>{{ rifa.stream || rifa.sala }}</strong>
+            </div>
+            <div class="info-item">
+              <span>Total números:</span>
+              <strong>{{ rifa.cantidadNumeros || rifa.totalNumeros || 'No definido' }}</strong>
+            </div>
+            <div class="info-item">
+              <span>Precio:</span>
+              <strong>${{ rifa.precioNumero }}</strong>
+            </div>
+            <div class="info-item">
+              <span>Vendidos:</span>
+              <strong>{{ getNumeroVendidosCount(rifa) }}</strong>
+            </div>
+            <div class="info-item">
+              <span>Total recaudado:</span>
+              <strong>${{ getTotalRecaudado(rifa) }}</strong>
+            </div>
+          </div>
+          
+          <div class="numeros-vendidos-admin">
+            <h6>Números Vendidos ({{ getNumeroVendidosCount(rifa) }}):</h6>
+            <div *ngIf="getNumeroVendidosCount(rifa) === 0" class="no-vendidos-message">
+              <em style="color: #6c757d;">No se han vendido números aún</em>
+            </div>
+            <div *ngIf="getNumeroVendidosCount(rifa) > 0" class="vendidos-list">
+              <div *ngFor="let vendido of getNumerosVendidosAdmin(rifa); let i = index" class="numero-vendido-admin">
+                <span class="numero">#{{ vendido.numero }}</span>
+                <span class="usuario">{{ vendido.username }}</span>
+                <span class="orden">({{ i + 1 }}°)</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="rifa-admin-actions">
+            <button *ngIf="rifa.estadoVentas" class="btn-action btn-cerrar" (click)="cerrarVentasRifa(rifa)">
+              Cerrar Ventas
+            </button>
+            <button *ngIf="!rifa.estadoVentas" class="btn-action btn-abrir" (click)="abrirVentasRifa(rifa)">
+              Abrir Ventas
+            </button>
+            <button class="btn-action btn-ganador" (click)="abrirSeleccionarGanadorAdmin(rifa)">
+              Seleccionar Ganador
+            </button>
+            <button class="btn-action btn-eliminar" (click)="eliminarRifa(rifa)">
+              Eliminar
+            </button>
+          </div>
+
+          <div *ngIf="rifa.ganador && rifa.ganador.numero" style="color: black;">
+            <p><strong>Ganador:</strong> #{{ rifa.ganador.numero }} ({{ rifa.ganador.username }})</p>
+            <!-- AÑADIMOS LA VISTA DEL PREMIO Y BANCA SOLO PARA EL ADMIN -->
+            <p><strong>Premio Entregado:</strong> {{ rifa.premio | currency }}</p>
+            <p><strong>Comisión Banca:</strong> {{ rifa.banca | currency }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para Seleccionar Ganador -->
+<div *ngIf="modalGanadorAdminOpen" class="modal-overlay">
+  <div class="modal-ganador-admin">
+    <button class="close-button" (click)="cerrarModalGanadorAdmin()">×</button>
+    <div class="modal-content">
+      <h3>Seleccionar Ganador - Quiniela #{{ rifaSeleccionadaAdmin?.numeroRifa }}</h3>
+      
+      <div *ngIf="getNumerosVendidosAdmin(rifaSeleccionadaAdmin).length === 0" class="no-vendidos">
+        <p style="color: #721c24; text-align: center; padding: 20px;">
+          ⚠️ No hay números vendidos en esta quiniela. No se puede seleccionar ganador.
+        </p>
+      </div>
+      
+      <div *ngIf="getNumerosVendidosAdmin(rifaSeleccionadaAdmin).length > 0" class="ganador-selection">
+        <h4>Números Vendidos:</h4>
+        <div class="vendidos-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin: 15px 0;">
+          <div *ngFor="let vendido of getNumerosVendidosAdmin(rifaSeleccionadaAdmin)" 
+               class="ganador-option" 
+               (click)="seleccionarGanadorAdmin(rifaSeleccionadaAdmin, +vendido.numero)"
+               style="
+                 padding: 10px;
+                 border: 2px solid #007bff;
+                 border-radius: 8px;
+                 cursor: pointer;
+                 text-align: center;
+                 background: linear-gradient(135deg, #007bff, #0056b3);
+                 color: white;
+                 transition: all 0.3s ease;
+               "
+               onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'"
+               onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+            <div class="numero-ganador" style="font-size: 18px; font-weight: bold;">
+              Número {{ vendido.numero }}
+            </div>
+            <div class="usuario-ganador" style="font-size: 14px; margin-top: 5px;">
+              {{ vendido.username }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="admin-panel-casino">
+  <h2>PANEL ADMIN</h2>
+  <!-- SOLO superUsuario puede ver estos apartados -->
+  <div *ngIf="isSuperAdmin()" class="admin-panel-casino-row">
+    <!-- Servidor -->
+    <div class="admin-panel-casino-col">
+      <h3>Servidor</h3>
+      <a (click)="irPM2()" class="casino-btn casino-btn-blue">Reiniciar servidor</a>
+    </div>
+    <!-- Stream -->
+    <div class="admin-panel-casino-col">
+      <h3>Stream</h3>
+      <a (click)="irIniciarStream()" class="casino-btn casino-btn-green">Iniciar stream</a>
+      <a (click)="irChats()" class="casino-btn casino-btn-green">Ver chats</a>
+      <a (click)="irVideos()" class="casino-btn casino-btn-green">Ver stream</a>
+      <a (click)="irImagenStream()" class="casino-btn casino-btn-green">Imagen de stream</a>
+    </div>
+    <!-- Usuarios -->
+    <div class="admin-panel-casino-col">
+      <h3>Usuarios</h3>
+      <a (click)="irRegistro()" class="casino-btn casino-btn-purple">Registrar usuario</a>
+      <a (click)="irUsuarios()" class="casino-btn casino-btn-purple">Ver usuarios</a>
+    </div>
+  </div>
+
+  <!-- SOLO controladorBanca puede ver estos apartados -->
+  <div *ngIf="isControladorBanca()" class="admin-panel-casino-row">
+    <!-- Registro -->
+    <div class="admin-panel-casino-col">
+      <h3>Registro</h3>
+      <a (click)="irHistorialSaldos()" class="casino-btn casino-btn-red">Historial de saldos</a>
+      <a (click)="irScreenshots()" class="casino-btn casino-btn-red">Ver Screenshot</a>
+      <a (click)="irApuestas()" class="casino-btn casino-btn-red">Ver Apuestas</a>
+    </div>
+    <!-- Banca -->
+    <div class="admin-panel-casino-col">
+      <h3>Banca</h3>
+      <a (click)="irRecibos()" class="casino-btn casino-btn-orange">Ver recibos</a>
+      <a (click)="irRetiros()" class="casino-btn casino-btn-orange">Ver retiros</a>
+    </div>
+  </div>
+  <button class="casino-central-btn" (click)="abrirCasinoAdmin()">Casino</button>
+</div>
+
+<div *ngIf="isImagenStreamModalOpen" class="modal-overlay">
+  <div class="modal-content-imagen-stream">
+    <button class="close-button" (click)="cerrarImagenStreamModal()">×</button>
+    <h3>Imagen de Stream</h3>
+    <input type="file" (change)="onImagenSeleccionada($event)" accept="image/*">
+    <div *ngIf="imagenStreamUrl">
+      <img [src]="imagenStreamUrl" alt="Imagen de stream" style="max-width:100%; max-height:220px; margin-top:10px;">
+    </div>
+    <div class="modal-buttons-imagen-stream">
+      <button (click)="subirImagenStream()">Subir Imagen</button>
+      <button (click)="resetearImagenStream()">Quitar imagen</button>
+    </div>
+  </div>
+</div>

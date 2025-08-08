@@ -1,0 +1,52 @@
+
+
+.menu {
+  background-color: #000000;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  height: 3rem;
+  justify-content: center;
+  border-bottom: 2px solid gold;
+  left: 0;
+  position: fixed; 
+  width: 100%;
+}
+
+.img-logoPrincipal{
+  max-height: 100%; 
+  height: 2rem;
+  width: auto;
+  object-fit: contain;
+}
+
+.img-logoPrincipal p{
+  color: gold;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+@media screen and (max-height: 400px) {
+  .menu {
+    height: 12%;
+  }
+
+}
+@media screen and (max-width: 600px) {
+
+  .d-flex{
+    height: 2.0rem;
+
+  }
+  .btn-submit{
+    font-size: var(--fontSizeSecondary);
+    width: 20%;
+  }
+  .btn-default{
+    font-size: var(--fontSizeSecondary);
+    width: 40%;
+  }
+  .img-logoPrincipal{
+    align-self: top;
+  }
+}

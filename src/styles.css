@@ -1,0 +1,117 @@
+/* You can add global styles to this file, and also import other style files */
+@font-face { 
+  font-family: "ChunkFive"; 
+  src: url('ChunkFive Regular.ttf'); 
+  
+}
+@font-face {
+  font-family: "Josefin"; 
+  src: url('JosefinSans-VariableFont_wght.ttf'); 
+}
+@font-face {
+  font-family: 'Chromium';
+  src: url('/src/assets/fonts/Chromium.ttf');
+}
+
+html, body {
+    
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins','ChunkFive','Josefin', sans-serif;
+    font-size: 1rem;
+}
+
+button, input{
+    font-family: 'Poppins', sans-serif;
+}
+
+/* *:focus {
+    outline: none;
+} */
+/* You can add global styles to this file, and also import other style files */
+/*Global colors*/
+:root{
+  --colorPrimary:#18181B;
+  --colorSecondary: #FD9E00;
+  --colorThird:#0E0E10;
+  --colorFourd:#291F1E;
+  --colorQuito:#AAD2BA;
+  --colorSexto:#937666;
+  --textPrimary:#fff;
+  --colorDanger:#DB222A;
+  --fontSizePrimary:1rem;
+  --fontSizeSecondary:1rem;
+  --borderRadius:.25rem;
+  --fontSizeMessage: 0.8rem;
+}
+
+@media screen and (max-height: 400px) {
+  :root{
+    --fontSizeSecondary:0.7rem;
+    --fontSizeMessage: 0.7rem;
+  }
+}
+
+body{
+  /*background-color: var(--colorThird);*/
+  background-color: #000000;
+  color: var(--textPrimary);
+  font-family: 'Poppins', sans-serif;
+}
+
+
+.menu-src input::placeholder {
+  color: #c0c0c0;
+  font-weight: 500;
+}
+
+.btn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  border-radius: var(--borderRadius);
+  border: 0;
+  height: 30px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  cursor: pointer;
+}
+
+.btn-submit{
+
+  color: var(--textPrimary);
+  margin: 0 .35rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.btn-default{
+  background-color: var(--colorFourd);
+  color: var(--textPrimary);
+  margin: 0 .35rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.d-flex{
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+}
+@media screen and (max-width: 600px) {
+  :root{
+    --fontSizeSecondary:0.7rem;
+    --fontSizeMessage: 0.7rem;
+  }
+
+  body{
+    
+  }
+
+}
+@media screen and (max-width: 400px) {
+  :root{
+    --fontSizeSecondary:0.6rem;
+  }
+
+}

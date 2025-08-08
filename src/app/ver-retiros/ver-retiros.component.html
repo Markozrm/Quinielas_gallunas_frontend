@@ -1,0 +1,105 @@
+<button class="btn-submitLeft" (click)="volver()">Volver</button>
+
+<div class="page-header">
+  <h1>Solicitudes de Retiro</h1>
+</div>
+
+<div *ngIf="loading" class="loading">
+  Cargando solicitudes...
+</div>
+
+<div *ngIf="!loading && retiros.length === 0" class="no-retiros">
+  No hay solicitudes de retiro pendientes.
+</div>
+
+<!-- Resumen de retiros pendientes -->
+<div class="resumen-retiros">
+  <div class="resumen-item">
+    <div class="resumen-titulo">Retiros pendientes</div>
+    <div class="resumen-numero">{{ retirosPendientes }}</div>
+  </div>
+  <div class="resumen-item">
+    <div class="resumen-titulo">Cantidad Acumulada</div>
+    <div class="resumen-numero">${{ cantidadAcumulada | number:'1.0-2' }}</div>
+  </div>
+</div>
+
+<div class="retiros-list">
+  <div *ngFor="let retiro of retiros" class="retiro-item" [ngClass]="getEstadoClase(retiro.estado)">
+    <div class="retiro-header">
+      <h4 class="username">{{ retiro.username }}</h4>
+      <span class="estado-tag" [ngClass]="getEstadoClase(retiro.estado)">{{ retiro.estado | uppercase }}</span>
+    </div>
+    
+    <div class="retiro-info">
+      <div class="info-row">
+        <span class="label">Cantidad:</span>
+        <span class="value">{{ retiro.cantidad }}$</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Banco:</span>
+        <span class="value">{{ retiro.banco }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Titular:</span>
+        <span class="value">{{ retiro.nombreTitular }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Número/CLABE:</span>
+        <span class="value">{{ retiro.numeroTarjeta }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Fecha:</span>
+        <span class="value">{{ formatoFecha(retiro.fechaSolicitud) }}</span>
+      </div>
+    </div>
+    
+    <div class="retiro-actions" *ngIf="retiro.estado === 'pendiente'">
+      <button (click)="aprobar(retiro._id)" class="btn-aprobar">Aprobar</button>
+      <button (click)="rechazar(retiro._id)" class="btn-rechazar">Rechazar</button>
+    </div>
+
+    <div class="retiro-actions" *ngIf="retiro.estado === 'aprobado'">
+      <button (click)="confirmarEliminar(retiro)" class="btn-eliminar">Eliminar</button>
+    </div>
+
+    <div class="retiro-actions" *ngIf="retiro.estado === 'rechazado'">
+      <button (click)="confirmarEliminar(retiro)" class="btn-eliminar">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para primera confirmación -->
+<div class="modal-overlay" *ngIf="mostrarModalConfirmar">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h3>Confirmar Eliminación</h3>
+    </div>
+    <div class="modal-body">
+      <p>¿Estás seguro que deseas eliminar esta solicitud de retiro?</p>
+      <p>Esta acción no se puede deshacer.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" (click)="cerrarModales()">Cancelar</button>
+      <button class="btn-confirmar" (click)="confirmarPrimerPaso()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para segunda confirmación -->
+<div class="modal-overlay" *ngIf="mostrarModalDobleConfirmar">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h3>Confirmación Final</h3>
+    </div>
+    <div class="modal-body">
+      <p><strong>¡ATENCIÓN!</strong></p>
+      <p>Estás a punto de eliminar permanentemente este registro.</p>
+      <p>¿Estás completamente seguro?</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" (click)="cerrarModales()">Cancelar</button>
+      <button class="btn-eliminar-confirmar" (click)="confirmarSegundoPaso()">Eliminar Definitivamente</button>
+    </div>
+  </div>
+</div>

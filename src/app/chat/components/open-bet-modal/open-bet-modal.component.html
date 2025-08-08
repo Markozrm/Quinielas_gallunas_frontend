@@ -1,0 +1,25 @@
+<div class="modal-overlay">
+    <div class="modal-content">
+      <h2>Abrir Apuestas</h2>
+      <input type="number" [(ngModel)]="fightNumber" placeholder="Número de pelea" />
+      
+      <div class="team-inputs">
+        <div class="team-section">
+          <h3>Partido Rojo</h3>
+          <input type="text" [(ngModel)]="redTeamName" placeholder="Nombre partido rojo" />
+          <input type="number" [(ngModel)]="redPoints" placeholder="PTS" />
+        </div>
+        
+        <div class="team-section">
+          <h3>Partido Verde</h3>
+          <input type="text" [(ngModel)]="greenTeamName" placeholder="Nombre partido verde" />
+          <input type="number" [(ngModel)]="greenPoints" placeholder="PTS" />
+        </div>
+      </div>
+      
+      <div class="button-container">
+        <button class="green" (click)="openBets()">Aceptar</button>
+        <button class="close" (click)="closeModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>

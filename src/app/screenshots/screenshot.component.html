@@ -1,0 +1,142 @@
+<div class="screenshots-container">
+  <h2>Comparación Completa de Saldos - Inicio vs Final</h2>
+  
+  <div class="filters">
+    <div class="form-group">
+      <label for="codigoStream">Código de Stream:</label>
+      <input type="text" id="codigoStream" [(ngModel)]="codigoStream" placeholder="Ej: Stream1-18-06-2025">
+    </div>
+    <div class="form-group">
+      <label for="ronda">Ronda:</label>
+      <input type="text" id="ronda" [(ngModel)]="ronda" placeholder="Ej: 1">
+    </div>
+    
+    <button (click)="buscarScreenshots()">Buscar Comparación</button>
+  </div>
+  
+  <div class="results">
+    <div *ngIf="loading" class="loading">Cargando comparación completa...</div>
+    <div *ngIf="error" class="error-message">{{error}}</div>
+    
+    <div *ngIf="userComparisons.length > 0" class="comparison-summary">
+      <div class="summary-stats">
+        <div class="stat-item">
+          <span class="stat-label">Total Inicio:</span>
+          <span class="stat-value">${{getTotalInitialBalance().toLocaleString()}}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Total Final:</span>
+          <span class="stat-value">${{getTotalFinalBalance().toLocaleString()}}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Diferencia Real:</span>
+          <span class="stat-value" [class]="getTotalDifference() >= 0 ? 'positive' : 'negative'">
+            ${{getTotalDifference().toLocaleString()}}
+          </span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Resultado Esperado:</span>
+          <span class="stat-value" [class]="getTotalExpectedResult() >= 0 ? 'positive' : 'negative'">
+            ${{getTotalExpectedResult().toLocaleString()}}
+          </span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Discrepancia Total:</span>
+          <span class="stat-value" [class]="getDiscrepancyClass(getTotalDiscrepancy())">
+            ${{getTotalDiscrepancy().toLocaleString()}}
+          </span>
+        </div>
+      </div>
+      
+      <div class="summary-stats secondary-stats">
+        <div class="stat-item">
+          <span class="stat-label">Total Cazado:</span>
+          <span class="stat-value">${{getTotalBetAmount().toLocaleString()}}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Total Ganado:</span>
+          <span class="stat-value positive">${{getTotalWon().toLocaleString()}}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Total Perdido:</span>
+          <span class="stat-value negative">${{getTotalLost().toLocaleString()}}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Comisión Total:</span>
+          <span class="stat-value">${{getTotalCommission().toLocaleString()}}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Apuestas:</span>
+          <span class="stat-value">{{metadata?.totalApuestas || 0}}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Usuarios:</span>
+          <span class="stat-value">{{metadata?.usuariosConApuestas || 0}}</span>
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="userComparisons.length > 0" class="comparison-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Saldo Inicio</th>
+            <th>Saldo Final</th>
+            <th>Diferencia Real</th>
+            <th>Resultado Esperado</th>
+            <th>Gana/Pierde</th>
+            <th>Total Cazado</th>
+            <!-- <th>Total Ganado</th>
+            <th>Total Perdido</th> -->
+            <th>Comisión</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Final</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let comparison of userComparisons" 
+              [class.highlight-discrepancy]="comparison['Gana/Pierde'] !== '0' && comparison.totalCazado > 0"
+              [class.highlight-no-bets]="comparison['Gana/Pierde'] !== '0' && comparison.totalCazado === 0">
+            <td class="user-cell">{{comparison.usuario}}</td>
+            <td class="saldo-cell inicio">
+              ${{comparison.saldoInicio.toLocaleString()}}
+            </td>
+            <td class="saldo-cell final">
+              ${{comparison.saldoFinal.toLocaleString()}}
+            </td>
+            <td class="saldo-cell diferencia" [class]="comparison.diferencia >= 0 ? 'positive' : 'negative'">
+              <span class="difference-indicator">{{comparison.diferencia >= 0 ? '+' : ''}}</span>
+              ${{comparison.diferencia.toLocaleString()}}
+            </td>
+            <td class="saldo-cell resultado-esperado" [class]="comparison.resultadoEsperado >= 0 ? 'positive' : 'negative'">
+              <span class="difference-indicator">{{comparison.resultadoEsperado >= 0 ? '+' : ''}}</span>
+              ${{comparison.resultadoEsperado.toLocaleString()}}
+            </td>
+            <td class="gana-pierde-cell" [class]="getDiscrepancyClass(comparison.discrepancia)">
+              {{comparison["Gana/Pierde"]}}
+            </td>
+            <td class="saldo-cell apostado">
+              ${{comparison.totalCazado.toLocaleString()}}
+            </td>
+            <!-- <td class="saldo-cell ganado positive">
+              ${{comparison.totalGanado.toLocaleString()}}
+            </td>
+            <td class="saldo-cell perdido negative">
+              ${{comparison.totalPerdido.toLocaleString()}}
+            </td> -->
+            <td class="saldo-cell comision">
+              ${{comparison.comisionPagada.toLocaleString()}}
+            </td>
+            <td class="timestamp-cell">{{formatDate(comparison.timestampInicio)}}</td>
+            <td class="timestamp-cell">{{formatDate(comparison.timestampFinal)}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div *ngIf="userComparisons.length === 0 && !loading" class="no-results">
+      No se encontraron datos para los filtros seleccionados.
+    </div>
+  </div>
+</div>

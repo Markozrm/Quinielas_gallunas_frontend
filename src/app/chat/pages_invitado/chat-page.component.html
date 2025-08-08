@@ -1,0 +1,394 @@
+<div class="main">
+  <div class="menuContainer">
+    <app-menu></app-menu>
+    <div>
+      <button class="btn-wrap" (click)="inicio()">
+        <img class="btn-submitLeft" src="../../../assets/image/granero_logo.jpg" alt="Logo">
+      </button>
+    </div>
+
+    <div>
+      <button class="btn-wrap" (click)="irMiPerfil()">
+        <img class="btn-submit" src="{{userPhoto}}" alt="Foto de perfil">
+      </button>
+    </div>
+
+  <div class="videoContainer">
+  <app-video-player></app-video-player>
+  <div *ngIf="imagenStreamUrl" class="imagen-stream-overlay">
+    <img [src]="imagenStreamUrl" alt="Imagen de stream" />
+  </div>
+</div>
+
+<!-- chat-page.component.html -->
+
+
+  <!-- Botón flotante arrastrable para abrir el chat modal -->
+  <div class="chat-button-container" 
+       [style.left.px]="buttonPosition.x" 
+       [style.top.px]="buttonPosition.y"
+       (mousedown)="onMouseDown($event)"
+       (mousemove)="onMouseMove($event)"
+       (mouseup)="onMouseUp()"
+       (touchstart)="onTouchStart($event)"
+       (touchmove)="onTouchMove($event)"
+       (touchend)="onTouchEnd()">
+    <button class="chat-button" (click)="openChatModal()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+      </svg>
+      <span>Chat</span>
+    </button>
+  </div>
+
+  <!-- Botón flotante para la ruleta -->
+  <div class="ruleta-float-button-container"
+       [style.left.px]="ruletaButtonPosition.x"
+       [style.top.px]="ruletaButtonPosition.y"
+       (mousedown)="onRuletaMouseDown($event)"
+       (mousemove)="onRuletaMouseMove($event)"
+       (mouseup)="onRuletaMouseUp()"
+       (touchstart)="onRuletaTouchStart($event)"
+       (touchmove)="onRuletaTouchMove($event)"
+       (touchend)="onRuletaTouchEnd()">
+    <button class="ruleta-float-button" (click)="mostrarPopupRuletaHandler()">
+      <canvas id="mini-wheel" width="38" height="38" style="display: block; pointer-events: none;"></canvas>
+    </button>
+  </div>
+
+  <div *ngIf="!esInvitado()" class="live-admin">
+    <button class="live-status" (click)="openPopup()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);">
+        <path d="M7.5 6.5C7.5 8.981 9.519 11 12 11s4.5-2.019 4.5-4.5S14.481 2 12 2 7.5 4.019 7.5 6.5zM20 21h1v-1c0-3.859-3.141-7-7-7h-4c-3.86 0-7 3.141-7 7v1h17z"></path>
+      </svg>
+      <span>{{ connectedUsers }}</span>
+    </button>
+    <!-- <button *ngIf="esAdmin()" (click)="toggleBooleanState()">{{textButton}}</button> -->
+  </div>
+
+  <!-- Componente de notificaciones personales -->
+  <app-notificacion-personal 
+    [notificacion]="notificacionActual"
+    (cerrarNotificacion)="cerrarNotificacion()">
+  </app-notificacion-personal>
+
+  <!-- Botón para mostrar historial de notificaciones -->
+  <!-- <button class="historial-btn" (click)="toggleHistorialNotificaciones()">
+    <span class="historial-icon">📋</span>
+  </button> -->
+
+  <!-- Sección de apuestas -->
+  <div *ngIf="esInvitado()" class="apuesta-container">
+    <div class="header-container">
+      <div class="header-left">
+        <span class="pelea-numero">PELEA  {{rondaActual}}</span>
+      </div>
+      <!--Boton para CASINO-->
+      <div class="header-casino">
+  <button class="casino-button" (click)="abrirCasino()">CASINO</button>
+</div>
+
+      <div [ngClass]="{'header-right-cerradas': estadoActualApuesta === 'APUESTAS CERRADAS', 'header-right': estadoActualApuesta === 'APUESTAS ABIERTAS'}">
+        <span [ngClass]="{'apuestas-status-cerradas': estadoActualApuesta === 'APUESTAS CERRADAS', 'apuestas-status': estadoActualApuesta === 'APUESTAS ABIERTAS'}">
+    {{ estadoActualApuesta }}
+  </span>
+      </div>
+    </div>
+    <div class="user-balance-container">
+      <span class="username">{{ username }}</span>
+      <span class="balance">Saldo: {{ balance | number:'1.0-2' }} MXN</span>
+    </div>
+    
+    <!-- Indicadores de apuestas -->
+    <div class="user-bets-status">
+      <div class="bet-status-indicator waiting">
+        <span class="bet-status-label">Se están cazando:</span>
+        <span class="bet-status-amount">${{ montoTotalEnEspera | number:'1.0-2' }}</span>
+      </div>
+      <div class="bet-status-indicator caught" [ngClass]="{'bet-red': colorApuestasCazadas === 'rojo', 'bet-green': colorApuestasCazadas === 'verde', 'bet-mixed': colorApuestasCazadas === 'ambos'}">
+        <ng-container *ngIf="colorApuestasCazadas !== 'ambos'">
+          <span class="bet-status-label">
+            <ng-container *ngIf="colorApuestasCazadas === 'rojo'">Voy jugando al ROJO:</ng-container>
+            <ng-container *ngIf="colorApuestasCazadas === 'verde'">Voy jugando al VERDE:</ng-container>
+            <ng-container *ngIf="colorApuestasCazadas === ''">Voy jugando:</ng-container>
+          </span>
+          <span class="bet-status-amount">${{ montoTotalCazado | number:'1.0-2' }}</span>
+        </ng-container>
+        
+        <ng-container *ngIf="colorApuestasCazadas === 'ambos'">
+          <div class="bet-status-multi">
+            <div class="bet-status-multi-line bet-red-text">Voy jugaando al Rojo: ${{ montoRojoCazado | number:'1.0-2' }}</div>
+            <div class="bet-status-multi-line bet-green-text">Voy jugando al Verde: ${{ montoVerdeCazado | number:'1.0-2' }}</div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    
+    <div class="match-info">
+      <button class="team-red" 
+              [class.selected]="selectedTeam === 'rojo'" 
+              (click)="selectTeam('rojo')">
+        <h3>{{ redTeamName || 'Rojo' }}</h3>
+        <div class="bet-amount">{{this.cantidadApostadaRojo}}$</div>
+        <p>PTS: {{ redPoints }}</p>
+      </button>
+
+      <button class="team-green" 
+              [class.selected]="selectedTeam === 'verde'" 
+              (click)="selectTeam('verde')">
+        <h3>{{ greenTeamName || 'Verde' }}</h3>
+        <div class="bet-amount">{{this.cantidadApostadaVerde}}$</div>
+        <p>PTS: {{ greenPoints }}</p>
+      </button>
+    </div>
+
+    <div class="betting-container">
+      <div class="quick-bets">
+        <button class="quick-bet-button" (click)="setBetAmount(50)">50</button>
+        <button class="quick-bet-button" (click)="setBetAmount(100)">100</button>
+        <button class="quick-bet-button" (click)="setBetAmount(200)">200</button>
+        <button class="quick-bet-button" (click)="setBetAmount(300)">300</button>
+        <button class="quick-bet-button" (click)="setBetAmount(500)">500</button>
+        <button class="quick-bet-button" (click)="setBetAmount(1000)">1,000</button>
+        <button class="quick-bet-button" (click)="setBetAmount(5000)">5,000</button>
+        <button class="quick-bet-button" (click)="setBetAmount(10000)">10,000</button>
+      </div>
+      <div class="input-bet-container">
+        <button class="quick-bet-allIn" (click)="apostarAllIn()">DOBLE O NADA</button>
+        <input #cantidadApuesta type="number" placeholder="INGRESAR CANTIDAD" [ngModel]="betAmount || ''" (ngModelChange)="setBetAmount($event)"/>
+        <button (click)="apostar(cantidadApuesta.value)" class="boton-apostar">
+          <p>APOSTAR</p>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- Pop-up -->
+  <div *ngIf="isPopupOpen" class="popup-overlay">
+    <div class="popup">
+      <button class="close-button" (click)="closePopup()">&#10005;</button>
+      <div class="popup-content">
+        <h3>Usuarios Conectados</h3>
+        <div class="user-list">
+          <div *ngFor="let user of users" class="user-item">
+            <img [src]="getUserPhoto(user.name)" alt="User Photo" class="user-photo">
+            <p>{{ user.name }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <!-- Historial de notificaciones -->
+    <div *ngIf="mostrarHistorialNotificaciones" class="historial-container">
+      <div class="historial-header">
+        <h3>Historial de Notificaciones</h3>
+        <button class="close-button" (click)="toggleHistorialNotificaciones()" aria-label="Cerrar historial">×</button>
+      </div>
+      <div class="historial-content">
+        <div *ngIf="historialNotificaciones.length === 0" class="no-notificaciones">
+          No hay notificaciones recientes
+        </div>
+        <div *ngFor="let notif of historialNotificaciones" class="historial-item" [ngClass]="'notificacion-' + notif.tipo">
+          <div class="historial-item-header">
+            <span class="historial-item-tipo">{{ notif.tipo | titlecase }}</span>
+            <span class="historial-item-fecha">{{ notif.detalles.fecha | date:'short' }}</span>
+          </div>
+          <p class="historial-item-mensaje">{{ notif.mensaje }}</p>
+        </div>
+      </div>
+    </div>
+
+  <!-- Modal del chat -->
+  <app-chat-modal *ngIf="isChatModalOpen" (closeModal)="closeChatModal()"></app-chat-modal>
+</div>
+
+<!-- Ventana emergente del casino -->
+<div *ngIf="isCasinoPopupOpen" class="popup-overlay">
+  <div class="popup">
+    <button class="close-button" (click)="cerrarCasino()">×</button>
+    <div class="popup-content">
+      <h3>CASINO</h3>
+      <div class="options-list">
+        <button (click)="seleccionarOpcion('QUINIELA')">QUINIELA</button>
+        <button (click)="mostrarPopupRuletaHandler()">RULETA</button>
+        <button (click)="seleccionarOpcion('RIFA')">RIFA</button>
+        <button (click)="seleccionarOpcion('VENTAJA')">VENTAJA</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Ruleta Modal (solo uno, global) -->
+<div *ngIf="mostrarPopupRuleta" class="popup-overlay">
+  <div class="popup">
+    <button class="close-button" (click)="cerrarPopupRuleta()">×</button>
+    <div class="popup-content ruleta-popup-content">
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <div id="spinWheel" style="margin-bottom: 20px;">
+          <canvas id="ruleta-canvas" width="300" height="300"></canvas>
+          <button
+            *ngIf="esAdmin()"
+            id="spin"
+            class="ruleta-spin-btn"
+            (click)="girarRuleta()"
+          >GIRAR</button>
+        </div>
+                <!-- Sección de números comprados por el usuario -->
+        <div class="numeros-comprados-section" *ngIf="misNumerosComprados.length > 0">
+          <h3>Tus números comprados ({{ misNumerosComprados.length }})</h3>
+          <div class="numeros-comprados-grid">
+            <div *ngFor="let num of misNumerosComprados" class="numero-comprado-chip">
+              {{ num }}
+              <span class="precio-chip">${{ preciosRuleta[num] || 0 }}</span>
+            </div>
+          </div>
+        </div>
+
+        <p>Escoge un número</p>
+        <div class="ruleta-grid">
+          <button
+    *ngFor="let item of [
+      {num:1, color:'dorado'},
+      {num:2, color:'negro'},
+      {num:7, color:'dorado'},
+      {num:8, color:'negro'},
+      {num:13, color:'dorado'},
+      {num:9, color:'negro'},
+      {num:10, color:'dorado'},
+      {num:5, color:'negro'},
+      {num:4, color:'dorado'},
+      {num:11, color:'negro'},
+      {num:14, color:'dorado'},
+      {num:3, color:'negro'},
+      {num:6, color:'dorado'},
+      {num:12, color:'negro'}
+    ]"
+    class="ruleta-btn {{item.color}}"
+    [disabled]="numerosComprados[item.num] || !preciosRuleta[item.num]"
+    (click)="comprarNumeroRuleta(item.num)"
+  >
+    <div style="font-size: 1.2em; font-weight: bold;">{{ item.num }}</div>
+    <div *ngIf="preciosRuleta[item.num]" style="font-size: 0.8em; color: #ffd700; line-height: 1;">
+      ${{ preciosRuleta[item.num] }}
+    </div>
+  </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Rifa para usuarios normales -->
+<div *ngIf="isRifaModalOpen" class="modal-overlay">
+  <div class="modal-rifa">
+    <button class="close-button" (click)="cerrarModalRifa()">×</button>
+    <div class="modal-content">
+      <h3>Quinielas Disponibles</h3>
+      
+      <!-- Mostrar saldo del usuario -->
+      <div style="text-align: center; margin-bottom: 15px; padding: 10px; background: #000; border-radius: 6px;">
+        <strong>Tu saldo: ${{ balance | number:'1.0-2' }}</strong>
+      </div>
+      
+      <!-- Botón manual para actualizar (solo visible cuando no hay rifa seleccionada) -->
+      <button *ngIf="!rifaSeleccionada" (click)="actualizarRifasManualmente()" 
+              style="margin: 10px 0; padding: 8px 16px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
+        🔄 Actualizar quinielas
+      </button>
+      
+      <div *ngIf="loadingRifas" class="loading-rifas">
+        Cargando quinielas...
+      </div>
+      
+      <div *ngIf="!loadingRifas && rifas.length === 0" class="no-rifas">
+        No hay quinielas disponibles en este momento.
+      </div>
+      
+      <div *ngIf="!loadingRifas && rifas.length > 0" class="rifas-container">
+        <div *ngFor="let rifa of rifas" class="rifa-card-modal">
+          <div class="rifa-info" style="color: black;">
+            <h4>Quiniela #{{ rifa.numeroRifa }}</h4>
+            <div class="rifa-estado">
+              <span>Estado: </span>
+              <span [ngClass]="{'abierta': rifa.estadoVentas, 'cerrada': !rifa.estadoVentas}">
+                {{ rifa.estadoVentas ? 'Ventas abiertas' : 'Ventas cerradas' }}
+              </span>
+            </div>
+            <div class="rifa-total">
+              <span>Total recaudado: </span>
+              <strong>${{ rifa.totalRecaudado }}</strong>
+            </div>
+            <div class="rifa-ganador">
+              <span>Ganador: </span>
+              <strong *ngIf="rifa.ganador !== null">{{ rifa.ganador.numero }}</strong>
+              <span *ngIf="rifa.ganador === null">Aún no hay ganador</span>
+            </div>
+          </div>
+          
+          <!-- Mostrar botón solo si las ventas están ABIERTAS -->
+          <div *ngIf="rifa.estadoVentas" class="rifa-compra">
+            <button class="btn-ver-numeros" (click)="seleccionarRifa(rifa)">
+              Ver números disponibles
+            </button>
+            
+            <div *ngIf="rifaSeleccionada === rifa" class="numeros-disponibles">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                <h5>Números disponibles ({{ rifa.numerosDisponibles.length }} de {{ rifa.cantidadNumeros || rifa.totalNumeros }}):</h5>
+                <button (click)="volverAListaRifas()" 
+                        style="padding: 5px 10px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                  ← Volver
+                </button>
+              </div>
+              <div class="numeros-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap: 8px; margin: 15px 0;">
+                <button *ngFor="let num of rifa.numerosDisponibles"
+                        [disabled]="comprandoNumero"
+                        (click)="comprarNumero(rifa, num)"
+                        class="numero-btn disponible"
+                        style="
+                          width: 50px;
+                          height: 50px;
+                          border: 2px solid #007bff;
+                          background: linear-gradient(135deg, #007bff, #0056b3);
+                          color: white;
+                          border-radius: 8px;
+                          cursor: pointer;
+                          font-weight: bold;
+                          font-size: 14px;
+                          transition: all 0.3s ease;
+                          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                        "
+                        [style.background]="comprandoNumero ? '#6c757d' : 'linear-gradient(135deg, #007bff, #0056b3)'"
+                        [style.cursor]="comprandoNumero ? 'not-allowed' : 'pointer'"
+                        onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'"
+                        onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                  {{ num }}
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Mensaje cuando las ventas están CERRADAS -->
+          <div *ngIf="!rifa.estadoVentas" class="rifa-cerrada" style="padding: 15px; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 8px; text-align: center; margin-top: 10px;">
+            <h5>🔒 Ventas Cerradas</h5>
+            <p><strong>Esta quiniela ya no acepta más números.</strong></p>
+            
+            <!-- --- INICIO DE LA CORRECCIÓN --- -->
+            <!-- Se asume que rifa.ganador es un objeto como { numero: 5, username: 'test' } -->
+            <p *ngIf="rifa.ganador && rifa.ganador.numero">
+              <strong>Ganador:</strong> Número #{{ rifa.ganador.numero }}
+            </p>
+            <!-- El premio ya no se muestra a los usuarios normales -->
+            
+            <p *ngIf="!rifa.ganador || !rifa.ganador.numero">El administrador seleccionará el ganador pronto.</p>
+            <!-- --- FIN DE LA CORRECCIÓN --- -->
+          </div>
+        </div>
+      </div>
+    </div>
+<div *ngIf="numeroRuletaSeleccionado !== null">
+  Número seleccionado: {{ numeroRuletaSeleccionado }}
+</div>
+<div *ngIf="mensajeGanadorRuleta" class="mensaje-ganador-ruleta">
+  {{ mensajeGanadorRuleta }}
+</div>
