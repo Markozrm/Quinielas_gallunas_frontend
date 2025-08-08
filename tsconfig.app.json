@@ -3,7 +3,9 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": ["jasmine"]
+    "types": ["jasmine"],
+    "typeRoots": ["node_modules/@types", "src/types"],
+    "skipLibCheck": true
   },
   "files": [
     "src/main.ts",

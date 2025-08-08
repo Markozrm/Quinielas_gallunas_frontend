@@ -89,8 +89,8 @@
     </tr>
     <tr *ngFor="let num of getNumeros()">
       <td>{{ num }}</td>
-      <td>{{ numerosComprados[num]?.buyer || '-' }}</td>
-      <td>{{ numerosComprados[num]?.amount || '-' }}</td>
+      <td>{{ numerosComprados[num] ? numerosComprados[num].buyer : '-' }}</td>
+      <td>{{ numerosComprados[num] ? numerosComprados[num].amount : '-' }}</td>
     </tr>
   </table>
 </div>
