@@ -9,13 +9,16 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./ruleta.component.css']
 })
 export class RuletaComponent implements OnInit, AfterViewInit, AfterViewChecked {
-  precios: {[key: number]: number} = {};  // Cambiado a number si tu backend maneja números
+  precios: {[key: number]: number} = {};
   numeroSeleccionado: number = 1;
   nuevoPrecio: string = '';
   salaActual: string = 'global';
-  public mostrarRuleta: boolean = false; // Nueva propiedad para controlar la visibilidad de la ruleta
-  public mostrarPopupRuleta: boolean = false; // Propiedad para controlar el popup de la ruleta
-
+  public mostrarRuleta: boolean = false;
+  public mostrarPopupRuleta: boolean = false;
+  
+  // NUEVA PROPIEDAD PARA EL TÍTULO
+  tituloRuleta: string = '';
+  
   parseFloat = parseFloat; 
   isNaN = isNaN;
 
@@ -63,12 +66,49 @@ export class RuletaComponent implements OnInit, AfterViewInit, AfterViewChecked 
     this.username = localStorage.getItem('username') || 'admin';
   }
 
+  // NUEVO MÉTODO PARA GUARDAR EL TÍTULO
+  guardarTituloRuleta(): void {
+    if (!this.tituloRuleta.trim()) {
+      alert('Por favor ingrese un título válido');
+      return;
+    }
+
+    this.ruletaService.setRuletaTitle(this.tituloRuleta, this.salaActual).subscribe({
+      next: () => {
+        alert(`Título de la ruleta actualizado: "${this.tituloRuleta}"`);
+        // Emitir el cambio via socket para notificar a los usuarios
+        this.ruletaSocket.emit('ruleta_titulo_actualizado', {
+          titulo: this.tituloRuleta,
+          sala: this.salaActual
+        });
+      },
+      error: (err) => {
+        console.error('Error guardando título:', err);
+        alert('Error al guardar el título');
+      }
+    });
+  }
+
+  // MÉTODO PARA CARGAR EL TÍTULO ACTUAL
+  cargarTituloRuleta(): void {
+    this.ruletaService.getRuletaTitle(this.salaActual).subscribe({
+      next: (response: any) => {
+        this.tituloRuleta = response.titulo || '';
+      },
+      error: (err) => console.error('Error cargando título:', err)
+    });
+  }
+
   ngOnInit(): void {
     this.cargarPrecios();
+    this.cargarTituloRuleta(); // CARGAR TÍTULO AL INICIALIZAR
+    
     this.route.params.subscribe(params => {
       this.salaActual = params['sala'] || 'global';
-        this.cargarPrecios();
+      this.cargarPrecios();
+      this.cargarTituloRuleta(); // CARGAR TÍTULO AL CAMBIAR SALA
     });
+
     // Inicializa el socket antes de usarlo
     this.ruletaSocket = io(`${environment.apiUrl_ruleta}:446`, {
       transports: ['websocket'],
