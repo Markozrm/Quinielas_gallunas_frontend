@@ -879,3 +879,153 @@ body {
   color: #222;
   transition: background 0.2s;
 }
+
+/* ...existing code... */
+
+/* Estilos simples para el modal de imagen de stream */
+.modal-content-imagen-stream {
+    position: fixed;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: #070707;
+    color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    height: 500px;
+    width: 500px;
+    padding: 20px;
+}
+
+.modal-content-imagen-stream h3 {
+    color: white;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+/* Selector de Stream */
+.stream-selector {
+    margin-bottom: 20px;
+}
+
+.stream-selector label {
+    display: block;
+    margin-bottom: 8px;
+    color: white;
+    font-weight: bold;
+}
+
+.stream-select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #fff;
+    border-radius: 8px;
+    font-size: 16px;
+    background: white;
+    color: #333;
+}
+
+.stream-select:focus {
+    outline: none;
+    border-color: #ffcb05;
+}
+
+/* Input de archivo */
+.modal-content-imagen-stream input[type="file"] {
+    margin: 15px 0;
+    padding: 10px;
+    border: 2px solid #fff;
+    border-radius: 8px;
+    background: white;
+    color: #333;
+    width: 90%;
+}
+
+/* Preview de imagen */
+.imagen-preview {
+    margin: 15px 0;
+}
+
+.imagen-preview h4 {
+    color: white;
+    margin-bottom: 10px;
+}
+
+.imagen-preview img {
+    max-width: 100%;
+    max-height: 200px;
+    border: 2px solid #fff;
+    border-radius: 8px;
+}
+
+/* Mensaje sin imagen */
+.no-imagen-message {
+    color: #ccc;
+    font-style: italic;
+    padding: 15px;
+    border: 2px dashed #fff;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+/* Botones del modal */
+.modal-buttons-imagen-stream {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.modal-buttons-imagen-stream button {
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: 2px solid #fff;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    min-width: 120px;
+}
+
+.modal-buttons-imagen-stream button:first-child {
+    background: #22ff05;
+    color: #222;
+}
+
+.modal-buttons-imagen-stream button:first-child:hover {
+    background: #1ed604;
+}
+
+.modal-buttons-imagen-stream button:last-child {
+    background: #ff5555;
+    color: white;
+}
+
+.modal-buttons-imagen-stream button:last-child:hover {
+    background: #ff3333;
+}
+
+.modal-buttons-imagen-stream button:disabled {
+    background: #666;
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Responsive simple */
+@media (max-width: 768px) {
+    .modal-content-imagen-stream {
+        width: 90%;
+        height: auto;
+        min-height: 400px;
+    }
+    
+    .modal-buttons-imagen-stream {
+        flex-direction: column;
+    }
+    
+    .modal-buttons-imagen-stream button {
+        width: 100%;
+    }
+}
+
+/* ...existing code... */

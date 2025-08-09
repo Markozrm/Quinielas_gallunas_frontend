@@ -536,8 +536,48 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
   if (savedImage) {
     this.imagenStreamUrl = savedImage;
   }
-  }
   
+  // AGREGAR: Polling para imagen overlay
+  this.iniciarPollingImagenOverlay();
+}
+
+// NUEVO MÉTODO: Polling para imagen overlay
+private iniciarPollingImagenOverlay() {
+  // Determinar qué stream estamos viendo
+  let streamId = '1'; // Por defecto Stream 1
+  const currentUrl = window.location.href;
+  if (currentUrl.includes('442')) streamId = '2';
+  
+  // Polling cada 3 segundos para imagen overlay
+  setInterval(() => {
+    this.http.get<{hasImage: boolean, imageUrl: string}>(`http://localhost:444/api/streams/imagen-overlay/${streamId}`)
+      .subscribe({
+        next: (data) => {
+          if (data.hasImage && data.imageUrl) {
+            const nuevaImagenUrl = 'http://localhost:444' + data.imageUrl;
+            if (this.imagenStreamUrl !== nuevaImagenUrl) {
+              console.log('[POLLING] Nueva imagen overlay detectada:', data.imageUrl);
+              this.imagenStreamUrl = nuevaImagenUrl;
+              localStorage.setItem('imagenStreamUrl', this.imagenStreamUrl);
+            }
+          } else {
+            if (this.imagenStreamUrl !== null) {
+              console.log('[POLLING] Imagen overlay removida');
+              this.imagenStreamUrl = null;
+              localStorage.removeItem('imagenStreamUrl');
+            }
+          }
+        },
+        error: (error) => {
+          // Error significa que no hay imagen overlay, lo cual es normal
+          if (this.imagenStreamUrl !== null) {
+            this.imagenStreamUrl = null;
+            localStorage.removeItem('imagenStreamUrl');
+          }
+        }
+      });
+  }, 3000); // Cada 3 segundos
+}
 
   ngOnDestroy(): void {
     this.apuestaSubscription?.unsubscribe();

@@ -271,13 +271,24 @@
   <div class="modal-content-imagen-stream">
     <button class="close-button" (click)="cerrarImagenStreamModal()">×</button>
     <h3>Imagen de Stream</h3>
+    
+    <!-- Selector de Stream -->
+    <div class="stream-selector">
+      <label for="streamSelect">Seleccionar Stream:</label>
+      <select id="streamSelect" [(ngModel)]="streamSeleccionado" class="stream-select">
+        <option value="">-- Selecciona un stream --</option>
+        <option value="1">Stream 1</option>
+        <option value="2">Stream 2</option>
+      </select>
+    </div>
+    
     <input type="file" (change)="onImagenSeleccionada($event)" accept="image/*">
     <div *ngIf="imagenStreamUrl">
       <img [src]="imagenStreamUrl" alt="Imagen de stream" style="max-width:100%; max-height:220px; margin-top:10px;">
     </div>
     <div class="modal-buttons-imagen-stream">
-      <button (click)="subirImagenStream()">Subir Imagen</button>
-      <button (click)="resetearImagenStream()">Quitar imagen</button>
+      <button (click)="subirImagenStream()" [disabled]="!streamSeleccionado">Subir Imagen</button>
+      <button (click)="resetearImagenStream()" [disabled]="!streamSeleccionado">Quitar imagen</button>
     </div>
   </div>
 </div>
