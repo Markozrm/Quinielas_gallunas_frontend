@@ -232,14 +232,28 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
   private ruletaCtx: CanvasRenderingContext2D | null = null;
 
   // --- MÉTODOS DE RULETA ---
-  mostrarPopupRuletaHandler(): void {
+ mostrarPopupRuletaHandler(): void {
     this.inicializarRuletaSocket();
     this.mostrarPopupRuleta = true;
     this.cargarPreciosRuleta();
-    setTimeout(() => this.drawRuletaWheel(), 300); // Aumenta el tiempo a 300ms
+    this.cargarTituloRuleta(); // <- AGREGAR ESTA LÍNEA
+    setTimeout(() => this.drawRuletaWheel(), 300);
     if (this.ruletaSocket && this.ruletaSocket.connected) {
       this.ruletaSocket.emit('ruleta_obtener_estado', 'global');
     }
+  }
+
+  // Agregar este nuevo método
+  private cargarTituloRuleta(): void {
+    this.ruletaService.getRuletaTitle('global').subscribe({
+      next: (response: any) => {
+        this.tituloRuletaActual = response.titulo || 'RULETA PLUMASS';
+      },
+      error: (err) => {
+        console.error('Error cargando título de ruleta:', err);
+        this.tituloRuletaActual = 'RULETA PLUMASS'; // Título por defecto
+      }
+    });
   }
 
   cerrarPopupRuleta(): void {
@@ -353,6 +367,12 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
       this.numerosComprados = {};
       if (this.ruletaSocket && this.ruletaSocket.connected) {
         this.ruletaSocket.emit('ruleta_obtener_estado', { stream: data.stream, sala: data.sala });
+      }
+    });
+     this.ruletaSocket.on('ruleta_titulo_actualizado', (data: { titulo: string, sala: string }) => {
+      console.log('Título de ruleta actualizado:', data);
+      if (data.sala === 'global') { // O la sala actual
+        this.tituloRuletaActual = data.titulo;
       }
     });
   }

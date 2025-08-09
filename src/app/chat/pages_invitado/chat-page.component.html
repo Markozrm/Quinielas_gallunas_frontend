@@ -225,6 +225,9 @@
   <div class="popup">
     <button class="close-button" (click)="cerrarPopupRuleta()">×</button>
     <div class="popup-content ruleta-popup-content">
+       <div class="ruleta-title-container">
+        <h2 class="ruleta-title">{{ tituloRuletaActual }}</h2>
+      </div>
       <div style="display: flex; flex-direction: column; align-items: center;">
         <div id="spinWheel" style="margin-bottom: 20px;">
           <canvas id="ruleta-canvas" width="300" height="300"></canvas>
