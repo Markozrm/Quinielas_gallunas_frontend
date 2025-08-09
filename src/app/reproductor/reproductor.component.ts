@@ -24,29 +24,82 @@ export class VideoPlayerComponent implements OnInit {
 
   public ngOnInit() {
     try {
+      // Configuración específica para iOS
       this.video.nativeElement.playsinline = true;
-      this.video.nativeElement.muted = true; // Asegúrate de que el video esté silenciado
+      this.video.nativeElement.muted = true;
       this.video.nativeElement.autoplay = true;
+      
+      // Prevenir comportamiento de pantalla completa en iOS
+      this.video.nativeElement.setAttribute('webkit-playsinline', 'true');
+      this.video.nativeElement.setAttribute('x5-video-player-type', 'h5');
+      this.video.nativeElement.setAttribute('x5-video-player-fullscreen', 'false');
+      
       this.user = this.route.snapshot.paramMap.get('sala') || 'HOME';
       this.port = this.route.snapshot.paramMap.get('port') || '443';
       this.load(`${this.apiUrl}:${this.port}/live/${this.user}/index.m3u8`);
       console.log("Despues de cargar",this.user);
       console.log("Despues de cargar",this.port);
-      //this.video.nativeElement.play();
     } catch (error) {
       console.error('Error loading video:', error);
     }
   }
   ngAfterViewInit(): void {
-    // Accede al elemento del video y llama al método play() para reproducir el video
-    this.video.nativeElement.playsinline = true;
-    this.video.nativeElement.muted = true; // Asegúrate de que el video esté silenciado
-    this.video.nativeElement.autoplay = true;
-    this.user = this.route.snapshot.paramMap.get('sala') || 'HOME';
-    this.port = this.route.snapshot.paramMap.get('port') || '443';
-    this.load(`${this.apiUrl}:${this.port}/live/${this.user}/index.m3u8`);
+    // Configuración adicional para iOS después de que la vista se inicialice
+    this.setupVideoForIOS();
+    
+    // Agregar eventos para manejar el comportamiento de pantalla completa
+    this.addVideoEventListeners();
+    
     this.video.nativeElement.play().catch((error: any) => {
       console.error('Error al reproducir el video:', error);
+    });
+  }
+
+  private setupVideoForIOS(): void {
+    const videoElement = this.video.nativeElement;
+    
+    // Configuración específica para iOS
+    videoElement.playsinline = true;
+    videoElement.muted = true;
+    videoElement.autoplay = true;
+    
+    // Atributos adicionales para prevenir pantalla completa
+    videoElement.setAttribute('webkit-playsinline', 'true');
+    videoElement.setAttribute('x5-video-player-type', 'h5');
+    videoElement.setAttribute('x5-video-player-fullscreen', 'false');
+  }
+
+  private addVideoEventListeners(): void {
+    const videoElement = this.video.nativeElement;
+    
+    // Manejar cuando el video entra en pantalla completa
+    videoElement.addEventListener('webkitbeginfullscreen', () => {
+      console.log('Video entró en pantalla completa');
+    });
+    
+    // Manejar cuando el video sale de pantalla completa
+    videoElement.addEventListener('webkitendfullscreen', () => {
+      console.log('Video salió de pantalla completa');
+      // Intentar reanudar la reproducción automáticamente
+      setTimeout(() => {
+        if (videoElement.paused) {
+          videoElement.play().catch((error: any) => {
+            console.warn('No se pudo reanudar automáticamente:', error);
+            // Mostrar control de play manual si es necesario
+          });
+        }
+      }, 100);
+    });
+    
+    // Eventos estándar de pantalla completa
+    videoElement.addEventListener('fullscreenchange', () => {
+      if (!document.fullscreenElement && videoElement.paused) {
+        setTimeout(() => {
+          videoElement.play().catch((error: any) => {
+            console.warn('No se pudo reanudar después de salir de pantalla completa:', error);
+          });
+        }, 100);
+      }
     });
   }
   

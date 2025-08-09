@@ -2,6 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { BehaviorSubject, Subject, interval } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ChatService implements OnDestroy {
@@ -18,7 +19,7 @@ export class ChatService implements OnDestroy {
   private pollingInterval: any = null;
 
   constructor(private http: HttpClient) {
-    this.socket = io('http://localhost:444'); // PUERTO 444
+    this.socket = io(`${environment.apiUrl}:444`); // PUERTO 444
     this.startImagePolling();
   }
 
@@ -31,7 +32,7 @@ export class ChatService implements OnDestroy {
 
   private checkForNewImage() {
     // USAR LA RUTA CORRECTA PARA OVERLAY:
-    this.http.get('http://localhost:444/api/streams/imagen-overlay/1').subscribe({
+    this.http.get(`${environment.apiUrl}:444/api/streams/imagen-overlay/1`).subscribe({
       next: (response: any) => {
         if (response.hasImage) {
           const newTimestamp = new Date(response.timestamp);
@@ -39,7 +40,7 @@ export class ChatService implements OnDestroy {
           if (!this.lastImageTimestamp || newTimestamp > this.lastImageTimestamp) {
             this.lastImageTimestamp = newTimestamp;
             console.log('[POLLING] Nueva imagen overlay detectada:', response.imageUrl);
-            const fullImageUrl = `http://localhost:444${response.imageUrl}`;
+            const fullImageUrl = `${environment.apiUrl}:444${response.imageUrl}`;
             // ...ya incluye el timestamp en la URL, así que solo úsala directamente:
             this.streamImageSubject.next({ imageUrl: fullImageUrl });
           }
