@@ -1,94 +1,542 @@
-
 .btn-submitLeft {
   font-size: var(--fontSizeMessage);
-  border: 0;
-  left: 0;
+  left: 50px; /* Ajustado para alinearse con el borde del menú */
+  top: 6px;
   border-radius: 0.4rem;
   position: fixed;
   z-index: 9999;
-  height: 4%;
-  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+  height: 40px;
+  width: 80px;
+  background-color: #000000; /* Cambiado a negro */
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none; /* Removido el borde completamente */
 }
-.main{
 
-    min-height: fit-content;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
+.btn-submitLeft:hover {
+  background-color: #333; /* Hover gris oscuro */
+  transform: translateY(-1px);
+}
+
+.main {
+  height: 100vh;
+  background: #000000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* Título principal centrado - Reducido */
+h1 {
+  color: white;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 15px 0 25px 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  width: 100%;
+}
+
+.menuContainer {
+  width: 100%;
+  position: relative;
+  margin-bottom: 15px;
+  flex-shrink: 0;
+}
+
+.formContainer {
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative; /* Añadido para posicionar el botón INICIAR */
+}
+
+form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+  background: transparent;
+  padding: 0;
+  flex: 1;
+  max-height: 60vh;
+}
+
+/* Título del formulario - Reducido */
+h2 {
+  grid-column: span 2;
+  color: white;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0 0 25px 0;
+}
+
+/* Columna izquierda - Campos del formulario */
+.form-left {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Campos de formulario */
+label[for="tituloStream"],
+label[for="numeroStream"],
+label[for="esVIP"] {
+  color: white;
+  font-size: 1rem;
+  font-weight: normal;
+  margin-bottom: 6px;
+  display: block;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #FD9E00;
+  box-shadow: 0 0 10px rgba(253, 158, 0, 0.3);
+}
+
+/* Select personalizado */
+select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+select:focus {
+  outline: none;
+  border-color: #FD9E00;
+  box-shadow: 0 0 10px rgba(253, 158, 0, 0.3);
+}
+
+select option {
+  background-color: #2d2d2d;
+  color: white;
+}
+
+/* Contenedor del checkbox mejorado */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+  padding: 10px 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.checkbox-container:hover {
+  border-color: rgba(253, 158, 0, 0.5);
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.checkbox-container label {
+  margin: 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Checkbox personalizado mejorado */
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: #FD9E00;
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+/* Columna derecha - Imagen */
+.form-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+label[for="userImage"] {
+  color: white;
+  font-size: 1rem;
+  font-weight: normal;
+  align-self: flex-end;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+/* Botón personalizado para el file input - Más grande */
+label[for="userImage"] {
+  background: linear-gradient(45deg, #8B4513, #CD853F);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 30px; /* Aumentado de 6px 20px a 10px 30px */
+  font-size: 1rem; /* Aumentado de 0.85rem a 1rem */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: capitalize;
+  font-weight: bold;
+  display: inline-block;
+}
+
+label[for="userImage"]:hover {
+  background: linear-gradient(45deg, #CD853F, #8B4513);
+  transform: translateY(-1px);
+}
+
+.image-preview-container {
+  width: 100%;
+  max-width: 320px;
+  align-self: flex-end;
+}
+
+.profile-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.profile-image:hover {
+  border-color: #FD9E00;
+}
+
+/* Sección de URL y Clave */
+.url-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 900px;
+}
+
+.url-container,
+.clave-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Labels de URL y KEY */
+.url-container label,
+.clave-container label {
+  color: white;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+/* TextAreas compactos */
+textarea {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  padding: 8px 12px;
+  color: #ccc;
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+  resize: none;
+  height: 35px;
+  box-sizing: border-box;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #FD9E00;
+}
+
+/* Botón Iniciar - Posicionado más arriba, cerca de la miniatura */
+.btn-iniciar {
+  position: absolute;
+  bottom: 280px; /* Cambiado de 20px a 120px para subirlo más */
+  right: 25px;
+  background: linear-gradient(45deg, #28a745, #20c997);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 15px 40px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+  z-index: 100;
+}
+
+.btn-iniciar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(40, 167, 69, 0.4);
+  background: linear-gradient(45deg, #20c997, #28a745);
+}
+
+/* Responsive optimizado */
+@media (max-width: 1024px) {
+  .btn-submitLeft {
+    left: 40px; /* Ajustado para tablet */
   }
-  
-  .menu-container{
-  
-    width: 100%;
-    height: 100%;
+
+  .formContainer {
+    padding: 0 25px;
   }
-  
+
   form {
-    width: 100%;
-    height: 100%;
-    background-color: #474747;
-    padding: 10%;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column; /* Cambia la dirección del flujo a vertical */
-    align-items: center; /* Alinea los elementos en el centro vertical */
+    grid-template-columns: 1fr;
+    gap: 25px;
+    max-height: 65vh;
   }
-  .formContainer{
-    margin: 15%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 80%;
-    max-width: min(80%,50vh);
-  }
-  form btn-iniciar{
   
-    color: var(--colorPrimary);
+  h2 {
+    grid-column: span 1;
+    font-size: 1.4rem;
   }
-  label {
-    display: block;
-    margin-bottom: 8px;
+  
+  .url-section {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin-bottom: 80px; /* Espacio para el botón INICIAR */
+  }
+  
+  .btn-iniciar {
+    position: fixed; /* Cambiado a fixed en responsive */
+    bottom: 80px; /* Más arriba en tablet también */
+    right: 20px;
+    padding: 12px 35px;
+    font-size: 1rem;
+  }
+
+  /* Botón miniatura más grande en tablet */
+  label[for="userImage"] {
+    padding: 8px 25px;
     font-size: 0.9rem;
   }
   
-  input {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 16px;
-    box-sizing: border-box;
+  .form-right {
+    align-items: center;
   }
   
-  button {
-    background-color: #FD9E00;
-    color: #fff;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+  label[for="userImage"] {
+    align-self: center;
   }
   
-  button:hover {
-    background-color: #45a049;
-  }
   .image-preview-container {
-    width: 100%; /* Ancho fijo del contenedor */
-    height: auto; /* Altura fija del contenedor */
-    overflow: hidden; /* Oculta el contenido adicional */
+    align-self: center;
+    max-width: 280px;
   }
-  
+
   .profile-image {
-    width: 100%; /* La imagen ocupa el 100% del contenedor */
-    height: 100%; /* La altura ocupa el 100% del contenedor */
-    object-fit: cover; /* Ajusta la imagen para cubrir el contenedor manteniendo la relación de aspecto */
+    height: 160px;
+  }
+}
+
+@media (max-width: 768px) {
+  .btn-submitLeft {
+    left: 15px; /* Más pegado al borde en móvil */
+    width: 65px; /* Más pequeño */
+    height: 32px; /* Más pequeño */
+    font-size: 0.75rem; /* Más pequeño */
+    top: 8px; /* Ligeramente más abajo */
+  }
+
+  h1 {
+    font-size: 1.2rem; /* Más pequeño */
+    margin: 8px 0 12px 0; /* Menos margen */
+  }
+
+  .main {
+    padding: 0 5px; /* Menos padding */
   }
   
-  @media screen and (-webkit-min-device-pixel-ratio:0) {
-  
-      input:focus {
-          font-size: 16px;
-      }
+  .formContainer {
+    padding: 0 8px; /* Menos padding */
   }
+  
+  form {
+    gap: 12px; /* Menos gap */
+    max-height: 75vh; /* Más altura para móvil */
+  }
+  
+  h2 {
+    font-size: 1rem; /* Más pequeño */
+    margin-bottom: 12px; /* Menos margen */
+  }
+
+  .form-left {
+    gap: 10px; /* Menos gap */
+  }
+
+  input[type="text"],
+  select {
+    padding: 6px 8px; /* Menos padding */
+    font-size: 0.75rem; /* Más pequeño */
+    margin-bottom: 10px; /* Menos margen */
+  }
+
+  .checkbox-container {
+    padding: 6px 8px; /* Menos padding */
+    gap: 8px; /* Menos gap */
+    margin-bottom: 10px; /* Menos margen */
+  }
+
+  .btn-iniciar {
+    padding: 8px 20px; /* Más pequeño */
+    font-size: 0.8rem; /* Más pequeño */
+    bottom: 15px; /* Más abajo para dar espacio */
+    right: 10px; /* Más pegado */
+  }
+
+  .url-section {
+    gap: 8px; /* Menos gap */
+    margin-top: 15px; /* Menos margen superior */
+    margin-bottom: 50px; /* Espacio para el botón */
+  }
+
+  textarea {
+    padding: 5px 8px; /* Menos padding */
+    font-size: 0.65rem; /* Más pequeño */
+    height: 28px; /* Más pequeño */
+  }
+
+  .image-preview-container {
+    max-width: 180px; /* Más pequeño */
+  }
+
+  .profile-image {
+    height: 100px; /* Más pequeño */
+  }
+
+  /* Botón miniatura más pequeño en móvil */
+  label[for="userImage"] {
+    padding: 6px 15px; /* Más pequeño */
+    font-size: 0.75rem; /* Más pequeño */
+  }
+
+  /* Labels más pequeños */
+  label[for="tituloStream"],
+  label[for="numeroStream"],
+  label[for="esVIP"] {
+    font-size: 0.85rem; /* Más pequeño */
+    margin-bottom: 4px; /* Menos margen */
+  }
+
+  .url-container label,
+  .clave-container label {
+    font-size: 0.8rem; /* Más pequeño */
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-submitLeft {
+    left: 10px; /* Muy pegado al borde */
+    width: 55px; /* Muy pequeño */
+    height: 28px; /* Muy pequeño */
+    font-size: 0.7rem; /* Muy pequeño */
+  }
+
+  .formContainer {
+    padding: 0 5px; /* Muy poco padding */
+  }
+
+  h1 {
+    font-size: 1rem; /* Muy pequeño */
+    margin: 5px 0 8px 0; /* Muy poco margen */
+  }
+
+  h2 {
+    font-size: 0.9rem; /* Muy pequeño */
+    margin-bottom: 10px; /* Poco margen */
+  }
+
+  .form-left {
+    gap: 8px; /* Muy poco gap */
+  }
+
+  input[type="text"],
+  select {
+    padding: 5px 6px; /* Muy poco padding */
+    font-size: 0.7rem; /* Muy pequeño */
+    margin-bottom: 8px; /* Poco margen */
+  }
+
+  .checkbox-container {
+    padding: 5px 6px; /* Muy poco padding */
+  }
+
+  .btn-iniciar {
+    padding: 6px 15px; /* Muy pequeño */
+    font-size: 0.7rem; /* Muy pequeño */
+    bottom: 10px; /* Muy abajo */
+    right: 8px; /* Muy pegado */
+  }
+
+  .image-preview-container {
+    max-width: 150px; /* Muy pequeño */
+  }
+
+  .profile-image {
+    height: 80px; /* Muy pequeño */
+  }
+
+  textarea {
+    font-size: 0.6rem; /* Muy pequeño */
+    height: 25px; /* Muy pequeño */
+    padding: 4px 6px; /* Muy poco padding */
+  }
+
+  /* Botón miniatura muy pequeño */
+  label[for="userImage"] {
+    padding: 5px 12px; /* Muy pequeño */
+    font-size: 0.7rem; /* Muy pequeño */
+  }
+
+  /* Labels muy pequeños */
+  label[for="tituloStream"],
+  label[for="numeroStream"],
+  label[for="esVIP"] {
+    font-size: 0.8rem; /* Muy pequeño */
+  }
+
+  .url-section {
+    margin-top: 10px; /* Poco margen */
+    margin-bottom: 40px; /* Espacio para botón */
+    gap: 6px; /* Muy poco gap */
+  }
+}
