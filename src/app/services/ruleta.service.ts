@@ -49,4 +49,11 @@ private readonly API_URL = `${environment.apiUrl}:444/api/ruleta`;
     getPurchases(sala: string): Observable<any> {
     return this.http.get(`${this.API_URL}/compras/${sala}`);
   }
+  setRuletaTitle(titulo: string, sala: string): Observable<any> {
+    return this.http.post(`${this.API_URL}/set-title`, { titulo, sala });
+  }
+
+  getRuletaTitle(sala: string): Observable<any> {
+    return this.http.get(`${this.API_URL}/get-title/${sala}`);
+  }
 }

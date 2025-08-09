@@ -2,6 +2,28 @@
   <h2>Panel de Control - Ruleta</h2>
   <h3>Sala: {{ salaActual | uppercase }}</h3>
   
+  <!-- NUEVA SECCIÓN PARA EL TÍTULO -->
+  <div class="controls-section">
+    <h4>Configurar Título de la Ruleta</h4>
+    <div class="price-control" style="flex: 1; min-width: 250px;">
+      <label>Título que verán los usuarios:</label>
+      <input 
+        type="text" 
+        [(ngModel)]="tituloRuleta"
+        placeholder="Ej: Con mil para $14,000.00"
+        maxlength="50"
+        style="width: 100%;"
+      >
+    </div>
+    <button 
+      (click)="guardarTituloRuleta()" 
+      [disabled]="!tituloRuleta || !tituloRuleta.trim()"
+      class="save-btn"
+    >
+      Guardar Título
+    </button>
+  </div>
+
   <div class="controls-section">
     <div class="price-control">
       <label>Número:</label>

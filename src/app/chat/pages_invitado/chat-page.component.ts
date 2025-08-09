@@ -38,6 +38,7 @@ import { environment } from 'src/environments/environment';
   ],
 })
 export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewInit {
+  public tituloRuletaActual: string = '';
   public estadoActualApuesta = '';
   public rondaActual = 0;
   public cantidadApostadaRojo = 0;
@@ -1316,66 +1317,176 @@ type NotificacionRuleta = {
   type NotificacionType = NotificacionApuesta | NotificacionRuleta;
 }
 
-  drawRuletaWheel(selectedIndex?: number) {
-    if (!this.ruletaCanvas) {
-      this.ruletaCanvas = document.getElementById('ruleta-canvas') as HTMLCanvasElement;
-      if (!this.ruletaCanvas) return;
-      this.ruletaCtx = this.ruletaCanvas.getContext('2d');
+ drawRuletaWheel(selectedIndex?: number) {
+  if (!this.ruletaCanvas) {
+    this.ruletaCanvas = document.getElementById('ruleta-canvas') as HTMLCanvasElement;
+    if (!this.ruletaCanvas) return;
+    this.ruletaCtx = this.ruletaCanvas.getContext('2d');
+  }
+  if (!this.ruletaCtx) return;
+
+  const ctx = this.ruletaCtx;
+  const width = this.ruletaCanvas.width;
+  const height = this.ruletaCanvas.height;
+  const centerX = width / 2;
+  const centerY = height / 2;
+  const radius = Math.min(width, height) / 2 - 25;
+  const innerRadius = 35; // Radio del círculo central
+  const n = this.ruletaNumbers.length;
+  const anglePerSector = 2 * Math.PI / n;
+
+  ctx.clearRect(0, 0, width, height);
+
+  // Borde exterior plateado/metálico
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, radius + 20, 0, 2 * Math.PI);
+  const metalGradient = ctx.createRadialGradient(centerX, centerY, radius + 10, centerX, centerY, radius + 20);
+  metalGradient.addColorStop(0, '#C0C0C0');
+  metalGradient.addColorStop(0.5, '#A0A0A0');
+  metalGradient.addColorStop(1, '#808080');
+  ctx.fillStyle = metalGradient;
+  ctx.fill();
+
+  // Borde dorado intermedio
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, radius + 15, 0, 2 * Math.PI);
+  ctx.fillStyle = '#FFD700';
+  ctx.fill();
+
+  // Borde negro para separación
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, radius + 12, 0, 2 * Math.PI);
+  ctx.fillStyle = '#000000';
+  ctx.fill();
+
+  // Sectores de la ruleta
+  for (let i = 0; i < n; i++) {
+    const angleStart = this.ruletaAngle + i * anglePerSector;
+    const angleEnd = angleStart + anglePerSector;
+    
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY);
+    ctx.arc(centerX, centerY, radius, angleStart, angleEnd);
+    ctx.lineTo(centerX, centerY);
+    ctx.closePath();
+    
+    // Colores exactos de la imagen: naranja y negro alternados
+    if (this.ruletaNumbers[i].color === 'dorado') {
+      ctx.fillStyle = '#FD9E00'; // Naranja como en la imagen
+    } else {
+      ctx.fillStyle = '#000000'; // Negro
     }
-    if (!this.ruletaCtx) return;
-
-    const ctx = this.ruletaCtx;
-    const width = this.ruletaCanvas.width;
-    const height = this.ruletaCanvas.height;
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const radius = Math.min(width, height) / 2 - 10;
-    const n = this.ruletaNumbers.length;
-    const anglePerSector = 2 * Math.PI / n;
-
-    ctx.clearRect(0, 0, width, height);
-
-    for (let i = 0; i < n; i++) {
-      const angleStart = this.ruletaAngle + i * anglePerSector;
-      const angleEnd = angleStart + anglePerSector;
-      ctx.beginPath();
-      ctx.moveTo(centerX, centerY);
-      ctx.arc(centerX, centerY, radius, angleStart, angleEnd);
-      ctx.closePath();
-      ctx.fillStyle = this.ruletaNumbers[i].color === 'dorado' ? '#FFD700' : '#222';
-      ctx.globalAlpha = (selectedIndex === i) ? 0.7 : 1;
-      ctx.fill();
-      ctx.globalAlpha = 1;
-      ctx.strokeStyle = '#fff';
-      ctx.stroke();
-
-      // Número
-      ctx.save();
-      ctx.translate(centerX, centerY);
-          const angle = angleStart + anglePerSector / 2; // Centro del sector
-      ctx.rotate(this.ruletaAngle + i * anglePerSector + Math.PI / 2);
-      ctx.fillStyle = '#fff';
-      ctx.font = 'bold 16px Arial';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      const textRadius = radius * 0.6; // Ajusta este valor según necesites
-ctx.fillText(this.ruletaNumbers[i].num.toString(), 18, -textRadius);
-      ctx.restore();
+    
+    if (selectedIndex === i) {
+      ctx.globalAlpha = 0.9;
     }
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    
+    // Líneas divisorias doradas entre sectores
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY);
+    ctx.lineTo(
+      centerX + Math.cos(angleStart) * radius,
+      centerY + Math.sin(angleStart) * radius
+    );
+    ctx.strokeStyle = '#FFD700';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
 
-    // Flecha
+  // Números en los sectores
+  for (let i = 0; i < n; i++) {
+    const angleStart = this.ruletaAngle + i * anglePerSector;
+    const angle = angleStart + anglePerSector / 2;
+    
     ctx.save();
     ctx.translate(centerX, centerY);
-    ctx.rotate(-Math.PI / 2);
-    ctx.beginPath();
-    ctx.moveTo(radius + 10, 0);
-    ctx.lineTo(radius + 30, -10);
-    ctx.lineTo(radius + 30, 10);
-    ctx.closePath();
-    ctx.fillStyle = '#e74c3c';
-    ctx.fill();
+    ctx.rotate(angle);
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = 'bold 28px Arial';
+    
+    // Color del texto: blanco siempre
+    ctx.fillStyle = '#FFFFFF';
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 2;
+    
+    const textRadius = radius * 0.7;
+    // Contorno negro para mejor legibilidad
+    ctx.strokeText(this.ruletaNumbers[i].num.toString(), textRadius, 0);
+    ctx.fillText(this.ruletaNumbers[i].num.toString(), textRadius, 0);
     ctx.restore();
   }
+
+  // Círculo central negro
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, innerRadius + 10, 0, 2 * Math.PI);
+  ctx.fillStyle = '#000000';
+  ctx.fill();
+
+  // Borde dorado del círculo central
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, innerRadius + 10, 0, 2 * Math.PI);
+  ctx.strokeStyle = '#FFD700';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  // Logo PLUMASS en el centro (exactamente como en la imagen)
+  ctx.save();
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.font = 'bold 14px Arial';
+  ctx.fillStyle = '#FFD700';
+  ctx.fillText('PLUMASS', centerX, centerY);
+  ctx.restore();
+
+  // Indicador triangular blanco en el LADO DERECHO
+  ctx.save();
+  ctx.translate(centerX, centerY);
+  ctx.rotate(0); // Apunta hacia el lado derecho
+  
+  // Triángulo blanco apuntando hacia la izquierda (hacia el centro)
+  ctx.beginPath();
+  ctx.moveTo(radius + 25, 0);          // Punta del triángulo hacia la izquierda
+  ctx.lineTo(radius - 5, -15);         // Esquina superior
+  ctx.lineTo(radius - 5, 15);          // Esquina inferior
+  ctx.closePath();
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fill();
+  
+  // Borde negro del triángulo
+  ctx.strokeStyle = '#000000';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  
+  ctx.restore();
+
+  // Pequeños detalles decorativos en el borde
+  for (let i = 0; i < 24; i++) {
+    const angle = (i * 2 * Math.PI) / 24;
+    const x1 = centerX + Math.cos(angle) * (radius + 8);
+    const y1 = centerY + Math.sin(angle) * (radius + 8);
+    const x2 = centerX + Math.cos(angle) * (radius + 12);
+    const y2 = centerY + Math.sin(angle) * (radius + 12);
+    
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.strokeStyle = '#FFD700';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // Sombra inferior para dar profundidad
+  ctx.save();
+  ctx.globalAlpha = 0.3;
+  ctx.beginPath();
+  ctx.ellipse(centerX, centerY + 8, radius + 20, radius + 15, 0, 0, 2 * Math.PI);
+  ctx.fillStyle = '#000000';
+  ctx.fill();
+  ctx.restore();
+}
 
   ngAfterViewInit(): void {
     // Si necesitas lógica aquí, agrégala. Si no, déjalo vacío.
