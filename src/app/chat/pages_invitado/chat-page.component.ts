@@ -209,27 +209,28 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
   public numeroRuletaSeleccionado: number | null = null;
 
   // Ruleta properties
-  private ruletaNumbers = [
-    {num:1, color:'dorado'},
-    {num:2, color:'negro'},
-    {num:7, color:'dorado'},
-    {num:8, color:'negro'},
-    {num:13, color:'dorado'},
-    {num:9, color:'negro'},
-    {num:10, color:'dorado'},
-    {num:5, color:'negro'},
-    {num:4, color:'dorado'},
-    {num:11, color:'negro'},
-    {num:14, color:'dorado'},
-    {num:3, color:'negro'},
-    {num:6, color:'dorado'},
-    {num:12, color:'negro'}
+  public ruletaNumbers = [
+    {num: 1, color: 'dorado'},
+    {num: 2, color: 'negro'},
+    {num: 7, color: 'dorado'},
+    {num: 8, color: 'negro'},
+    {num: 13, color: 'dorado'},
+    {num: 9, color: 'negro'},
+    {num: 10, color: 'dorado'},
+    {num: 5, color: 'negro'},
+    {num: 4, color: 'dorado'},
+    {num: 11, color: 'negro'},
+    {num: 14, color: 'dorado'},
+    {num: 3, color: 'negro'},
+    {num: 6, color: 'dorado'},
+    {num: 12, color: 'negro'}
   ];
   private ruletaSpinning = false;
   private ruletaAngle = 0;
   private ruletaAnimationFrame: number | null = null;
   private ruletaCanvas: HTMLCanvasElement | null = null;
   private ruletaCtx: CanvasRenderingContext2D | null = null;
+  public precioUnificado: number = 0;
 
   // --- MÉTODOS DE RULETA ---
  mostrarPopupRuletaHandler(): void {
@@ -397,7 +398,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
       number: num,
       stream: stream,
       sala: sala,
-      amount: Number(precio)
+      amount: Number(this.precioUnificado)
     },
     (respuesta: any) => {
       if (respuesta && respuesta.success) {
@@ -1230,10 +1231,10 @@ private iniciarPollingImagenOverlay() {
   public rondaActualRuleta: number = 0;
   public streamActual: string = '';
   public mensajeGanadorRuleta: string = '';
+  
   public cargarPreciosRuleta() {
     this.ruletaService.getPrices('global').subscribe({
       next: (respuesta: any) => {
-        // respuesta puede ser { success: true, data: {1: 100, ...} } o solo {1: 100, ...}
         let precios: any = {};
         if ('data' in respuesta) {
           precios = respuesta.data || {};
@@ -1242,6 +1243,13 @@ private iniciarPollingImagenOverlay() {
         }
         console.log('Precios procesados:', precios);
         this.preciosRuleta = {};
+        
+        // Obtener el primer precio como precio unificado
+        const preciosArray = Object.values(precios);
+        if (preciosArray.length > 0) {
+          this.precioUnificado = Number(preciosArray[0]);
+        }
+        
         for (const key in precios) {
           if (precios.hasOwnProperty(key)) {
             this.preciosRuleta[Number(key)] = Number(precios[key]);
@@ -1251,6 +1259,7 @@ private iniciarPollingImagenOverlay() {
       error: (err) => {
         console.error('Error cargando precios de ruleta:', err);
         this.preciosRuleta = {};
+        this.precioUnificado = 0;
       }
     });
   }
