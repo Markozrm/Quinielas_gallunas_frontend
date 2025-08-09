@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core'; // ← Agregar OnInit
 import { Router } from '@angular/router';
 import { MenuComponent } from '../menu/menu.component';
 import { UsersService } from '../services/users.service';
@@ -17,7 +17,7 @@ import { environment } from '../../environments/environment'; // AGREGAR ESTE IM
   standalone:true,
   imports:[MenuComponent,CommonModule,NgIf,FormsModule],
 })
-export class AdminComponent {
+export class AdminComponent implements OnInit { // ← Agregar implements OnInit
   constructor(
     private router: Router,
     private usersService: UsersService,
@@ -330,34 +330,72 @@ getTotalRecaudado(rifa: any): number {
 }
 
  // Propiedades necesarias:
-isImagenStreamModalOpen = false;
-imagenStreamUrl: string | null = null;
+ isImagenStreamModalOpen = false;
+ imagenStreamUrl: string | null = null;
+ streamSeleccionado: string = '';
 
-irImagenStream() {
+ irImagenStream() {
   this.isImagenStreamModalOpen = true;
+  this.streamSeleccionado = '';
+  this.imagenStreamUrl = null; // Limpiar imagen previa
+  localStorage.removeItem('imagenStreamUrlAdmin'); // Limpiar localStorage
 }
 
 cerrarImagenStreamModal() {
   this.isImagenStreamModalOpen = false;
+  this.streamSeleccionado = '';
+  this.imagenStreamUrl = null;
 }
 
-onImagenSeleccionada(event: Event) {
-  const input = event.target as HTMLInputElement;
-  if (input.files && input.files[0]) {
+onImagenSeleccionada(event: any) {
+  const file = event.target.files[0];
+  if (file) {
     const reader = new FileReader();
     reader.onload = (e: any) => {
       this.imagenStreamUrl = e.target.result;
-      localStorage.setItem('imagenStreamUrlAdmin', this.imagenStreamUrl!);
     };
-    reader.readAsDataURL(input.files[0]);
+    reader.readAsDataURL(file);
+  }
+}
+
+// NUEVO MÉTODO: Consultar imagen overlay actual
+consultarImagenOverlay() {
+  if (!this.streamSeleccionado) return;
+  
+  this.http.get<{hasImage: boolean, imageUrl: string}>(`http://localhost:444/api/streams/imagen-overlay/${this.streamSeleccionado}`)
+    .subscribe({
+      next: (data) => {
+        if (data.hasImage && data.imageUrl) {
+          this.imagenStreamUrl = 'http://localhost:444' + data.imageUrl;
+          localStorage.setItem('imagenStreamUrlAdmin', this.imagenStreamUrl);
+        } else {
+          this.imagenStreamUrl = null;
+          localStorage.removeItem('imagenStreamUrlAdmin');
+        }
+      },
+      error: (error) => {
+        console.log('No hay imagen overlay o error:', error);
+        this.imagenStreamUrl = null;
+      }
+    });
+}
+
+// NUEVO MÉTODO: Al seleccionar stream, cargar su imagen actual
+onStreamSeleccionado() {
+  if (this.streamSeleccionado) {
+    this.consultarImagenOverlay();
   }
 }
 
 subirImagenStream() {
+  if (!this.streamSeleccionado) {
+    alert('⚠️ Por favor selecciona un stream primero');
+    return;
+  }
+
   if (this.imagenStreamUrl) {
     const formData = new FormData();
     
-    // Convertir base64 a blob
     if (this.imagenStreamUrl.startsWith('data:')) {
       const base64Data = this.imagenStreamUrl.split(',')[1];
       const byteCharacters = atob(base64Data);
@@ -370,13 +408,18 @@ subirImagenStream() {
       formData.append('file', blob, `stream-overlay-${Date.now()}.png`);
     }
     
-    formData.append('tituloStream', 'Imagen Overlay Stream');
+    formData.append('tituloStream', `Imagen Overlay Stream ${this.streamSeleccionado}`);
 
-    // USAR RUTA OVERLAY (NO setClave):
-    this.http.post(`http://localhost:444/api/streams/setImagenOverlay/1`, formData).subscribe({
+    this.http.post(`http://localhost:444/api/streams/setImagenOverlay/${this.streamSeleccionado}`, formData).subscribe({
       next: (response: any) => {
         console.log('Imagen overlay subida:', response);
-        alert('✅ Imagen enviada al stream de apuestas');
+        alert(`✅ Imagen enviada al Stream ${this.streamSeleccionado}`);
+        
+        // Consultar la imagen después de subirla
+        setTimeout(() => {
+          this.consultarImagenOverlay();
+        }, 500);
+        
         this.cerrarImagenStreamModal();
       },
       error: (error: any) => {
@@ -390,18 +433,25 @@ subirImagenStream() {
 }
 
 resetearImagenStream() {
-  // USAR RUTA OVERLAY PARA QUITAR:
-  this.http.post(`http://localhost:444/api/streams/removeImagenOverlay/1`, {}).subscribe({
+  if (!this.streamSeleccionado) {
+    alert('⚠️ Por favor selecciona un stream primero');
+    return;
+  }
+
+  this.http.post(`http://localhost:444/api/streams/removeImagenOverlay/${this.streamSeleccionado}`, {}).subscribe({
     next: (response: any) => {
       console.log('Imagen overlay removida:', response);
+      
+      // LIMPIAR INMEDIATAMENTE LA VISTA
       this.imagenStreamUrl = null;
       localStorage.removeItem('imagenStreamUrlAdmin');
-      alert('✅ Imagen removida del stream de apuestas');
+      
+      alert(`✅ Imagen removida del Stream ${this.streamSeleccionado}`);
       this.cerrarImagenStreamModal();
     },
     error: (error: any) => {
       console.error('Error removiendo imagen overlay:', error);
-      alert('❌ Error al remover imagen overlay: ' + error.message);
+      alert('❌ Error al remover imagen overlay: ' + (error.error?.error || error.message));
     }
   });
 }
@@ -412,6 +462,9 @@ ngOnInit(): void {
   if (savedImage) {
     this.imagenStreamUrl = savedImage;
   }
+  
+  // AGREGAR: Consultar imagen overlay al inicializar
+  this.consultarImagenOverlay();
 }
 }
 interface rifaData {
