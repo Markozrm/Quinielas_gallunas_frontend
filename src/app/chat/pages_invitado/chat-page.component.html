@@ -225,7 +225,7 @@
   <div class="popup">
     <button class="close-button" (click)="cerrarPopupRuleta()">×</button>
     <div class="popup-content ruleta-popup-content">
-       <div class="ruleta-title-container">
+             <div class="ruleta-title-container">
         <h2 class="ruleta-title">{{ tituloRuletaActual }}</h2>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center;">
@@ -250,6 +250,10 @@
         </div>
 
         <p>Escoge un número</p>
+        <!-- Mostrar precio de referencia basado en el número 1 -->
+        <div *ngIf="preciosRuleta[1]" style="text-align: center; margin-bottom: 15px; font-size: 1.1em; font-weight: bold; color: #ffd700;">
+          Número: ${{ preciosRuleta[1] }}
+        </div>
         <div class="ruleta-grid">
           <button
     *ngFor="let item of [
@@ -273,9 +277,6 @@
     (click)="comprarNumeroRuleta(item.num)"
   >
     <div style="font-size: 1.2em; font-weight: bold;">{{ item.num }}</div>
-    <div *ngIf="preciosRuleta[item.num]" style="font-size: 0.8em; color: #ffd700; line-height: 1;">
-      ${{ preciosRuleta[item.num] }}
-    </div>
   </button>
         </div>
       </div>
