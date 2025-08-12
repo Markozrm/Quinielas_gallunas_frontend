@@ -1,39 +1,89 @@
-  <!-- <div class="block-left">
+<!-- <div class="block-left">
     <app-users-rooms></app-users-rooms> -->
 
     <div class="main">
-      <div class="menuContainer">
+      <div class="menu-container">
         <app-menu></app-menu>
-        
       </div>
+      
       <button (click)="volver()" class="btn-volver">Volver</button>
+      
       <div class="formContainer">
         <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
-          <h2>Registro</h2>
+          <div class="form-content">
+            <!-- RECUADRO IZQUIERDO - Datos y botones de tipo usuario -->
+            <div class="form-left">
+              <div class="form-group">
+                <label for="username">Usuario:</label>
+                <input type="text" id="username" name="username" required formControlName="username" placeholder="Ingrese el nombre de usuario">
+              </div>
 
-           <!-- Nuevo campo para la imagen -->
-        <label for="userImage">Imagen de perfil:</label>
-        <input type="file" id="userImage" name="userImage" accept="image/*" required (change)="handleImageChange($event)" formControlName ="image">
-        <div *ngIf="imagePreview" class="image-preview-container">
-          <img [src]="imagePreview" alt="Vista previa de la imagen" class="profile-image" >
-        </div>
+              <div class="form-group">
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" name="password" required formControlName="password" placeholder="Ingrese la contraseña">
+              </div>
 
+              <div class="form-group">
+                <label for="saldo">Saldo:</label>
+                <input type="number" id="saldo" name="saldo" formControlName="saldo" placeholder="Ingrese el saldo inicial">
+              </div>
 
-          <label for="username">Usuario:</label>
-          <input type="text" id="username" name="username" required formControlName ="username">
+              <div class="tipo-usuario-section">
+                <label>Tipo de usuario:</label>
+                <div class="tipo-usuario-buttons">
+                  <button type="button" class="tipo-btn cliente-btn" 
+                          [class.selected]="formulario.get('tipoUsuario')?.value === 'usuario'"
+                          (click)="formulario.get('tipoUsuario')?.patchValue('usuario')">
+                    USUARIO
+                  </button>
+                  <button type="button" class="tipo-btn admin-btn"
+                          [class.selected]="formulario.get('tipoUsuario')?.value === 'administrador'"
+                          (click)="formulario.get('tipoUsuario')?.patchValue('administrador')">
+                    ADMINISTRADOR
+                  </button>
+                  <button type="button" class="tipo-btn espectador-btn"
+                          [class.selected]="formulario.get('tipoUsuario')?.value === 'invitado'"
+                          (click)="formulario.get('tipoUsuario')?.patchValue('invitado')">
+                    INVITADO
+                  </button>
+                  <button type="button" class="tipo-btn superuser-btn"
+                          [class.selected]="formulario.get('tipoUsuario')?.value === 'superUsuario'"
+                          (click)="formulario.get('tipoUsuario')?.patchValue('superUsuario')">
+                    SUPERUSUARIO
+                  </button>
+                  <button type="button" class="tipo-btn controlador-btn"
+                          [class.selected]="formulario.get('tipoUsuario')?.value === 'controladorBanca'"
+                          (click)="formulario.get('tipoUsuario')?.patchValue('controladorBanca')">
+                    ADMIN BANCA
+                  </button>
+                </div>
+              </div>
+            </div>
 
-          <label for="password">Contraseña:</label>
-          <input type="password" id="password" name="password" required formControlName ="password">
+            <!-- RECUADRO CENTRO - Título -->
+            <div class="form-center">
+              <h1 class="main-title">REGISTRAR USUARIO</h1>
+            </div>
 
-          <select id="tipoUsuario" required formControlName="tipoUsuario" >
-            <option value="usuario">usuario</option>
-            <option value="administrador">administrador</option>
-            <option value="invitado">invitado</option>
-            <option value="superUsuario">superUsuario</option>
-            <option value="controladorBanca">controladorBanca</option>
-          </select>
+            <!-- RECUADRO DERECHO - Imagen y botón crear -->
+            <div class="form-right">
+              <div class="image-section">
+                <p class="foto-label">Foto de perfil:</p>
+                <button type="button" class="image-upload-btn" (click)="fileInput.click()">
+                  Elegir
+                </button>
+                <input #fileInput type="file" id="userImage" name="userImage" accept="image/*" 
+                       (change)="handleImageChange($event)" formControlName="image">
+                
+                <div class="image-preview-container">
+                  <img *ngIf="imagePreview" [src]="imagePreview" alt="Vista previa de la imagen" class="profile-image">
+                  <div *ngIf="!imagePreview" class="default-avatar"></div>
+                </div>
 
-          <button type="submit" class="btn-iniciar">Registrar</button>
+                <button type="submit" class="btn-crear">Crear</button>
+              </div>
+            </div>
+          </div>
         </form>
       </div>
     </div>
