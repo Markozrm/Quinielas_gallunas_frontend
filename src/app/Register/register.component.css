@@ -1,88 +1,461 @@
-.main{
-
-  min-height: fit-content;
+.main {
+  height: 100vh;
+  background-color: #000000;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  padding: 0;
+  position: relative;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
 }
 
-.menu-container{
-
+.menu-container {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 100%;
+  z-index: 100;
+}
+
+.formContainer {
+  background: transparent;
+  width: 100%;
+  max-width: 1400px;
+  color: white;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 form {
   width: 100%;
   height: 100%;
-  background-color: #474747;
-  padding: 10%;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
-  flex-direction: column; /* Cambia la dirección del flujo a vertical */
-  align-items: center; /* Alinea los elementos en el centro vertical */
+  align-items: center;
+  justify-content: center;
 }
-.formContainer{
-  margin: 15%;
+
+.form-content {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 60px;
+  width: 100%;
+  max-width: 1200px;
+  align-items: center;
+  height: 70vh;
+}
+
+/* RECUADRO IZQUIERDO */
+.form-left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 30px;
+  justify-self: end;
+}
+
+/* RECUADRO CENTRO */
+.form-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.main-title {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 2px;
+  margin: 0;
+  transform: rotate(0deg);
+  white-space: nowrap;
+  position: relative;
+  top: -240px; /* Mueve el título más arriba */
+}
+
+/* RECUADRO DERECHO */
+.form-right {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 80%;
-  max-width: min(80%,50vh);
+  padding: 30px;
+  justify-self: start;
 }
-form btn-iniciar{
 
-  color: var(--colorPrimary);
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
 }
-label {
-  display: block;
+
+.form-group label {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
   margin-bottom: 8px;
+}
+
+.form-group input {
+  background: white;
+  border: 1px solid #ccc;
+  color: black;
+  padding: 12px;
+  font-size: 1rem;
+  outline: none;
+  border-radius: 6px;
+  width: 100%;
+  min-width: 250px;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  border-color: #fd9e00;
+}
+
+/* Ocultar el campo de saldo */
+.form-group:has(input[name="saldo"]) {
+  display: none;
+}
+
+/* Fallback para navegadores que no soportan :has() */
+input[name="saldo"] {
+  display: none;
+}
+
+label[for="saldo"] {
+  display: none;
+}
+
+.tipo-usuario-section {
+  margin-top: 20px;
+}
+
+.tipo-usuario-section label {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.tipo-usuario-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  max-width: 350px;
+}
+
+.tipo-btn {
+  padding: 12px 20px;
+  border: 2px solid white;
+  border-radius: 25px;
+  background: transparent;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
   font-size: 0.9rem;
 }
 
-input {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 16px;
-  box-sizing: border-box;
-}
-.btn-volver{
-  background-color: #FD9E00;
-  color: #fff;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  z-index: 10000;
-  position: fixed;
-  left: 0;
-  top: 0;
-}
-button {
-  background-color: #FD9E00;
-  color: #fff;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.cliente-btn.selected {
+  background: #00bfff;
+  border-color: #00bfff;
+  color: white;
 }
 
-button:hover {
-  background-color: #45a049;
+.admin-btn.selected {
+  background: #fd9e00;
+  border-color: #fd9e00;
+  color: white;
+}
+
+.espectador-btn.selected {
+  background: #00bfff;
+  border-color: #00bfff;
+  color: white;
+}
+
+.superuser-btn.selected {
+  background: #fd9e00;
+  border-color: #fd9e00;
+  color: white;
+}
+
+.controlador-btn {
+  grid-column: 1 / -1;
+  margin-top: 10px;
+}
+
+.controlador-btn.selected {
+  background: #fd9e00;
+  border-color: #fd9e00;
+  color: white;
+}
+
+.image-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.foto-label {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.image-upload-btn {
+  background: #fd9e00;
+  color: white;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+input[type='file'] {
+  display: none;
 }
 
 .image-preview-container {
-  width: 300px; /* Ancho fijo del contenedor */
-  height: 300px; /* Altura fija del contenedor */
-  overflow: hidden; /* Oculta el contenido adicional */
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(135deg, #87ceeb 0%, #87ceeb 50%, #90ee90 50%, #90ee90 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .profile-image {
-  width: 100%; /* La imagen ocupa el 100% del contenedor */
-  height: 100%; /* La altura ocupa el 100% del contenedor */
-  object-fit: cover; /* Ajusta la imagen para cubrir el contenedor manteniendo la relación de aspecto */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.default-avatar {
+  width: 80px;
+  height: 80px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+.btn-crear {
+  background: #4caf50;
+  color: white;
+  padding: 15px 35px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.btn-crear:hover {
+  background: #45a049;
+}
+
+.btn-volver {
+  background: transparent;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  z-index: 10000;
+  position: fixed;
+  left: 20px;
+  top: 5px;
+  font-weight: bold;
+}
+
+.btn-volver:hover {
+  text-decoration: underline;
+}
+
+/* RESPONSIVIDAD PARA TABLETS */
+@media (max-width: 1024px) {
+  .form-content {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 40px;
+    height: auto;
+  }
+  
+  .form-left {
+    justify-self: center;
+    padding: 20px;
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  .form-center {
+    order: -1;
+  }
+  
+  .main-title {
+    transform: rotate(0deg);
+    font-size: 2rem;
+  }
+  
+  .form-right {
+    justify-self: center;
+    padding: 20px;
+  }
+  
+  .form-group input {
+    min-width: auto;
+  }
+  
+  .tipo-usuario-buttons {
+    grid-template-columns: 1fr 1fr;
+    max-width: none;
+  }
+  
+  .controlador-btn {
+    grid-column: 1 / -1;
+  }
+}
+
+/* RESPONSIVIDAD PARA MÓVILES */
+@media (max-width: 768px) {
+  .main {
+    height: auto;
+    min-height: 100vh;
+    padding: 10px;
+  }
+  
+  .formContainer {
+    height: auto;
+    padding: 15px;
+  }
+  
+  .form-content {
+    gap: 30px;
+  }
+  
+  .main-title {
+    font-size: 1.5rem;
+    margin-bottom: -25px;
+  }
+  
+  .form-left {
+    padding: 15px;
+    gap: 15px;
+  }
+  
+  .form-right {
+    padding: 15px;
+  }
+  
+  .form-group input {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+  
+  .form-group label {
+    font-size: 1rem;
+  }
+  
+  .tipo-usuario-buttons {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .tipo-btn {
+    padding: 12px 15px;
+    font-size: 0.8rem;
+  }
+  
+  .controlador-btn {
+    grid-column: 1;
+    margin-top: 5px;
+  }
+  
+  .image-preview-container {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .default-avatar {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .image-upload-btn {
+    padding: 8px 20px;
+    font-size: 0.9rem;
+  }
+  
+  .btn-crear {
+    padding: 12px 25px;
+    font-size: 1rem;
+  }
+  
+  .foto-label {
+    font-size: 1rem;
+  }
+  
+  .btn-volver {
+    left: 10px;
+    top: 10px;
+    padding: 8px 15px;
+    font-size: 0.9rem;
+  }
+}
+
+/* RESPONSIVIDAD PARA MÓVILES PEQUEÑOS */
+@media (max-width: 480px) {
+  .form-content {
+    gap: 20px;
+  }
+  
+  .main-title {
+    font-size: 1.3rem;
+    margin-bottom: -20px;
+  }
+  
+  .form-left {
+    gap: 12px;
+    padding: 10px;
+  }
+  
+  .form-group input {
+    padding: 8px;
+  }
+  
+  .tipo-btn {
+    padding: 10px 12px;
+    font-size: 0.75rem;
+  }
+  
+  .image-preview-container {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .default-avatar {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .btn-crear {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
 }
