@@ -29,6 +29,7 @@ import { ScreenshotsComponent } from './screenshots/screenshot.component.';
 import { HistorialSaldosComponent } from './historial-saldos/historial-saldos.component';
 import { RifaPageComponent } from './chat/components/quiniela/rifa.component'; // <-- agrega este import arriba
 import { RuletaComponent } from './ruleta-admin/ruleta';
+import { CorteDiarioComponent } from './Corte-Diario/corte-diario.component';
 const routes: Routes = [
   {
     path: '',
@@ -185,7 +186,12 @@ const routes: Routes = [
     path: 'admin/ruleta', 
     component: RuletaComponent,
     canActivate: [PanelGuard] // Protege la ruta para que solo los administradores puedan acceder
-  }
+  },
+  {
+  path: 'admin/corte',
+  component: CorteDiarioComponent,
+  canActivate: [PanelGuard]
+},
 ];
 
 @NgModule({

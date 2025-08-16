@@ -1,0 +1,236 @@
+.menuContainer {
+  position: relative;
+  min-height: 54px; /* Ajusta según la altura de tu barra */
+  width: 100%;
+}
+.inicio-btn-superior {
+  position: absolute;
+  left: 24px;
+  top: 7px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  text-shadow: 2px 2px 4px #000;
+  transition: color 0.2s;
+  z-index: 1000;
+  padding: 0 18px;
+  height: 40px;
+  line-height: 40px;
+  margin: 0;
+}
+.inicio-btn-superior:hover {
+  color: #ffcc00;
+}
+.corte-diario-container {
+  max-width: 500px;
+  margin: 40px auto;
+  background: #000;
+  color: #fff;
+  border-radius: 12px;
+  padding: 32px 24px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+}
+.corte-diario-container h2 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.corte-diario-container label {
+  font-weight: bold;
+}
+.corte-diario-container select {
+  margin-left: 10px;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.corte-diario-resumen p {
+  margin: 8px 0;
+  font-size: 1.1em;
+}
+.stream-input {
+  margin-left: 10px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #888;
+  font-size: 1em;
+}
+.buscar-btn {
+  margin-left: 8px;
+  padding: 4px 12px;
+  border-radius: 4px;
+  background: #ff9800;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+.corte-diario-bg {
+  min-height: 100vh;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 40px;
+}
+.stream-input-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 32px;
+}
+.stream-input {
+  background: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+  border-radius: 24px;
+  padding: 8px 24px;
+  font-size: 1.1em;
+  outline: none;
+  width: 260px;
+  text-align: center;
+  margin-right: 12px;
+  font-family: inherit;
+}
+.buscar-btn {
+  padding: 8px 18px;
+  border-radius: 20px;
+  background: #ff9800;
+  color: #fff;
+  border: none;
+  font-weight: bold;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.buscar-btn:hover {
+  background: #ffa726;
+}
+.corte-diario-card {
+  background: #181818;
+  border: 3px solid #ff9800;
+  border-radius: 18px;
+  padding: 32px 36px 28px 36px;
+  min-width: 420px;
+  max-width: 95vw;
+  color: #fff;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+}
+.corte-diario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.15em;
+  margin-bottom: 18px;
+  font-weight: 500;
+  gap: 24px;
+}
+.corte-diario-fecha,
+.corte-diario-hora {
+  min-width: 160px;
+  text-align: left;
+}
+.corte-diario-title {
+  flex: 1;
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+.corte-diario-content {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+}
+.corte-diario-labels, .corte-diario-values {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 1.15em;
+}
+.corte-diario-labels div {
+  font-weight: 500;
+}
+.corte-diario-values div {
+  text-align: right;
+  font-weight: 400;
+}
+.corte-diario-loading {
+  text-align: center;
+  font-size: 1.2em;
+  background: #222;
+  border: 2px dashed #ff9800;
+  color: #ff9800;
+  margin-top: 32px;
+}
+.corte-diario-historial {
+  margin: 32px auto 0 auto;
+  max-width: 900px;
+  background: #181818;
+  border-radius: 16px;
+  padding: 24px 18px 18px 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+
+.tabla-historial {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 12px;
+  color: #fff;
+  font-size: 1em;
+}
+
+.tabla-historial th, .tabla-historial td {
+  border: 1px solid #333;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.tabla-historial th {
+  background: #222;
+  color: #ff9800;
+  font-weight: bold;
+}
+
+.tabla-historial tr:nth-child(even) {
+  background: #222;
+}
+
+.tabla-historial tr:hover {
+  background: #333;
+}
+
+.paginacion-historial {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  margin-top: 8px;
+}
+
+.paginacion-historial button {
+  background: #ff9800;
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 6px 18px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.paginacion-historial button:disabled {
+  background: #888;
+  cursor: not-allowed;
+}
+
+.paginacion-historial span {
+  color: #fff;
+  font-size: 1em;
+}
+
+.menuContainer {
+  position: relative;
+  min-height: 54px; /* Ajusta según la altura de tu barra */
+  width: 100%;
+} 

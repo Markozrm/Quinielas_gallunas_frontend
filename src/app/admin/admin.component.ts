@@ -8,6 +8,7 @@ import { CommonModule, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http'; // AGREGAR ESTE IMPORT
 import { environment } from '../../environments/environment'; // AGREGAR ESTE IMPORT
+import { CorteDiarioService } from '../services/corte-diario.service';
 
 
 @Component({
@@ -23,7 +24,8 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
     private usersService: UsersService,
     private route: ActivatedRoute,
     private quinielaService: QuinielaService,
-    private http: HttpClient // AGREGAR ESTE PARÁMETRO
+    private http: HttpClient, // AGREGAR ESTE PARÁMETRO
+    private corteDiarioService: CorteDiarioService // <--- NUEVO
   ) 
   {}
   irChats()
@@ -64,11 +66,17 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
    irRuletaAdmin() {
     this.router.navigate(['/admin/ruleta']);
   }
+  irCorte() {
+    this.router.navigate(['/admin/corte']);
+  }
   
   isSidebarOpen = false;
   username: string = localStorage.getItem('nombreUsuario') ?? '';
   userPhoto: string = this.getImage(this.username);
-
+  corteDiario: any = null;
+  corteStreamSeleccionado: string = '';
+    mostrarCorteDiario = false;
+  corteInterval: any = null;
   // Propiedades para el casino admin
   isCasinoAdminOpen = false;
   showRifaPanel = false;
@@ -455,7 +463,30 @@ resetearImagenStream() {
     }
   });
 }
+// Métodos para el corte diario
+abrirCorteDiario() {
+  this.mostrarCorteDiario = true;
+  this.cargarCorteDiario();
+  if (this.corteInterval) clearInterval(this.corteInterval);
+  this.corteInterval = setInterval(() => this.cargarCorteDiario(), 2000);
+}
 
+cargarCorteDiario() {
+  if (!this.corteStreamSeleccionado) return;
+  const hoy = new Date();
+  const fecha = `${hoy.getDate().toString().padStart(2, '0')}-${(hoy.getMonth()+1).toString().padStart(2, '0')}-${hoy.getFullYear()}`;
+  this.corteDiarioService.getCorteDiario(this.corteStreamSeleccionado).subscribe(data => {
+    this.corteDiario = data;
+  });
+}
+
+cerrarCorteDiario() {
+  this.mostrarCorteDiario = false;
+  if (this.corteInterval) clearInterval(this.corteInterval);
+}
+ngOnDestroy() {
+  if (this.corteInterval) clearInterval(this.corteInterval);
+}
 // Al iniciar el componente, recupera la imagen si existe
 ngOnInit(): void {
   const savedImage = localStorage.getItem('imagenStreamUrlAdmin');
@@ -466,6 +497,7 @@ ngOnInit(): void {
   // AGREGAR: Consultar imagen overlay al inicializar
   this.consultarImagenOverlay();
 }
+
 }
 interface rifaData {
     numeroRifa: number;

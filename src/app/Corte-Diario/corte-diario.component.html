@@ -1,0 +1,87 @@
+<div class="menuContainer">
+    <app-menu></app-menu>
+    <button class="inicio-btn-superior" (click)="volverInicio()">INICIO</button>
+  </div>
+<div class="corte-diario-bg">
+  <div class="stream-input-bar">
+    <input
+      type="text"
+      [(ngModel)]="corteStreamCodigo"
+      (keyup.enter)="buscarCorteDiario()"
+      placeholder="STREAM1-13-08-2025"
+      class="stream-input"
+    />
+    <button (click)="buscarCorteDiario()" class="buscar-btn">Buscar</button>
+  </div>
+
+  <div class="corte-diario-card" *ngIf="corteDiario">
+    <div class="corte-diario-header">
+      <div class="corte-diario-fecha">{{ corteDiario.fecha }}</div>
+      <div class="corte-diario-title">INICIO</div>
+      <div class="corte-diario-hora">{{ corteDiario.hora }}</div>
+    </div>
+    <div class="corte-diario-content">
+      <div class="corte-diario-labels">
+        <div>Saldo Global:</div>
+        <div>Retiros:</div>
+        <div>Cantidad de Retiros:</div>
+        <div>Usuarios con saldo:</div>
+        <div>Recibos Pendientes:</div>
+        <div>Recibos pendientes cantidad:</div>
+      </div>
+      <div class="corte-diario-values">
+        <div>${{ corteDiario.saldoGlobal | number:'1.1-1' }}</div>
+        <div>{{ corteDiario.cantidadRetiros }}</div>
+        <div>${{ corteDiario.montoRetiros | number:'1.1-1' }}</div>
+        <div>{{ corteDiario.usuariosConSaldo }}</div>
+        <div>{{ corteDiario.recibosPendientes }}</div>
+        <div>${{ corteDiario.montoRecibosPendientes | number:'1.1-1' }}</div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!corteDiario && corteStreamCodigo" class="corte-diario-card corte-diario-loading">
+    <p>Cargando datos...</p>
+  </div>
+  <div *ngIf="!corteStreamCodigo" class="corte-diario-card corte-diario-loading">
+    <p>Ingresa un código de stream para ver el corte.</p>
+  </div>
+
+  <div style="margin-top: 32px; text-align: center;">
+    <button (click)="cargarHistorialCortes()" class="buscar-btn" [disabled]="!ultimoStreamConsultado">
+      {{ mostrarHistorial ? 'Cerrar historial de cortes' : 'Ver historial de cortes guardados' }}
+    </button>
+  </div>
+
+  <div *ngIf="mostrarHistorial && historialCortes.length > 0" class="corte-diario-historial">
+    <h3>Historial de cortes guardados</h3>
+    <table class="tabla-historial">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Saldo Global</th>
+          <th>Retiros</th>
+          <th>Monto Retiros</th>
+          <th>Usuarios con saldo</th>
+          <th>Recibos Pendientes</th>
+          <th>Monto Recibos Pendientes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let corte of cortesPaginados">
+          <td>{{ corte.fecha | date:'short' }}</td>
+          <td>${{ corte.saldoGlobal | number:'1.1-1' }}</td>
+          <td>{{ corte.cantidadRetiros }}</td>
+          <td>${{ corte.montoRetiros | number:'1.1-1' }}</td>
+          <td>{{ corte.usuariosConSaldo }}</td>
+          <td>{{ corte.recibosPendientes }}</td>
+          <td>${{ corte.montoRecibosPendientes | number:'1.1-1' }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="paginacion-historial">
+      <button (click)="cambiarPaginaHistorial(-1)" [disabled]="paginaHistorial === 1">&lt; Anterior</button>
+      <span>Página {{ paginaHistorial }} de {{ totalPaginasHistorial() }}</span>
+      <button (click)="cambiarPaginaHistorial(1)" [disabled]="paginaHistorial === totalPaginasHistorial()">Siguiente &gt;</button>
+    </div>
+  </div>
+</div>
