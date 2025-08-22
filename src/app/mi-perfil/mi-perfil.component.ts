@@ -131,7 +131,7 @@ contactarWhatsApp(): void {
   window.open('https://chat.whatsapp.com/IJ95JG0WwxVJOGEHeCWZCu', '_blank');
 }
   volver(): void {
-    this.router.navigate(['/']); // Volver a la página principal
+    this.router.navigate(['/Inicio']); // Volver a la página principal
   }
   logout(): void {
   // Eliminar todos los datos de apuestas del usuario

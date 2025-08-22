@@ -25,7 +25,7 @@
 
 
   <!-- Botón flotante arrastrable para abrir el chat modal -->
-  <div class="chat-button-container" 
+  <!-- <div class="chat-button-container" 
        [style.left.px]="buttonPosition.x" 
        [style.top.px]="buttonPosition.y"
        (mousedown)="onMouseDown($event)"
@@ -40,9 +40,9 @@
       </svg>
       <span>Chat</span>
     </button>
-  </div>
+  </div> -->
 
-  <!-- Botón flotante para la ruleta -->
+  <!-- Botón flotante para la ruleta 
   <div class="ruleta-float-button-container"
        [style.left.px]="ruletaButtonPosition.x"
        [style.top.px]="ruletaButtonPosition.y"
@@ -55,7 +55,7 @@
     <button class="ruleta-float-button" (click)="mostrarPopupRuletaHandler()">
       <canvas id="mini-wheel" width="38" height="38" style="display: block; pointer-events: none;"></canvas>
     </button>
-  </div>
+  </div> -->
 
   <div *ngIf="!esInvitado()" class="live-admin">
     <button class="live-status" (click)="openPopup()">
@@ -84,10 +84,10 @@
       <div class="header-left">
         <span class="pelea-numero">PELEA  {{rondaActual}}</span>
       </div>
-      <!--Boton para CASINO-->
+      <!--Boton para CASINO
       <div class="header-casino">
   <button class="casino-button" (click)="abrirCasino()">CASINO</button>
-</div>
+</div> -->
 
       <div [ngClass]="{'header-right-cerradas': estadoActualApuesta === 'APUESTAS CERRADAS', 'header-right': estadoActualApuesta === 'APUESTAS ABIERTAS'}">
         <span [ngClass]="{'apuestas-status-cerradas': estadoActualApuesta === 'APUESTAS CERRADAS', 'apuestas-status': estadoActualApuesta === 'APUESTAS ABIERTAS'}">

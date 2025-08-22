@@ -33,8 +33,11 @@ import { CorteDiarioComponent } from './Corte-Diario/corte-diario.component';
 const routes: Routes = [
   {
     path: '',
-    component:IndexComponent
-    // loadChildren: () => import('./login/login.component').then((m) => m.LoginComponent),
+    component: LoginComponent
+  },
+  {
+    path: 'Inicio',
+    component: IndexComponent
   },
   {
     path: 'Admin',
