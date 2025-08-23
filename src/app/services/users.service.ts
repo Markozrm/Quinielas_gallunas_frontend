@@ -20,6 +20,7 @@ export class UsersService {
     formData.append('username', formValue.username);
     formData.append('password', formValue.password);
     formData.append('tipoUsuario', formValue.tipoUsuario);
+    formData.append('email', formValue.email);
     return firstValueFrom(this.httpClient.post<any>(`${this.baseUrl}/register`, formData));
   }
 
@@ -137,4 +138,9 @@ uploadProfilePhoto(username: string, photo: File): Promise<any>{
     return this.httpClient.get<any>(`${this.apiUrl}:444/api/saldos/obtener-registros-por-usuario/${encodeURIComponent(username)}`);
   }
 
+  verificarCodigo(email: string, codigo: string) {
+    return firstValueFrom(
+      this.httpClient.post<any>(`${this.baseUrl}/verificar-codigo`, { email, codigo })
+    );
+  }
 }

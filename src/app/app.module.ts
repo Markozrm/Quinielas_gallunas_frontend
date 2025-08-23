@@ -13,6 +13,8 @@ import { QuinielaModule } from './chat/quiniela.module';
 import { QuinielaService } from './services/quiniela.service';
 import { ChatService } from './chat/services/chat.service';
 import { RuletaComponent } from './ruleta-admin/ruleta';
+import { CodigoIngresoComponent } from './codigo-ingreso/codigo-ingreso.component';
+
 const apiUrl = environment.apiUrl;
 const Port = environment.PORT;
 const config: SocketIoConfig = 
@@ -33,7 +35,8 @@ const config: SocketIoConfig =
     FormsModule,
     ReactiveFormsModule,
     QuinielaModule,
-    SocketIoModule.forRoot(config)
+    SocketIoModule.forRoot(config),
+    CodigoIngresoComponent
   ],
   providers: [QuinielaService, ChatService],
   bootstrap: [AppComponent],

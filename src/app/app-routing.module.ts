@@ -30,6 +30,7 @@ import { HistorialSaldosComponent } from './historial-saldos/historial-saldos.co
 import { RifaPageComponent } from './chat/components/quiniela/rifa.component'; // <-- agrega este import arriba
 import { RuletaComponent } from './ruleta-admin/ruleta';
 import { CorteDiarioComponent } from './Corte-Diario/corte-diario.component';
+import { CodigoIngresoComponent } from './codigo-ingreso/codigo-ingreso.component';
 const routes: Routes = [
   {
     path: '',
@@ -194,6 +195,10 @@ const routes: Routes = [
   path: 'admin/corte',
   component: CorteDiarioComponent,
   canActivate: [PanelGuard]
+},
+{
+  path: 'codigo-ingreso/:email',
+  component: CodigoIngresoComponent
 },
 ];
 

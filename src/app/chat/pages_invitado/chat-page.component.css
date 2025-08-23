@@ -151,6 +151,7 @@
   z-index: 9999;
   width: 2.5rem;
   height: auto;
+  margin-top: 6px;
 }
 .btn-submit {
   right: 0;
@@ -158,7 +159,7 @@
    width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
-  border: 2px solid gold;
+  border: 2px solid rgb(255, 255, 255);
   cursor: pointer;
   transition: transform 0.2
 }

@@ -7,7 +7,8 @@
   align-items: center;
   height: 3rem;
   justify-content: center;
-  border-bottom: 2px solid gold;
+  border-bottom: 2px solid rgb(255, 255, 255);
+  border-top: 2px solid rgb(255, 255, 255);
   left: 0;
   position: fixed; 
   width: 100%;
@@ -21,14 +22,14 @@
 }
 
 h1 {
-  color: gold;
-  font-size: 1.5rem;
+  color: rgb(255, 255, 255);
+  font-size: 1.3rem;
   font-weight: bold;
   margin-left: 10px;
 }
 
 .img-logoPrincipal p{
-  color: gold;
+  color: rgb(255, 255, 255);
   font-size: 1.5rem;
   font-weight: bold;
 }
