@@ -54,11 +54,12 @@ export class LoginComponent {
         localStorage.setItem('slogan', 'Usuario de Plumass')
       }
       console.log(response.token);
-
-      // Redirige al componente principal después de iniciar sesión
-      this.router.navigate(['/Inicio']);
+      if (response.token.rol === 'superUsuario' || response.token.rol === 'administrador') {
+        this.router.navigate(['/live-admin', 'Stream1', '440']);
+      } else {
+        this.router.navigate(['/live-inv', 'Stream1', '440']);
+      }
     }
-
   }
     esAdmin(): boolean {
       const rol = localStorage.getItem("Rol") || "";
