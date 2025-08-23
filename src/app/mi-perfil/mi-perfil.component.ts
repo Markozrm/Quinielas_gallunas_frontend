@@ -131,7 +131,12 @@ contactarWhatsApp(): void {
   window.open('https://chat.whatsapp.com/IJ95JG0WwxVJOGEHeCWZCu', '_blank');
 }
   volver(): void {
-    this.router.navigate(['/']); // Volver a la página principal
+    const rol = localStorage.getItem('Rol');
+    if (rol === 'superUsuario' || rol === 'administrador') {
+      this.router.navigate(['/live-admin', 'Stream1', '440']);
+    } else {
+      this.router.navigate(['/live-inv', 'Stream1', '440']);
+    }
   }
   logout(): void {
   // Eliminar todos los datos de apuestas del usuario

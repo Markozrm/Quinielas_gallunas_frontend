@@ -20,6 +20,13 @@
   object-fit: contain;
 }
 
+h1 {
+  color: gold;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
 .img-logoPrincipal p{
   color: gold;
   font-size: 1.5rem;

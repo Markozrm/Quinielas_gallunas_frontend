@@ -475,7 +475,7 @@ export class ChatAdminPageComponent implements OnInit, OnDestroy {
   }
 
   inicio() {
-    this.router.navigate([`/`]);
+    this.router.navigate([`/Inicio`]);
   }
 
   esAdmin(): boolean {

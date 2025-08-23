@@ -1,14 +1,12 @@
+<hr>
+<img class="portada_login" src="./assets/image/portada.jpg" alt="">
+<hr>
 <div class="main">
-  <div class="menuContainer">
-    <button class="btn-submitLeft" (click)="Volver()">
-      Volver
-    </button>
-    <app-menu></app-menu>
-  </div>
-
   <div class="login-form">
-    <h2>Iniciar sesión</h2>
-    
+    <div class="fotos_login">
+    <img class="inicia_sesion" src="./assets/image/Iniciar_sesión.png" alt="">
+    <img class="logo" src="./assets/image/logo.png" alt="">
+    </div>
     <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="username">Escribe tu usuario</label>
@@ -19,8 +17,7 @@
         <label for="password">Escribe tu contraseña</label>
         <input type="password" formControlName="password" required placeholder="Contraseña">
       </div>
-
-      <button type="submit" class="btn-iniciar">INICIAR</button>
+      <button type="submit" class="btn-iniciar">Iniciar</button>
       
       <!-- <div class="forgot-password">
         <a href="#">Olvidé mi contraseña</a>
@@ -28,8 +25,8 @@
     </form>
     
     <div class="new-user">
-      <p>¿ERES NUEVO?</p>
-      <p>¡Crea una cuenta ahora!</p>
+      <strong><p>¿ERES NUEVO?</p></strong>
+      <strong><p class="crear_cuenta">¡Crea una cuenta ahora!</p></strong>
       <button (click)="Regitro()" class="btn-crear">Crear Cuenta</button>
     </div>
   </div>

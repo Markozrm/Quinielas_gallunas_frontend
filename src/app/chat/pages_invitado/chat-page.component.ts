@@ -651,7 +651,7 @@ private iniciarPollingImagenOverlay() {
   }
 
   inicio(): void {
-    this.router.navigate(['/']);
+    this.router.navigate(['/Inicio']);
   }
 
   esAdmin(): boolean {

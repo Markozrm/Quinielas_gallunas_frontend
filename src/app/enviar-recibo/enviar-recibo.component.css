@@ -65,16 +65,18 @@
     background-color: #45a049;
   }
 .btn-submitLeft {
-    background-color: #FD9E00;
-    color: #fff;
-    position: fixed;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    z-index: 10000;
-    padding: 10px 10px;
+   background-color: #ffffff;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  position: fixed;
+  top: 4px;
+  left: 4px;
+  z-index: 10000;
 }
   
 .btn-submitLeft:hover {

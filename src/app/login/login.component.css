@@ -16,7 +16,6 @@
 }
 
 .login-form {
-  margin-top: 25%;
   width: 85%;
   border-radius: 15px;
   padding: 20px;
@@ -25,21 +24,20 @@
   z-index: 1;
   color: #000;
   text-align: center;
-  background-image: url('../../assets/image/bg.jpg');
   background-repeat: no-repeat;
   background-position: bottom right;
   background-size: 100%;
   background-blend-mode: soft-light;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 h2 {
   font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 20px;
   text-align: center;
-  color: #000;
+  color: #FFA500;
   text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
 }
 
@@ -52,12 +50,13 @@ h2 {
 }
 
 label {
+  font-family:Brush Script MT,Lucida Handwriting;
   align-self:self-start;
   font-weight: bold;
   margin-bottom: 5%;
   margin-left: 10%;
-  font-size: 1rem;
-  color: #000;
+  font-size: 1.5rem;
+  color: #ffffff;
 }
 
 input {
@@ -65,44 +64,47 @@ input {
   padding: 12px 15px;
   border-radius: 25px;
   border: none;
-  background-color: #000;
-  color: #fff;
+  background-color: #ffffff;
+  color: #000000;
   font-size: 1.5rem;
 }
 
 input:focus {
-  background-color: #000;
-  color: #fff;
+  background-color: #ffffff;
+  color: #000000;
   outline: none;
 }
 
 input::placeholder {
-  color: #fff;
+  color: #000000;
   opacity: 0.8;
 }
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus {
-  -webkit-text-fill-color: #fff;
-  -webkit-box-shadow: 0 0 0px 1000px #000 inset;
+  -webkit-text-fill-color: #000000;
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset;
   transition: background-color 5000s ease-in-out 0s;
 }
 
 .btn-iniciar {
   width: 60%;
   padding: 12px;
-  border-radius: 25px;
+  border-radius: 14px;
   border: none;
-  background-color: #000;
-  color: #fff;
+  background: linear-gradient(70deg, rgb(0, 0, 0), #bca35b);
+  color: #ffffff;
   font-weight: bold;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   letter-spacing: 1px;
   text-transform: uppercase;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  box-shadow: 0 1px 5px rgba(0,0,0,0.2);
   transition: all 0.3s ease;
+  margin: 1px;
+  box-shadow: 0 0 0 2px #fff;
+
 }
 
 .btn-iniciar:hover {
@@ -136,8 +138,8 @@ input:-webkit-autofill:focus {
   margin: 10px auto;
   border-radius: 25px;
   border: none;
-  background-color: #000;
-  color: #FFA500;
+  background-color: #ffffff;
+  color: #000000;
   font-weight: bold;
   font-size: 1rem;
   cursor: pointer;
@@ -173,4 +175,39 @@ input:-webkit-autofill:focus {
   h2 {
     font-size: 1.8rem;
   }
+}
+.portada_login{
+  width: 100%;
+  height: 1%;
+  justify-content: center;
+
+}
+
+.fotos_login {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.inicia_sesion {
+  width: 45%;
+  height: 23%;
+  margin-top: -40px;
+}
+.logo {
+  width: 23%;
+  height: 23%;
+  margin-top: -100px;
+}
+hr {
+  color: #fff;
+}
+
+p {
+  font-size: 1.2rem;
+  color: #f3c600;
+}
+
+.crear_cuenta{
+  font-size: 1.2rem;
+  color: #ffffff;
 }

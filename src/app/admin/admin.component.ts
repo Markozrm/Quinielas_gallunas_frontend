@@ -121,7 +121,7 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
     // Otra lógica de cierre de sesión que puedas necesitar...
   }
   inicio(){
-    this.router.navigate([`/`]);
+    this.router.navigate([`/Inicio`]);
   }
   isSuperAdmin(){
     const rol = localStorage.getItem("Rol") || "";

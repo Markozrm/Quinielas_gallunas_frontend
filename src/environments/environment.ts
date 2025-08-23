@@ -3,17 +3,22 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
-  apiUrl: 'https://cheapservercaballos.com',
-  apiUrl_apuestas: 'https://cheapservercaballos.com',
-  PORT : '8443',
+ production: false,
+  apiUrl: 'http://localhost',
+  PORT:'81',
   apuesta_PORT: '3448',
+  apiUrl_apuestas: 'http://localhost',
   quiniela_PORT: '3449',
-  apiUrl_quiniela: 'https://cheapservercaballos.com',
-  apiUrl_ruleta: 'https://cheapservercaballos.com',
-  ruleta_PORT: '446'
-
+  apiUrl_quiniela: 'http://localhost', 
+  ruleta_PORT: '444', // <-- Añade el puerto para la ruleta aquí
+ //apiUrl: 'https://cheapservercaballos.com',
+   //apiUrl_apuestas: 'https://cheapservercaballos.com',
+   //PORT:'8443'
+  //apiUrl_quiniela: 'https://cheapservercaballos.com',
+  //quiniela_PORT: '8444',
+  apiUrl_ruleta: 'http://localhost',
 };
+
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
