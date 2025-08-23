@@ -1,0 +1,30 @@
+<!-- <div class="block-left">
+    <app-users-rooms></app-users-rooms> -->
+<app-menu></app-menu>
+    <div class="main">
+      <div class="menuContainer">
+        
+      </div>
+      <div class="codigo-ingreso-bg">
+        <div class="codigo-ingreso-card">
+          <form [formGroup]="codigoForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3 row">
+              <label for="staticEmail" class="col-sm-4 col-form-label">Correo</label>
+              <div class="col-sm-8">
+                <input type="text" readonly class="form-control-plaintext" id="staticEmail" [value]="email">
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <label for="inputCodigo" class="col-sm-4 col-form-label">Código</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="inputCodigo" formControlName="codigo" placeholder="Ingresa el código">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100" [disabled]="codigoForm.invalid">Verificar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+

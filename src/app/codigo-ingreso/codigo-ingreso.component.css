@@ -1,0 +1,21 @@
+.codigo-ingreso-bg {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000000;
+  color: #000000;
+}
+
+.codigo-ingreso-card {
+  background: #fff;
+  padding: 2.5rem 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  max-width: 400px;
+  width: 100%;
+}
+
+.menuContainer {
+  margin-bottom: 1.5rem;
+}

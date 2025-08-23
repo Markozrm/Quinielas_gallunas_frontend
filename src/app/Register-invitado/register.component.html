@@ -1,4 +1,4 @@
-  <!-- <div class="block-left">
+<!-- <div class="block-left">
     <app-users-rooms></app-users-rooms> -->
 
     <div class="main">
@@ -20,7 +20,7 @@
     </ng-template>
   </div>
   <label class="custom-file-upload">
-    <input type="file" id="userImage" name="userImage" accept="image/*" required (change)="handleImageChange($event)" formControlName="image" />
+    <input type="file" id="userImage" name="userImage" accept="image/*" required (change)="handleImageChange($event)" />
     Seleccionar de mi galería
   </label>
 </div>
@@ -30,6 +30,9 @@
 
           <label for="password">Contraseña:</label>
           <input type="password" id="password" name="password" required formControlName ="password">
+
+          <label for="email">Correo electrónico:</label>
+          <input type="email" id="email" name="email" required formControlName="email">
 
           <!-- <select id="tipoUsuario" required formControlName="tipoUsuario" >
             <option value="usuario">usuario</option>
