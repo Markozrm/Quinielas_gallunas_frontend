@@ -13,6 +13,7 @@ import { UsersService } from '../services/users.service'; // Asegúrate de impor
 })
 export class CodigoIngresoComponent {
   email: string = '';
+  username: string = '';
   codigoForm: FormGroup;
 
   constructor(private route: ActivatedRoute, private router: Router, private userService: UsersService) {
@@ -30,7 +31,7 @@ export class CodigoIngresoComponent {
     const response = await this.userService.verificarCodigo(this.email, codigo);
     if (response.success) {
       alert('Código correcto, acceso permitido');
-      this.router.navigate(['/live-inv', 'Stream1', '440']); // <-- Redirige aquí
+      this.router.navigate(['/live-inv', 'Stream1', '440']);
     } else {
       alert(response.error || 'Código incorrecto');
     }

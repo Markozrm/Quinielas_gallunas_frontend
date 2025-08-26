@@ -7,6 +7,9 @@
       </div>
       <div class="codigo-ingreso-bg">
         <div class="codigo-ingreso-card">
+          <p class="mb-2">
+            <strong>{{ username }}</strong> Hemos mandado un código a tu correo {{ email }} para que puedas confirmar tu correo.
+          </p>
           <form [formGroup]="codigoForm" (ngSubmit)="onSubmit()">
             <div class="mb-3 row">
               <label for="staticEmail" class="col-sm-4 col-form-label">Correo</label>

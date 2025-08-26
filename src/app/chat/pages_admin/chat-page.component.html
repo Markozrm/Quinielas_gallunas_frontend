@@ -46,12 +46,14 @@
     </button>
     
     <!-- Contenedor de botones de control de apuestas -->
-    <div class="betting-control-buttons">
+    <!-- <div class="betting-control-buttons">
       <div class="admin-bet-box red">
         <div class="admin-bet-title">{{ redTeamName || 'Rojo' }}</div>
         <div class="admin-bet-amount">{{ cantidadApostadaRojo }}$</div>
         <div class="admin-bet-points">PTS: {{ redPoints }}</div>
+
       </div>
+      -->
 
       <!-- Botón principal para abrir/cerrar apuestas cuando corresponda -->
       <button *ngIf="estadoApuesta" 
@@ -79,12 +81,13 @@
               (click)="abrirNuevaRonda()">
         Abrir Nueva Ronda
       </button>
-
+    <!-- 
       <div class="admin-bet-box green">
         <div class="admin-bet-title">{{ greenTeamName || 'Verde' }}</div>
         <div class="admin-bet-amount">{{ cantidadApostadaVerde }}$</div>
         <div class="admin-bet-points">PTS: {{ greenPoints }}</div>
       </div>
+      -->
     </div>
     
     <!-- Sección para rondas en espera -->
