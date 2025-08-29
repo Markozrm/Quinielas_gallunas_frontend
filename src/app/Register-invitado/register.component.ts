@@ -29,7 +29,11 @@ export class RegisterInvitadoComponent {
       password: new FormControl('', Validators.required),
       image: new FormControl(),
       tipoUsuario: new FormControl(),
-      email: new FormControl('', [Validators.required, Validators.email]), // <-- Validación
+      email: new FormControl('', [Validators.required, Validators.email]),
+      nombre: new FormControl('', Validators.required),
+      apellido: new FormControl('', Validators.required),
+      telefono: new FormControl('', Validators.required),
+      fechaNacimiento: new FormControl('', Validators.required),
     });
   }
   public image: any;

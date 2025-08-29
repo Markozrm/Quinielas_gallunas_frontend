@@ -21,6 +21,10 @@ export class UsersService {
     formData.append('password', formValue.password);
     formData.append('tipoUsuario', formValue.tipoUsuario);
     formData.append('email', formValue.email);
+    formData.append('nombre', formValue.nombre);    
+    formData.append('apellido', formValue.apellido);
+    formData.append('telefono', formValue.telefono);
+    formData.append('fechaNacimiento', formValue.fechaNacimiento);
     return firstValueFrom(this.httpClient.post<any>(`${this.baseUrl}/register`, formData));
   }
 
