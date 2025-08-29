@@ -139,3 +139,11 @@ button:hover {
 .custom-file-upload input[type="file"] {
   display: none;
 }
+
+input[type="date"] {
+  display: block;
+  font:
+    1rem "Fira Sans",
+    sans-serif;
+  margin: 0.4rem 0;
+}
