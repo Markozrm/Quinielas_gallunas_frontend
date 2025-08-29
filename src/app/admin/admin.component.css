@@ -54,14 +54,14 @@ body {
 }
 
 .btn-submit {
-  background-color: var(--colorSecondary);
+  background-color: #fff;
   right: 0;
   top: 0;
 }
 
 .btn-submitLeft {
   color: white;
-  background-color: #FD9E00;
+  background-color: #fff;
   left: 0;
   top: 0;
   width: 4rem;
