@@ -1,4 +1,4 @@
-/* Estilos para el botón flotante arrastrable de la ruleta */
+/* Estilos para el botón flotante arrastrable de la ruleta 
 .ruleta-float-button-container {
   position: fixed;
   z-index: 1000;
@@ -36,7 +36,7 @@
 }
 * {
   box-sizing: border-box;
-}
+}*/
 
 /* Estilos para el botón flotante arrastrable del chat */
 .chat-button-container {
@@ -151,7 +151,6 @@
   z-index: 9999;
   width: 2.5rem;
   height: auto;
-  margin-top: 6px;
 }
 .btn-submit {
   right: 0;
@@ -159,7 +158,7 @@
    width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
-  border: 2px solid rgb(255, 255, 255);
+  border: 2px solid gold;
   cursor: pointer;
   transition: transform 0.2
 }
@@ -359,12 +358,29 @@
 }
 
 .user-balance-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.5em;
+  width: 100%;                  /* <-- Cambia esto */
+  max-width: 100%;              /* <-- Asegura que no se pase */
+  background: #fff !important;
+  color: #000 !important;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: 1.3em;
   font-weight: bold;
-  color: white;
+  padding: 8px 24px;
+  border-bottom: 2px solid #000;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  box-sizing: border-box;
+  z-index: 10;
+  position: relative;
+  margin-bottom: 0;
+}
+
+body, .main, .apuesta-container, .chat-container {
+  background: #fff !important;
+  padding-top: 80px; /* Deja espacio para la barra negra fija */
 }
 
 .match-info {
@@ -464,29 +480,26 @@ input[type="number"]::placeholder {
 }
 
 .boton-apostar {
- width: 120px;            /* Ancho fijo para hacerlo circular */
-  height: 120px;           /* Altura igual al ancho para formar un círculo */
-  padding: 0;              /* Eliminar padding para evitar deformación */
-  border-radius: 50%;      /* Hacerlo completamente redondo */
-  color: white;
-  background-color: black;
-  border: 2px solid var(--colorSecondary);
-  font-size: 1.2em;
-  cursor: pointer;
-  display: flex;           /* Usar flexbox para centrar el texto */
-  align-items: center;     /* Centrar verticalmente */
-  justify-content: center; /* Centrar horizontalmente */
+  background: linear-gradient(90deg, #b49b5e 0%, #fff3c0 100%) !important;
+  color: #000 !important;
+  border: none !important;
+  border-radius: 30px !important;
+  font-family: 'Permanent Marker', 'Arial Black', Arial, sans-serif;
+  font-size: 2em !important;
   font-weight: bold;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin: 0 10px 0 0;
+  height: 60px !important;
+  min-width: 260px !important;   /* <-- Más ancho mínimo */
+  padding: 0 40px !important;    /* <-- Más espacio horizontal */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-transform: uppercase;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  margin: 0 auto;          /* Centrar el botón en su contenedor */
-  transition: all 0.3s ease /* Transición suave para efectos hover */
-}
-
-.boton-apostar:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  transition: background 0.2s, color 0.2s;
+  box-sizing: border-box;
+  white-space: nowrap;
 }
 
 h2 {
@@ -830,9 +843,9 @@ h2 {
 
 .input-bet-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start; /* Alinea a la izquierda */
   align-items: center;
-  gap: 10px;
+  gap: 90px; /* Espacio entre input y botón */
   width: 100%;
   margin: 10px auto;
 
@@ -918,13 +931,13 @@ input[type="number"]::placeholder {
 .bet-status-indicator.waiting {
   background-color: #ff990000;
   border: 2px solid #fff; 
-  color: white;
+  color: black;
 }
 
 .bet-status-indicator.caught {
   background-color:#ff990000;
   border: 2px solid #fff;
-  color: white;
+  color: black;
 }
 
 .bet-red {
@@ -1094,7 +1107,7 @@ input[type="number"]::placeholder {
   background-color: #c9302c;
 }
 
-/* Estilos para el botón del casino en el header */
+/* Estilos para el botón del casino en el header 
 .header-casino {
   flex: 1;
   display: flex;
@@ -1124,7 +1137,7 @@ input[type="number"]::placeholder {
 .casino-button:active {
   transform: translateY(0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
+}*/
 
 @media screen and (min-width: 600px) {
   .bet-status-multi-line {
@@ -1606,10 +1619,219 @@ input[type="number"]::placeholder {
   letter-spacing: 1px;
 }
 
-/* Responsive para móviles */
-@media (max-width: 768px) {
-  .ruleta-title {
-    font-size: 1.4em;
-    padding: 8px 16px;
+/* HEADER SUPERIOR (usuario y saldo) */
+.user-balance-container {
+  /* Elimina position: fixed y top */
+  width: 100vw;
+  background: #fff !important;      /* Fondo igual al de la página */
+  color: #000 !important;           /* Letras negras */
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: 1.3em;
+  font-weight: bold;
+  padding: 8px 24px;
+  border-bottom: 2px solid #000;    /* Línea inferior negra */
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;                        /* Espacio entre textos */
+  box-sizing: border-box;
+  z-index: 10;
+  position: relative;
+  margin-bottom: 0;
+}
+
+/* PELEA Y CAZANDO */
+.header-container {
+  background: #fff;
+  border-bottom: none;
+  padding: 0;
+  gap: 0;
+}
+
+.header-left {
+  background: #fff;
+  border: none;
+  color: #000;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: 2em;
+  font-weight: bold;
+  padding: 0;
+  border-radius: 0;
+}
+
+.header-right {
+  background: #fff;
+  color: #000;
+  border: none;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: 2em;
+  font-weight: bold;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* CUADROS DE MONTO ROJO Y VERDE */
+.team-red {
+  background: #ff2d2d !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: none !important;
+  font-family: 'Arial Black', Arial, sans-serif;
+}
+
+.team-green {
+  background: #1bc47d !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: none !important;
+  font-family: 'Arial Black', Arial, sans-serif;
+}
+
+/* NÚMEROS DE MONTO EN LOS CUADROS */
+.team-red h3, .team-green h3 {
+  font-size: 2.2em;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: #fff;
+}
+
+/* BOTONES DE APUESTA RÁPIDA */
+.quick-bets {
+  background: none;
+  gap: 12px;
+}
+
+.quick-bet-button {
+  background: #fff !important;
+  color: #000 !important;
+  border: 2px solid #000 !important;
+  border-radius: 12px !important;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: 1.1em;
+  font-weight: bold;
+  box-shadow: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.quick-bet-button:hover {
+  background: #e6e6e6 !important;
+  color: #000 !important;
+}
+
+/* BOTÓN "TODO" */
+.quick-bet-allIn {
+  background: #000 !important;
+  color: #fff !important;
+  border: 2px solid #ffcb05 !important;
+  border-radius: 12px !important;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: none;
+  letter-spacing: 1px;
+}
+
+.quick-bet-allIn:hover {
+  background: #222 !important;
+}
+
+/* BOTÓN MONTO SELECCIONADO */
+.current-bet {
+  background: linear-gradient(90deg, #b49b5e 0%, #fff3c0 100%);
+  color: #000;
+  border-radius: 30px;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: 1.3em;
+  font-weight: bold;
+  padding: 10px 0;
+  margin: 10px 0 0 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* BOTÓN JUGAR */
+.boton-apostar {
+  background: linear-gradient(90deg, #b49b5e 0%, #fff3c0 100%) !important;
+  color: #000 !important;
+  border: none !important;
+  border-radius: 30px !important;
+  font-family: 'Permanent Marker', 'Arial Black', Arial, sans-serif;
+  font-size: 2em !important;
+  font-weight: bold;
+  letter-spacing: 2px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin: 0 10px 0 0;
+  height: 60px !important;
+  min-width: 260px !important;   /* <-- Más ancho mínimo */
+  padding: 0 40px !important;    /* <-- Más espacio horizontal */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  transition: background 0.2s, color 0.2s;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+.boton-apostar:hover {
+  background: linear-gradient(90deg, #fff3c0 0%, #b49b5e 100%) !important;
+  color: #000 !important;
+}
+
+/* BOTÓN "VOY JUGANDO..." */
+.voy-jugando {
+  background: #ff2d2d !important;
+  color: #fff !important;
+  border-radius: 30px !important;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: 1.3em;
+  font-weight: bold;
+  letter-spacing: 1px;
+  padding: 12px 0;
+  margin: 10px 0 0 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  text-align: center;
+  text-transform: uppercase;
+  border: none !important;
+}
+
+/* PUNTOS */
+.team-points {
+  color: #000 !important;
+  background: none !important;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin: 0 0 10px 0;
+  padding: 0;
+}
+
+/* FONDO GENERAL */
+body, .main, .apuesta-container, .chat-container {
+  background: #fff !important;
+  padding-top: 0 !important;
+}
+@media (max-width: 600px) {
+  .boton-apostar {
+    font-size: 1.1em !important;
+    min-width: 80px !important;
+    height: 50px !important;
+    width: 230px !important;
+    padding: 0 16px !important;
+  }
+}
+@media (max-width: 600px) {
+  .input-bet-container {
+    gap: 10px;
+  }
+  input[type="number"] {
+    width: 90% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    font-size: 1.1em;
+    margin: 0 auto;
+    display: block;
   }
 }
