@@ -1,5 +1,5 @@
 .btn-submitLeft {
-  background-color: #FD9E00;
+  background-color: #bca35b;
   color: #fff;
   position: fixed;
   border: none;
@@ -22,7 +22,7 @@
 }
 
 .page-header h1 {
-  color: #FD9E00;
+  color: #bca35b;
   font-size: 28px;
   text-transform: uppercase;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
@@ -58,7 +58,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   transition: transform 0.2s ease;
   position: relative;
-  border-left: 5px solid #FD9E00;
+  border-left: 5px solid #bca35b;
 }
 
 .retiro-item:hover {
@@ -128,7 +128,7 @@
 .label {
   font-weight: bold;
   width: 40%;
-  color: #FD9E00;
+  color: #bca35b;
 }
 
 .value {
@@ -268,7 +268,7 @@
 }
 
 .modal-header {
-  background-color: #FD9E00;
+  background-color: #bca35b;
   color: white;
   padding: 15px 20px;
   text-align: center;
@@ -313,7 +313,7 @@
   min-width: 140px;
   text-align: center;
   box-shadow: 0 2px 8px #0006;
-  border: 2px solid #FD9E00;
+  border: 2px solid #bca35b;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -322,7 +322,7 @@
 
 .resumen-titulo {
   font-size: 1.1em;
-  color: #FD9E00;
+  color: #bca35b;
   margin-bottom: 8px;
   font-weight: bold;
   letter-spacing: 1px;

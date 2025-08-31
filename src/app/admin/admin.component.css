@@ -54,14 +54,14 @@ body {
 }
 
 .btn-submit {
-  background-color: var(--colorSecondary);
+  background-color: #bca35b;
   right: 0;
   top: 0;
 }
 
 .btn-submitLeft {
   color: white;
-  background-color: #FD9E00;
+  background-color: #bca35b;
   left: 0;
   top: 0;
   width: 4rem;
@@ -556,7 +556,7 @@ body {
 
 /* Panel admin tipo casino */
 .admin-panel-casino {
-    background: #070707;
+    background: #ffff;
     color: #fff;
     border-radius: 12px;
     padding: 30px 20px 80px 20px;
@@ -863,25 +863,6 @@ body {
     width: 500px;
 }
 
-.modal-content-imagen-stream input[type="file"] {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  color: #020101;
-}
-
-.modal-buttons-imagen-stream button {
-  padding: 8px 18px 10px ;
-  border-radius: 8px;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  background: #22ff05;
-  color: #222;
-  transition: background 0.2s;
-}
-
-/* ...existing code... */
-
 /* Estilos simples para el modal de imagen de stream */
 .modal-content-imagen-stream {
     position: fixed;
@@ -1028,4 +1009,10 @@ body {
     }
 }
 
-/* ...existing code... */
+/* Títulos del panel admin con texto negro */
+.admin-panel-casino h2,
+.admin-panel-casino-col h3 {
+  color: #000 !important;
+  background: none !important;
+  text-shadow: none !important;
+}

@@ -47,7 +47,7 @@
     border: none;
     color: #fff;
     cursor: pointer;
-    background-color: #FD9E00; /* Verde para cancelar */
+    background-color: #bca35b; /* Naranja reemplazado */
   }
   
   .users-list {
@@ -118,7 +118,7 @@
     }
     
     .save-button {
-      background-color: #FD9E00;
+      background-color: #bca35b;
       color: #fff;
       border: none;
     }
@@ -137,7 +137,7 @@
       border: none;
       color: #fff;
       cursor: pointer;
-      background-color:  #f44336; /* Verde para cancelar */
+      background-color:  #f44336; /* Rojo para cancelar */
     }
     
     @media screen and (-webkit-min-device-pixel-ratio:0) {
@@ -153,7 +153,7 @@
     background: #111;
     border-radius: 15px;
     padding: 20px;
-    border: 2px solid #FD9E00;
+    border: 2px solid #bca35b;
   }
   
   .recibos-table {
@@ -165,18 +165,18 @@
   
   .recibos-table th, .recibos-table td {
     padding: 12px 8px;
-    border-bottom: 1px solid #FD9E00;
+    border-bottom: 1px solid #bca35b;
     text-align: center;
   }
   
   .recibos-table th {
     background: #222;
-    color: #FD9E00;
+    color: #bca35b;
     font-weight: bold;
   }
   
   .ver-recibo-btn {
-    background: linear-gradient(90deg, #FD9E00 60%, #fff700 100%);
+    background: linear-gradient(90deg, #bca35b 60%, #fff700 100%);
     color: #222;
     border: none;
     padding: 8px 18px;
@@ -187,7 +187,7 @@
   }
   
   .ver-recibo-btn:hover {
-    background: linear-gradient(90deg, #fff700 60%, #FD9E00 100%);
+    background: linear-gradient(90deg, #fff700 60%, #bca35b 100%);
   }
   .estado-aprobado {
     background: #1abc9c;
@@ -266,7 +266,7 @@
   min-width: 140px;
   text-align: center;
   box-shadow: 0 2px 8px #0006;
-  border: 2px solid #FD9E00;
+  border: 2px solid #bca35b;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -274,7 +274,7 @@
 
 .resumen-titulo {
   font-size: 1.1em;
-  color: #FD9E00;
+  color: #bca35b;
   margin-bottom: 8px;
   font-weight: bold;
   letter-spacing: 1px;
@@ -294,7 +294,7 @@
   color: #e74c3c;
 }
 .resumen-item.monto .resumen-numero {
-  color: #FD9E00;
+  color: #bca35b;
 }
 
 @media (max-width: 700px) {
@@ -316,13 +316,13 @@
   background: #111;
   border-radius: 15px;
   padding: 20px;
-  border: 2px solid #FD9E00;
+  border: 2px solid #bca35b;
   box-shadow: 0 2px 8px #0006;
   overflow-x: auto;
 }
 
 .historial-recibos h3 {
-  color: #FD9E00;
+  color: #bca35b;
   text-align: center;
   margin-bottom: 18px;
   font-size: 1.25em;
@@ -341,12 +341,12 @@
 .historial-recibos th, .historial-recibos td {
   padding: 12px 8px;
   text-align: center;
-  border-bottom: 1px solid #FD9E00;
+  border-bottom: 1px solid #bca35b;
 }
 
 .historial-recibos th {
   background: #222;
-  color: #FD9E00;
+  color: #bca35b;
   font-weight: bold;
   font-size: 1.05em;
 }
@@ -408,7 +408,7 @@
     padding-right: 10px;
     text-align: left;
     font-weight: bold;
-    color: #FD9E00;
+    color: #bca35b;
   }
 }
 .paginacion-historial {
@@ -420,7 +420,7 @@
 }
 
 .paginacion-historial button {
-  background: #FD9E00;
+  background: #bca35b;
   color: #222;
   border: none;
   border-radius: 6px;

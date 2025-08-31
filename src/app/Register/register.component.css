@@ -116,7 +116,7 @@ form {
 }
 
 .form-group input:focus {
-  border-color: #fd9e00;
+  border-color: #bca35b;
 }
 
 /* Ocultar el campo de saldo */
@@ -171,8 +171,8 @@ label[for="saldo"] {
 }
 
 .admin-btn.selected {
-  background: #fd9e00;
-  border-color: #fd9e00;
+  background: #bca35b;
+  border-color: #bca35b;
   color: white;
 }
 
@@ -183,8 +183,8 @@ label[for="saldo"] {
 }
 
 .superuser-btn.selected {
-  background: #fd9e00;
-  border-color: #fd9e00;
+  background: #bca35b;
+  border-color: #bca35b;
   color: white;
 }
 
@@ -194,8 +194,8 @@ label[for="saldo"] {
 }
 
 .controlador-btn.selected {
-  background: #fd9e00;
-  border-color: #fd9e00;
+  background: #bca35b;
+  border-color: #bca35b;
   color: white;
 }
 
@@ -214,7 +214,7 @@ label[for="saldo"] {
 }
 
 .image-upload-btn {
-  background: #fd9e00;
+  background: #bca35b;
   color: white;
   padding: 10px 25px;
   border: none;

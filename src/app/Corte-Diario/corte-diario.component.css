@@ -60,14 +60,14 @@
   margin-left: 8px;
   padding: 4px 12px;
   border-radius: 4px;
-  background: #ff9800;
+  background: #bca35b;
   color: #fff;
   border: none;
   cursor: pointer;
 }
 .corte-diario-bg {
   min-height: 100vh;
-  background: #000;
+  background: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -81,7 +81,7 @@
 }
 .stream-input {
   background: transparent;
-  border: 2px solid #fff;
+  border: 2px solid #000;
   color: #fff;
   border-radius: 24px;
   padding: 8px 24px;
@@ -95,7 +95,7 @@
 .buscar-btn {
   padding: 8px 18px;
   border-radius: 20px;
-  background: #ff9800;
+  background: #bca35b;
   color: #fff;
   border: none;
   font-weight: bold;
@@ -104,11 +104,11 @@
   transition: background 0.2s;
 }
 .buscar-btn:hover {
-  background: #ffa726;
+  background: #bca35b;
 }
 .corte-diario-card {
   background: #181818;
-  border: 3px solid #ff9800;
+  border: 3px solid #bca35b;
   border-radius: 18px;
   padding: 32px 36px 28px 36px;
   min-width: 420px;
@@ -159,8 +159,8 @@
   text-align: center;
   font-size: 1.2em;
   background: #222;
-  border: 2px dashed #ff9800;
-  color: #ff9800;
+  border: 2px dashed #bca35b;
+  color: #bca35b;
   margin-top: 32px;
 }
 .corte-diario-historial {
@@ -188,7 +188,7 @@
 
 .tabla-historial th {
   background: #222;
-  color: #ff9800;
+  color: #bca35b;
   font-weight: bold;
 }
 
@@ -209,7 +209,7 @@
 }
 
 .paginacion-historial button {
-  background: #ff9800;
+  background: #bca35b;
   color: #fff;
   border: none;
   border-radius: 16px;

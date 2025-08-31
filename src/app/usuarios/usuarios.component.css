@@ -47,7 +47,7 @@
   border: none;
   color: #fff;
   cursor: pointer;
-  background-color: #FD9E00; /* Verde para cancelar */
+  background-color: #bca35b; /* Verde para cancelar */
 }
 
 .search-container {
@@ -139,7 +139,7 @@
   }
   
   .save-button {
-    background-color: #FD9E00;
+    background-color: #bca35b;
     color: #fff;
     border: none;
   }
@@ -178,7 +178,7 @@
   padding: 8px;
   margin-top: 10px;
   cursor: pointer;
-  background-color: #FD9E00;
+  background-color: #bca35b;
 } 
 .saldo-input-container {
   margin: 15px 0;
@@ -307,9 +307,9 @@
 }
 
 .pagination-btn:hover:not(:disabled) {
-  background-color: #FD9E00;
+  background-color: #bca35b;
   color: white;
-  border-color: #FD9E00;
+  border-color: #bca35b;
 }
 
 .pagination-btn:disabled {
@@ -320,9 +320,9 @@
 }
 
 .pagination-btn.active {
-  background-color: #FD9E00;
+  background-color: #bca35b;
   color: white;
-  border-color: #FD9E00;
+  border-color: #bca35b;
   font-weight: bold;
 }
 

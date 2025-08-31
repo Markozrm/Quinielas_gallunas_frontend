@@ -18,8 +18,6 @@
   align-items: center;
   height: 100%;
   width: 100%;
-  
-  
 }
   
 .app-users-type {
@@ -46,16 +44,11 @@
 .chat-container{
   width: 100%;
   height: 100%;
- 
- 
 }
-
-
 .app-users-type{
   width: 100%;
   height: 100%;
 } 
-
 .btn-wrap{
   border: none;
   background: none;
@@ -164,15 +157,12 @@
 
 .users-type {
   width: 100%;
-
 }
-
 .input-wrapper {
   display: flex;
   width: 100%;
   max-width: 600px;
 }
-
 .input-wrapper input {
   flex: 1;
   padding: 10px;
@@ -180,7 +170,6 @@
   border-radius: 4px 0 0 4px;
   font-size: 16px;
 }
-
 .input-wrapper button {
   padding: 10px 15px;
   background-color: var(--colorSecondary, #007BFF);
@@ -190,11 +179,9 @@
   cursor: pointer;
   font-size: 16px;
 }
-
 .input-wrapper button:hover {
   background-color: var(--colorPrimary, #0056b3);
 }
-
 .popup-overlay {
   position: fixed;
   top: 0;
@@ -233,19 +220,16 @@
 .popup-content {
   text-align: center;
 }
-
 .user-list {
   margin-top: 20px;
   max-height: 300px;
   overflow-y: auto;
 }
-
 .user-item {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
 }
-
 .user-photo {
   width: 40px;
   height: 40px;
@@ -351,7 +335,7 @@
 }
 
 .ronda {
-  color: #ff6600;
+  color: #bca35b;
   margin-left: 5px;
   font-weight: bold;
 }
@@ -376,8 +360,8 @@ input[type="number"] {
   padding: 10px;
   border-radius: 8px;
   color: white;
-  background-color: #FE9C03;
-  border: 2px solid #f8b954;
+  background-color: #bca35b;
+  border: 2px solid #bca35b;
 }
 .team-green p,.team-red p, .boton-apostar p{
   margin: 5px 0;
@@ -385,7 +369,7 @@ input[type="number"] {
   font-size: 1.2em;
 }
 .boton-apostar:hover {
-  background-color: gold;
+  background-color: #bca35b;
 }
 .resumen-stream {
   background-color: #444;
@@ -393,6 +377,8 @@ input[type="number"] {
   border-radius: 5px;
   margin-bottom: 15px;
   color: white;
+  border-left: 4px solid #bca35b;
+  background: linear-gradient(to right, #333, #222);
 }
 
 .resumen-stream p {
@@ -402,7 +388,9 @@ input[type="number"] {
 }
 
 .resumen-stream strong {
-  color: gold;
+  color: #bca35b;
+  font-size: 1.3em;
+  font-weight: 700;
 }
 
 .equipo-verde {
@@ -498,7 +486,7 @@ input[type="number"] {
 .tabla-cazado th {
  padding: 12px 15px;
   text-align: center;
-  color: gold;
+  color: #bca35b;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -508,7 +496,7 @@ input[type="number"] {
 .tabla-cazado td {
    padding: 10px 15px;
   text-align: center;
-  color: #fff;
+  color: #bca35b;
   border-bottom: 1px solid #444;
 }
 .tabla-cazado tr:last-child td {
@@ -520,13 +508,13 @@ input[type="number"] {
 }
 
 .tabla-cazado tr:hover {
-  background-color: rgba(255, 215, 0, 0.1);
+  background-color: rgba(188, 163, 91, 0.1);
 }
 
 /* Estilo para la celda de monto */
 .tabla-cazado td:nth-child(2) {
   font-weight: bold;
-  color: gold;
+  color: #bca35b;
   font-family: 'Courier New', monospace;
 }
 
@@ -538,7 +526,7 @@ input[type="number"] {
   margin: 15px 0;
   color: white;
   text-align: center;
-  border-left: 4px solid gold;
+  border-left: 4px solid #bca35b;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -553,7 +541,7 @@ input[type="number"] {
 
 
 .resumen-stream strong {
- color: gold;
+ color: #bca35b;
   font-size: 1.3em;
   font-weight: 700;
 }
@@ -599,5 +587,42 @@ input[type="number"] {
 }
 
 .ronda {
-  color: #ff9900;
+  color: #bca35b;
+}
+
+/* Botón Filtrar */
+.boton-filtrar,
+.filtrar-btn {
+  background-color: #bca35b !important;
+  color: #fff !important;
+  border: 2px solid #bca35b !important;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 8px 18px;
+  transition: background 0.2s;
+}
+
+.boton-filtrar:hover,
+.filtrar-btn:hover {
+  background-color: #a68e4a !important;
+  border-color: #a68e4a !important;
+}
+
+/* Fuerza el color para el botón Filtrar específico */
+button, 
+button[type="submit"], 
+button[type="button"] {
+  background-color: #bca35b !important;
+  color: #fff !important;
+  border: 2px solid #bca35b !important;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+button:hover, 
+button[type="submit"]:hover, 
+button[type="button"]:hover {
+  background-color: #a68e4a !important;
+  border-color: #a68e4a !important;
 }
