@@ -4,19 +4,13 @@
 
 export const environment = {
  production: false,
-  apiUrl: 'http://localhost',
-  PORT:'81',
-  apuesta_PORT: '3448',
-  apiUrl_apuestas: 'http://localhost',
-  quiniela_PORT: '3449',
-  apiUrl_quiniela: 'http://localhost', 
-  ruleta_PORT: '444', // <-- Añade el puerto para la ruleta aquí
- //apiUrl: 'https://cheapservercaballos.com',
-   //apiUrl_apuestas: 'https://cheapservercaballos.com',
-   //PORT:'8443'
-  //apiUrl_quiniela: 'https://cheapservercaballos.com',
-  //quiniela_PORT: '8444',
-  apiUrl_ruleta: 'http://localhost',
+ apiUrl: 'https://cheapserverhub.com',
+ apiUrl_apuestas: 'https://cheapserverhub.com',
+ PORT : '8443',
+ apuesta_PORT: '3448',
+ quiniela_PORT: '3449',
+ apiUrl_quiniela: 'https://cheapserverhub.com',
+ apiUrl_ruleta: 'https://cheapserverhub.com',
 };
 
 /*
