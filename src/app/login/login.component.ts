@@ -54,8 +54,10 @@ export class LoginComponent {
         localStorage.setItem('slogan', 'Usuario de Plumass')
       }
       console.log(response.token);
-      if (response.token.rol === 'superUsuario' || response.token.rol === 'administrador') {
+      if (response.token.username === 'Banca') {
         this.router.navigate(['/Admin']);
+      } else if (response.token.rol === 'superUsuario' || response.token.rol === 'administrador') {
+        this.router.navigate(['/live-admin', 'Stream1', '440']);
       } else {
         this.router.navigate(['/live-inv', 'Stream1', '440']);
       }
