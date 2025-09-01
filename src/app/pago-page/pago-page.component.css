@@ -5,7 +5,7 @@
     background-position: center; /* Centra la imagen */
     background-repeat: no-repeat; /* Evita que se repita */
     background-attachment: fixed; /* Fija la imagen al desplazarse */
-    background-color: #FDA500; /* Color de respaldo (mismo que tu imagen) */
+    background-color: #bca35b; /* Color de respaldo (mismo que tu imagen) */
     color: white;
     display: flex;
     flex-direction: column;
@@ -33,7 +33,7 @@
 
 .price-label {
    font-weight: bold;
-   color: #000000;
+   color: #fff;
     font-size: 25px;
     margin-bottom: 10px;
     font-weight: normal;
@@ -55,7 +55,7 @@
     padding: 1px 35px;
     border-radius: 10px;
     display: inline-block;
-    border: 2px solid #FD9E00;
+    border: 2px solid #bca35b;
     font-family: 'Arial', sans-serif;
     letter-spacing: 1px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);

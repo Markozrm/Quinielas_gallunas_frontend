@@ -358,3 +358,43 @@
     min-width: 30px;
   }
 }
+
+.user-info-card {
+  border: 1px solid #d1d1d1;
+  border-radius: 8px;
+  background: #f7f7f7;
+  padding: 12px;
+  margin-bottom: 8px;
+  margin-top: 8px;
+}
+.user-info-card h4 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 1.1em;
+}
+.user-info-card p {
+  margin: 0 0 4px 0;
+  font-size: 0.95em;
+}
+.user-info-card-static {
+  border: 1px solid #bca35b;
+  border-radius: 8px;
+  background: #181818;
+  color: #fff;
+  padding: 14px 16px;
+  margin: 12px 0 8px 0;
+  font-size: 1em;
+}
+.user-info-card-static h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.1em;
+  color: #bca35b;
+  text-align: center;
+  letter-spacing: 1px;
+}
+.user-info-card-static p {
+  margin: 0 0 6px 0;
+  font-size: 0.97em;
+  color: #fff;
+}

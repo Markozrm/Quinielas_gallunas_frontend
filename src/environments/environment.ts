@@ -4,13 +4,18 @@
 
 export const environment = {
  production: false,
- apiUrl: 'https://cheapserverhub.com',
- apiUrl_apuestas: 'https://cheapserverhub.com',
- PORT : '8443',
- apuesta_PORT: '3448',
- quiniela_PORT: '3449',
- apiUrl_quiniela: 'https://cheapserverhub.com',
- apiUrl_ruleta: 'https://cheapserverhub.com',
+ apiUrl: 'http://localhost', // Cambia a localhost para pruebas locales
+ apiUrl_apuestas: 'http://localhost', // Cambia a localhost para pruebas locales
+ PORT : '3000', // Puerto local de tu backend principal
+ apuesta_PORT: '3448', // Puerto local para apuestas
+ quiniela_PORT: '3449', // Puerto local para quinielas
+ apiUrl_quiniela: 'http://localhost', // Cambia a localhost para pruebas locales
+ apiUrl_ruleta: 'http://localhost', // Cambia a localhost para pruebas locales
+ // apiUrl: 'https://cheapserverhub.com', // No usado en local
+ // apiUrl_apuestas: 'https://cheapserverhub.com', // No usado en local
+ // apiUrl_quiniela: 'https://cheapserverhub.com', // No usado en local
+ // apiUrl_ruleta: 'https://cheapserverhub.com', // No usado en local
+ // PORT : '8443', // No usado en local
 };
 
 /*
