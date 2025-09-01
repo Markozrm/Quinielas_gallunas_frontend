@@ -1,8 +1,17 @@
 <div class="menuContainer">
   <!--<app-menu></app-menu>-->
   <div>
-    <button class="btn-submitLeft" (click)="inicio()">
-       Stream
+    <button 
+      class="btn-submitLeft" 
+      *ngIf="!isControladorBanca()" 
+      (click)="inicio()">
+      Stream
+    </button>
+    <button 
+      class="btn-submitLeft" 
+      *ngIf="isControladorBanca()" 
+      (click)="irMiPerfil()">
+      Perfil
     </button>
   </div>
   <div>
