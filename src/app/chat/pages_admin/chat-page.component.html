@@ -3,7 +3,7 @@
     <!--<app-menu></app-menu>-->
     <div>
       <button class="btn-wrap" (click)="inicio()">
-        <img class="btn-submitLeft" src="../../../assets/image/granero_logo.jpg" alt="Logo">
+        <img class="btn-submitLeft" src="../../../assets/image/atras.png" alt="Logo">
       </button>
     </div>
 
@@ -45,14 +45,14 @@
       <span>{{ connectedUsers }}</span>
     </button>
     
-    <!-- Contenedor de botones de control de apuestas -->
+    <!-- Contenedor de botones de control de apuestas 
     <div class="betting-control-buttons">
       <div class="admin-bet-box red">
         <div class="admin-bet-title">{{ redTeamName || 'Rojo' }}</div>
         <div class="admin-bet-amount">{{ cantidadApostadaRojo }}$</div>
         <div class="admin-bet-points">PTS: {{ redPoints }}</div>
       </div>
-
+-->
       <!-- Botón principal para abrir/cerrar apuestas cuando corresponda -->
       <button *ngIf="estadoApuesta" 
               class="admin-btn close-bets-btn" 
@@ -79,13 +79,13 @@
               (click)="abrirNuevaRonda()">
         Abrir Nueva Ronda
       </button>
-
+<!-- 
       <div class="admin-bet-box green">
         <div class="admin-bet-title">{{ greenTeamName || 'Verde' }}</div>
         <div class="admin-bet-amount">{{ cantidadApostadaVerde }}$</div>
         <div class="admin-bet-points">PTS: {{ greenPoints }}</div>
       </div>
-    </div>
+    </div>-->
     
     <!-- Sección para rondas en espera -->
     <div *ngIf="rondasEnEspera.length > 0" class="rondas-espera">
