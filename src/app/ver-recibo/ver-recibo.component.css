@@ -435,3 +435,13 @@
   color: #888;
   cursor: not-allowed;
 }
+.btn-submitLeft {
+  background: #bca35b;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
