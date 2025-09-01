@@ -37,6 +37,14 @@ export class MiPerfilComponent implements OnInit {
     });
   }
 
+  esControladorBanca(): boolean {
+  return localStorage.getItem('Rol') === 'controladorBanca';
+}
+
+irAdmin() {
+  this.router.navigate(['/Admin']);
+}
+
   ngOnInit(): void {
     // Obtener nombre de usuario del localStorage
     this.nombreUsuario = localStorage.getItem('nombreUsuario') || 'USUARIO';

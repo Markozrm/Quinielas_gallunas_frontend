@@ -145,6 +145,9 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
     this.showRifaPanel = false;
     this.rifasAdmin = [];
   }
+  irMiPerfil() {
+    this.router.navigate(['/mi-perfil']);
+  }
 
   irRifaAdmin() {
     this.showRifaPanel = true;
@@ -309,6 +312,7 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
     });
   }
 
+  
   eliminarRifa(rifa: any) {
     if (confirm(`¿Estás seguro de eliminar la rifa #${rifa.numeroRifa}?`)) {
       this.quinielaService.eliminarRifa(rifa.numeroRifa).subscribe({ // Cambado a quinielaService
