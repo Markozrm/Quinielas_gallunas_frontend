@@ -28,7 +28,7 @@ export class RegisterInvitadoComponent {
       username: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),
       image: new FormControl(),
-      tipoUsuario: new FormControl(),
+      tipoUsuario: new FormControl('invitado', Validators.required), // ← valor inicial
       email: new FormControl('', [Validators.required, Validators.email]),
       nombre: new FormControl('', Validators.required),
       apellido: new FormControl('', Validators.required),
@@ -56,21 +56,44 @@ export class RegisterInvitadoComponent {
   async onSubmit() {
     this.formulario.get('tipoUsuario')?.patchValue("invitado");
     const email = this.formulario.get('email')?.value;
+
+    // Validar que todos los campos estén llenos excepto la imagen y tipoUsuario
+    const camposObligatorios = [
+      'username',
+      'password',
+      'email',
+      'nombre',
+      'apellido',
+      'telefono',
+      'fechaNacimiento'
+    ];
+    for (const campo of camposObligatorios) {
+      if (!this.formulario.get(campo)?.value) {
+        alert('Por favor, completa todos los campos antes de continuar.');
+        return;
+      }
+    }
+
     if (!email) {
       alert('Debes ingresar un correo electrónico');
       return;
     }
     const response = await this.userService.register(this.formulario.value, this.image);
 
-    if (response.error) {
-      alert(response.error);
-    } else {
-      console.log('Email para enviar código:', email);
-      this.router.navigate(['/codigo-ingreso', email]);
+    // Si el usuario ya existe, muestra el mensaje y no redirige
+    if (response.data === "El nombre de usuario ya existe" || response.error) {
+      alert('El nombre de usuario ya existe');
+      return;
     }
+
+    // Si el registro fue exitoso, redirige a la verificación de código
+    console.log('Email para enviar código:', email);
+    this.router.navigate(['/codigo-ingreso', email]);
   }
+
   volver() {
     this.location.back();
   }
+
 }
 

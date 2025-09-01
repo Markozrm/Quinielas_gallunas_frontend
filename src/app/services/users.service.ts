@@ -2,6 +2,7 @@ import { Injectable,inject } from '@angular/core';
 import {HttpClient} from  '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
@@ -145,6 +146,12 @@ uploadProfilePhoto(username: string, photo: File): Promise<any>{
   verificarCodigo(email: string, codigo: string) {
     return firstValueFrom(
       this.httpClient.post<any>(`${this.baseUrl}/verificar-codigo`, { email, codigo })
+    );
+  }
+
+  getUser(username: string) {
+    return this.httpClient.get(`/api/users/get-all-users`).pipe(
+      map((users: any) => users.find((u: any) => u.username === username))
     );
   }
 }

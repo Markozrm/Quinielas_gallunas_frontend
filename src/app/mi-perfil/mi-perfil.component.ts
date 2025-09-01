@@ -22,7 +22,8 @@ export class MiPerfilComponent implements OnInit {
   showChangePhoto: boolean = false;
   fotoSeleccionada: File | null = null;
   previewFoto: string | ArrayBuffer | null= null;
-  
+  usuario: any = {};
+  mostrarEditarPerfil: boolean = false;
   // Formulario para cambio de contraseña
   cambioPasswordForm: FormGroup;
   mostrarCambioPassword: boolean = false;
@@ -41,19 +42,41 @@ export class MiPerfilComponent implements OnInit {
   return localStorage.getItem('Rol') === 'controladorBanca';
 }
 
+toggleEditarPerfil() {
+  this.mostrarEditarPerfil = !this.mostrarEditarPerfil;
+}
+
 irAdmin() {
   this.router.navigate(['/Admin']);
 }
 
+  editarPerfilForm: FormGroup = new FormGroup({
+    nombre: new FormControl('', Validators.required),
+    apellido: new FormControl('', Validators.required),
+    telefono: new FormControl('', Validators.required),
+    fechaNacimiento: new FormControl('', Validators.required)
+  });
+
   ngOnInit(): void {
     // Obtener nombre de usuario del localStorage
     this.nombreUsuario = localStorage.getItem('nombreUsuario') || 'USUARIO';
-    
+
     // Obtener la foto del usuario
     this.userPhoto = this.usersService.getImageUrl(this.nombreUsuario);
-    
+
     // Obtener el saldo del usuario
     this.actualizarSaldo();
+
+    // Obtener los datos completos del usuario SIN afectar la imagen
+    this.usersService.getUsers().subscribe((users: any[]) => {
+      this.usuario = users.find(u => u.username === this.nombreUsuario) || {};
+      this.editarPerfilForm.patchValue({
+        nombre: this.usuario.nombre || '',
+        apellido: this.usuario.apellido || '',
+        telefono: this.usuario.telefono || '',
+        fechaNacimiento: this.usuario.fechaNacimiento || ''
+      });
+    });
   }
 
   actualizarSaldo(): void {
@@ -64,43 +87,43 @@ irAdmin() {
     });
   }
   // Agregar estos métodos a la clase MiPerfilComponent
-toggleCambioFoto(): void {
-  this.mostrarCambioFoto = !this.mostrarCambioFoto;
-  if (!this.mostrarCambioFoto) {
-    this.fotoSeleccionada = null;
-    this.previewFoto = null;
-  }
-}
-
-onFileSelected(event: any): void {
-  const file: File = event.target.files[0];
-  if (file) {
-    this.fotoSeleccionada = file;
-    
-    // Mostrar preview de la imagen
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.previewFoto = reader.result;
-    };
-    reader.readAsDataURL(file);
-  }
-}
-
-async cambiarFoto(): Promise<void> {
-  if (this.fotoSeleccionada && this.nombreUsuario) {
-    try {
-      const response = await this.usersService.uploadProfilePhoto(this.nombreUsuario, this.fotoSeleccionada);
-      alert('Foto de perfil actualizada exitosamente');
-      this.userPhoto = `${response.newPhotoUrl}?t=${new Date().getTime()}`;
-      this.toggleCambioFoto();
-    } catch (error) {
-      alert('Error al actualizar la foto de perfil');
-      console.error(error);
+  toggleCambioFoto(): void {
+    this.mostrarCambioFoto = !this.mostrarCambioFoto;
+    if (!this.mostrarCambioFoto) {
+      this.fotoSeleccionada = null;
+      this.previewFoto = null;
     }
-  } else {
-    alert('Por favor selecciona una foto válida');
   }
-}
+
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.fotoSeleccionada = file;
+      
+      // Mostrar preview de la imagen
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.previewFoto = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  async cambiarFoto(): Promise<void> {
+    if (this.fotoSeleccionada && this.nombreUsuario) {
+      try {
+        const response = await this.usersService.uploadProfilePhoto(this.nombreUsuario, this.fotoSeleccionada);
+        alert('Foto de perfil actualizada exitosamente');
+        this.userPhoto = `${response.newPhotoUrl}?t=${new Date().getTime()}`;
+        this.toggleCambioFoto();
+      } catch (error) {
+        alert('Error al actualizar la foto de perfil');
+        console.error(error);
+      }
+    } else {
+      alert('Por favor selecciona una foto válida');
+    }
+  }
 
   irARecargar(): void {
     this.router.navigate(['/recargar']);
@@ -135,9 +158,9 @@ async cambiarFoto(): Promise<void> {
     }
   }
   //Método para la redirección al grupo de WA
-contactarWhatsApp(): void {
-  window.open('https://chat.whatsapp.com/IJ95JG0WwxVJOGEHeCWZCu', '_blank');
-}
+  contactarWhatsApp(): void {
+    window.open('https://chat.whatsapp.com/IJ95JG0WwxVJOGEHeCWZCu', '_blank');
+  }
   volver(): void {
     const rol = localStorage.getItem('Rol');
     if (rol === 'superUsuario' || rol === 'administrador') {
@@ -158,5 +181,21 @@ contactarWhatsApp(): void {
   localStorage.removeItem('tokenLogin');
   localStorage.removeItem('nombreUsuario');
   this.router.navigate(['/']);
+}
+
+guardarCambios(): void {
+  if (this.editarPerfilForm.valid) {
+    const datosActualizados = {
+      ...this.usuario,
+      ...this.editarPerfilForm.value
+    };
+    this.usersService.editUser(this.usuario._id, datosActualizados).subscribe((res: any) => {
+      alert('Datos actualizados correctamente');
+      // Actualiza los datos locales
+      this.usuario = { ...this.usuario, ...this.editarPerfilForm.value };
+    });
+  } else {
+    alert('Por favor, completa todos los campos correctamente.');
+  }
 }
 }

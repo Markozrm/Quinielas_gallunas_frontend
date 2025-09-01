@@ -220,7 +220,7 @@ export class ApuestasStreamComponent implements OnInit,OnDestroy{
     // Otra lógica de cierre de sesión que puedas necesitar...
   }
   inicio(){
-    this.router.navigate([`/`]);
+    this.router.navigate([`/Admin`]);
   }
   esAdmin(): boolean {
     const rol = localStorage.getItem("Rol") || "";

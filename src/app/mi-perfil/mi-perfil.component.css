@@ -405,3 +405,44 @@
   }
   
 }
+
+input {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 2px solid #e0e0e0; /* Borde gris claro */
+  border-radius: 8px; /* Esquinas redondeadas */
+  font-size: 16px;
+  background: #f8f8f8; /* Fondo gris muy claro */
+  font-family: 'Segoe UI', sans-serif;
+}
+
+
+input::placeholder {
+  color: #a0a0a0; /* Gris medio */
+  font-style: italic; /* Cursiva */
+  opacity: 1; /* Firefox necesita esto */
+}
+
+.form-group label {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+.btn-guardar{
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 12px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.btn-guardar:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
