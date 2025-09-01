@@ -50,7 +50,7 @@ export class IniciardorStreamsComponent {
   async onSubmit() {
     console.log("Inicio de sesión");
 
-    const url = 'rtmp://209.38.136.151';
+    const url = 'rtmp://64.23.244.141';
     const selectorValue = this.formulario.get('numeroStream')?.value;
     const fechaFormateada = this.formatDate(new Date());
     const tituloStream = this.formulario.get('tituloStream')?.value;
