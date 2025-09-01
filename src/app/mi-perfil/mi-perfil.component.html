@@ -49,7 +49,36 @@
       <button class="btn-accion" (click)="irARecargar()">RECARGAR SALDO <span class="btn-ir">IR</span></button>
       <button class="btn-accion" (click)="retirarSaldo()">RETIRAR SALDO <span class="btn-ir">IR</span></button>
       <button class="btn-accion" (click)="verHistorialApuestas()">HISTORIAL APUESTAS <span class="btn-ir">IR</span></button>
+      <button class="btn-accion" (click)="toggleEditarPerfil()">EDITAR PERFIL <span class="btn-ir">IR</span></button>
     </div>
+
+<div class="perfil-content" *ngIf="mostrarEditarPerfil">
+  <form [formGroup]="editarPerfilForm" (ngSubmit)="guardarCambios()">
+    <div class="datos-usuario">
+      <p>
+        <label for="nombre"><strong>Nombres:</strong></label><br>
+        <input id="nombre" type="text" formControlName="nombre" />
+      </p>
+      <p>
+        <label for="apellido"><strong>Apellido:</strong></label><br>
+        <input id="apellido" type="text" formControlName="apellido" />
+      </p>
+      <p>
+        <label for="telefono"><strong>Teléfono:</strong></label><br>
+        <input id="telefono" type="text" formControlName="telefono" />
+      </p>
+      <p>
+        <label for="fechaNacimiento"><strong>Fecha de nacimiento:</strong></label><br>
+        <input id="fechaNacimiento" type="date" formControlName="fechaNacimiento" />
+      </p>
+      <p>
+        <label for="email"><strong>Correo electrónico:</strong></label><br>
+        <input id="email" type="email" [value]="usuario?.email" disabled />
+      </p>
+    </div>
+    <button type="submit" class="btn-guardar">Guardar cambios</button>
+  </form>
+</div>
     <!-- Botón de WhatsApp separado y centrado -->
 <!--<div class="whatsapp-btn-container">
   <button class="btn-whatsapp" (click)="contactarWhatsApp()">UNIRME AL GRUPO DE WHATSAPP</button>
@@ -84,4 +113,6 @@
     </button>
 
   </div>
+</div>
+
 
