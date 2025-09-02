@@ -88,7 +88,7 @@ export class RegisterInvitadoComponent {
 
     // Si el registro fue exitoso, redirige a la verificación de código
     console.log('Email para enviar código:', email);
-    this.router.navigate(['/codigo-ingreso', email]);
+    this.router.navigate(['/Login']);
   }
 
   volver() {
