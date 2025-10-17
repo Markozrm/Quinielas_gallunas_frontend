@@ -59,7 +59,7 @@ export class LoginComponent {
       } else if (response.token.rol === 'superUsuario' || response.token.rol === 'administrador') {
         this.router.navigate(['/Admin']);
       } else {
-        this.router.navigate(['/live-inv', 'Stream1', '440']);
+        this.router.navigate(['/mi-perfil']);
       }
     }
   }
