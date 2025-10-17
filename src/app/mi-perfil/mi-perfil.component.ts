@@ -162,13 +162,10 @@ irAdmin() {
     window.open('https://chat.whatsapp.com/IJ95JG0WwxVJOGEHeCWZCu', '_blank');
   }
   volver(): void {
-    const rol = localStorage.getItem('Rol');
-    if (rol === 'superUsuario' || rol === 'administrador') {
-      this.router.navigate(['/live-admin', 'Stream1', '440']);
-    } else {
-      this.router.navigate(['/live-inv', 'Stream1', '440']);
-    }
-  }
+  const clave = 'Stream1-17-10-2025';
+  const puerto = '443';
+  this.router.navigate([`/live-admin/${clave}/${puerto}`]);
+}
   logout(): void {
   // Eliminar todos los datos de apuestas del usuario
   const keys = Object.keys(localStorage);

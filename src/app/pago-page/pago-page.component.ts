@@ -123,10 +123,10 @@ export class PagoPageComponent implements OnInit {
     );
   }
   copiarDatosBancarios() {
-  const datos = `BENEFICIARIO: PLUMASS\n` +
-                `NUMERO DE TARJETA: 5101 2552 7066 4060\n` +
-                `CLABE: 638180000196608239\n` +
-                `BANCO: NU MEXICO (SPEI)\n` +
+  const datos = `BENEFICIARIO: Eric Rafael González Cisneros\n` +
+                `NUMERO DE TARJETA: \n` +
+                `CLABE: 012509004734305618\n` +
+                `BANCO: BBVA\n` +
                 `CONCEPTO: TRANSFERENCIA`;
   
   this._clipboardService.copy(datos);

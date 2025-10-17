@@ -369,6 +369,27 @@
     display: none !important;
 }
 
+/* Tarjeta de datos bancarios */
+.datos-bancarios-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  max-width: 400px;
+}
+
+.datos-bancarios-card h3 {
+  color: #222;
+  margin-bottom: 12px;
+}
+
+.datos-bancarios-card p {
+  margin: 6px 0;
+  font-size: 16px;
+  color: #222;
+}
+
 /* Media Queries para responsive */
 @media (max-width: 768px) {
     .body {
