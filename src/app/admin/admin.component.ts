@@ -121,7 +121,7 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
     // Otra lógica de cierre de sesión que puedas necesitar...
   }
   inicio() {
-    const clave = 'Stream1-20-10-2025';
+    const clave = 'Stream1-21-10-2025';
     const puerto = '443';
     this.router.navigate([`/live-admin/${clave}/${puerto}`]);
   }
