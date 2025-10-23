@@ -162,7 +162,7 @@ irAdmin() {
     window.open('https://chat.whatsapp.com/IJ95JG0WwxVJOGEHeCWZCu', '_blank');
   }
   volver(): void {
-  const clave = 'Stream1-21-10-2025';
+  const clave = 'Stream1-22-10-2025';
   const puerto = '443';
   this.router.navigate([`/live-admin/${clave}/${puerto}`]);
 }
