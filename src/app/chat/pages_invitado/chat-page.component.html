@@ -91,7 +91,7 @@
         <button class="quick-bet-button" (click)="setBetAmount(500)">10,000</button>
         <button class="quick-bet-button" (click)="setBetAmount(1000)">20,000</button>
         <button class="quick-bet-button" (click)="setBetAmount(5000)">100,000</button>
-        <button class="quick-bet-allIn" (click)="apostarAllIn()">TODO</button>
+        <!-- <button class="quick-bet-allIn" (click)="apostarAllIn()">TODO</button>-->
       </div>
       <div class="input-bet-container">
         <input #cantidadApuesta type="number" placeholder="INGRESAR CANTIDAD" [ngModel]="betAmount || ''" (ngModelChange)="setBetAmount($event)"/>
