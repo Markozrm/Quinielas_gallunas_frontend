@@ -561,6 +561,16 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
   
   // AGREGAR: Polling para imagen overlay
   this.iniciarPollingImagenOverlay();
+  this.chatService.socket?.on?.('stream_configured', (payload: any) => {
+    console.log('stream_configured recibido:', payload);
+    if (!payload?.clave) return;
+    // guarda la clave local en el navegador del invitado
+    localStorage.setItem('streamClave', payload.clave);
+    const target = `/live-inv/${payload.clave}/${payload.port || '443'}`;
+    if (window.location.pathname !== target) {
+      this.router.navigate([target]);
+    }
+  });
 }
 
 // NUEVO MÉTODO: Polling para imagen overlay

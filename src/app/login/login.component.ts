@@ -8,6 +8,7 @@ import {Router,ActivatedRoute} from '@angular/router'
 import { filter } from 'rxjs/operators';
 import { Event,NavigationEnd } from '@angular/router';
 import { Location } from '@angular/common';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -41,28 +42,60 @@ export class LoginComponent {
       alert(response.error);
     }
     else{
-      localStorage.setItem('tokenLogin',response.token)
-      localStorage.setItem('nombreUsuario',response.token.username)
-      localStorage.setItem('Rol',response.token.rol)
-      if (response.token.rol) {
-        localStorage.setItem('rol', response.token.rol.toLowerCase());
-      }
-      if (!localStorage.getItem('avatar')) {
-        localStorage.setItem('avatar', 'assets/logoPrincipal.PNG')
-      }
-      if (!localStorage.getItem('slogan')) {
-        localStorage.setItem('slogan', 'Usuario de Plumass')
-      }
-      console.log(response.token);
-      if(response.token.rol === 'controladorBanca') {
-        this.router.navigate(['/Admin']);
-      } else if (response.token.rol === 'superUsuario' || response.token.rol === 'administrador') {
-        this.router.navigate(['/Admin']);
-      } else {
-        this.router.navigate(['/mi-perfil']);
-      }
+      this.onLoginSuccess(response);
     }
   }
+
+  async onLoginSuccess(responseLogin: any) {
+    // ya tienes el token y rol en responseLogin
+    localStorage.setItem('tokenLogin', responseLogin.token);
+    localStorage.setItem('nombreUsuario', responseLogin.token.username);
+    localStorage.setItem('Rol', responseLogin.token.rol);
+
+    // redirigir al stream configurado (o a mi-perfil si no existe)
+    await this.redirectToConfiguredStream();
+  }
+
+  private async redirectToConfiguredStream(): Promise<void> {
+    const puerto = '443';
+    // Intentar obtener siempre la clave más reciente desde el backend
+    try {
+      const res: any = await firstValueFrom(this.userService.getClaveStream('1'));
+      const claveBackend = res?.stream?.clave;
+      if (claveBackend) {
+        localStorage.setItem('streamClave', claveBackend);
+        console.log('Clave obtenida desde backend y guardada:', claveBackend);
+        const rol = localStorage.getItem('Rol');
+        const target = (rol === 'superUsuario' || rol === 'administrador')
+          ? `/live-admin/${claveBackend}/${puerto}`
+          : `/live-inv/${claveBackend}/${puerto}`;
+        if (window.location.pathname !== target) {
+          await this.router.navigateByUrl(target);
+        }
+        return;
+      }
+    } catch (error: any) {
+      console.warn('Error obteniendo clave del backend en login:', error);
+      // si falla la petición, seguir con fallback a localStorage
+    }
+
+    // Fallback: si backend no devuelve clave, usar la guardada en localStorage (si existe)
+    const claveLocal = localStorage.getItem('streamClave');
+    if (claveLocal) {
+      const rol = localStorage.getItem('Rol');
+      const target = (rol === 'superUsuario' || rol === 'administrador')
+        ? `/live-admin/${claveLocal}/${puerto}`
+        : `/live-inv/${claveLocal}/${puerto}`;
+      if (window.location.pathname !== target) {
+        await this.router.navigateByUrl(target);
+      }
+      return;
+    }
+
+    // Si no hay clave en ninguna parte, ir a mi-perfil
+    await this.router.navigate(['/mi-perfil']);
+  }
+
     esAdmin(): boolean {
       const rol = localStorage.getItem("Rol") || "";
   

@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http'; // AGREGAR ESTE IMPORT
 import { environment } from '../../environments/environment'; // AGREGAR ESTE IMPORT
 import { CorteDiarioService } from '../services/corte-diario.service';
+import { firstValueFrom } from 'rxjs';
 
 
 @Component({
@@ -122,10 +123,23 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
     this.router.navigate([`Login`]);
     // Otra lógica de cierre de sesión que puedas necesitar...
   }
-  inicio() {
-    const clave = 'Stream1-15-11-2025';
+  // Reemplaza el método inicio para navegar al stream más reciente
+  async inicio(): Promise<void> {
     const puerto = '443';
-    this.router.navigate([`/live-admin/${clave}/${puerto}`]);
+    try {
+      const res: any = await firstValueFrom(this.usersService.getClaveStream('1'));
+      const clave = res?.stream?.clave;
+      console.log('Inicio -> clave obtenida del backend:', clave);
+      if (clave) {
+        localStorage.setItem('streamClave', clave);
+        this.router.navigate([`/live-admin/${clave}/${puerto}`]);
+      } else {
+        alert('No hay clave de stream configurada.');
+      }
+    } catch (err: any) {
+      console.error('Error al obtener la clave del stream:', err);
+      alert('Error al obtener la clave del stream. Intenta más tarde.');
+    }
   }
   isSuperAdmin(){
     const rol = localStorage.getItem("Rol") || "";
