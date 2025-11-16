@@ -23,6 +23,7 @@
     "ngx-clipboard": "^16.0.0",
     "ngx-socket-io": "4.5.0",
     "rxjs": "~7.5.0",
+    "socket.io": "^4.8.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.3"
   },
