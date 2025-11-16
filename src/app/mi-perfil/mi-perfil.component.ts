@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MenuComponent } from '../menu/menu.component';
 import { UsersService } from '../services/users.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-mi-perfil',
@@ -161,11 +162,39 @@ irAdmin() {
   contactarWhatsApp(): void {
     window.open('https://chat.whatsapp.com/IJ95JG0WwxVJOGEHeCWZCu', '_blank');
   }
-  volver(): void {
-  const clave = 'Stream1-15-11-2025';
-  const puerto = '443';
-  this.router.navigate([`/live-admin/${clave}/${puerto}`]);
-}
+  async volver(): Promise<void> {
+    const rol = localStorage.getItem('Rol');
+    const puerto = '443';
+    console.log('VOLVER DEBUG -> Rol localStorage:', rol);
+
+    // Siempre pedir la clave más reciente al backend (no usar cache local)
+    try {
+      console.log('Solicitando clave más reciente al backend...');
+      const res: any = await firstValueFrom(this.usersService.getClaveStream('1'));
+      const nuevaClave = res?.stream?.clave;
+      console.log('Respuesta getClaveStream:', res);
+
+      if (!nuevaClave) {
+        alert('No se encontró la clave del stream activo.');
+        return;
+      }
+
+      // Guardar la clave actualizada en localStorage
+      localStorage.setItem('streamClave', nuevaClave);
+      console.log('streamClave actualizada en localStorage:', nuevaClave);
+
+      const target = (rol === 'superUsuario' || rol === 'administrador')
+        ? `/live-admin/${nuevaClave}/${puerto}`
+        : `/live-inv/${nuevaClave}/${puerto}`;
+
+      if (window.location.pathname !== target) {
+        await this.router.navigateByUrl(target);
+      }
+    } catch (err: any) {
+      console.error('Error obteniendo clave del stream:', err);
+      alert('No se pudo obtener la clave del stream. Intenta más tarde.');
+    }
+  }
   logout(): void {
   // Eliminar todos los datos de apuestas del usuario
   const keys = Object.keys(localStorage);

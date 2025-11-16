@@ -5,6 +5,7 @@ import { UsersService } from '../services/users.service';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ChatService } from '../services/chat.service'; // ← agrega import
 
 @Component({
   selector: 'app-iniciardor-streams',
@@ -23,6 +24,7 @@ export class IniciardorStreamsComponent {
     private fb: FormBuilder,
     private usersService: UsersService,
     private router: Router,
+    private chatService: ChatService // ← inyecta el servicio de sockets
   ) {
     this.formulario = this.fb.group({
       tituloStream: [''],
@@ -68,6 +70,20 @@ export class IniciardorStreamsComponent {
         esVIP.toString()
       );
       alert(response.data);
+
+      // EMITIR evento para notificar a clientes conectados
+      // después de recibir la respuesta del backend (setClaveStream)
+      localStorage.setItem('streamClave', this.claveStream); // guarda en admin (opcional)
+      try {
+        this.chatService.socket?.emit('stream_configured', {
+          clave: this.claveStream,
+          port: '443',
+          streamNumber: selectorValue
+        });
+        console.log('Evento stream_configured emitido:', this.claveStream);
+      } catch (err) {
+        console.warn('Error emitiendo stream_configured:', err);
+      }
     }
   }
 
