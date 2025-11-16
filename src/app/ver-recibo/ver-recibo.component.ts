@@ -3,6 +3,7 @@ import { RecipesService } from '../services/recipes.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { UsersService } from '../services/users.service';
+import { NotificacionGlobalService } from '../chat/notification.service';
 
 @Component({
   selector: 'app-ver-recibo',
@@ -55,7 +56,8 @@ export class VerReciboComponent implements OnInit {
   constructor(
     private userService: UsersService,
     private recipeService: RecipesService,
-    private router: Router
+    private router: Router,
+    private notificacionService: NotificacionGlobalService
   ) {}
 
   ngOnInit(): void {
@@ -141,6 +143,7 @@ export class VerReciboComponent implements OnInit {
       
       // 4. Actualizar resumen inmediatamente
       this.actualizarResumen();
+      this.notificacionService.restarPendiente();
       
     } catch (error) {
       console.error('Error en aceptar recibo:', error);
@@ -164,7 +167,7 @@ export class VerReciboComponent implements OnInit {
       
       // 3. Actualizar resumen inmediatamente
       this.actualizarResumen();
-      
+      this.notificacionService.restarPendiente();
       alert("Solicitud rechazada correctamente");
     } catch (error) {
       console.error('Error en rechazar recibo:', error);
