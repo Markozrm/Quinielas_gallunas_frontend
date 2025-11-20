@@ -224,4 +224,30 @@ guardarCambios(): void {
     alert('Por favor, completa todos los campos correctamente.');
   }
 }
+
+  // Añade este método al componente
+  async goToStream(): Promise<void> {
+    const puerto = '443';
+    const rol = localStorage.getItem('Rol');
+
+    try {
+      const res: any = await firstValueFrom(this.usersService.getClaveStream('1'));
+      const clave = res?.stream?.clave;
+      if (!clave) {
+        alert('No se encontró la clave del stream activo.');
+        return;
+      }
+      localStorage.setItem('streamClave', clave);
+      const target = (rol === 'superUsuario' || rol === 'administrador')
+        ? `/live-admin/${clave}/${puerto}`
+        : `/live-inv/${clave}/${puerto}`;
+
+      if (window.location.pathname !== target) {
+        await this.router.navigateByUrl(target);
+      }
+    } catch (err: any) {
+      console.error('Error obteniendo clave del stream:', err);
+      alert('No se pudo obtener la clave del stream. Intenta más tarde.');
+    }
+  }
 }
