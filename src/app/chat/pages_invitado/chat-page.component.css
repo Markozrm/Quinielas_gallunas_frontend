@@ -1835,3 +1835,55 @@ body, .main, .apuesta-container, .chat-container {
     display: block;
   }
 }
+/* Wrapper pequeño para alinear label + botón */
+.tabla-puntos-section {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+}
+
+/* Etiqueta */
+.tabla-puntos-section .tabla-label {
+  font-weight: 800;
+  font-size: 12px;
+  color: #000;
+  padding: 6px 8px 6px 0;
+}
+
+/* Forzar que el botón interno del componente tenga el mismo estilo
+   ::ng-deep asegura que el estilo atraviese el scope del componente hijo */
+::ng-deep .tabla-puntos-section .btn-tabla,
+::ng-deep app-tabla-puntos .btn-tabla {
+  /* Copia el estilo visual de .quick-bet-button */
+  background: #fff !important;
+  color: #000 !important;
+  border: 3px solid #111 !important;
+  padding: 10px 18px !important;
+  border-radius: 12px !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+  height: 54px !important;
+  min-width: 84px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  pointer-events: auto !important;
+}
+
+/* Hover / active para que se vea idéntico */
+::ng-deep .tabla-puntos-section .btn-tabla:hover,
+::ng-deep app-tabla-puntos .btn-tabla:hover {
+  transform: translateY(-2px);
+  transition: transform 120ms ease;
+}
+
+/* Si tu layout coloca los quick-bet en una grid, asegurar margin consistente */
+.tabla-puntos-section { margin-top: 4px; }
+
+/* En caso de que el modal estuviera oculto por z-index (parche visual) */
+::ng-deep .modal, ::ng-deep .modal-backdrop {
+  z-index: 99999 !important;
+}
