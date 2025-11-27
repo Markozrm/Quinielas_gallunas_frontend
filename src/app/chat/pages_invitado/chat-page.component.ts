@@ -19,7 +19,7 @@ import { ChatModalComponent } from '../components/chat-modal/chat-modal.componen
 import { RuletaService } from 'src/app/services/ruleta.service'; // Asegúrate de importar el servicio
 import { io, Socket } from 'socket.io-client';
 import { environment } from 'src/environments/environment';
-
+import { TablaPuntosComponent } from 'src/app/tabla-puntos/tabla-puntos.component';
 @Component({
   selector: 'app-chat-page',
   templateUrl: './chat-page.component.html',
@@ -34,7 +34,8 @@ import { environment } from 'src/environments/environment';
     VideoPlayerComponent,
     UsersTypeComponent,
     NotificacionPersonalComponent,
-    ChatModalComponent
+    ChatModalComponent,
+    TablaPuntosComponent
   ],
 })
 export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewInit {

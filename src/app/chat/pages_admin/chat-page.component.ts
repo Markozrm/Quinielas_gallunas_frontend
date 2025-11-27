@@ -18,7 +18,8 @@ import { OpenBetModalComponent } from '../components/open-bet-modal/open-bet-mod
 import { CloseBetModalComponent } from '../components/close-bet-modal/close-bet-modal.component';
 import { ChooseWinnerModalComponent } from '../components/choose-winner/choose-winner-modal.component';
 import { ChatModalComponent } from '../components/chat-modal/chat-modal.component';
-
+import { NotificacionGlobalService } from '../notification.service';
+import { TablaPuntosComponent } from 'src/app/tabla-puntos/tabla-puntos.component';
 @Component({
   selector: 'app-chat-page',
   templateUrl: './chat-page.component.html',
@@ -26,7 +27,7 @@ import { ChatModalComponent } from '../components/chat-modal/chat-modal.componen
   standalone: true,
   imports: [UsersRoomsComponent, CommonModule, ChooseWinnerModalComponent,
     UsersChatComponent, UsersTypeComponent, OpenBetModalComponent,
-    CloseBetModalComponent, VideoPlayerComponent, MenuComponent, ChatModalComponent],
+    CloseBetModalComponent, VideoPlayerComponent, MenuComponent, ChatModalComponent, TablaPuntosComponent,],
 })
 export class ChatAdminPageComponent implements OnInit, OnDestroy {
 
@@ -54,6 +55,9 @@ export class ChatAdminPageComponent implements OnInit, OnDestroy {
   public greenTeamName: string = '';
   public redPoints: number = 0;
   public greenPoints: number = 0;
+ // Notificaciones
+  notificaciones: any[] = [];
+  mostrarNotificaciones: boolean = false;
 
   constructor(private usersService: UsersService,
     private route: ActivatedRoute, private router: Router,

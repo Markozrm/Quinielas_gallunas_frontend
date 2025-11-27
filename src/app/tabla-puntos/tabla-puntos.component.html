@@ -1,0 +1,153 @@
+<button class="btn-tabla" (click)="abrir()">{{ title }}</button>
+
+<div class="modal-backdrop" *ngIf="modalOpen" (click)="cerrar()"></div>
+
+<div class="modal" *ngIf="modalOpen" role="dialog" aria-modal="true">
+  <div class="modal-header">
+    <div class="titulo">
+      <h1 class="main-title">{{ title }}</h1>
+
+      <!-- PALENQUE: editable para admin, texto para viewers -->
+      <div *ngIf="isSuperUser; else palenqueViewer">
+        <input class="title-input subtitle-input" [(ngModel)]="palenqueName" (ngModelChange)="setPalenqueName($any($event))" />
+      </div>
+      <ng-template #palenqueViewer>
+        <div class="subtitle">{{ palenqueName }}</div>
+      </ng-template>
+
+      <div class="fecha">{{ getFechaFormateada() }}</div>
+
+      <!-- ENTRADA: editable para admin -->
+      <div *ngIf="isSuperUser; else entradaViewer" class="entrada">
+        ENTRADA:
+        <input style="margin-left:8px;width:140px;text-align:center;font-weight:800;border:none;background:transparent;color:#00C85A;" [(ngModel)]="entradaAmount" (ngModelChange)="setEntradaAmount($any($event))" />
+      </div>
+      <ng-template #entradaViewer>
+        <div class="entrada">ENTRADA: <span class="cantidad">{{ entradaAmount }}</span></div>
+      </ng-template>
+    </div>
+
+    <button class="close" aria-label="Cerrar" (click)="cerrar()">×</button>
+  </div>
+
+  <div class="modal-body">
+    <!-- REEMPLAZAR este bloque: CONTROLES ADMIN (solo visibles si isSuperUser) -->
+    <div *ngIf="isSuperUser" class="admin-controls" style="margin-bottom:12px; display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
+      <label style="font-weight:800;">
+        Filas (1-150):
+        <input
+          type="number"
+          name="adminRows"
+          [(ngModel)]="adminRowsCount"
+          (ngModelChange)="setAdminRows($event)"
+          min="1" max="150"
+          style="width:84px; margin-left:6px; padding:4px;" />
+      </label>
+
+      <label style="font-weight:800;">
+        Columnas (3-9):
+        <input
+          type="number"
+          name="adminCols"
+          [(ngModel)]="adminColsCount"
+          (ngModelChange)="setAdminCols($event)"
+          min="3" max="9"
+          style="width:64px; margin-left:6px; padding:4px;" />
+      </label>
+
+      <div style="display:flex; align-items:center; gap:8px; margin-left:6px;">
+        <span style="font-weight:800;">Color:</span>
+        <button (click)="setTool('red')" [class.active]="selectedTool==='red'" style="padding:6px 10px;background:#ff6b6b;border-radius:6px;border:none;color:#fff;font-weight:800;">Rojo</button>
+        <button (click)="setTool('green')" [class.active]="selectedTool==='green'" style="padding:6px 10px;background:#2ecc71;border-radius:6px;border:none;color:#fff;font-weight:800;">Verde</button>
+        <!-- Botón X (solo icono) -->
+        <button (click)="setTool('x')" [class.active]="selectedTool==='x'" title="Marcar X" style="padding:6px 10px;border-radius:6px;border:1px solid #ccc;background:transparent;font-weight:800;">X</button>
+        <!-- Botón T (solo icono) -->
+        <button (click)="setTool('t')" [class.active]="selectedTool==='t'" title="Marcar T" style="padding:6px 10px;border-radius:6px;border:1px solid #ccc;background:transparent;font-weight:800;">T</button>
+      </div>
+
+      <div style="display:flex; gap:8px; margin-left:12px;">
+        <button (click)="clearAllColors()" style="padding:6px 10px;">Limpiar colores</button>
+        <button (click)="guardarAdminyEmitir()" style="padding:6px 10px;">Guardar y Emitir</button>
+      </div>
+    </div>
+
+    <!-- TABLA: renderiza usando tablaData; columnas configurables controladas por adminColsCount -->
+    <div class="tabla-card" style="width:100%;padding:8px;">
+      <!-- aplicar clase admin-view solo cuando isSuperUser === true -->
+      <table class="tabla-puntos" [class.admin-view]="isSuperUser">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th class="partido">Partido</th>
+            <th *ngFor="let c of [].constructor(adminColsCount); let ci = index">{{ ci + 1 }}</th>
+            <th>W</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let row of tablaData.slice(0, adminRowsCount); let ri = index">
+            <td class="id">{{ ri + 1 }}.</td>
+
+            <!-- PARTIDO: editable para admin, viewer usa partyNames fallback -->
+            <td class="partido">
+              <ng-container *ngIf="isSuperUser; else partidoViewer">
+                <input class="cell-input" [(ngModel)]="partyNames[ri]" (ngModelChange)="setPartyName(ri+1, $any($event))" />
+              </ng-container>
+              <ng-template #partidoViewer>
+                {{ partyNames[ri] || ('PARTIDO ' + (ri + 1)) }}
+              </ng-template>
+            </td>
+
+            <td *ngFor="let cell of row.slice(0, adminColsCount); let ci = index"
+                [ngClass]="{'celda': true, 'red': (cellColors[ri+1] && cellColors[ri+1][ci+1]==='red'), 'green': (cellColors[ri+1] && cellColors[ri+1][ci+1]==='green')}"
+                (click)="isSuperUser ? toggleCellColor(ri+1, ci+1) : null">
+              <!-- si esSuperUser mostramos input para editar contenido, sino texto -->
+              <ng-container *ngIf="isSuperUser; else viewerCell">
+                <input class="cell-input" [(ngModel)]="tablaData[ri][ci]" (ngModelChange)="emitAdminUpdate()" />
+              </ng-container>
+              <ng-template #viewerCell>
+                {{ tablaData[ri][ci] }}
+              </ng-template>
+
+              <!-- mostrar marca X/T si existe -->
+              <div class="cell-mark" *ngIf="cellMarks[ri+1] && cellMarks[ri+1][ci+1]" style="font-weight:900;margin-top:2px;">
+                {{ cellMarks[ri+1][ci+1] }}
+              </div>
+            </td>
+
+            <!-- columna W: comportarse igual que las demás celdas -->
+            <td
+              [ngClass]="{
+                'celda': true,
+                'red': (cellColors[ri+1] && cellColors[ri+1][adminColsCount+1] === 'red'),
+                'green': (cellColors[ri+1] && cellColors[ri+1][adminColsCount+1] === 'green')
+              }"
+              (click)="isSuperUser ? toggleCellColor(ri+1, adminColsCount+1) : null"
+            >
+              <ng-container *ngIf="isSuperUser; else viewerW">
+                <input
+                  class="cell-input"
+                  [(ngModel)]="tablaData[ri][adminColsCount]"
+                  (ngModelChange)="emitAdminUpdate()"
+                />
+              </ng-container>
+              <ng-template #viewerW>
+                {{ tablaData[ri][adminColsCount] }}
+              </ng-template>
+
+              <!-- mostrar marca X/T para W -->
+              <div class="cell-mark" *ngIf="cellMarks[ri+1] && cellMarks[ri+1][adminColsCount+1]" style="font-weight:900;margin-top:2px;">
+                {{ cellMarks[ri+1][adminColsCount+1] }}
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <!-- footer vacío intencionalmente -->
+  </div>
+</div>

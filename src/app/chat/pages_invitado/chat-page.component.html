@@ -42,6 +42,8 @@
     <div class="header-container">
       <div class="header-left">
         <span class="pelea-numero">PELEA  {{rondaActual}}</span>
+        
+         <!-- Tabla de Puntos: botón justo debajo de PELEA (vista normal, sin edición) -->
       </div>
       <!--Boton para CASINO-
       <div class="header-casino">
@@ -91,6 +93,13 @@
         <button class="quick-bet-button" (click)="setBetAmount(10000)">10,000</button>
         <button class="quick-bet-button" (click)="setBetAmount(20000)">20,000</button>
         <button class="quick-bet-button" (click)="setBetAmount(100000)">100,000</button>
+         <div class="tabla-puntos-section">
+            <div class="tipo-usuario-buttons">
+              <app-tabla-puntos></app-tabla-puntos>
+            </div>
+          </div>
+        </div>
+        
         <!-- <button class="quick-bet-allIn" (click)="apostarAllIn()">TODO</button>-->
       </div>
       <div class="input-bet-container">
@@ -249,6 +258,7 @@
       <!-- Mostrar saldo del usuario -->
       <div style="text-align: center; margin-bottom: 15px; padding: 10px; background: #000; border-radius: 6px;">
         <strong>Tu saldo: ${{ balance | number:'1.0-2' }}</strong>
+        
       </div>
       
       <!-- Botón manual para actualizar (solo visible cuando no hay rifa seleccionada) -->

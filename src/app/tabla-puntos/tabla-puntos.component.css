@@ -1,0 +1,697 @@
+/* Reset ligero para el componente */
+:host { display:block; font-family: "Helvetica Neue", Arial, sans-serif; }
+
+/* BOTÓN que abre la tabla (mantener discreto) */
+.btn-tabla {
+  background: transparent;
+  color: #fff;
+  border: 2px solid transparent;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+/* BACKDROP */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 1100;
+}
+
+/* VENTANA EXTERNA NEGRA CON BORDE NARANJA GRUESO (igual imagen) */
+.modal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 420px;                /* ancho similar a la referencia */
+  max-width: 94%;
+  max-height: 92vh;           /* no exceder pantalla */
+  box-sizing: border-box;
+  background: #000000;        /* negro sólido */
+  z-index: 1101;
+  border-radius: 18px;
+  border: 8px solid #FF9E00;  /* borde naranja grueso */
+  box-shadow: 0 14px 40px rgba(0,0,0,0.6);
+  color: #fff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER: título y cruz alineados */
+.modal-header {
+  padding: 18px 18px 10px 18px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* TITULOS centrados dentro del header */
+.titulo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  gap: 6px;
+  margin-right: 8px;
+}
+
+/* Main title: TABLA DE PUNTOS (blanco, grueso, mayúsculas, spacing) */
+.titulo h2,
+.titulo .main-title {
+  margin: 0;
+  color: #FFFFFF;
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow:
+    0 2px 0 rgba(0,0,0,0.85),
+    0 6px 18px rgba(0,0,0,0.45);
+}
+
+/* Subtítulo naranja con glow */
+.titulo .subtitle,
+.titulo .subtitle-input {
+  color: #FFB84D;
+  font-weight: 900;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow:
+    0 2px 0 rgba(0,0,0,0.7),
+    0 4px 18px rgba(255,158,0,0.25);
+}
+
+/* Fecha en blanco, subrayada */
+.titulo .fecha {
+  color: #FFFFFF;
+  font-weight: 800;
+  font-size: 12px;
+  text-decoration: underline;
+  text-decoration-color: rgba(255,255,255,0.95);
+  margin-top: 2px;
+}
+
+/* INPUT de título (para superuser) - estilo coherente */
+.title-input {
+  background: transparent;
+  border: none;
+  color: #FFB84D;
+  font-weight: 900;
+  font-size: 16px;
+  text-align: center;
+  text-transform: uppercase;
+  outline: none;
+  text-shadow: 0 2px 0 rgba(0,0,0,0.6);
+}
+
+/* CRUZ de cierre circular naranja (top-right) */
+.close {
+  background: #FF9E00;
+  color: #000;
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.45);
+  margin-top: -4px; /* ajusta verticalmente para que quede dentro del borde naranja */
+}
+
+/* CUERPO: padding y scroll interno */
+.modal-body {
+  padding: 10px 18px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: auto;
+}
+
+/* ENTRADA: colocada justo debajo del header, centrada y en verde */
+.entrada {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 900;
+  color: #00C85A;
+  font-size: 13px;
+  letter-spacing: 0.6px;
+  margin-bottom: 4px;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.6);
+}
+
+/* cantidad en verde con más peso */
+.entrada .cantidad {
+  color: #00C85A;
+  font-weight: 900;
+  margin-left: 6px;
+}
+
+/* Tarjeta blanca interna que contiene la tabla */
+.tabla-puntos {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  color: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  /* permitir que la tabla ajuste columnas según contenido */
+  table-layout: auto;
+}
+
+/* Forzar la tabla a adaptarse al ancho del modal */
+.tabla-puntos {
+  width: 100%;
+  table-layout: fixed;    /* distribuir espacio entre columnas */
+  font-size: 9px;         /* reducir tamaño global dentro de la tabla */
+  line-height: 1;
+}
+
+/* reducir paddings para ganar ancho util */
+.tabla-puntos thead th,
+.tabla-puntos tbody td {
+  padding: 4px 6px;
+  box-sizing: border-box;
+}
+
+/* ID columna estrecha fija */
+.tabla-puntos tbody td.id {
+  width: 34px;
+  padding-right: 6px;
+  font-size: 10px;
+}
+
+/* Columnas numéricas pequeñas y fijas para que no ocupen mucho ancho */
+.tabla-puntos tbody td.celda {
+  width: 30px;       /* ancho fijo para cada celda de números */
+  min-width: 30px;
+  max-width: 30px;
+  padding: 4px 4px;
+  height: 34px;
+  font-size: 9px;
+  line-height: 1;
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+/* Columna W (final) */
+.tabla-puntos td.w {
+  width: 38px;
+  min-width: 38px;
+  max-width: 38px;
+  font-size: 10px;
+}
+
+/* Columna partido: ocupar el espacio restante y permitir wrapping corto */
+.tabla-puntos tbody td.partido {
+  /* ocupar el resto del ancho disponible */
+  width: auto;
+  min-width: 100px;
+  max-width: none;
+  padding: 4px 8px;
+  font-weight: 800;
+  font-size: 10px;       /* un poco mayor para legibilidad */
+  line-height: 1.05;
+  white-space: normal;   /* permitir varias líneas */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  /* si prefieres que las filas mantengan una sola línea y cortar texto, sustituye por:
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+  */
+}
+
+/* Inputs y marcas adaptadas a la nueva escala */
+.tabla-puntos .cell-input,
+.tabla-puntos .cell-mark {
+  font-size: 9px;
+  height: 28px;
+  padding: 2px 4px;
+}
+
+/* Asegurar que el body del modal permita scroll sólo vertical si hace falta */
+.modal-body {
+  overflow-y: auto;
+  overflow-x: hidden; /* evitar doble scroll horizontal: la tabla se adapta */
+}
+
+/* Ajustes específicos para columnas con texto largo */
+.tabla-puntos tbody td.partido {
+  font-size: 11px;         /* un poco más grande que el resto para legibilidad */
+  line-height: 1;          /* reducir espacio vertical sin cambiar contenedores */
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+/* Asegurar inputs y marcas usan la nueva escala sin alterar caja */
+.tabla-puntos .cell-input,
+.tabla-puntos .cell-mark {
+  font-size: 10px;
+  line-height: 1;
+}
+
+/* mantener alturas mínimas de celdas pero sin incrementar el tamaño global */
+.tabla-puntos tbody td.celda,
+.tabla-puntos td.w {
+  /* no cambiar width/height aquí para no alterar el tamaño de la tabla */
+  font-size: 10px;
+  line-height: 1;
+}
+
+/* Encabezado de la tabla: separada en bloque visual */
+.tabla-puntos thead th {
+  background: #f6f6f6;
+  border-bottom: 1px solid #e0e0e0;
+  font-weight: 800;
+  font-size: 12px;
+  padding: 8px 6px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* ID column estrecha */
+.tabla-puntos tbody td.id {
+  width: 36px;
+  padding: 8px 6px;
+  text-align: right;
+  font-weight: 700;
+  color: #222;
+}
+
+/* Partido columna más ancha y alineada a la izquierda en mayúsculas */
+.tabla-puntos tbody td.partido {
+  /* quitar límite fijo de ancho para que el texto pueda ocupar más espacio */
+  /* width: 160px; */
+  min-width: 220px;     /* más espacio inicial a lo ancho */
+  padding: 6px 10px;
+  text-align: left;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #111;
+  font-size: clamp(12px, 1.4vw, 14px);
+  line-height: 1.1;
+  /* permitir wrapping natural y evitar cortes raros en medio de palabras */
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+/* Aumentar ancho de la columna "Partido" para usuarios (invitados) */
+table.tabla-puntos th.partido,
+table.tabla-puntos td.partido {
+  min-width: 220px; /* más espacio mínimo */
+  width: auto;
+  max-width: none;   /* permitir que la columna crezca según el contenido */
+  white-space: normal;
+  word-break: normal;
+  text-align: left;
+  padding-left: 12px;
+}
+
+/* Celdas numéricas pequeñas y cuadradas */
+.tabla-puntos tbody td.celda {
+  /* quitar cálculo rígido para que la columna Partido pueda crecer */
+  /* width: calc((100% - 196px) / 10); */
+  width: auto;
+  min-width: 36px;
+  padding: 8px 6px;
+  border-left: 1px solid #eee;
+  border-top: 1px solid #f3f3f3;
+  height: 42px;
+  vertical-align: middle;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* Columna W con mismo estilo que celdas */
+.tabla-puntos tbody td.w {
+  padding: 8px 6px;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* Filas: separación visual y fondo blanco */
+.tabla-puntos tbody tr {
+  background: #fff;
+}
+
+/* Inputs dentro de celdas para superuser: silueta mínima */
+.cell-input {
+  width: 100%;
+  height: 32px;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  padding: 4px 6px;
+  font-weight: 700;
+  text-align: center;
+  border-radius: 4px;
+  background: #fff;
+}
+
+/* Footer: botones pequeños, discretos y alineados a la derecha */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 10px 18px;
+  background: transparent;
+  border-top: 0;
+}
+
+/* Botones del footer (mantener visibles pero discretos) */
+.modal-footer button {
+  background: #111;
+  color: #fff;
+  border: 2px solid #222;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* Colores de celdas pintadas (admin + viewers) */
+.tabla-puntos td.red {
+  background-image: linear-gradient(135deg, #ff2b2b 50%, #ffffff 50%) !important;
+  background-color: transparent !important;
+}
+.tabla-puntos td.green {
+  background-image: linear-gradient(135deg, #00c853 50%, #ffffff 50%) !important;
+  background-color: transparent !important;
+}
+
+/* Si quieres la diagonal invertida (color en la otra mitad), añade la clase .diag-inv a la celda:
+   <td class="celda red diag-inv"> ... </td> */
+.tabla-puntos td.diag-inv.red { background-image: linear-gradient(315deg, #ff2b2b 50%, #ffffff 50%) !important; }
+.tabla-puntos td.diag-inv.green { background-image: linear-gradient(315deg, #00c853 50%, #ffffff 50%) !important; }
+
+/* Mantener borde y asegurarnos que la marca sea legible */
+.tabla-puntos td.red, .tabla-puntos td.green { border: 1px solid #e9e9e9; }
+.tabla-puntos .cell-mark { color: #000 !important; font-weight: 900 !important; text-shadow: 0 0 2px rgba(255,255,255,0.4); }
+
+/* Si prefieres la marca en blanco cuando aparece sobre la mitad coloreada, descomenta:
+.tabla-puntos td.red .cell-mark, .tabla-puntos td.green .cell-mark { color: #fff !important; text-shadow: none; }
+*/
+
+/* Resaltar celdas clickable en modo admin */
+.admin-controls button.active {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transform: translateY(-1px);
+}
+
+/* Ajustes para inputs dentro de celdas (admin) */
+.tabla-puntos .cell-input {
+  width: 100%;
+  height: 34px;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  padding: 4px 6px;
+  font-weight: 700;
+  text-align: center;
+  border-radius: 4px;
+}
+
+/* Asegurar que el W final se mantenga visible y del mismo estilo */
+.tabla-puntos td.w {
+  width: 42px;
+}
+
+/* Ajustes responsivos: reducir tamaño ligeramente en pantallas pequeñas */
+@media (max-width: 420px) {
+  .modal { width: 340px; border-radius: 14px; }
+  .titulo h2 { font-size: 18px; }
+  .titulo .subtitle { font-size: 14px; }
+  .tabla-puntos thead th, .tabla-puntos tbody td { font-size: 11px; padding: 6px 4px; }
+  .btn-tabla { padding: 6px 10px; }
+}
+
+/* En móvil: ocultar únicamente el título dentro del recuadro (mantener el botón) */
+@media (max-width: 420px) {
+  .modal .titulo .main-title {
+    display: none !important;
+  }
+}
+
+/* botones X/T en blanco */
+button[title="Marcar X"],
+button[title="Marcar T"] {
+  color: #ffffff !important;
+}
+
+/* marcas X/T dentro de las celdas: por defecto negro (sobre fondo blanco) */
+.tabla-puntos .cell-mark {
+  color: #000 !important;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* si la celda está pintada (red/green), la marca pasa a blanca para contraste */
+.tabla-puntos td.red .cell-mark,
+.tabla-puntos td.green .cell-mark {
+  color: #fff !important;
+}
+
+/* ====== Overrides para VISTA INVITADO: mostrar texto en 2-3 renglones y ID estrecha ====== */
+/* Por defecto se deja en 3 renglones; si quieres 2 cambia `-webkit-line-clamp: 3` por 2. */
+.tabla-puntos:not(.admin-view) tbody td.partido {
+  /* Usar line-clamp para limitar a N renglones sin alterar la caja de la celda */
+  display: -webkit-box;            /* necesario para -webkit-line-clamp */
+  -webkit-box-orient: vertical;
+  line-clamp: 3;                   /* propiedad estándar para compatibilidad */
+  -webkit-line-clamp: 3;           /* <-- valor por defecto (3 renglones). Cambia a 2 si quieres */
+  overflow: hidden;                /* recorta lo que sobrepase los renglones permitidos */
+  text-overflow: ellipsis;
+  white-space: normal;             /* permitir saltos de línea dentro del clamp */
+  line-height: 1.12;
+  max-height: none;                /* permitimos que la celda ajuste según el clamp */
+  word-break: break-word;
+  overflow-wrap: anywhere;
+
+  /* No tocar padding/anchos/borde: respetar las reglas previas del archivo */
+  padding: inherit;
+  font-size: inherit;
+  box-sizing: border-box;
+}
+
+/* Mantener ID lo más estrecha posible SOLO para invitados */
+.tabla-puntos:not(.admin-view) tbody td.id,
+.tabla-puntos:not(.admin-view) thead th.id {
+  width: 28px !important;
+  min-width: 28px !important;
+  max-width: 28px !important;
+  padding: 4px 6px !important;
+  font-size: 10px !important;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* ====== fin overrides invitados ====== */
+
+/* ==== Ajustes SOLO para vista ADMIN (no afectan a invitados) ==== */
+/* La tabla tiene ambas clases: "tabla-puntos" y "admin-view" cuando isSuperUser === true */
+.tabla-puntos.admin-view {
+  /* mantener la tabla dentro del modal y repartir espacio entre columnas */
+  table-layout: fixed;
+}
+
+/* Dar mucho más espacio horizontal a la columna "partido" en admin */
+.tabla-puntos.admin-view tbody td.partido,
+.tabla-puntos.admin-view thead th.partido {
+  width: 46%;            /* ocupa gran porción del ancho total en admin */
+  min-width: 240px;      /* asegurar caja más ancha */
+  max-width: none;
+  font-size: 12px;       /* un poco más grande para legibilidad en admin */
+  line-height: 1.08;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  padding-left: 12px;
+}
+
+/* Compactar columnas numéricas en admin para compensar el mayor "partido" */
+.tabla-puntos.admin-view tbody td.celda,
+.tabla-puntos.admin-view thead th.celda {
+  width: 22px;
+  min-width: 22px;
+  max-width: 22px;
+  padding: 3px 4px;
+  font-size: 9px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+}
+
+/* Ajustes para ID y columna W en admin */
+.tabla-puntos.admin-view tbody td.id {
+  width: 38px;
+  min-width: 38px;
+}
+.tabla-puntos.admin-view td.w,
+.tabla-puntos.admin-view th.w {
+  width: 36px;
+  min-width: 36px;
+  max-width: 36px;
+}
+
+/* Si necesitas aún más espacio para 'partido', aumenta el porcentaje anterior (width: 50% por ejemplo) */
+/* ==== fin ajustes admin ==== */
+
+/* ====== Fix final: asegurar layout fijo y evitar solapamiento ====== */
+/* Aplicar sólo para la vista INVITADO (no afecta admin-view) */
+.tabla-puntos:not(.admin-view) {
+  table-layout: fixed !important; /* distribuir según anchos fijos */
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+/* Columnas pequeñas con ancho fijo para que "partido" reciba el resto */
+.tabla-puntos:not(.admin-view) thead th.id,
+.tabla-puntos:not(.admin-view) tbody td.id {
+  width: 28px !important;
+  min-width: 28px !important;
+  max-width: 28px !important;
+  padding: 4px 6px !important;
+  box-sizing: border-box;
+}
+
+.tabla-puntos:not(.admin-view) thead th.celda,
+.tabla-puntos:not(.admin-view) tbody td.celda {
+  width: 30px !important;
+  min-width: 30px !important;
+  max-width: 30px !important;
+  padding: 4px 4px !important;
+  box-sizing: border-box;
+}
+
+.tabla-puntos:not(.admin-view) thead th.w,
+.tabla-puntos:not(.admin-view) tbody td.w {
+  width: 36px !important;
+  min-width: 36px !important;
+  max-width: 36px !important;
+}
+
+/* La columna "partido" toma el espacio restante: no debe solaparse ni cambiar
+   las dimensiones de las otras columnas. Mantiene padding y bordes originales. */
+.tabla-puntos:not(.admin-view) thead th.partido,
+.tabla-puntos:not(.admin-view) tbody td.partido {
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  padding: inherit;
+  box-sizing: border-box;
+  text-align: left;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Mostrar el texto de partido en N renglones (por defecto 3).
+   Cambia -webkit-line-clamp a 2 si quieres exactamente 2 renglones. */
+.tabla-puntos:not(.admin-view) tbody td.partido .partido-text,
+.tabla-puntos:not(.admin-view) tbody td.partido {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  line-clamp: 3 !important;
+  -webkit-line-clamp: 3 !important; /* <-- cambiar a 2 si quieres 2 renglones */
+  overflow: hidden !important;
+  white-space: normal !important;
+  line-height: 1.12 !important;
+  max-height: calc(1.12em * 3) !important; /* adaptar al número de renglones */
+}
+
+/* Asegurar que no haya display:block que rompa la caja de la celda */
+.tabla-puntos:not(.admin-view) tbody td.partido,
+.tabla-puntos:not(.admin-view) tbody td.partido * {
+  display: revert !important;
+}
+
+/* Mantener scroll vertical en modal y evitar scroll horizontal */
+.modal-body {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+/* ====== fin fix ====== */
+
+/* Override final: aumentar ligeramente ancho de 'partido' y permitir mayúsculas/minúsculas */
+.tabla-puntos tbody td.partido,
+table.tabla-puntos th.partido,
+table.tabla-puntos td.partido {
+  /* un poco más de espacio horizontal por defecto (invitados y admin si no tienen admin-view específico) */
+  min-width: 260px !important;
+  /* no forzar mayúsculas: respetar el texto tal cual */
+  text-transform: none !important;
+  /* conservar estilo de caja y wrapping */
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+  font-size: clamp(11px, 1.3vw, 14px) !important;
+}
+
+/* Vista admin: darle aún más espacio a 'partido' (solo cuando la tabla tenga .admin-view) */
+.tabla-puntos.admin-view tbody td.partido,
+.tabla-puntos.admin-view thead th.partido {
+  min-width: 300px !important;
+  width: 50% !important;    /* ocupa mitad del ancho total en admin para mayor visibilidad */
+  text-transform: none !important;
+  font-size: 13px !important;
+  padding-left: 12px;
+}
+
+/* Aumentar grosor de las negritas dentro de la tabla y controladores relacionados */
+.tabla-puntos thead th,
+.tabla-puntos tbody td.id,
+.tabla-puntos tbody td.celda,
+.tabla-puntos tbody td.w,
+.tabla-puntos tbody td.partido,
+.tabla-puntos .cell-input,
+.tabla-puntos .cell-mark {
+  font-weight: 900 !important;
+}
+
+/* Incrementar ligeramente la altura vertical de las celdas (más espacio interno) */
+.tabla-puntos thead th,
+.tabla-puntos tbody td {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+/* Asegurar que la columna "partido" tenga algo más de altura mínima sin tocar su ancho */
+.tabla-puntos tbody td.partido {
+  min-height: 56px !important;
+  line-height: 1.08 !important;
+  box-sizing: border-box !important;
+}
+
+/* override final: hacer la columna "partido" más ancha a la derecha solo para INVITADOS */
+.tabla-puntos:not(.admin-view) thead th.partido,
+.tabla-puntos:not(.admin-view) tbody td.partido{
+  width: 40% !important;
+  min-width: 340px !important;
+  padding-right: 14px !important;
+  box-sizing: border-box;
+}
+
+/* compactar columnas numéricas para compensar y evitar scroll horizontal */
+.tabla-puntos:not(.admin-view) thead th.celda,
+.tabla-puntos:not(.admin-view) tbody td.celda{
+  width: 24px !important;
+  min-width: 24px !important;
+  max-width: 24px !important;
+  padding: 4px !important;
+  box-sizing: border-box;
+}
