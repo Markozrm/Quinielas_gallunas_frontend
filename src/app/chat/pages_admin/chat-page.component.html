@@ -98,21 +98,12 @@
         </button>
       </div>
     </div>
-
-    <!-- INSERTADO: botón/selector de Tabla de Puntos EXACTAMENTE debajo de "Abrir Nueva Ronda" -->
-    <div class="tabla-puntos-admin-wrapper centered-below-new-round">
-      <app-tabla-puntos [isSuperUser]="true"></app-tabla-puntos>
-    </div>
-
   </div>
-  
-  </div>
-  
   <!-- Modales -->
   <app-open-bet-modal *ngIf="isOpenBetModalOpen" (onOpenBets)="handleOpenBets($event)" (onClose)="closeOpenBetModal()"></app-open-bet-modal>
   <app-close-bet-modal *ngIf="isCloseBetModalOpen" [numeroPelea]="this.numeroPelea" (onCloseBets)="handleCloseBets()" (onClose)="closeCloseBetModal()"></app-close-bet-modal>
   <app-choose-winner-modal *ngIf="isChooseModalOpen" [numeroPelea]="this.rondaSeleccionada" (onCloseBets)="handleChooseWinner($event)" (onClose)="closeChooseModal()"></app-choose-winner-modal>
-
+<app-tabla-puntos *ngIf="esAdmin()" [isSuperUser]="true"></app-tabla-puntos>
   <!-- Sección de apuestas -->
   <div class="apuesta-container">
     <div *ngIf="esInvitado()">
