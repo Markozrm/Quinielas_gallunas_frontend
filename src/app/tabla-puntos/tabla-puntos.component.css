@@ -33,7 +33,7 @@
   background: #000000;        /* negro sólido */
   z-index: 1101;
   border-radius: 18px;
-  border: 8px solid #FF9E00;  /* borde naranja grueso */
+  border: 8px solid #9E9E9E;  /* borde naranja grueso */
   box-shadow: 0 14px 40px rgba(0,0,0,0.6);
   color: #fff;
   overflow: hidden;
@@ -78,14 +78,10 @@
 /* Subtítulo naranja con glow */
 .titulo .subtitle,
 .titulo .subtitle-input {
-  color: #FFB84D;
-  font-weight: 900;
-  font-size: 16px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  color: #BDBDBD; /* antes: #FFB84D */
   text-shadow:
     0 2px 0 rgba(0,0,0,0.7),
-    0 4px 18px rgba(255,158,0,0.25);
+    0 4px 18px rgba(158,158,158,0.20); /* reemplaza el glow naranja por gris suave */
 }
 
 /* Fecha en blanco, subrayada */
@@ -113,7 +109,7 @@
 
 /* CRUZ de cierre circular naranja (top-right) */
 .close {
-  background: #FF9E00;
+  background: #9E9E9E; /* antes: #FF9E00 */
   color: #000;
   border: none;
   width: 42px;
@@ -702,3 +698,44 @@ table.tabla-puntos td.partido {
   z-index: 2147483647 !important;
   pointer-events: auto !important;
 }
+
+/* ===== Overrides: cambiar naranja por gris para la vista de invitados ===== */
+/* Contorno del modal: gris en vez de naranja */
+.modal {
+  border: 8px solid #9E9E9E; /* antes: #FF9E00 */
+}
+
+/* Botón de cierre circular: gris en vez de naranja */
+.close {
+  background: #9E9E9E; /* antes: #FF9E00 */
+  color: #000;
+}
+
+/* Subtítulos y pequeñas decoraciones: gris claro en vez de naranja/ambar */
+.titulo .subtitle,
+.titulo .subtitle-input {
+  color: #BDBDBD; /* antes: #FFB84D */
+  text-shadow:
+    0 2px 0 rgba(0,0,0,0.7),
+    0 4px 18px rgba(158,158,158,0.20); /* reemplaza el glow naranja por gris suave */
+}
+
+/* Ajustar cualquier glow naranja remanente en el header */
+.titulo .main-title,
+.titulo .subtitle,
+.titulo .subtitle-input {
+  text-shadow:
+    0 2px 0 rgba(0,0,0,0.85),
+    0 6px 18px rgba(0,0,0,0.45);
+}
+
+/* Si hubiera gradientes o sombras usando el naranja específico, suavizar a gris */
+.modal .close,
+.modal .titulo .subtitle {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+/* Asegurar contraste del icono X si el fondo es gris */
+.close { color: #111; }
+
+/* ===== fin overrides invitados ===== */
