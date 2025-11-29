@@ -1,10 +1,10 @@
 import { NgIf } from '@angular/common';
 import { MenuComponent } from '../menu/menu.component';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Injectable, inject } from '@angular/core';
 import { UsersService } from '../services/users.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Validators, FormControl, FormGroup, AbstractControl } from '@angular/forms';
+import { Validators, FormControl, FormGroup, AbstractControl, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { CommonModule } from '@angular/common';
@@ -17,31 +17,41 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./register.component.css']
 })
 
-export class RegisterInvitadoComponent {
+export class RegisterInvitadoComponent implements OnInit {
   formulario: FormGroup;
   imagePreview: string | null = null;
   public image: any;
 
-  constructor(private route: ActivatedRoute, private router: Router, private userService: UsersService, private location: Location) {
-    this.formulario = new FormGroup({
-      username: new FormControl('', [
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private userService: UsersService,
+    private location: Location
+  ) {
+    this.formulario = this.fb.group({
+      username: ['', [
         Validators.required,
         this.noSpacesValidator,
         this.noAccentsValidator
-      ]),
-      password: new FormControl('', Validators.required),
-      image: new FormControl('', [this.imageRequiredValidator]),
-      tipoUsuario: new FormControl('invitado', Validators.required),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      nombre: new FormControl('', [
+      ]],
+      password: ['', Validators.required],
+      image: ['', [this.imageRequiredValidator]],
+      tipoUsuario: ['invitado', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      nombre: ['', [
         Validators.required,
         this.noSpacesValidator,
         this.noAccentsValidator
-      ]),
-      apellido: new FormControl('', Validators.required),
-      telefono: new FormControl('', Validators.required),
-      fechaNacimiento: new FormControl('', Validators.required),
+      ]],
+      apellido: ['', Validators.required],
+      telefono: ['', Validators.required],
+      fechaNacimiento: ['', Validators.required],
     });
+  }
+
+  ngOnInit(): void {
+    // ...existing code...
   }
 
   // Validador personalizado para espacios
