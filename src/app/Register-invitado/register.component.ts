@@ -38,15 +38,16 @@ export class RegisterInvitadoComponent implements OnInit {
       password: ['', Validators.required],
       image: ['', [this.imageRequiredValidator]],
       tipoUsuario: ['invitado', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      nombre: ['', [
-        Validators.required,
-        this.noSpacesValidator,
-        this.noAccentsValidator
-      ]],
-      apellido: ['', Validators.required],
-      telefono: ['', Validators.required],
-      fechaNacimiento: ['', Validators.required],
+      // Campos comentados para que NO sean obligatorios en registro de invitado:
+      // email: ['', [Validators.required, Validators.email]],
+      // nombre: ['', [
+      //   Validators.required,
+      //   this.noSpacesValidator,
+      //   this.noAccentsValidator
+      // ]],
+      // apellido: ['', Validators.required],
+      // telefono: ['', Validators.required],
+      // fechaNacimiento: ['', Validators.required],
     });
   }
 
@@ -92,51 +93,36 @@ export class RegisterInvitadoComponent implements OnInit {
 
   async onSubmit() {
     this.formulario.get('tipoUsuario')?.patchValue("invitado");
-    const email = this.formulario.get('email')?.value;
+    // Los campos comentados no se validan aquí; solo validar username/password/image
 
-    // Validar formulario completo
+    // Validar formulario completo (ahora solo username, password, image y tipoUsuario)
     if (this.formulario.invalid) {
       if (this.formulario.get('username')?.errors?.['required']) {
         alert('El nombre de usuario es obligatorio.');
         return;
       }
       if (this.formulario.get('username')?.errors?.['hasSpaces']) {
-        alert('El nombre de usuario no puede contener espacios, acentos ni caracteres especiales.');
+        alert('El nombre de usuario no puede contener espacios.');
         return;
       }
       if (this.formulario.get('username')?.errors?.['hasAccents']) {
         alert('El nombre de usuario no puede contener acentos.');
         return;
       }
-      if (this.formulario.get('nombre')?.errors?.['required']) {
-        alert('El nombre es obligatorio.');
-        return;
-      }
-      if (this.formulario.get('nombre')?.errors?.['hasSpaces']) {
-        alert('El nombre no puede contener espacios.');
-        return;
-      }
-      if (this.formulario.get('nombre')?.errors?.['hasAccents']) {
-        alert('El nombre no puede contener acentos.');
+      if (this.formulario.get('password')?.errors?.['required']) {
+        alert('La contraseña es obligatoria.');
         return;
       }
       if (this.formulario.get('image')?.errors?.['imageRequired']) {
         alert('Debes seleccionar una imagen de perfil.');
         return;
       }
-      if (this.formulario.get('email')?.errors?.['required']) {
-        alert('El correo electrónico es obligatorio.');
-        return;
-      }
-      if (this.formulario.get('email')?.errors?.['email']) {
-        alert('El correo electrónico no es válido.');
-        return;
-      }
-      // Puedes agregar más validaciones específicas aquí...
-      alert('Por favor, completa todos los campos correctamente antes de continuar.');
+
+      alert('Por favor, completa los campos obligatorios antes de continuar.');
       return;
     }
 
+    // Llamada al servicio (se mantienen tal cual)
     const response = await this.userService.register(this.formulario.value, this.image);
 
     if (response.data === "El nombre de usuario ya existe" || response.error) {
