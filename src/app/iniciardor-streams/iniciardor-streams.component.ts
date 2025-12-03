@@ -70,20 +70,6 @@ export class IniciardorStreamsComponent {
         esVIP.toString()
       );
       alert(response.data);
-
-      // EMITIR evento para notificar a clientes conectados
-      // después de recibir la respuesta del backend (setClaveStream)
-      localStorage.setItem('streamClave', this.claveStream); // guarda en admin (opcional)
-      try {
-        this.chatService.socket?.emit('stream_configured', {
-          clave: this.claveStream,
-          port: '443',
-          streamNumber: selectorValue
-        });
-        console.log('Evento stream_configured emitido:', this.claveStream);
-      } catch (err) {
-        console.warn('Error emitiendo stream_configured:', err);
-      }
     }
   }
 
