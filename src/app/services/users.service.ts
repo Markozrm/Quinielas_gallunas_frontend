@@ -101,7 +101,7 @@ export class UsersService {
     return this.httpClient.delete<any>(`${this.baseUrl}/delete-user/${username}`);
   }
 
-  updateSaldo(username: string, monto: number, concepto: string, tipo: string) {
+  updateSaldo(username: string, monto: number, concepto: string, tipo: string, sala?: string) {
     const body = { "monto":monto, "concepto": concepto, "tipo": tipo };  // El cuerpo de la petición contiene la cantidad a sumar
     return firstValueFrom(
       this.httpClient.put<any>(`${this.baseUrl}/add-saldo/${username}`, body)

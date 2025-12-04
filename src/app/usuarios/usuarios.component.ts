@@ -2,7 +2,9 @@ import { Component ,OnInit} from '@angular/core';
 import { UsersService } from '../services/users.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { RecipesService } from '../services/recipes.service'; // Agrega esta importación
+
 @Component({
   selector: 'app-usuarios',
   templateUrl: './usuarios.component.html',
@@ -35,8 +37,20 @@ export class UsuariosComponent implements OnInit {
   
   conceptoSaldo: string = '';
   
-  constructor(private userService: UsersService,private router:Router) { }
+  mostrarEnHistorialRecibo: boolean = false; // NUEVO: para el checkbox
+  streamSearch: string = '';
+  usuariosPorStream: any[] = [];
+  mostrandoPorStream: boolean = false;
+  streamSeleccionado: string = '';
+  fechaActual: string = '';
 
+
+  constructor(
+    private userService: UsersService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private recipeService: RecipesService // NUEVO: inyecta el servicio de recibos
+  ) { }
   ngOnInit(): void {
     this.userService.getUsers().subscribe(users => {
       this.users = this.sortUsersAlphabetically(users);
@@ -280,6 +294,7 @@ export class UsuariosComponent implements OnInit {
     this.showSaldoModal = true;
     this.saldoAmount = 0;
     this.conceptoSaldo = '';
+    this.mostrarEnHistorialRecibo = false;
   }
 
   closeSaldoModal(): void {
@@ -290,22 +305,39 @@ export class UsuariosComponent implements OnInit {
 
   addSaldo(): void {
     if (this.selectedUser && this.saldoAmount > 0) {
-      if (!this.conceptoSaldo.trim()) {
-        this.conceptoSaldo = "modificacion de saldo por admin";
-      }
-      this.userService.updateSaldo(this.selectedUser.username, this.saldoAmount, this.conceptoSaldo, "modificacion_admin")
-        .then((result) => {
-          alert(`Saldo actualizado. Nuevo saldo: ${result.user.saldo}`);
-          this.userService.getUsers().subscribe(users => {
-            this.users = users;
-            this.filterUsers(); // Aplicar filtro y ordenamiento actual
-            this.calcularSaldoTotal(); // Actualiza el saldo total después de modificar
-          });
-          this.closeSaldoModal();
-        })
-        .catch(error => {
-          alert(`Error al actualizar el saldo: ${error.message}`);
+      const concepto = this.conceptoSaldo?.trim() || '';
+      const claveStream = this.getClaveStream();
+      if (!claveStream) { return; }
+      this.userService.updateSaldo(
+        this.selectedUser.username,
+        this.saldoAmount,
+        concepto, 
+        "modificacion_admin",
+        claveStream
+      )
+      .then(async (result) => {
+        // NUEVO: Si el checkbox está marcado, crea un recibo manual
+        if (this.mostrarEnHistorialRecibo) {
+          await this.recipeService.createManualRecibo({
+            username: this.selectedUser.username,
+            monto: this.saldoAmount,
+            banco: 'Manual',
+            estado: 'aprobado',
+            fecha: new Date(),
+            concepto: concepto || 'Modificación manual',
+          }).toPromise();
+        }
+        alert(`Saldo actualizado. Nuevo saldo: ${result.user.saldo}`);
+        this.userService.getUsers().subscribe(users => {
+          this.users = users;
+          this.filterUsers();
+          this.calcularSaldoTotal();
         });
+        this.closeSaldoModal();
+      })
+      .catch(error => {
+        alert(`Error al actualizar el saldo: ${error.message}`);
+      });
     } else {
       alert("La cantidad debe ser mayor que 0");
     }
@@ -341,4 +373,9 @@ export class UsuariosComponent implements OnInit {
   verHistorial(user: any): void {
     this.router.navigate([`/historial-usuario/${user.username}`]);
   }
+  
+ getClaveStream(): string {
+  if (!this.streamSeleccionado || !this.fechaActual) return '';
+  return `${this.streamSeleccionado}-${this.fechaActual}`;
+}
 }

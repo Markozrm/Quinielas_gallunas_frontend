@@ -65,4 +65,7 @@ export class RecipesService {
       throw error; // Re-lanzamos el error para manejarlo en el componente
     }
   }
+    createManualRecibo(data: any) {
+    return this.httpClient.post(`${this.baseUrl}/manual`, data);
+  }
 }
