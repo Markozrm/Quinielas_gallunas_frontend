@@ -46,7 +46,16 @@
 <div *ngIf="modalVisible" class="modal-overlay" (click)="cerrarModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <h3>Recibo</h3>
-    <img [src]="modalImageUrl" alt="Recibo" style="max-width:100%;max-height:400px;">
+        <ng-container *ngIf="!modalImageError; else noDisponible">
+      <img [src]="modalImageUrl" alt="Recibo"
+           style="max-width:100%;max-height:400px;"
+           (error)="modalImageError = true">
+    </ng-container>
+    <ng-template #noDisponible>
+      <div style="color: #FD9E00; font-weight: bold; margin: 24px 0;">
+        El recibo ya no se encuentra disponible
+      </div>
+    </ng-template>
     <br>
     <button class="save-button"
             *ngIf="selectedUser?.estado === 'pendiente'"
@@ -89,6 +98,7 @@
         <th>Usuario</th>
         <th>Cantidad</th>
         <th>Banco</th>
+        <th>Ver Recibo</th>
       </tr>
     </thead>
     <tbody>
@@ -98,6 +108,9 @@
         <td data-label="Usuario">{{ recibo.username }}</td>
         <td data-label="Cantidad">{{ recibo.monto }}</td>
         <td data-label="Banco">{{ recibo.banco }}</td>
+        <td>
+          <button class="ver-recibo-btn" (click)="verRecibo(recibo)">Ver Recibo</button>
+        </td>
       </tr>
     </tbody>
   </table>

@@ -81,6 +81,7 @@ export class VerReciboComponent implements OnInit {
       this.recibosAceptadosHistorial = recibos
         .filter((r: any) => r.estado === 'aprobado')
         .map((r: any) => ({
+          _id: r._id,
           fecha: r.fechaAprobacion || r.fecha || '', // usa fechaAprobacion si existe
           username: r.username,
           monto: r.monto,
@@ -112,11 +113,21 @@ export class VerReciboComponent implements OnInit {
     this.modalImageUrl = this.getImageUrl(recipe._id);
     this.modalVisible = true;
   }
+    modalImageError: boolean = false; // Nueva variable
+
+  verReciboAceptado(recibo: any) {
+    this.selectedUser = recibo;
+    this.modalImageUrl = this.getImageUrl(recibo._id);
+    this.modalVisible = true;
+    this.modalImageError = false; // Reinicia el error
+  }
+
 
   cerrarModal() {
     this.modalVisible = false;
     this.modalImageUrl = '';
     this.selectedUser = null;
+    this.modalImageError = false; // Reinicia el error
   }
 
   getImageUrl(id: string): string {
