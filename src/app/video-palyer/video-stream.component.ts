@@ -14,6 +14,17 @@ export class VideoStreamComponent implements OnInit {
 
   constructor(private route: ActivatedRoute) {}
 
+  private setMaxVolume(): void {
+    if (this.video && this.video.nativeElement) {
+      this.video.nativeElement.muted = false; // Desmutea el video
+      this.video.nativeElement.volume = 1.0;  // Volumen máximo
+      this.video.nativeElement.play().catch((err: any) => {
+        console.warn('No se pudo reproducir automáticamente:', err);
+      });
+      console.log('Volumen establecido al máximo y desmuteado');
+    }
+  }
+
   public ngOnInit() {
     try {
       const folder = this.route.snapshot.paramMap.get('folder');
@@ -21,7 +32,7 @@ export class VideoStreamComponent implements OnInit {
       this.videoUrl = `${this.videoUrl}/${folder}/${name}`
       console.log(this.videoUrl);
       this.load(this.videoUrl);
-      //this.video.nativeElement.play();
+      this.setMaxVolume(); // Sube el volumen al iniciar
     } catch (error) {
       console.error('Error loading video:', error);
     }
@@ -57,12 +68,11 @@ export class VideoStreamComponent implements OnInit {
     this.hls.loadSource(currentVideo);
     this.hls.attachMedia(this.video.nativeElement);
     this.video.nativeElement.addEventListener('loadedmetadata', () => {
-      // Aquí puedes buscar el segmento más reciente y establecer el tiempo actual del video
       this.video.nativeElement.currentTime = this.video.nativeElement.duration;
-      
-      // Iniciar la reproducción después de configurar el tiempo actual
-      //this.video.nativeElement.play();
+      this.setMaxVolume(); // Sube el volumen y desmutea cuando se carga el video
     });
+    this.video.nativeElement.muted = false;
+    this.video.nativeElement.volume = 1.0;
   
   }
 
