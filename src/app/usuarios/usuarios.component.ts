@@ -304,20 +304,31 @@ export class UsuariosComponent implements OnInit {
   }
 
   addSaldo(): void {
+    console.log('addSaldo llamado');
+    console.log('selectedUser:', this.selectedUser);
+    console.log('saldoAmount:', this.saldoAmount);
+    console.log('conceptoSaldo:', this.conceptoSaldo);
+    const claveStream = this.getClaveStream();
+    console.log('claveStream:', claveStream);
+
     if (this.selectedUser && this.saldoAmount > 0) {
       const concepto = this.conceptoSaldo?.trim() || '';
-      const claveStream = this.getClaveStream();
-      if (!claveStream) { return; }
+      // Elimina la validación de claveStream si no es obligatoria
+      // if (!claveStream) { 
+      //   console.log('Clave stream vacía, no se puede continuar');
+      //   return; 
+      // }
       this.userService.updateSaldo(
         this.selectedUser.username,
         this.saldoAmount,
         concepto, 
         "modificacion_admin",
-        claveStream
+        claveStream // puede ir vacío si tu backend lo permite
       )
       .then(async (result) => {
-        // NUEVO: Si el checkbox está marcado, crea un recibo manual
+        console.log('Resultado updateSaldo:', result);
         if (this.mostrarEnHistorialRecibo) {
+          console.log('Creando recibo manual...');
           await this.recipeService.createManualRecibo({
             username: this.selectedUser.username,
             monto: this.saldoAmount,
@@ -336,37 +347,49 @@ export class UsuariosComponent implements OnInit {
         this.closeSaldoModal();
       })
       .catch(error => {
+        console.error('Error en updateSaldo:', error);
         alert(`Error al actualizar el saldo: ${error.message}`);
       });
     } else {
+      console.log('Condición no cumplida: selectedUser o saldoAmount <= 0');
       alert("La cantidad debe ser mayor que 0");
     }
   }
 
   subtractSaldo(): void {
+    console.log('subtractSaldo llamado');
+    console.log('selectedUser:', this.selectedUser);
+    console.log('saldoAmount:', this.saldoAmount);
+    console.log('conceptoSaldo:', this.conceptoSaldo);
+
     if (this.selectedUser && this.saldoAmount > 0) {
       if (this.selectedUser.saldo < this.saldoAmount) {
+        console.log('Saldo insuficiente');
         alert("El usuario no tiene suficiente saldo");
         return;
       }
       if (!this.conceptoSaldo.trim()) {
+        console.log('Concepto vacío');
         alert('Debes ingresar un concepto para la modificación de saldo.');
         return;
       }
       this.userService.restarSaldo(this.selectedUser.username, this.saldoAmount, this.conceptoSaldo)
         .then((result) => {
+          console.log('Resultado restarSaldo:', result);
           alert(`Saldo actualizado. Nuevo saldo: ${result.user.saldo}`);
           this.userService.getUsers().subscribe(users => {
             this.users = users;
-            this.filterUsers(); // Aplicar filtro y ordenamiento actual
-            this.calcularSaldoTotal(); // Calcula el saldo total al cargar los usuarios
+            this.filterUsers();
+            this.calcularSaldoTotal();
           });
           this.closeSaldoModal();
         })
         .catch(error => {
+          console.error('Error en restarSaldo:', error);
           alert(`Error al actualizar el saldo: ${error.message}`);
         });
     } else {
+      console.log('Condición no cumplida: selectedUser o saldoAmount <= 0');
       alert("La cantidad debe ser mayor que 0");
     }
   }
