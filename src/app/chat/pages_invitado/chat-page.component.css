@@ -339,8 +339,8 @@
   border: 3px solid #FFA500;
 }
 .header-right-cerradas{
-  color: #a3a3a3;
-  border: 3px solid #a3a3a3;
+  color: #000000;
+  border: 3px solid #000000;
 }
 
 
@@ -349,6 +349,7 @@
   font-weight: bold;
   font-family: 'Chromium', sans-serif;
   letter-spacing: 2px; /* Aumenta el espacio entre letras */
+  background: linear-gradient(135deg, #b4952a 0%, #e2c97a);
 }
 
 .estado-apuestas {
@@ -613,7 +614,7 @@ h2 {
   width: 100%;
   text-align: center;
   padding: 10px;
-  color: #a3a3a3;
+  color: #000000;
   border-radius: 6px;
   margin-bottom: 1px;
   font-weight: 400;
@@ -1644,7 +1645,7 @@ input[type="number"]::placeholder {
 
 /* PELEA Y CAZANDO */
 .header-container {
-  background: #fff;
+  background: linear-gradient(135deg, #b4952a 0%, #e2c97a);
   border-bottom: none;
   padding: 0;
   gap: 0;
