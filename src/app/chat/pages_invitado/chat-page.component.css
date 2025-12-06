@@ -129,7 +129,7 @@
 }
 
 .videoContainer{
-  padding-top: 5% ;
+  padding-top: 2% ;
   position: relative;
 }
 
@@ -379,7 +379,7 @@
 }
 
 body, .main, .apuesta-container, .chat-container {
-  background: #fff !important;
+  background: linear-gradient(135deg, #b4952a 0%, #e2c97a 100%);
   padding-top: 80px; /* Deja espacio para la barra negra fija */
 }
 
@@ -929,14 +929,15 @@ input[type="number"]::placeholder {
 }
 
 .bet-status-indicator.waiting {
-  background-color: #ff990000;
+  background-color: #ffffff00;
   border: 2px solid #fff; 
   color: black;
 }
 
 .bet-status-indicator.caught {
-  background-color:#ff990000;
-  border: 2px solid #fff;
+  
+    background-color: #fff;
+  border: 2px solid #ffffff;
   color: black;
 }
 
@@ -1753,7 +1754,7 @@ input[type="number"]::placeholder {
 
 /* BOTÓN JUGAR */
 .boton-apostar {
-  background: linear-gradient(90deg, #b49b5e 0%, #fff3c0 100%) !important;
+  background: linear-gradient(90deg, #f0f0f0 0%, #ffffff 100%) !important;
   color: #000 !important;
   border: none !important;
   border-radius: 30px !important;
@@ -1810,7 +1811,7 @@ input[type="number"]::placeholder {
 
 /* FONDO GENERAL */
 body, .main, .apuesta-container, .chat-container {
-  background: #fff !important;
+  background: linear-gradient(135deg, #b4952a 0%, #e2c97a 100%);
   padding-top: 0 !important;
 }
 @media (max-width: 600px) {
@@ -1862,7 +1863,7 @@ body, .main, .apuesta-container, .chat-container {
   padding: 10px 18px !important;
   border-radius: 12px !important;
   font-weight: 800 !important;
-  font-size: 14px !important;
+  font-size: 12px !important;
   height: 54px !important;
   min-width: 84px !important;
   display: inline-flex !important;
