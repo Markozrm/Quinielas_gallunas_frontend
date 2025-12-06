@@ -15,7 +15,7 @@
 .user-balance-container {
   width: 100%;           
   max-width: 100%;            
-  background: #fff !important;
+  background: linear-gradient(135deg, #b4952a 0%, #e2c97a 100%);;
   color: #000 !important;
   font-family: 'Arial Black', Arial, sans-serif;
   font-size: 1.3em;
@@ -91,4 +91,10 @@ h1 {
   font-weight: 700;
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+
+.titulo {
+  height: 3rem;
+  width: 23rem;
+  margin: 10px;
 }
