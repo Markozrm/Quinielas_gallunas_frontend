@@ -1889,3 +1889,9 @@ body, .main, .apuesta-container, .chat-container {
 ::ng-deep .modal, ::ng-deep .modal-backdrop {
   z-index: 99999 !important;
 }
+
+.saldo-info{
+  font-size: 16px;
+  font-weight: bold;
+  color: #000;
+}
