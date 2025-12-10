@@ -46,7 +46,16 @@
 <div *ngIf="modalVisible" class="modal-overlay" (click)="cerrarModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <h3>Recibo</h3>
-    <img [src]="modalImageUrl" alt="Recibo" style="max-width:100%;max-height:400px;">
+        <ng-container *ngIf="!modalImageError; else noDisponible">
+      <img [src]="modalImageUrl" alt="Recibo"
+           style="max-width:100%;max-height:400px;"
+           (error)="modalImageError = true">
+    </ng-container>
+    <ng-template #noDisponible>
+      <div style="color: #FD9E00; font-weight: bold; margin: 24px 0;">
+        El recibo ya no se encuentra disponible
+      </div>
+    </ng-template>
     <br>
     <button class="save-button"
             *ngIf="selectedUser?.estado === 'pendiente'"
@@ -80,6 +89,9 @@
 <!-- Tabla de historial de recibos aceptados -->
 <div class="historial-recibos">
   <h3>Historial de Recibos Aceptados</h3>
+   <div class="total-dia-container" *ngIf="diaSeleccionado">
+    <h4>Total del día: ${{ totalPorDia | number:'1.2-2' }}</h4>
+  </div>
   <button (click)="resetHistorialAceptados()" class="borrar-btn" style="margin-bottom: 12px;">Reset historial</button>
   <table>
     <thead>
@@ -89,6 +101,7 @@
         <th>Usuario</th>
         <th>Cantidad</th>
         <th>Banco</th>
+        <th>Ver Recibo</th>
       </tr>
     </thead>
     <tbody>
@@ -98,13 +111,18 @@
         <td data-label="Usuario">{{ recibo.username }}</td>
         <td data-label="Cantidad">{{ recibo.monto }}</td>
         <td data-label="Banco">{{ recibo.banco }}</td>
+        <td>
+          <button class="ver-recibo-btn" (click)="verRecibo(recibo)">Ver Recibo</button>
+        </td>
       </tr>
     </tbody>
   </table>
-  <!-- Controles de paginación -->
-  <div class="paginacion-historial">
-    <button (click)="cambiarPagina(paginaActual - 1)" [disabled]="paginaActual === 1">Anterior</button>
-    <span>Página {{paginaActual}} de {{totalPaginas}}</span>
-    <button (click)="cambiarPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">Siguiente</button>
+    <!-- Controles de paginación por día -->
+  <div class="paginacion-historial" *ngIf="diasOperativos.length > 0">
+    <button (click)="cambiarDia('anterior')" [disabled]="esPrimerDia">Anterior</button>
+    <span *ngIf="diaSeleccionado">
+      Día: {{ diaSeleccionado | date:'dd/MM/yyyy' }}
+    </span>
+    <button (click)="cambiarDia('siguiente')" [disabled]="esUltimoDia">Siguiente</button>
   </div>
 </div>

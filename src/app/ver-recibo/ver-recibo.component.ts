@@ -24,6 +24,8 @@ export class VerReciboComponent implements OnInit {
   recibosRechazados: number = 0;
   montoAcumulado: number = 0;
   recibosAceptadosHistorial: any[] = [];
+    diasOperativos: string[] = [];
+  diaSeleccionado: string | null = null;
   paginaActual: number = 1;
   recibosPorPagina: number = 40;
 
@@ -32,9 +34,48 @@ export class VerReciboComponent implements OnInit {
   }
 
   get recibosPaginados() {
-    const inicio = (this.paginaActual - 1) * this.recibosPorPagina;
-    return this.recibosAceptadosHistorial.slice(inicio, inicio + this.recibosPorPagina);
+  if (!this.diaSeleccionado) {
+      return [];
+    }
+      const inicioDia = new Date(this.diaSeleccionado + 'T00:00:00Z');
+    inicioDia.setUTCHours(7, 0, 0, 0);
+
+    const finDia = new Date(inicioDia);
+   finDia.setUTCDate(finDia.getUTCDate() + 1);
+
+    return this.recibosAceptadosHistorial.filter(recibo => {
+      const fechaRecibo = new Date(recibo.fecha);
+      return fechaRecibo >= inicioDia && fechaRecibo < finDia;
+    });
   }
+
+  // NUEVO: Getter para calcular el total del día seleccionado
+  get totalPorDia(): number {
+    return this.recibosPaginados.reduce((acc, recibo) => acc + (Number(recibo.monto) || 0), 0);
+  }
+  cambiarDia(direccion: 'anterior' | 'siguiente') {
+    if (!this.diaSeleccionado) return;
+    const indiceActual = this.diasOperativos.indexOf(this.diaSeleccionado);
+    
+    if (direccion === 'siguiente' && indiceActual > 0) {
+      this.diaSeleccionado = this.diasOperativos[indiceActual - 1];
+    } else if (direccion === 'anterior' && indiceActual < this.diasOperativos.length - 1) {
+      this.diaSeleccionado = this.diasOperativos[indiceActual + 1];
+    }
+  }
+
+  get esPrimerDia(): boolean {
+    if (!this.diaSeleccionado) return true;
+    const indiceActual = this.diasOperativos.indexOf(this.diaSeleccionado);
+    return indiceActual === this.diasOperativos.length - 1;
+  }
+
+  get esUltimoDia(): boolean {
+    if (!this.diaSeleccionado) return true;
+    const indiceActual = this.diasOperativos.indexOf(this.diaSeleccionado);
+    return indiceActual === 0;
+  }
+
 
   cambiarPagina(nuevaPagina: number) {
     if (nuevaPagina >= 1 && nuevaPagina <= this.totalPaginas) {
@@ -81,11 +122,26 @@ export class VerReciboComponent implements OnInit {
       this.recibosAceptadosHistorial = recibos
         .filter((r: any) => r.estado === 'aprobado')
         .map((r: any) => ({
+          _id: r._id,
           fecha: r.fechaAprobacion || r.fecha || '', // usa fechaAprobacion si existe
           username: r.username,
           monto: r.monto,
           banco: r.banco,
         }));
+           // NUEVO: Agrupar por día operativo
+      const dias = new Set<string>();
+      this.recibosAceptadosHistorial.forEach(recibo => {
+        const fecha = new Date(recibo.fecha);
+        const fechaAjustada = new Date(fecha);
+        fechaAjustada.setHours(fechaAjustada.getHours() - 7);
+        const diaOperativo = fechaAjustada.toISOString().split('T')[0];
+        dias.add(diaOperativo);
+      });
+      this.diasOperativos = Array.from(dias); // Ya está ordenado por la naturaleza del sort previo
+      
+      if (!this.diaSeleccionado && this.diasOperativos.length > 0) {
+        this.diaSeleccionado = this.diasOperativos[0];
+      }
 
       this.recibosAceptados = recibos
         .filter((r: any) => r.estado === 'aprobado')
@@ -112,11 +168,21 @@ export class VerReciboComponent implements OnInit {
     this.modalImageUrl = this.getImageUrl(recipe._id);
     this.modalVisible = true;
   }
+    modalImageError: boolean = false; // Nueva variable
+
+  verReciboAceptado(recibo: any) {
+    this.selectedUser = recibo;
+    this.modalImageUrl = this.getImageUrl(recibo._id);
+    this.modalVisible = true;
+    this.modalImageError = false; // Reinicia el error
+  }
+
 
   cerrarModal() {
     this.modalVisible = false;
     this.modalImageUrl = '';
     this.selectedUser = null;
+    this.modalImageError = false; // Reinicia el error
   }
 
   getImageUrl(id: string): string {

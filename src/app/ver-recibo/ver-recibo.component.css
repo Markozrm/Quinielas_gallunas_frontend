@@ -329,6 +329,21 @@
   font-weight: bold;
   letter-spacing: 1px;
 }
+.total-dia-container {
+  text-align: center;
+  margin: -10px 0 20px 0;
+}
+
+.total-dia-container h4 {
+  color: #fff;
+  font-size: 1.4em;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.total-dia-container h4 span {
+  color: #1abc9c; /* Un color verde para el monto */
+}
 
 .historial-recibos table {
   width: 100%;
