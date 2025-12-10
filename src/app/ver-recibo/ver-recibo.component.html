@@ -89,6 +89,9 @@
 <!-- Tabla de historial de recibos aceptados -->
 <div class="historial-recibos">
   <h3>Historial de Recibos Aceptados</h3>
+   <div class="total-dia-container" *ngIf="diaSeleccionado">
+    <h4>Total del día: ${{ totalPorDia | number:'1.2-2' }}</h4>
+  </div>
   <button (click)="resetHistorialAceptados()" class="borrar-btn" style="margin-bottom: 12px;">Reset historial</button>
   <table>
     <thead>
@@ -114,10 +117,12 @@
       </tr>
     </tbody>
   </table>
-  <!-- Controles de paginación -->
-  <div class="paginacion-historial">
-    <button (click)="cambiarPagina(paginaActual - 1)" [disabled]="paginaActual === 1">Anterior</button>
-    <span>Página {{paginaActual}} de {{totalPaginas}}</span>
-    <button (click)="cambiarPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">Siguiente</button>
+    <!-- Controles de paginación por día -->
+  <div class="paginacion-historial" *ngIf="diasOperativos.length > 0">
+    <button (click)="cambiarDia('anterior')" [disabled]="esPrimerDia">Anterior</button>
+    <span *ngIf="diaSeleccionado">
+      Día: {{ diaSeleccionado | date:'dd/MM/yyyy' }}
+    </span>
+    <button (click)="cambiarDia('siguiente')" [disabled]="esUltimoDia">Siguiente</button>
   </div>
 </div>
