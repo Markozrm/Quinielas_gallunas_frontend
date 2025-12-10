@@ -127,7 +127,9 @@ export class VerReciboComponent implements OnInit {
           username: r.username,
           monto: r.monto,
           banco: r.banco,
-        }));
+        }))
+        .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime()); // Ordena descendente por fecha
+
            // NUEVO: Agrupar por día operativo
       const dias = new Set<string>();
       this.recibosAceptadosHistorial.forEach(recibo => {
