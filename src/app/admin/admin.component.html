@@ -231,7 +231,7 @@
     </div>
   </div>
 </div>
-
+<div *ngIf="isSuperAdmin()">
 <div class="admin-panel-casino">
   <h2>PANEL ADMIN</h2>
   <!-- SOLO superUsuario puede ver estos apartados -->
@@ -276,7 +276,7 @@
   </div>
   <!--<button class="casino-central-btn" (click)="abrirCasinoAdmin()">Casino</button> -->
 </div>
-
+</div>
 <div *ngIf="isImagenStreamModalOpen" class="modal-overlay">
   <div class="modal-content-imagen-stream">
     <button class="close-button" (click)="cerrarImagenStreamModal()">×</button>
