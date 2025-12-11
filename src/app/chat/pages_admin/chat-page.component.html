@@ -79,6 +79,20 @@
               (click)="abrirNuevaRonda()">
         Abrir Nueva Ronda
       </button>
+
+                    <div class="top-row">
+                <div class="admin-bet-box red">
+                  <div class="admin-bet-title">{{ redTeamName || 'Rojo' }}</div>
+                  <div class="admin-bet-amount">{{ cantidadApostadaRojo }}$</div>
+                  <div class="admin-bet-points">PTS: {{ redPoints }}</div>
+                </div>
+                
+                <div class="admin-bet-box green">
+                  <div class="admin-bet-title">{{ greenTeamName || 'Verde' }}</div>
+                  <div class="admin-bet-amount">{{ cantidadApostadaVerde }}$</div>
+                  <div class="admin-bet-points">PTS: {{ greenPoints }}</div>
+                </div>
+              </div>
 <!-- 
       <div class="admin-bet-box green">
         <div class="admin-bet-title">{{ greenTeamName || 'Verde' }}</div>
