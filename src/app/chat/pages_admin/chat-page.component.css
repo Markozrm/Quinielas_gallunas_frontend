@@ -256,7 +256,7 @@
   background-color: gold;
 } 
 .apuestas-en-vivo {
-  background-color: #333; /* Fondo oscuro */
+  background: linear-gradient(135deg, #b4952a 0%, #e2c97a 100%); /* Fondo oscuro */
   padding: 10px;
   border-radius: 5%;
   color: white;
