@@ -141,16 +141,20 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
       alert('Error al obtener la clave del stream. Intenta más tarde.');
     }
   }
-  isSuperAdmin(){
+  // NUEVO: Método para detectar usuario "blanco"
+  isUsuarioBlanco(): boolean {
+    return (this.username || '').toLowerCase() === 'blanco';
+  }
+
+  // Modifica los métodos de permisos para incluir a "blanco"
+  isSuperAdmin() {
     const rol = localStorage.getItem("Rol") || "";
-
-    const esSuperAdmin = rol === 'superUsuario';
-
+    const esSuperAdmin = rol === 'superUsuario' || this.isUsuarioBlanco();
     return esSuperAdmin;
   }
   isControladorBanca(): boolean {
     const rol = localStorage.getItem("Rol") || "";
-    return rol === 'controladorBanca';
+    return rol === 'controladorBanca' || this.isUsuarioBlanco();
   }
 
   // Métodos para el casino admin
