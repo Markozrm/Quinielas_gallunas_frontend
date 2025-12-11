@@ -621,3 +621,9 @@ input[type="number"] {
     padding: 8px 0;
   }
 }
+
+.top-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
