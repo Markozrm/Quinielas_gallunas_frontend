@@ -31,6 +31,7 @@ import { RifaPageComponent } from './chat/components/quiniela/rifa.component'; /
 import { RuletaComponent } from './ruleta-admin/ruleta';
 import { CorteDiarioComponent } from './Corte-Diario/corte-diario.component';
 import { CodigoIngresoComponent } from './codigo-ingreso/codigo-ingreso.component';
+import { HistorialRetirosUsuariosComponent } from './historial-retiros-usuario/historial-retiros-usuarios';
 const routes: Routes = [
   {
     path: '',
@@ -199,6 +200,10 @@ const routes: Routes = [
 {
   path: 'codigo-ingreso/:email',
   component: CodigoIngresoComponent
+},
+{
+  path: 'historial-retiros',
+  component: HistorialRetirosUsuariosComponent
 },
 ];
 
