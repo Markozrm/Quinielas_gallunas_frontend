@@ -67,7 +67,7 @@
     </div>
     <div class="saldo-info">
     <div class="saldo-valor">
-  <span class="nombre-usuario">{{ username }}</span>&nbsp;&nbsp; &nbsp;Saldo: {{ balance }}
+  <span class="nombre-usuario">{{ username }}</span>&nbsp;&nbsp; &nbsp;Saldo: {{ balance | number:'1.0-0' }}
 </div>
     </div>
     <div class="match-info">
