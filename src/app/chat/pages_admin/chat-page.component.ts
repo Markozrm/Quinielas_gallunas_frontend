@@ -20,6 +20,7 @@ import { ChooseWinnerModalComponent } from '../components/choose-winner/choose-w
 import { ChatModalComponent } from '../components/chat-modal/chat-modal.component';
 import { NotificacionGlobalService } from '../notification.service';
 import { TablaPuntosComponent } from 'src/app/tabla-puntos/tabla-puntos.component';
+import { map } from 'rxjs/operators'; // Ya lo tienes
 @Component({
   selector: 'app-chat-page',
   templateUrl: './chat-page.component.html',
@@ -32,7 +33,7 @@ import { TablaPuntosComponent } from 'src/app/tabla-puntos/tabla-puntos.componen
 export class ChatAdminPageComponent implements OnInit, OnDestroy {
 
   public textButton = 'Cerrar Apuestas';
-  public chat$ = this.apuestaService.chat$;
+  public chat$: any; // Cambia la inicialización aquí
   selectedTeam: 'rojo' | 'verde' | 'empate' | null = null;
   apuesta: { rojo: string; verde: string; empate: string } = { rojo: '', verde: '', empate: '' };
   public scrollable: boolean = true;
@@ -433,6 +434,31 @@ export class ChatAdminPageComponent implements OnInit, OnDestroy {
         this.greenPoints = data.teamInfo.greenPoints;
       }
     });
+
+    // Procesar el stream de chat para agrupar las apuestas por estado
+    this.chat$ = this.apuestaService.chat$.pipe(
+      map((bets: any[]) => {
+        const betsAgrupadas = new Map<string, any>();
+
+        // Recorremos todas las apuestas que llegan del servicio
+        for (const bet of bets) {
+          // Creamos una clave única por usuario, ronda y estado ('cazada' o 'cazando')
+          const key = `${bet.user.name}-${bet.ronda}-${bet.estado}`;
+
+          if (betsAgrupadas.has(key)) {
+            // Si ya existe una entrada para este usuario, ronda y estado, sumamos la cantidad
+            const existingBet = betsAgrupadas.get(key);
+            existingBet.cantidad += bet.cantidad;
+          } else {
+            // Si no existe, creamos una nueva entrada
+            betsAgrupadas.set(key, { ...bet });
+          }
+        }
+
+        // Convertimos el mapa de nuevo a un array para mostrarlo en la tabla
+        return Array.from(betsAgrupadas.values());
+      })
+    );
   }
 
   ngOnDestroy() {
