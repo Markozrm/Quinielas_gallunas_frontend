@@ -140,6 +140,10 @@ irAdmin() {
     this.router.navigate([`/historial-usuario/${this.nombreUsuario}`]);
   }
 
+  verHistorialRetiros() {
+  this.router.navigate(['/historial-retiros']);
+}
+
   verHistorialPeleas(): void {
     // Navegar a la página de historial de peleas
     this.router.navigate(['/Ver-apuestas']);

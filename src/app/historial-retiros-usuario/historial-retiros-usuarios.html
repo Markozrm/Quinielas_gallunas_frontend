@@ -1,0 +1,49 @@
+<div class="historial-retiros-container">
+  <button class="btn-volver" (click)="volverAlPerfil()">
+    Volver
+  </button>
+  <h2>Mi Historial de Retiros</h2>
+
+  <div class="resumen-saldos">
+    <div class="saldo-aprobado">
+      <span class="resumen-label">Aprobados:</span>
+      <span class="resumen-monto">${{ getTotalAprobado() }}</span>
+    </div>
+    <div class="saldo-rechazado">
+      <span class="resumen-label">Rechazados:</span>
+      <span class="resumen-monto">${{ getTotalRechazado() }}</span>
+    </div>
+  </div>
+
+  <div class="tabla-retiros-wrapper">
+    <table class="tabla-retiros" *ngIf="retiros && retiros.length > 0; else sinRetiros">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Cantidad</th>
+          <th>Banco</th>
+          <th>Titular</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let retiro of retiros">
+          <td>{{ retiro.fechaSolicitud | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td><span class="monto">${{ retiro.cantidad }}</span></td>
+          <td>{{ retiro.banco }}</td>
+          <td>{{ retiro.nombreTitular }}</td>
+          <td>
+            <span [ngClass]="{
+              'estado-pendiente': retiro.estado === 'pendiente',
+              'estado-aprobado': retiro.estado === 'aprobado',
+              'estado-rechazado': retiro.estado === 'rechazado'
+            }">{{ retiro.estado | titlecase }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <ng-template #sinRetiros>
+    <div class="no-retiros">No tienes retiros registrados.</div>
+  </ng-template>
+</div>
