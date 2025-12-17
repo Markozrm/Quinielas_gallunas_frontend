@@ -146,13 +146,18 @@
     
     <div class="apuestas-en-vivo">
       <h3>Tabla de apuestas</h3>
+      <!-- Solo el color tiene clase, el estado NO -->
       <ul>
         <li *ngFor="let chat of chat$ | async" class="chat-message">
           <span>{{ chat.user.name }}</span>
           <span>{{ chat.cantidad }}</span>
-          <span *ngIf="esVerde(chat.verde)">VERDE</span>
-          <span *ngIf="!esVerde(chat.verde)">ROJO</span>
-          <span class="estado-jugando">{{chat.estado}}</span>
+          <span [ngClass]="esVerde(chat.verde) ? 'verde-text' : 'rojo-text'">
+            {{ esVerde(chat.verde) ? 'VERDE' : 'ROJO' }}
+          </span>
+          <span class="estado-jugando" 
+                [ngClass]="(chat.estado === 'cazada' || chat.estado === 'devuelta' || chat.estado === 'pagada') ? 'blanco-texto' : ''">
+            {{chat.estado}}
+          </span>
           <span>Ronda: {{chat.ronda}}</span>
         </li>
       </ul>
