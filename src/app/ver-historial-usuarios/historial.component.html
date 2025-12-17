@@ -53,6 +53,7 @@
     <table class="historial-table">
       <thead>
         <tr>
+          <th>FECHA</th>
           <th>CONCEPTO</th>
           <th>CANTIDAD</th>
           <th>COLOR</th>
@@ -62,6 +63,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of paginatedItems">
+          <td>{{ item.fecha ? (item.fecha | date:'dd/MM/yyyy') : '' }}</td>
           <td>{{item.concepto}}</td>
           <td>{{ formatNumberNoPlus(item.cantidad) }}</td>
           <td [ngClass]="getColorClass(item.color)">{{item.color}}</td>
