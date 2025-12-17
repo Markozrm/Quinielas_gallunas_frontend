@@ -627,3 +627,18 @@ input[type="number"] {
   justify-content: space-between;
   width: 100%;
 }
+
+/* Agrega esto a tu archivo de estilos */
+.rojo-text {
+  color: #ff0400;
+  font-weight: bold;
+}
+.verde-text {
+  color: #00e60b;
+  font-weight: bold;
+}
+
+/* Agrega esto a tu archivo de estilos correspondiente */
+.blanco-texto {
+  color: #fff;
+}
