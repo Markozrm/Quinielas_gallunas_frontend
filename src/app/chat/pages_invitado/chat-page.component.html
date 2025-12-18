@@ -45,10 +45,12 @@
         
          <!-- Tabla de Puntos: botón justo debajo de PELEA (vista normal, sin edición) -->
       </div>
-      <!--Boton para CASINO-
-      <div class="header-casino">
-  <button class="casino-button" (click)="abrirCasino()">CASINO</button>
-</div>-->
+
+ <div class="ir-stream-container">
+  <button class="ir-stream-btn" (click)="volver()">
+    IR STREAM
+  </button>
+</div>
 
       <div [ngClass]="{'header-right-cerradas': estadoActualApuesta === 'APUESTAS CERRADAS', 'header-right': estadoActualApuesta === 'APUESTAS ABIERTAS'}">
         <span [ngClass]="{'apuestas-status-cerradas': estadoActualApuesta === 'APUESTAS CERRADAS', 'apuestas-status': estadoActualApuesta === 'APUESTAS ABIERTAS'}">
@@ -67,7 +69,7 @@
     </div>
     <div class="saldo-info">
     <div class="saldo-valor">
-  <span class="nombre-usuario">{{ username }}</span>&nbsp;&nbsp; &nbsp;Saldo: {{ balance | number:'1.0-0' }}
+  <span class="nombre-usuario">{{ username }}</span>&nbsp;&nbsp; &nbsp;Saldo: {{ balance }}
 </div>
     </div>
     <div class="match-info">
