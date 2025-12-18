@@ -7,7 +7,7 @@ import { QuinielaService } from 'src/app/services/quiniela.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http'; // AGREGAR ESTA LÍNEA
-import { Subscription } from 'rxjs';
+import { Subscription, firstValueFrom } from 'rxjs';
 import { take, switchMap, filter } from 'rxjs/operators';
 import { MenuComponent } from '../../menu/menu.component';
 import { UsersChatComponent } from '../components/users-chat/users-chat.component';
@@ -1531,7 +1531,38 @@ type NotificacionRuleta = {
   ngAfterViewInit(): void {
     // Si necesitas lógica aquí, agrégala. Si no, déjalo vacío.
   }
-  
+  async volver(): Promise<void> {
+  const rol = localStorage.getItem('Rol');
+  const puerto = '443';
+  console.log('VOLVER DEBUG -> Rol localStorage:', rol);
+
+  try {
+    console.log('Solicitando clave más reciente al backend...');
+    const res: any = await firstValueFrom(this.usersService.getClaveStream('1'));
+    const nuevaClave = res?.stream?.clave;
+    console.log('Respuesta getClaveStream:', res);
+
+    if (!nuevaClave) {
+      alert('No se encontró la clave del stream activo.');
+      return;
+    }
+
+    localStorage.setItem('streamClave', nuevaClave);
+    console.log('streamClave actualizada en localStorage:', nuevaClave);
+
+    const target = (rol === 'superUsuario' || rol === 'administrador')
+      ? `/live-admin/${nuevaClave}/${puerto}`
+      : `/live-inv/${nuevaClave}/${puerto}`;
+
+    if (window.location.pathname !== target) {
+      await this.router.navigateByUrl(target);
+    }
+  } catch (err: any) {
+    console.error('Error obteniendo clave del stream:', err);
+    alert('No se pudo obtener la clave del stream. Intenta más tarde.');
+  }
+}
+
 } // <--- Aquí termina la clase
 
 interface UserType {

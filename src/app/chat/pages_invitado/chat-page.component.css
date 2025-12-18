@@ -1896,3 +1896,50 @@ body, .main, .apuesta-container, .chat-container {
   color: #000;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
+
+.ir-stream-container {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0 16px 0;
+}
+
+.ir-stream-btn {
+  background: linear-gradient(90deg, #000000 0%, #000000 100%);
+  color: #fff;
+  border: none;
+  border-radius: 18px;
+  font-size: 1rem;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  letter-spacing: 1px;
+}
+.ir-stream-btn:hover {
+  background: linear-gradient(90deg, #000000 0%, #000000 100%);
+  transform: translateY(-1px) scale(1.03);
+}
+/* ...existing code... */
+
+@media (max-width: 600px) {
+  .ir-stream-btn {
+    font-size: 0.85rem;
+    padding: 8px 18px;
+    border-radius: 12px;
+    min-width: 90px;
+    max-width: 100%;
+  }
+  .ir-stream-container {
+    margin: 8px 0 12px 0;
+  }
+}
+/* ...existing code... */
+
+.ir-stream-container {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0 16px 0;
+  width: 100%;
+}
+
+/* Ya tienes la media query para móviles, así que no necesitas cambiarla */
