@@ -93,12 +93,18 @@ export class VerHistorialUsuariosComponent implements OnInit {
       return;
     }
 
-    // Corte a partir de hoy a las 6:00 AM
-    const hoy = new Date();
-    hoy.setHours(6, 0, 0, 0);
-    const historialFiltrado = this.historialCompletoParaResumen.filter(item => new Date(item.fecha) >= hoy);
+    const fechaLimite = new Date('2025-12-18T06:00:00');
 
-    // Agrupa todos los movimientos por día
+    const historialFiltrado = this.historialCompletoParaResumen.filter(item => {
+      const itemDate = new Date(item.fecha);
+      return itemDate >= fechaLimite;
+    });
+
+    if (historialFiltrado.length === 0) {
+      this.dailySummary = [];
+      return;
+    }
+
     const groupedByDay: { [key: string]: any[] } = {};
     historialFiltrado.forEach(item => {
       const itemDate = new Date(item.fecha);
@@ -110,40 +116,65 @@ export class VerHistorialUsuariosComponent implements OnInit {
       groupedByDay[dayKey].push(item);
     });
 
-    // Ordena los días
     const sortedDays = Object.keys(groupedByDay).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
 
-    // Filtro para movimientos válidos (NO manuales)
-    const movimientosValidos = (item: any) =>
-      !(item.originalTipo === 'modificacion_admin' || item.originalTipo === 'restar_saldo');
+    const esMovimientoManual = (item: any) =>
+      item.tipo === 'modificacion_admin' || 
+      item.originalTipo === 'modificacion_admin';
 
-    // Usa el saldo actual como base para el saldo inicial
+    const esRetiro = (item: any) =>
+      (item.tipo === 'restar_saldo' || item.originalTipo === 'restar_saldo') &&
+      !esMovimientoManual(item);
+
+    // Calcular saldo inicial SIN modificaciones manuales
     let saldoInicialDelDia = this.resumen.saldoActual || 0;
-    if (sortedDays.length > 0) {
-      const primerDia = sortedDays[0];
-      const movimientosPrimerDia = groupedByDay[primerDia];
-      const sumaMovimientosPrimerDia = movimientosPrimerDia.reduce((acc, item) => acc + (item.cantidadFinal || 0), 0);
-      saldoInicialDelDia = saldoInicialDelDia - sumaMovimientosPrimerDia;
+    
+    // Restar TODAS las transacciones (apuestas, recargas, retiros) EXCEPTO modificaciones manuales
+    for (let i = sortedDays.length - 1; i >= 0; i--) {
+      const dayKey = sortedDays[i];
+      const movimientosDia = groupedByDay[dayKey];
+      const cambioNetoDia = movimientosDia
+        .filter(item => !esMovimientoManual(item) && !esRetiro(item))
+        .reduce((acc, item) => acc + (item.cantidadFinal || 0), 0);
+      const retirosDelDia = movimientosDia
+        .filter(item => esRetiro(item))
+        .reduce((acc, item) => acc + Math.abs(item.cantidadFinal || 0), 0);
+      
+      saldoInicialDelDia -= (cambioNetoDia - retirosDelDia);
     }
 
     const summary: any[] = [];
     for (const dayKey of sortedDays) {
       const dayTransactions = groupedByDay[dayKey];
 
-      // Solo movimientos válidos para recargas/retiros/ganadas/perdidas
-      const transaccionesValidas = dayTransactions.filter(movimientosValidos);
+      const transaccionesValidas = dayTransactions.filter(
+        item => !esMovimientoManual(item) && !esRetiro(item) && item.tipo !== 'recarga'
+      );
 
-      const cambioNetoDelDia = dayTransactions.reduce((acc, item) => acc + (item.cantidadFinal || 0), 0);
+      const cambioNetoDelDia = dayTransactions
+        .filter(item => !esMovimientoManual(item) && !esRetiro(item))
+        .reduce((acc, item) => acc + (item.cantidadFinal || 0), 0);
 
-      const totalGanado = transaccionesValidas.filter(item => item.cantidadFinal > 0 && item.tipoMovimiento !== 'aumento').reduce((acc, item) => acc + item.cantidadFinal, 0);
-      const totalPerdido = transaccionesValidas.filter(item => item.cantidadFinal < 0 && item.tipoMovimiento !== 'descuento').reduce((acc, item) => acc + Math.abs(item.cantidadFinal), 0);
-      const recargas = transaccionesValidas.filter(item => item.tipoMovimiento === 'aumento').reduce((acc, item) => acc + item.cantidad, 0);
-      const retiros = transaccionesValidas.filter(item => item.tipoMovimiento === 'descuento').reduce((acc, item) => acc + Math.abs(item.cantidad), 0);
+      const totalGanado = transaccionesValidas
+        .filter(item => item.cantidadFinal > 0)
+        .reduce((acc, item) => acc + item.cantidadFinal, 0);
+      
+      const totalPerdido = transaccionesValidas
+        .filter(item => item.cantidadFinal < 0)
+        .reduce((acc, item) => acc + Math.abs(item.cantidadFinal), 0);
+      
+      const recargas = dayTransactions
+        .filter(item => item.tipo === 'recarga' && !esMovimientoManual(item))
+        .reduce((acc, item) => acc + Math.abs(item.cantidad || item.cantidadFinal), 0);
+      
+      const retiros = dayTransactions
+        .filter(item => esRetiro(item))
+        .reduce((acc, item) => acc + Math.abs(item.cantidad || item.cantidadFinal), 0);
 
-      const saldoFinal = saldoInicialDelDia + cambioNetoDelDia;
+      const saldoFinal = saldoInicialDelDia + cambioNetoDelDia - retiros;
 
       summary.push({
-        fecha: new Date(dayKey),
+        fecha: new Date(dayKey + 'T06:00:00'),
         saldoInicial: saldoInicialDelDia,
         saldoFinal,
         totalGanado,
@@ -184,22 +215,42 @@ export class VerHistorialUsuariosComponent implements OnInit {
         if (response?.success) {
           historialApuestas = response.historial || [];
           resumenApuestas = response.resumen || {};
-
         }
         this.usersService.getUserSaldoRecords(this.username).subscribe({
           next: (saldoResponse) => {
             if (Array.isArray(saldoResponse)) {
-              historialSaldos = saldoResponse.map((item: any) => ({
-                fecha: item.fecha,
-                concepto: item.concepto,
-                cantidad: Math.abs(item.cantidad ?? item.saldo),
-                cantidadFinal: item.saldo,
-                tipo: item.tipo, // <-- AGREGA ESTO
-                originalTipo: item.tipo, // <-- AGREGA ESTO
-                tipoMovimiento: item.tipo === 'retiro_aprobado' || item.saldo < 0 ? 'descuento' : 'aumento',
-                color: '',
-                resultado: ''
-              }));
+              historialSaldos = saldoResponse.map((item: any) => {
+                // Determinar el valor correcto de cantidadFinal según el tipo
+                let cantidadFinal: number;
+                const cantidadBase = Math.abs(item.cantidad ?? item.saldo ?? 0);
+                
+                if (item.tipo === 'recarga') {
+                  // Recargas siempre suman
+                  cantidadFinal = cantidadBase;
+                } else if (item.tipo === 'restar_saldo' || item.tipo === 'retiro_aprobado') {
+                  // Retiros siempre restan
+                  cantidadFinal = -cantidadBase;
+                } else if (item.tipo === 'modificacion_admin') {
+                  // Modificaciones manuales: respetar el signo original del backend
+                  cantidadFinal = item.saldo;
+                } else {
+                  // Fallback: usar el signo original
+                  cantidadFinal = item.saldo ?? item.cantidad ?? 0;
+                }
+                
+                return {
+                  fecha: item.fecha,
+                  concepto: item.concepto || '',
+                  cantidad: cantidadBase,
+                  cantidadFinal: cantidadFinal,
+                  tipo: item.tipo,
+                  originalTipo: item.tipo,
+                  tipoMovimiento: cantidadFinal < 0 ? 'descuento' : 'aumento',
+                  color: '',
+                  resultado: '',
+                  sala: item.sala || ''
+                };
+              });
             }
             const historialUnido = [...historialApuestas, ...historialSaldos].sort((a, b) => {
               return new Date(b.fecha).getTime() - new Date(a.fecha).getTime();
@@ -212,7 +263,7 @@ export class VerHistorialUsuariosComponent implements OnInit {
           },
           error: () => {
             this.historial = historialApuestas;
-            this.historialCompletoParaResumen = [...historialApuestas]; // <-- AGREGA ESTA LÍNEA
+            this.historialCompletoParaResumen = [...historialApuestas];
             this.resumen = resumenApuestas;
             this.filteredHistorial = [...this.historial];
             this.loading = false;
