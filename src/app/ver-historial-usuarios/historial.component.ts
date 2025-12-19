@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from '../services/users.service';
 
 @Component({
@@ -12,8 +12,12 @@ import { UsersService } from '../services/users.service';
   styleUrls: ['./historial.component.css']
 })
 export class VerHistorialUsuariosComponent implements OnInit {
+    loadRetirosPorUsuario(): void {
+      // Implementación vacía para evitar error de compilación. Puedes agregar la lógica real si es necesario.
+    }
   username: string = '';
   historial: any[] = [];
+  historialCompletoParaResumen: any[] = [];
   filteredHistorial: any[] = [];
   loading: boolean = true;
   error: string | null = null;
@@ -30,22 +34,144 @@ export class VerHistorialUsuariosComponent implements OnInit {
 
   isSuperUser: boolean = false;
 
+  retirosAceptados: number = 0;
+  retirosRechazados: number = 0;
+  montoTotalRetirado: number = 0;
+  montoTotalRechazado: number = 0;
+
+  // --- INICIO: Propiedades para el Resumen Diario ---
+  showDailySummaryModal: boolean = false;
+  dailySummary: any[] = [];
+  paginatedDailySummary: any[] = [];
+  currentDailyPage: number = 1;
+  dailyItemsPerPage: number = 5;
+  // --- FIN: Propiedades para el Resumen Diario ---
+
   constructor(
     private route: ActivatedRoute,
     private usersService: UsersService,
-    private location: Location
+    private location: Location,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     const rawRol = localStorage.getItem('rol');
     const rol = (rawRol || '').trim().toLowerCase();
     this.isSuperUser = rol === 'superusuario';
-    console.log('Valor en localStorage rol:', rawRol, '| ROL normalizado:', rol, '| isSuperUser:', this.isSuperUser);
     this.route.params.subscribe(params => {
       this.username = params['username'];
       this.loadHistory();
+      this.loadRetirosPorUsuario();
+    });
+    this.route.queryParams.subscribe(params => {
+      this.currentPage = +params['page'] || 1;
     });
   }
+
+  // --- INICIO: Métodos para el Resumen Diario ---
+
+  toggleDailySummaryModal(show: boolean): void {
+    this.showDailySummaryModal = show;
+    if (show) {
+      this.calculateDailySummary();
+      this.pageChangedDaily(1);
+    }
+  }
+
+  getCustomDay(date: Date): Date {
+    const d = new Date(date);
+    if (d.getHours() < 6) {
+      d.setDate(d.getDate() - 1);
+    }
+    d.setHours(6, 0, 0, 0);
+    return d;
+  }
+
+  calculateDailySummary(): void {
+    if (!this.historialCompletoParaResumen || this.historialCompletoParaResumen.length === 0) {
+      this.dailySummary = [];
+      return;
+    }
+
+    // Corte a partir de hoy a las 6:00 AM
+    const hoy = new Date();
+    hoy.setHours(6, 0, 0, 0);
+    const historialFiltrado = this.historialCompletoParaResumen.filter(item => new Date(item.fecha) >= hoy);
+
+    // Agrupa todos los movimientos por día
+    const groupedByDay: { [key: string]: any[] } = {};
+    historialFiltrado.forEach(item => {
+      const itemDate = new Date(item.fecha);
+      const customDay = this.getCustomDay(itemDate);
+      const dayKey = customDay.toISOString().split('T')[0];
+      if (!groupedByDay[dayKey]) {
+        groupedByDay[dayKey] = [];
+      }
+      groupedByDay[dayKey].push(item);
+    });
+
+    // Ordena los días
+    const sortedDays = Object.keys(groupedByDay).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+
+    // Filtro para movimientos válidos (NO manuales)
+    const movimientosValidos = (item: any) =>
+      !(item.originalTipo === 'modificacion_admin' || item.originalTipo === 'restar_saldo');
+
+    // Usa el saldo actual como base para el saldo inicial
+    let saldoInicialDelDia = this.resumen.saldoActual || 0;
+    if (sortedDays.length > 0) {
+      const primerDia = sortedDays[0];
+      const movimientosPrimerDia = groupedByDay[primerDia];
+      const sumaMovimientosPrimerDia = movimientosPrimerDia.reduce((acc, item) => acc + (item.cantidadFinal || 0), 0);
+      saldoInicialDelDia = saldoInicialDelDia - sumaMovimientosPrimerDia;
+    }
+
+    const summary: any[] = [];
+    for (const dayKey of sortedDays) {
+      const dayTransactions = groupedByDay[dayKey];
+
+      // Solo movimientos válidos para recargas/retiros/ganadas/perdidas
+      const transaccionesValidas = dayTransactions.filter(movimientosValidos);
+
+      const cambioNetoDelDia = dayTransactions.reduce((acc, item) => acc + (item.cantidadFinal || 0), 0);
+
+      const totalGanado = transaccionesValidas.filter(item => item.cantidadFinal > 0 && item.tipoMovimiento !== 'aumento').reduce((acc, item) => acc + item.cantidadFinal, 0);
+      const totalPerdido = transaccionesValidas.filter(item => item.cantidadFinal < 0 && item.tipoMovimiento !== 'descuento').reduce((acc, item) => acc + Math.abs(item.cantidadFinal), 0);
+      const recargas = transaccionesValidas.filter(item => item.tipoMovimiento === 'aumento').reduce((acc, item) => acc + item.cantidad, 0);
+      const retiros = transaccionesValidas.filter(item => item.tipoMovimiento === 'descuento').reduce((acc, item) => acc + Math.abs(item.cantidad), 0);
+
+      const saldoFinal = saldoInicialDelDia + cambioNetoDelDia;
+
+      summary.push({
+        fecha: new Date(dayKey),
+        saldoInicial: saldoInicialDelDia,
+        saldoFinal,
+        totalGanado,
+        totalPerdido,
+        recargas,
+        retiros
+      });
+
+      saldoInicialDelDia = saldoFinal;
+    }
+
+    this.dailySummary = summary.reverse();
+  }
+
+  get totalDailyPages(): number {
+    return Math.ceil(this.dailySummary.length / this.dailyItemsPerPage);
+  }
+
+  pageChangedDaily(page: number): void {
+    if (page < 1 || page > this.totalDailyPages) {
+      return;
+    }
+    this.currentDailyPage = page;
+    const startIndex = (page - 1) * this.dailyItemsPerPage;
+    this.paginatedDailySummary = this.dailySummary.slice(startIndex, startIndex + this.dailyItemsPerPage);
+  }
+
+  // --- FIN: Métodos para el Resumen Diario ---
 
   loadHistory(): void {
     this.loading = true;
@@ -66,9 +192,11 @@ export class VerHistorialUsuariosComponent implements OnInit {
               historialSaldos = saldoResponse.map((item: any) => ({
                 fecha: item.fecha,
                 concepto: item.concepto,
-                cantidad: item.saldo,
-                cantidadFinal: item.saldo, // El signo se conserva
-                tipoMovimiento: item.saldo < 0 ? 'descuento' : 'aumento', // Opcional, para estilos o textos
+                cantidad: Math.abs(item.cantidad ?? item.saldo),
+                cantidadFinal: item.saldo,
+                tipo: item.tipo, // <-- AGREGA ESTO
+                originalTipo: item.tipo, // <-- AGREGA ESTO
+                tipoMovimiento: item.tipo === 'retiro_aprobado' || item.saldo < 0 ? 'descuento' : 'aumento',
                 color: '',
                 resultado: ''
               }));
@@ -77,12 +205,14 @@ export class VerHistorialUsuariosComponent implements OnInit {
               return new Date(b.fecha).getTime() - new Date(a.fecha).getTime();
             });
             this.historial = historialUnido;
+            this.historialCompletoParaResumen = [...historialUnido];
             this.resumen = resumenApuestas;
             this.filteredHistorial = [...this.historial];
             this.loading = false;
           },
           error: () => {
             this.historial = historialApuestas;
+            this.historialCompletoParaResumen = [...historialApuestas]; // <-- AGREGA ESTA LÍNEA
             this.resumen = resumenApuestas;
             this.filteredHistorial = [...this.historial];
             this.loading = false;

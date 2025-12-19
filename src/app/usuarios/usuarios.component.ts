@@ -313,11 +313,6 @@ export class UsuariosComponent implements OnInit {
 
     if (this.selectedUser && this.saldoAmount > 0) {
       const concepto = this.conceptoSaldo?.trim() || '';
-      // Elimina la validación de claveStream si no es obligatoria
-      // if (!claveStream) { 
-      //   console.log('Clave stream vacía, no se puede continuar');
-      //   return; 
-      // }
       this.userService.updateSaldo(
         this.selectedUser.username,
         this.saldoAmount,
@@ -327,7 +322,8 @@ export class UsuariosComponent implements OnInit {
       )
       .then(async (result) => {
         console.log('Resultado updateSaldo:', result);
-        if (this.mostrarEnHistorialRecibo) {
+        // Solo crea el recibo manual si mostrarEnHistorialRecibo está activo Y concepto no está vacío
+        if (this.mostrarEnHistorialRecibo && concepto) {
           console.log('Creando recibo manual...');
           await this.recipeService.createManualRecibo({
             username: this.selectedUser.username,
@@ -368,14 +364,20 @@ export class UsuariosComponent implements OnInit {
         alert("El usuario no tiene suficiente saldo");
         return;
       }
-      if (!this.conceptoSaldo.trim()) {
-        console.log('Concepto vacío');
-        alert('Debes ingresar un concepto para la modificación de saldo.');
-        return;
-      }
-      this.userService.restarSaldo(this.selectedUser.username, this.saldoAmount, this.conceptoSaldo)
-        .then((result) => {
-          console.log('Resultado restarSaldo:', result);
+      const concepto = this.conceptoSaldo?.trim() || '';
+      this.userService.restarSaldo(this.selectedUser.username, this.saldoAmount, concepto)
+        .then(async (result) => {
+          // Solo crea el recibo manual si mostrarEnHistorialRecibo está activo Y concepto no está vacío
+          if (this.mostrarEnHistorialRecibo && concepto) {
+            await this.recipeService.createManualRecibo({
+              username: this.selectedUser.username,
+              monto: -this.saldoAmount,
+              banco: 'Manual',
+              estado: 'aprobado',
+              fecha: new Date(),
+              concepto: concepto || 'Modificación manual',
+            }).toPromise();
+          }
           alert(`Saldo actualizado. Nuevo saldo: ${result.user.saldo}`);
           this.userService.getUsers().subscribe(users => {
             this.users = users;

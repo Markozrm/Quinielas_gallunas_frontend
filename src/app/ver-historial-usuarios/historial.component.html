@@ -7,7 +7,12 @@
       <span class="balance">{{formatNumberNoPlus(resumen.saldoActual || 0)}}</span>
     </div>
   </div>
-
+  <!-- Botón para abrir el resumen diario -->
+  <div class="text-center my-3">
+    <button (click)="toggleDailySummaryModal(true)" class="btn-resumen-diario">
+      Ver Resumen Diario
+    </button>
+  </div>
   <!-- Solo visible para superusuarios -->
   <div *ngIf="isSuperUser" class="superuser-ganancias">
     <label for="codigoStream">Código de Stream:</label>
@@ -85,18 +90,71 @@
             [disabled]="currentPage === 1">
       ‹ Anterior
     </button>
-    
+  
     <span class="page-info">{{currentPage}} / {{totalPages}}</span>
-    
+  
     <button class="pagination-btn" 
             (click)="pageChanged(currentPage + 1)"
             [disabled]="currentPage === totalPages">
       Siguiente ›
     </button>
-    
+  
     <button class="close-btn" 
             (click)="goBack()">
       ✕ Cerrar
     </button>
+  </div>
+  <!-- Modal de resumen diario -->
+  <div *ngIf="showDailySummaryModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Resumen Diario</h2>
+        <button (click)="toggleDailySummaryModal(false)" class="close-modal-btn">✕</button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="dailySummary.length === 0" class="no-results">
+          No hay datos para mostrar en el resumen.
+        </div>
+        <div *ngIf="dailySummary.length > 0" class="table-container">
+          <table class="historial-table">
+            <thead>
+              <tr>
+                <th>FECHA</th>
+                <th>SALDO INICIAL</th>
+                <th>GANADO</th>
+                <th>PERDIDO</th>
+                <th>RECARGAS</th>
+                <th>RETIROS</th>
+                <th>SALDO FINAL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let day of paginatedDailySummary">
+                <td>{{ day.fecha | date:'dd/MM/yyyy' }}</td>
+                <td>{{ formatNumberNoPlus(day.saldoInicial) }}</td>
+                <td class="positivo">{{ formatNumber(day.totalGanado) }}</td>
+                <td class="negativo">{{ formatPerdidas(day.totalPerdido) }}</td>
+                <td class="positivo">{{ formatNumber(day.recargas) }}</td>
+                <td class="negativo">{{ formatPerdidas(day.retiros) }}</td>
+                <td>{{ formatNumberNoPlus(day.saldoFinal) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div *ngIf="dailySummary.length > dailyItemsPerPage" class="pagination-controls">
+          <button class="pagination-btn" 
+                  (click)="pageChangedDaily(currentDailyPage - 1)"
+                  [disabled]="currentDailyPage === 1">
+            ‹ Anterior
+          </button>
+          <span class="page-info">{{currentDailyPage}} / {{totalDailyPages}}</span>
+          <button class="pagination-btn" 
+                  (click)="pageChangedDaily(currentDailyPage + 1)"
+                  [disabled]="currentDailyPage === totalDailyPages">
+            Siguiente ›
+          </button>
+      </div>
+    </div>
   </div>
 </div>
