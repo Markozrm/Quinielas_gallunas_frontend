@@ -1,29 +1,29 @@
 import { FormControl, FormGroup } from '@angular/forms';
 import { MenuComponent } from './../menu/menu.component';
-import { Component } from '@angular/core';
-import { Injectable,inject } from '@angular/core';
-import {UsersService} from '../services/users.service';
+import { Component, OnInit } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { UsersService } from '../services/users.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {Router,ActivatedRoute} from '@angular/router'
+import { Router, ActivatedRoute } from '@angular/router'
 import { filter } from 'rxjs/operators';
-import { Event,NavigationEnd } from '@angular/router';
+import { Event, NavigationEnd } from '@angular/router';
 import { Location } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-login',
-  standalone:true,
-  imports:[MenuComponent,ReactiveFormsModule,FormsModule],
+  standalone: true,
+  imports: [MenuComponent, ReactiveFormsModule, FormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
-  formulario : FormGroup;
+  formulario: FormGroup;
 
   previousUrl: string = '';
 
-  constructor(private route: ActivatedRoute,private router: Router,private location: Location){
+  constructor(private route: ActivatedRoute, private router: Router, private location: Location) {
     this.formulario = new FormGroup({
       username: new FormControl(),
       password: new FormControl()
@@ -33,15 +33,22 @@ export class LoginComponent {
   //router = inject(Router);
   userService = inject(UsersService);
 
+  ngOnInit(): void {
+    const token = localStorage.getItem('tokenLogin');
+    const rol = localStorage.getItem('Rol');
+    if (token && rol) {
+      // El usuario ya está logeado, redirigirlo
+      this.redirectToConfiguredStream();
+    }
+  }
 
-
-  async onSubmit(){
+  async onSubmit() {
     console.log("Inicio de sesion");
     const response = await this.userService.login(this.formulario.value);
-    if (response.error){
+    if (response.error) {
       alert(response.error);
     }
-    else{
+    else {
       this.onLoginSuccess(response);
     }
   }
@@ -96,21 +103,21 @@ export class LoginComponent {
     await this.router.navigate(['/mi-perfil']);
   }
 
-    esAdmin(): boolean {
-      const rol = localStorage.getItem("Rol") || "";
-  
-      const esSuperAdmin = rol === 'superUsuario' || rol === 'administrador';
-  
-      return esSuperAdmin;
-    }
-    Volver(){
-      this.location.back(); // Navegar a la última ruta visitada
-    }
-    Regitro(){
-      const userParam = this.route.snapshot.paramMap.get('sala');
-      const portParam = this.route.snapshot.paramMap.get('port');
-      this.router.navigate([`RegistroInvitado/${userParam || 'Live'}/${portParam}`]);
-    }
+  esAdmin(): boolean {
+    const rol = localStorage.getItem("Rol") || "";
+
+    const esSuperAdmin = rol === 'superUsuario' || rol === 'administrador';
+
+    return esSuperAdmin;
+  }
+  Volver() {
+    this.location.back(); // Navegar a la última ruta visitada
+  }
+  Regitro() {
+    const userParam = this.route.snapshot.paramMap.get('sala');
+    const portParam = this.route.snapshot.paramMap.get('port');
+    this.router.navigate([`RegistroInvitado/${userParam || 'Live'}/${portParam}`]);
+  }
 
 }
 
