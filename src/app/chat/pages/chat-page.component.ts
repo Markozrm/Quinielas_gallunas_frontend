@@ -78,6 +78,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
 
   public connectedUsers:any;
   isSidebarOpen = false;
+  isChatVisible = false; // Controla la visibilidad del chat
   username: string = localStorage.getItem('nombreUsuario') ?? '';
   userPhoto: string = this.getImage(this.username);
   isPopupOpen = false; // Estado para el pop-up
@@ -90,6 +91,10 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   userService = inject(UsersService);
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
+  toggleChat() {
+    this.isChatVisible = !this.isChatVisible;
   }
 
   closeSidebar() {
