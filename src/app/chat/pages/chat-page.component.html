@@ -38,10 +38,17 @@
       <span>{{ connectedUsers }}</span>
     </button>
     <button *ngIf="esAdmin()" (click)="toggleBooleanState()">{{textButton}}</button>
+
+    <!-- Botón flotante para abrir/cerrar el chat -->
+    <button class="chat-fab" (click)="toggleChat()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: white;">
+        <path d="M20 2H4c-1.103 0-2 .897-2 2v12c0 1.103.897 2 2 2h3v3.767L13.767 18H20c1.103 0 2-.897 2-2V4c0-1.103-.897-2-2-2zm-2 10H6v-2h12v2zm0-4H6V6h12v2z"></path>
+      </svg>
+    </button>
   </div>
 
  
-  <div *ngIf="!esInvitado()" class="chat-container">
+  <div *ngIf="isChatVisible" class="chat-container">
     <app-users-chat></app-users-chat>
     <div class="input-container">
       <app-users-type></app-users-type>
