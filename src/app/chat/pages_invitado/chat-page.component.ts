@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { apuestaService } from 'src/app/services/apuestas.service';
-import { ChatService } from '../../services/chat.service'; // VERIFICAR ESTA RUTA
+import { ChatService } from '../services/chat.service';
 import { UsersService } from 'src/app/services/users.service';
 import { QuinielaService } from 'src/app/services/quiniela.service';
 import { CommonModule } from '@angular/common';
@@ -541,18 +541,6 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
   //   localStorage.removeItem('imagenStreamUrl');
   // });
 
-  // POR ESTOS EVENTOS DE POLLING:
-  this.chatService.streamImage$.subscribe((payload: { imageUrl: string }) => {
-    console.log('[POLLING] Imagen recibida:', payload);
-    this.imagenStreamUrl = payload.imageUrl;
-    localStorage.setItem('imagenStreamUrl', payload.imageUrl);
-  });
-
-  this.chatService.streamImageRemoved$.subscribe(() => {
-    console.log('[POLLING] Imagen removida');
-    this.imagenStreamUrl = null;
-    localStorage.removeItem('imagenStreamUrl');
-  });
 
   // Al iniciar, recupera la imagen si existe
   const savedImage = localStorage.getItem('imagenStreamUrl');
@@ -560,56 +548,6 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
     this.imagenStreamUrl = savedImage;
   }
   
-  // AGREGAR: Polling para imagen overlay
-  this.iniciarPollingImagenOverlay();
-  this.chatService.socket?.on?.('stream_configured', (payload: any) => {
-    console.log('stream_configured recibido:', payload);
-    if (!payload?.clave) return;
-    // guarda la clave local en el navegador del invitado
-    localStorage.setItem('streamClave', payload.clave);
-    const target = `/live-inv/${payload.clave}/${payload.port || '443'}`;
-    if (window.location.pathname !== target) {
-      this.router.navigate([target]);
-    }
-  });
-}
-
-// NUEVO MÉTODO: Polling para imagen overlay
-private iniciarPollingImagenOverlay() {
-  // Determinar qué stream estamos viendo
-  let streamId = '1'; // Por defecto Stream 1
-  const currentUrl = window.location.href;
-  if (currentUrl.includes('442')) streamId = '2';
-  
-  // Polling cada 3 segundos para imagen overlay
-  setInterval(() => {
-    this.http.get<{hasImage: boolean, imageUrl: string}>(`http://localhost:444/api/streams/imagen-overlay/${streamId}`)
-      .subscribe({
-        next: (data) => {
-          if (data.hasImage && data.imageUrl) {
-            const nuevaImagenUrl = 'http://localhost:444' + data.imageUrl;
-            if (this.imagenStreamUrl !== nuevaImagenUrl) {
-              console.log('[POLLING] Nueva imagen overlay detectada:', data.imageUrl);
-              this.imagenStreamUrl = nuevaImagenUrl;
-              localStorage.setItem('imagenStreamUrl', this.imagenStreamUrl);
-            }
-          } else {
-            if (this.imagenStreamUrl !== null) {
-              console.log('[POLLING] Imagen overlay removida');
-              this.imagenStreamUrl = null;
-              localStorage.removeItem('imagenStreamUrl');
-            }
-          }
-        },
-        error: (error) => {
-          // Error significa que no hay imagen overlay, lo cual es normal
-          if (this.imagenStreamUrl !== null) {
-            this.imagenStreamUrl = null;
-            localStorage.removeItem('imagenStreamUrl');
-          }
-        }
-      });
-  }, 3000); // Cada 3 segundos
 }
 
   ngOnDestroy(): void {

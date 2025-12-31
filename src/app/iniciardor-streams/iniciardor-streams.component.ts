@@ -5,7 +5,7 @@ import { UsersService } from '../services/users.service';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ChatService } from '../services/chat.service'; // ← agrega import
+import { ChatService } from '../chat/services/chat.service';
 
 @Component({
   selector: 'app-iniciardor-streams',
