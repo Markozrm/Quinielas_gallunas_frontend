@@ -45,7 +45,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
       this.chatService.joinRoom(room, username);
 
       // Solicitar mensajes históricos al entrar a la sala
-      this.chatService.emitirGetMensajesHistorial(room);
+      this.chatService.socket.emit('get_mensajes_historial', { room });
     });
 
     // Suscríbete a users$ para el pop-up de usuarios conectados

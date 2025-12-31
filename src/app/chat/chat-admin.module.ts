@@ -18,6 +18,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         ChatAdminRoutingModule,
         UsersRoomsComponent,
         UsersChatComponent,
+        ChatAdminPageComponent,
         UsersTypeComponent,
         ChatModalComponent,
      

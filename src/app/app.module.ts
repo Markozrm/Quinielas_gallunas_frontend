@@ -9,12 +9,20 @@ import { environment } from 'src/environments/environment';
 import { CommonModule } from '@angular/common';
 import { ChangePasswordComponent } from './cambiar-contraseña/change-password.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { QuinielaModule } from './chat/quiniela.module';
 import { QuinielaService } from './services/quiniela.service';
 import { ChatService } from './chat/services/chat.service';
 import { RuletaComponent } from './ruleta-admin/ruleta';
 import { CodigoIngresoComponent } from './codigo-ingreso/codigo-ingreso.component';
 
-const config: SocketIoConfig = { url: `${environment.apiUrl_chat}:${environment.chat_PORT}`, options: {} };
+const apiUrl = environment.apiUrl;
+const Port = environment.PORT;
+const config: SocketIoConfig = 
+{ url:`${apiUrl}:${Port}`, options: {} };
+//{ url:'http://localhost:81' , options: {} };
+//{ url:`${apiUrl}:${Port}`, options: {} };
+
+
 
 @NgModule({
   declarations: [AppComponent,ChangePasswordComponent, RuletaComponent],
@@ -26,6 +34,7 @@ const config: SocketIoConfig = { url: `${environment.apiUrl_chat}:${environment.
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    QuinielaModule,
     SocketIoModule.forRoot(config),
     CodigoIngresoComponent
   ],
