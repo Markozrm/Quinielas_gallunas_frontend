@@ -13,17 +13,22 @@ export const environment = {
   quiniela_PORT: '3449',
   apiUrl_ruleta: 'https://cheapserverhub.com',
   ruleta_PORT: '3444',
+  apiUrl_chat: 'https://cheapserverhub.com',
+  chat_PORT: '3010',
+  
 
   // CONFIGURACIÓN LOCAL (DESCOMENTA si quieres usar local en este mismo archivo)
-  // production: false,
-  // apiUrl: 'http://localhost',
-  // PORT: '3000',
-  // apiUrl_apuestas: 'http://localhost',
-  // apuesta_PORT: '3448',
-  // apiUrl_quiniela: 'http://localhost',
-  // quiniela_PORT: '3449',
-  // apiUrl_ruleta: 'http://localhost',
-  // ruleta_PORT: '3444'
+  //production: false,
+  //apiUrl: 'http://localhost',
+  //PORT: '444',
+  //apiUrl_apuestas: 'http://localhost',
+  //apuesta_PORT: '3448',
+  //apiUrl_quiniela: 'http://localhost',
+  //quiniela_PORT: '3449',
+  //apiUrl_ruleta: 'http://localhost',
+  //ruleta_PORT: '3444',
+  //apiUrl_chat: 'http://localhost',
+  //chat_PORT: '3010'
 };
 
 /*

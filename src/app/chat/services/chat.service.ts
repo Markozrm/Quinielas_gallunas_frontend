@@ -5,11 +5,11 @@ import {HttpClient} from  '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
+
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
-  public socket: Socket;
   private httpClient = inject(HttpClient);
   private apiUrl = environment.apiUrl;
   private Port = environment.PORT;
@@ -143,7 +143,7 @@ clearUnreadCount(username: string) {
   const currentTabs = this.activeChatTabsSubject.value;
   const updatedTabs = currentTabs.map(tab => {
     if (tab.user === username) {
-      return {...tab, unread: 0};
+      return { ...tab, unread: 0 };
     }
     return tab;
   });
@@ -166,12 +166,44 @@ clearUnreadCount(username: string) {
 
 
 
-  constructor(socket: Socket) {
+  constructor(private socket: Socket) {
+  console.log('[ChatService] Intentando conectar a:', environment.apiUrl_chat);
+
+  this.socket.on('connect', () => {
+    console.log('[ChatService] Socket conectado correctamente a', environment.apiUrl_chat);
+  });
+
+  this.socket.on('connect_error', (err: any) => {
+    console.error('[ChatService] Error de conexión al socket:', err);
+  });
+
+  this.socket.on('disconnect', (reason: any) => {
+    console.warn('[ChatService] Socket desconectado. Razón:', reason);
+  });
+
+  this.socket.ioSocket.on('reconnect_attempt', (attempt: number) => {
+    console.warn('[ChatService] Intentando reconectar... Intento:', attempt);
+  });
+
+  this.socket.ioSocket.on('reconnect', (attempt: number) => {
+    console.log('[ChatService] Reconectado exitosamente. Intento:', attempt);
+  });
+
+  // Log para todos los eventos recibidos
+  const originalOn = this.socket.on;
+  this.socket.on = (event: string, callback: (...args: any[]) => void) => {
+    const wrappedCallback = (...args: any[]) => {
+      console.log(`[ChatService][Socket On] Evento recibido: ${event}`, ...args);
+      callback.apply(this, args);
+    };
+    return originalOn.call(this.socket, event, wrappedCallback);
+  };
+
     // Log global para todos los eventos recibidos por el socket
-    const originalEmit = socket.emit;
+    const originalEmit2 = socket.emit;
     socket.emit = function(...args) {
       console.log('[Socket Emit]', ...args);
-      return originalEmit.apply(socket, args);
+      return originalEmit2.apply(socket, args);
     };
     // Procesar mensajeSala como historial (compatibilidad)
     socket.fromEvent<any[]>('mensajeSala').subscribe((data) => {
@@ -210,7 +242,7 @@ clearUnreadCount(username: string) {
       }
     });
     this.socket = socket;
-    this.baseUrl = `${this.apiUrl}:444/api/mensajes`;
+    this.baseUrl = `${this.apiUrl}/api/mensajes`;
 
     // Suscribirse a mensajes históricos enviados por el backend
     socket.fromEvent<any[]>('mensajes_historial').subscribe((data) => {
@@ -470,6 +502,14 @@ clearUnreadCount(username: string) {
   public getUsersCount(){
     this.socket.emit('usersCount');
     return this.socket.fromEvent('getUsersCount');
+  }
+
+  public getMensajesHistorial(room: string) {
+    this.socket.emit('get_mensajes_historial', { room });
+  }
+
+  public emitirGetMensajesHistorial(room: string) {
+    this.socket.emit('get_mensajes_historial', { room });
   }
 }
 
