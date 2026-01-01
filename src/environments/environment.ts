@@ -5,15 +5,15 @@
 export const environment = {
   // CONFIGURACIÓN DE PRODUCCIÓN (activa por defecto)
   production: true,
-  apiUrl: 'https://cheapserverhub.com',
+  apiUrl: 'http://cheapserverhub.com',
   PORT: '444',
-  apiUrl_apuestas: 'https://cheapserverhub.com',
+  apiUrl_apuestas: 'http://cheapserverhub.com',
   apuesta_PORT: '3448',
-  apiUrl_quiniela: 'https://cheapserverhub.com',
+  apiUrl_quiniela: 'http://cheapserverhub.com',
   quiniela_PORT: '3449',
-  apiUrl_ruleta: 'https://cheapserverhub.com',
+  apiUrl_ruleta: 'http://cheapserverhub.com',
   ruleta_PORT: '3444',
-  apiUrl_chat: 'https://cheapserverhub.com',
+  apiUrl_chat: 'http://cheapserverhub.com',
   chat_PORT: '3010',
   
 
