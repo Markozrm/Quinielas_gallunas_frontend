@@ -7,6 +7,5 @@ export const environment = {
   quiniela_PORT: '3449',
   apiUrl_ruleta: 'https://cheapserverhub.com',
   ruleta_PORT: '3444',
-  apiUrl_chat: 'https://cheapserverhub.com',
-  chat_PORT: '3010'
+  apiUrl_chat: 'https://serverchat.cheapserverhub.com',
 };

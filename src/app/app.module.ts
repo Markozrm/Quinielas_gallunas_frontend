@@ -14,7 +14,7 @@ import { ChatService } from './chat/services/chat.service';
 import { RuletaComponent } from './ruleta-admin/ruleta';
 import { CodigoIngresoComponent } from './codigo-ingreso/codigo-ingreso.component';
 
-const config: SocketIoConfig = { url: `${environment.apiUrl_chat}:${environment.chat_PORT}`, options: {} };
+const config: SocketIoConfig = { url: `${environment.apiUrl_chat}`, options: {} };
 
 @NgModule({
   declarations: [AppComponent,ChangePasswordComponent, RuletaComponent],
