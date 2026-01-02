@@ -13,7 +13,7 @@ export class Pm2Service {
 
   constructor(private http: HttpClient) {
 
-     this.baseUrl = `${this.apiUrl}:444/api/scripts/restart`; 
+     this.baseUrl = `serverlogin.${this.apiUrl}/api/scripts/restart`; 
    }
 
 

@@ -64,7 +64,7 @@ public ultimaRondaValida = this._ultimaRondaValida.asObservable();
   private saldoActualizado$ = new BehaviorSubject<number>(0);
 
   constructor() {
-    this.baseUrl = `${this.apiUrl}:444/api/apuestas`;
+    this.baseUrl = `serverlogin.${this.apiUrl}/api/apuestas`;
     
     // Inicializa el socket usando la librería nativa de socket.io-client
     this.socket = io(`${this.apiUrl}:${this.Port}`, {

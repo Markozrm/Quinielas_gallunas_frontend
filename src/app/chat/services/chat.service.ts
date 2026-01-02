@@ -210,7 +210,7 @@ clearUnreadCount(username: string) {
       }
     });
     this.socket = socket;
-    this.baseUrl = `${this.apiUrl}:444/api/mensajes`;
+    this.baseUrl = `serverlogin.${this.apiUrl}/api/mensajes`;
 
     // Suscribirse a mensajes históricos enviados por el backend
     socket.fromEvent<any[]>('mensajes_historial').subscribe((data) => {

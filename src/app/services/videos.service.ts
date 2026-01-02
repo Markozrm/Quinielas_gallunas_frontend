@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 export class VideoService {
   
   private apiUrl = environment.apiUrl;
-  private baseUrl = `${this.apiUrl}:444/api/videos`;
+  private baseUrl = `serverlogin.${this.apiUrl}/api/videos`;
   constructor(private http: HttpClient) { }
 
   getVideos(): Observable<any> {
