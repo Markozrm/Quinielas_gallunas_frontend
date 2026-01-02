@@ -22,28 +22,9 @@ export class NotificacionGlobalService {
     }
   }
 
-  // Construye la URL base para socket / fetch respetando puertos ya presentes en environment.apiUrl
+  // Obtiene la URL base para el socket usando apiUrl_apuestas
   private getSocketBaseUrl(): string {
-    // usar los puertos definidos en environment (PORT, apuesta_PORT, ...) y si no existen usar '444'
-    const defaultSocketPort = (environment as any).PORT || (environment as any).apuesta_PORT || '444';
-    const api = (environment.apiUrl || '').trim();
-
-    try {
-      const url = new URL(api);
-      // Si apiUrl ya tiene puerto devuelve su origen (incluye puerto)
-      if (url.port) {
-        return url.origin;
-      }
-      // Si no tiene puerto, usa hostname con puerto de socket (o el por defecto)
-      return `${url.protocol}//${url.hostname}:${defaultSocketPort}`;
-    } catch {
-      // environment.apiUrl podría ser solo "host:port" o "host"
-      if (api.includes(':')) {
-        // ya contiene puerto -> asegurar esquema
-        return api.startsWith('http') ? api : `http://${api}`;
-      }
-      return `http://${api}:${defaultSocketPort}`;
-    }
+    return (environment.apiUrl_apuestas || '').trim();
   }
 
   private inicializarSocket() {
@@ -61,7 +42,7 @@ export class NotificacionGlobalService {
   }
 
   private async actualizarPendientes() {
-    const base = this.getSocketBaseUrl();
+    const base = (environment.apiUrl || '').trim();
     const url = `${base.replace(/\/$/, '')}/api/recipes/get-all-recipes`;
     try {
       const res = await fetch(url);
