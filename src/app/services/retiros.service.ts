@@ -12,7 +12,7 @@ export class RetirosService {
   private baseUrl: string;
 
   constructor() {
-    this.baseUrl = `serverlogin.${this.apiUrl}/api/retiros`;
+    this.baseUrl = `${this.apiUrl}:444/api/retiros`;
   }
 
   // Solicitar un nuevo retiro de saldo

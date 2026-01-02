@@ -18,10 +18,10 @@ export class TablaService {
 
   constructor() {
     // Mantengo exactamente tu puerto: 444
-    this.baseUrl = `serverlogin.${this.apiUrl}/api/tabla`;
+    this.baseUrl = `${this.apiUrl}:444/api/tabla`;
 
     // conectar socket al mismo host/puerto (no cambio de puerto)
-    const socketUrl = `serverlogin.${this.apiUrl}`;
+    const socketUrl = `${this.apiUrl}:444`;
     this.socket = io(socketUrl, { transports: ['websocket', 'polling'] });
 
     this.socket.on('connect', () => console.log('TablaService socket connected', this.socket.id));
