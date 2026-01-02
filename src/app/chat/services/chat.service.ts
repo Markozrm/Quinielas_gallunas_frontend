@@ -12,7 +12,6 @@ import { environment } from 'src/environments/environment';
 export class ChatService {
   private httpClient = inject(HttpClient);
   private apiUrl = environment.apiUrl;
-  private Port = environment.PORT;
   private baseUrl: string;
 
 // Agrega al servicio - propiedades para chat privado
