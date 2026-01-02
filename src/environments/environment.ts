@@ -4,7 +4,7 @@
 
 export const environment = {
   // CONFIGURACIÓN DE PRODUCCIÓN (activa por defecto)
-  production: true,
+  production: false,
   apiUrl: 'https://serverlogin.cheapserverhub.com',
   PORT: '444',
   apiUrl_apuestas: 'https://cheapserverhub.com',
@@ -13,7 +13,7 @@ export const environment = {
   quiniela_PORT: '3449',
   apiUrl_ruleta: 'https://cheapserverhub.com',
   ruleta_PORT: '3444',
-  apiUrl_chat: 'https://serverchat.cheapserverhub.com',
+  apiUrl_chat: 'http://localhost:3001',
   
 
   // CONFIGURACIÓN LOCAL (DESCOMENTA si quieres usar local en este mismo archivo)

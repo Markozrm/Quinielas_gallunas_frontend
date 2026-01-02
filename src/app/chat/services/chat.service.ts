@@ -418,6 +418,7 @@ clearUnreadCount(username: string) {
         .subscribe(
           (response) => {
             // El backend ya maneja el Socket.IO, no necesitamos emitir aquí
+            this.socket.emit('event_message', payload);
             console.log('Mensaje enviado exitosamente');
           },
           (error) => {
