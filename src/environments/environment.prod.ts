@@ -1,7 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://cheapserverhub.com',
-  PORT: '8443',
+  apiUrl: 'https://serverlogin.cheapserverhub.com',
   apiUrl_apuestas: 'https://cheapserverhub.com',
   apuesta_PORT: '3448',
   apiUrl_quiniela: 'https://cheapserverhub.com',
