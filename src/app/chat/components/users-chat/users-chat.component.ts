@@ -40,8 +40,6 @@ export class UsersChatComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    console.log('UsersChatComponent ngOnInit - isPrivate:', this.isPrivate, 'targetUser:', this.targetUser);
-    
     // Configurar el observable correcto según el tipo de chat
     if (this.isPrivate && this.targetUser) {
       // Para chat privado, filtrar mensajes del chat general que sean relevantes
@@ -57,9 +55,7 @@ export class UsersChatComponent implements OnInit, OnDestroy {
           return isPrivateMessage && isFromThisConversation;
         }))
       );
-      console.log('Configurado para chat privado con:', this.targetUser);
     } else {
-      console.log('Configurado para chat general');
     }
 
     this.sharedService.currentBooleanState.subscribe(state => {
@@ -69,10 +65,6 @@ export class UsersChatComponent implements OnInit, OnDestroy {
     // Suscribirse al observable correcto
     const chatObservable = (this.isPrivate && this.targetUser) ? this.privateChat$ : this.chat$;
     this.chatSubscription = chatObservable.subscribe(messages => {
-      console.log('UsersChatComponent received messages:', messages);
-      console.log('Number of messages:', messages.length);
-      console.log('Is private chat:', this.isPrivate);
-
       if (this.scrollable) {
         this.scrollToBottom();
       }
@@ -106,8 +98,6 @@ export class UsersChatComponent implements OnInit, OnDestroy {
   }
 
   public formatDate(date: Date | string): string {
-    console.log('🕐 formatDate input:', { date, type: typeof date });
-    
     let messageDate: Date;
     
     // Manejar diferentes tipos de entrada de fecha
@@ -116,21 +106,17 @@ export class UsersChatComponent implements OnInit, OnDestroy {
     } else if (typeof date === 'string') {
       messageDate = new Date(date);
     } else {
-      console.warn('⚠️ Fecha inválida recibida:', date);
       return 'fecha inválida';
     }
     
     // Verificar si la fecha es válida
     if (isNaN(messageDate.getTime())) {
-      console.warn('⚠️ Fecha no válida después de conversión:', messageDate);
       return 'fecha inválida';
     }
     
     const now = new Date();
     const diffMs = now.getTime() - messageDate.getTime();
     const diffMin = Math.round(diffMs / 60000);
-
-    console.log('🕐 Diferencia en minutos:', diffMin);
 
     if (diffMin < 1) {
       return 'hace unos segundos';
@@ -174,28 +160,17 @@ export class UsersChatComponent implements OnInit, OnDestroy {
   }
 
   eliminarMensaje(mensajeId: string) {
-    console.log(`Eliminar mensaje con ID: ${mensajeId}`);
     this.chatService.deleteMessage(mensajeId);
   }
 
   puedeEliminarMensajes(): boolean {
     const rol = localStorage.getItem("Rol") || "";
-    console.log('🔍 Verificando permisos de eliminación. Rol:', rol);
-
     const esSuperAdmin = rol === 'superUsuario' || rol === 'administrador';
-    console.log('✅ ¿Es admin?', esSuperAdmin);
-
     return esSuperAdmin;
   }
   openDeleteConfirm(mensajeId: string): void {
-    console.log('🗑️ Intentando eliminar mensaje');
-    console.log('📋 ID del mensaje:', mensajeId);
-    console.log('👤 ¿Puede eliminar mensajes?', this.puedeEliminarMensajes());
-    console.log('🔑 Rol del usuario:', localStorage.getItem('Rol'));
-    
     this.selectedMessage = mensajeId;
     this.showDeleteModal = true;
-    console.log('✅ Modal de confirmación abierto');
   }
 
   closeDeleteModal(): void {
@@ -204,13 +179,10 @@ export class UsersChatComponent implements OnInit, OnDestroy {
   }
 
   confirmDelete(): void {
-    console.log(`Confirmando eliminación del mensaje con ID: ${this.selectedMessage}`);
     if (this.selectedMessage) {
       this.chatService.deleteMessage(this.selectedMessage);
       this.showDeleteModal = false;
       this.selectedMessage = '';
-    } else {
-      console.error('No hay mensaje seleccionado para eliminar');
     }
   }
 
