@@ -11,7 +11,7 @@ export class RecipesService {
   private baseUrl: string;
   constructor() {
     //this.baseUrl = 'http://localhost:3000/api/users';
-    this.baseUrl = `${this.apiUrl}:444/api/recibos`;
+    this.baseUrl = `serverlogin.${this.apiUrl}/api/recibos`;
   }
 
   register(formValue: any, image: any) {

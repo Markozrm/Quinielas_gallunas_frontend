@@ -12,7 +12,7 @@ export class PaymentService {
   private baseUrl: string;
 
   constructor() {
-    this.baseUrl = `${this.apiUrl}:444/api/payments`;
+    this.baseUrl = `serverlogin.${this.apiUrl}/api/payments`;
   }
 
   getAllPaymentInfo(): Observable<any> {

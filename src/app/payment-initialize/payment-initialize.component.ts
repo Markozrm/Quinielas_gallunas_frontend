@@ -71,7 +71,7 @@ export class PaymentInitializeComponent implements OnInit {
       return;
     }
 
-    this.http.post(`${this.apiUrl}:444/api/payments/initialize`, {}).subscribe(
+    this.http.post(`serverlogin.${this.apiUrl}/api/payments/initialize`, {}).subscribe(
       (response: any) => {
         this.message = response.message || 'Datos inicializados correctamente';
         this.showBackButton = true;
