@@ -12,7 +12,7 @@ export class CorteDiarioService {
   private baseUrl: string;
 
   constructor() {
-    this.baseUrl = `${this.apiUrl}:444/api/corte-diario`;
+    this.baseUrl = `${this.apiUrl}/api/corte-diario`;
   }
 
   // Obtener el resumen del corte diario para un stream específico

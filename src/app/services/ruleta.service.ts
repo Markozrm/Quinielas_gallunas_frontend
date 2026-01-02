@@ -8,7 +8,7 @@ import { io, Socket } from 'socket.io-client';
 })
 export class RuletaService {
  
-private readonly API_URL = `${environment.apiUrl}:444/api/ruleta`;
+private readonly API_URL = `${environment.apiUrl}/api/ruleta`;
   private ruletaSocket: Socket;
   private saldoActualizado$ = new BehaviorSubject<number>(0);
   private username: string = 'BANCA'; // O el usuario actual

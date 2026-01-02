@@ -10,7 +10,7 @@ export class NotificacionGlobalService {
 
   constructor(private router: Router) {
     this.solicitarPermisoNotificaciones();
-    this.socket = io(`${environment.apiUrl}:444`, { transports: ['websocket'] });
+    this.socket = io(`${environment.apiUrl}`, { transports: ['websocket'] });
     this.inicializarSocket();
     this.actualizarPendientes(); // Inicializa el contador al cargar
   }
@@ -41,7 +41,7 @@ export class NotificacionGlobalService {
 
   // Llama a este método al iniciar para obtener el número real de pendientes
   private actualizarPendientes() {
-    fetch(`${environment.apiUrl}:444/api/recipes/get-all-recipes`)
+    fetch(`${environment.apiUrl}/api/recipes/get-all-recipes`)
       .then(res => res.json())
       .then((recibos: any[]) => {
         this.pendientes = recibos.filter(r => r.estado === 'pendiente' || !r.estado).length;

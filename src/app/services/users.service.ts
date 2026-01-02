@@ -12,7 +12,7 @@ export class UsersService {
   private baseUrl: string;
   constructor() {
     //this.baseUrl = 'http://localhost:3000/api/users';
-    this.baseUrl = `${this.apiUrl}:444/api/users`;
+    this.baseUrl = `${this.apiUrl}/api/users`;
   }
 
   register(formValue: any, image: any) {
@@ -48,7 +48,7 @@ export class UsersService {
   }
   getImageMsj(id: string): string {
     // Construir y devolver la URL de la imagen del usuario
-    return `${this.apiUrl}:444/api/mensajes/get-image/${id}`;
+    return `${this.apiUrl}/api/mensajes/get-image/${id}`;
   }
   setClaveStream(id:string,tituloStream:string,image:any,clave:string,esVIP:string): any {
     //console.log('Tamaño de la imagen antes de enviar la solicitud POST:', image.size, 'bytes');
@@ -59,14 +59,14 @@ export class UsersService {
     formData.append('clave',clave);
     formData.append('esVIP',esVIP);
     return firstValueFrom(
-      this.httpClient.post<any>(`${this.apiUrl}:444/api/streams/setClave/${id}`,formData)
+      this.httpClient.post<any>(`${this.apiUrl}/api/streams/setClave/${id}`,formData)
     );
   }
   getClaveStream(id:string): any {
-    return this.httpClient.get<any>(`${this.apiUrl}:444/api/streams/getClave/${id}`);
+    return this.httpClient.get<any>(`${this.apiUrl}/api/streams/getClave/${id}`);
   }
   getImagenStream(id:string): any {
-    return `${this.apiUrl}:444/api/streams/getImagen/${id}`;
+    return `${this.apiUrl}/api/streams/getImagen/${id}`;
   }
 
 
@@ -116,12 +116,12 @@ export class UsersService {
   }
   //Ruta para el historial de Usuarios
   getUserHistory(username: string) {
-  return this.httpClient.get<any>(`${this.apiUrl}:444/api/apuestas/historialDetallado/${username}`);
+  return this.httpClient.get<any>(`${this.apiUrl}/api/apuestas/historialDetallado/${username}`);
 }
 
   //Ruta para el historial agrupado por rondas
   getUserHistoryByRounds(username: string) {
-    return this.httpClient.get<any>(`${this.apiUrl}:444/api/apuestas/historialPorRondas/${username}`);
+    return this.httpClient.get<any>(`${this.apiUrl}/api/apuestas/historialPorRondas/${username}`);
   }
 
   getSaldo(username: string) {
@@ -140,7 +140,7 @@ uploadProfilePhoto(username: string, photo: File): Promise<any>{
 
   // Obtener registros de saldos por usuario
   getUserSaldoRecords(username: string) {
-    return this.httpClient.get<any>(`${this.apiUrl}:444/api/saldos/obtener-registros-por-usuario/${encodeURIComponent(username)}`);
+    return this.httpClient.get<any>(`${this.apiUrl}/api/saldos/obtener-registros-por-usuario/${encodeURIComponent(username)}`);
   }
 
   verificarCodigo(email: string, codigo: string) {

@@ -8,7 +8,7 @@ import HLS from 'hls.js';
 })
 export class VideoStreamComponent implements OnInit {
   
-  videoUrl: string = 'https://cheapserverhub.com:444/api/videos';
+  videoUrl: string = 'https://cheapserverhub.com/api/videos';
   private hls = new HLS();
   @ViewChild('video', { static: true }) private readonly video: ElementRef<HTMLVideoElement> | any;
 

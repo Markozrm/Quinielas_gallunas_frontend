@@ -396,11 +396,11 @@ onImagenSeleccionada(event: any) {
 consultarImagenOverlay() {
   if (!this.streamSeleccionado) return;
   
-  this.http.get<{hasImage: boolean, imageUrl: string}>(`http://localhost:444/api/streams/imagen-overlay/${this.streamSeleccionado}`)
+  this.http.get<{hasImage: boolean, imageUrl: string}>(`http://localhost/api/streams/imagen-overlay/${this.streamSeleccionado}`)
     .subscribe({
       next: (data) => {
         if (data.hasImage && data.imageUrl) {
-          this.imagenStreamUrl = 'http://localhost:444' + data.imageUrl;
+          this.imagenStreamUrl = 'http://localhost' + data.imageUrl;
           localStorage.setItem('imagenStreamUrlAdmin', this.imagenStreamUrl);
         } else {
           this.imagenStreamUrl = null;
@@ -444,7 +444,7 @@ subirImagenStream() {
     
     formData.append('tituloStream', `Imagen Overlay Stream ${this.streamSeleccionado}`);
 
-    this.http.post(`http://localhost:444/api/streams/setImagenOverlay/${this.streamSeleccionado}`, formData).subscribe({
+    this.http.post(`http://localhost/api/streams/setImagenOverlay/${this.streamSeleccionado}`, formData).subscribe({
       next: (response: any) => {
         console.log('Imagen overlay subida:', response);
         alert(`✅ Imagen enviada al Stream ${this.streamSeleccionado}`);
@@ -472,7 +472,7 @@ resetearImagenStream() {
     return;
   }
 
-  this.http.post(`http://localhost:444/api/streams/removeImagenOverlay/${this.streamSeleccionado}`, {}).subscribe({
+  this.http.post(`http://localhost/api/streams/removeImagenOverlay/${this.streamSeleccionado}`, {}).subscribe({
     next: (response: any) => {
       console.log('Imagen overlay removida:', response);
       

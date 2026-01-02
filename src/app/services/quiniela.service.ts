@@ -13,7 +13,7 @@ export class QuinielaService {
   private http = inject(HttpClient);
 
   // URL para la API REST (server_login en puerto 444)
-  private baseUrl = `${this.apiUrl}:444/api/rifas`;
+  private baseUrl = `${this.apiUrl}/api/rifas`;
   
   // URL para el servidor de WebSockets (BINGO_BACKEND en puerto 3449)
   private socketUrl = `${this.apiUrl}:3449`;

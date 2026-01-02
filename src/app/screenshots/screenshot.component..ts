@@ -62,7 +62,7 @@ export class ScreenshotsComponent {
     this.error = '';
     
     // Use the new comparison endpoint
-    this.http.get<ComparisonResponse>(`${environment.apiUrl}:444/api/screenshot/comparacion-completa/${this.codigoStream}/${this.ronda}`)
+    this.http.get<ComparisonResponse>(`${environment.apiUrl}/api/screenshot/comparacion-completa/${this.codigoStream}/${this.ronda}`)
       .subscribe({
         next: (data) => {
           this.userComparisons = data.comparaciones;

@@ -50,7 +50,7 @@ export class ChangePasswordComponent {
       newPassword: this.changePasswordData.newPassword
     };
 
-    this.http.put(`${environment.apiUrl_apuestas}:444/api/users/change-password`, payload)
+    this.http.put(`${environment.apiUrl_apuestas}/api/users/change-password`, payload)
       .subscribe({
         next: (response: any) => {
           this.isLoading = false;

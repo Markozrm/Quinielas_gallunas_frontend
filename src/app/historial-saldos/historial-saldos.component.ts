@@ -58,15 +58,15 @@ export class HistorialSaldosComponent implements OnInit {
     this.error = '';
     
     // Determine which endpoint to use based on filters
-    let apiUrl = `${environment.apiUrl}:444/api/saldos/obtener-registros-saldos`;
+    let apiUrl = `${environment.apiUrl}/api/saldos/obtener-registros-saldos`;
     
     // If we have a specific user selected, use the user endpoint
     if (this.selectedUser) {
-      apiUrl = `${environment.apiUrl}:444/api/saldos/obtener-registros-por-usuario/${encodeURIComponent(this.selectedUser)}`;
+      apiUrl = `${environment.apiUrl}/api/saldos/obtener-registros-por-usuario/${encodeURIComponent(this.selectedUser)}`;
     }
     // If we have a specific date range and start date equals end date, use the date endpoint
     else if (this.startDate && this.endDate && this.startDate === this.endDate) {
-      apiUrl = `${environment.apiUrl}:444/api/saldos/obtener-registros-por-fecha`;
+      apiUrl = `${environment.apiUrl}/api/saldos/obtener-registros-por-fecha`;
     }
     
     this.http.get<SaldoRecord[]>(apiUrl)

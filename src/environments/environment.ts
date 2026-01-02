@@ -5,7 +5,7 @@
 export const environment = {
   // CONFIGURACIÓN DE PRODUCCIÓN (activa por defecto)
   production: true,
-  apiUrl: 'https://cheapserverhub.com',
+  apiUrl: 'https://serverlogin.cheapserverhub.com',
   PORT: '444',
   apiUrl_apuestas: 'https://cheapserverhub.com',
   apuesta_PORT: '3448',
