@@ -86,7 +86,8 @@ export class ApuestasStreamComponent implements OnInit,OnDestroy{
         { ronda: 22, cazado: 5780 },
         { ronda: 23, cazado: 7159 },
         { ronda: 24, cazado: 0 },
-        { ronda: 25, cazado: 0 }
+        { ronda: 25, cazado: 0 },
+        { ronda: 26, cazado: 8586 }
       ];
       // No llamamos a obtenerResumenStream ni obtenerTodasLasApuestas
       return;
