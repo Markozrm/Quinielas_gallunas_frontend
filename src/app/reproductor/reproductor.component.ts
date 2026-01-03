@@ -12,7 +12,9 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./video-player.component.css']
 })
 export class VideoPlayerComponent implements OnInit {
-  private apiUrl = environment.apiUrl;
+  private apiUrl_live: string = environment.apiUrl_live;
+  private apiUrl_live_2: string = environment.apiUrl_live_2;
+  private apiUrl_live_3: string = environment.apiUrl_live_3;
   private hls = new HLS();
   public user: string | null = 'HOME' //TODO: User que se pasa por la url como parametro !
   public port: string | null = '443'
@@ -36,7 +38,13 @@ export class VideoPlayerComponent implements OnInit {
       
       this.user = this.route.snapshot.paramMap.get('sala') || 'HOME';
       this.port = this.route.snapshot.paramMap.get('port') || '443';
-      this.load(`${this.apiUrl}:${this.port}/live/${this.user}/index.m3u8`);
+      if (this.port == '443') {
+        this.load(`${this.apiUrl_live}/live/${this.user}/index.m3u8`);
+      } else if (this.port == '442') {
+        this.load(`${this.apiUrl_live_2}/live/${this.user}/index.m3u8`);
+      } else {
+        this.load(`${this.apiUrl_live_3}/live/${this.user}/index.m3u8`);
+      }
       console.log("Despues de cargar",this.user);
       console.log("Despues de cargar",this.port);
     } catch (error) {
