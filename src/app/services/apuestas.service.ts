@@ -12,7 +12,6 @@ export class apuestaService {
   private apiUrl = environment.apiUrl;
   private apiUrl_apuestas = environment.apiUrl_apuestas;
   private baseUrl: string;
-  private baseUrl_apuestas: string;
 
   private _users$ = new BehaviorSubject<UserType[]>([]);
   public users$ = this._users$.asObservable();
