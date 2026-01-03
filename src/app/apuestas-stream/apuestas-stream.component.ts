@@ -59,7 +59,6 @@ export class ApuestasStreamComponent implements OnInit,OnDestroy{
   filtrar() {
     const streamCode = this.formFiltro.get('message')?.value;
 
-    // Si el código es el del stream especial, asigna el total cazado fijo y los detalles de las 25 rondas
     if (streamCode === 'Stream1-02-01-2026') {
       this.totalStream = 72857;
       this.resumenRondas = [
@@ -89,7 +88,7 @@ export class ApuestasStreamComponent implements OnInit,OnDestroy{
         { ronda: 24, cazado: 0 },
         { ronda: 25, cazado: 0 }
       ];
-      // this.todasLasApuestas = []; // Si quieres limpiar las apuestas, descomenta esto
+      // No llamamos a obtenerResumenStream ni obtenerTodasLasApuestas
       return;
     }
 
