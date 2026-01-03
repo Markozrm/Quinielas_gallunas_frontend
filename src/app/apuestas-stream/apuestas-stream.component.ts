@@ -56,19 +56,51 @@ export class ApuestasStreamComponent implements OnInit,OnDestroy{
   });
   
 
-  filtrar(){
+  filtrar() {
+    const streamCode = this.formFiltro.get('message')?.value;
+
+    // Si el código es el del stream especial, asigna el total cazado fijo y los detalles de las 25 rondas
+    if (streamCode === 'Stream1-02-01-2026') {
+      this.totalStream = 72857;
+      this.resumenRondas = [
+        { ronda: 1, cazado: 0 },
+        { ronda: 2, cazado: 200 },
+        { ronda: 3, cazado: 200 },
+        { ronda: 4, cazado: 1200 },
+        { ronda: 5, cazado: 1420 },
+        { ronda: 6, cazado: 0 },
+        { ronda: 7, cazado: 2490 },
+        { ronda: 8, cazado: 4686 },
+        { ronda: 9, cazado: 3000 },
+        { ronda: 10, cazado: 2344 },
+        { ronda: 11, cazado: 2890 },
+        { ronda: 12, cazado: 4382 },
+        { ronda: 13, cazado: 6818 },
+        { ronda: 14, cazado: 2046 },
+        { ronda: 15, cazado: 0 },
+        { ronda: 16, cazado: 4666 },
+        { ronda: 17, cazado: 3652 },
+        { ronda: 18, cazado: 5912 },
+        { ronda: 19, cazado: 4200 },
+        { ronda: 20, cazado: 3948 },
+        { ronda: 21, cazado: 5864 },
+        { ronda: 22, cazado: 5780 },
+        { ronda: 23, cazado: 7159 },
+        { ronda: 24, cazado: 0 },
+        { ronda: 25, cazado: 0 }
+      ];
+      // this.todasLasApuestas = []; // Si quieres limpiar las apuestas, descomenta esto
+      return;
+    }
+
     const { message } = this.formFiltro.value;
     if (message) {
       this.streamActual = message;
-       //Muestra el resumen de las apuestas 
-      this.obtenerResumenStream(message);
-      // Primero obtenemos todas las apuestas de todas las rondas
       this.obtenerResumenStream(message);
       this.obtenerTodasLasApuestas(message);
-      // Mantenemos la conexión de socket para otras funcionalidades
       this.apuestaService.leaveRoom();
       this.apuestaService.initChat();
-      const username:string= localStorage.getItem("nombreUsuario") || "";
+      const username: string = localStorage.getItem("nombreUsuario") || "";
       this.apuestaService.joinRoom(message, username);
     }
   }
