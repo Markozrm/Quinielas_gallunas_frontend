@@ -417,13 +417,19 @@ clearUnreadCount(username: string) {
       this.httpClient.post<any>(`${this.baseUrl}/enviarMensaje`, httpPayload)
         .subscribe(
           (response) => {
-            // El backend ya maneja el Socket.IO, no necesitamos emitir aquí
-            this.socket.emit('event_message', payload);
+            // El backend ya guardó el mensaje
+            // Emitir event_message con el messageId para que el gateway solo emita sin guardar de nuevo
+            const payloadWithId = {
+              ...payload,
+              messageId: response.messageId,
+              alreadySaved: true // Flag para indicar que ya fue guardado
+            };
+            this.socket.emit('event_message', payloadWithId);
             console.log('Mensaje enviado exitosamente');
           },
           (error) => {
             console.error('Error al enviar mensaje:', error);
-            // Si falla HTTP, enviar por socket como fallback
+            // Si falla HTTP, enviar por socket como fallback (sin el flag)
             this.socket.emit('event_message', payload);
           }
         );
