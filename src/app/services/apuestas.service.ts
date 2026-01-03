@@ -9,8 +9,10 @@ import { environment } from 'src/environments/environment';
 })
 export class apuestaService {
   private httpClient = inject(HttpClient);
-  private apiUrl = environment.apiUrl_apuestas;
+  private apiUrl = environment.apiUrl;
+  private apiUrl_apuestas = environment.apiUrl_apuestas;
   private baseUrl: string;
+  private baseUrl_apuestas: string;
 
   private _users$ = new BehaviorSubject<UserType[]>([]);
   public users$ = this._users$.asObservable();
@@ -66,7 +68,7 @@ public ultimaRondaValida = this._ultimaRondaValida.asObservable();
     this.baseUrl = `${this.apiUrl}/api/apuestas`;
     
     // Inicializa el socket usando la librería nativa de socket.io-client
-    this.socket = io(`${this.apiUrl}`, {
+    this.socket = io(`${this.apiUrl_apuestas}`, {
       transports: ['websocket'],
     });
 
