@@ -52,15 +52,14 @@ export class IniciardorStreamsComponent {
   async onSubmit() {
     console.log("Inicio de sesión");
 
-    const url = 'rtmp://64.23.244.141';
     const selectorValue = this.formulario.get('numeroStream')?.value;
     const fechaFormateada = this.formatDate(new Date());
     const tituloStream = this.formulario.get('tituloStream')?.value;
     const esVIP = this.formulario.get('esVIP')?.value;
     if (selectorValue) {
-      const port = 1935 + Number(selectorValue) - 1;
+      const url = 'rtmp://serverstream' + selectorValue + '.cheapserverhub.com/live';
       this.claveStream = `Stream${selectorValue}-${fechaFormateada}`;
-      this.urlStream = `${url}:${port}/live`;
+      this.urlStream = `${url}/${this.claveStream}`;
     
       const response = await this.usersService.setClaveStream(
         selectorValue.toString(),
