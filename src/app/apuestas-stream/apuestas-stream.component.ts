@@ -264,6 +264,12 @@ export class ApuestasStreamComponent implements OnInit,OnDestroy{
       }
     }
 
+    // Agrega este método en tu componente:
+calcularCazadoPorRonda(ronda: number): number {
+  return this.todasLasApuestas
+    .filter(a => a.ronda === ronda && a.estado === 'pagada')
+    .reduce((total, a) => total + Number(a.monto), 0);
+}
 }
 interface UserType {
   name: string;
