@@ -270,12 +270,6 @@ calcularCazadoPorRonda(ronda: number): number {
     .filter(a => a.ronda === ronda && a.estado === 'pagada')
     .reduce((total, a) => total + Number(a.cantidadTotal || a.cantidad || a.monto), 0);
 }
-
-calcularTotalCazado(): number {
-  return this.todasLasApuestas
-    .filter(a => a.estado === 'pagada')
-    .reduce((total, a) => total + Number(a.cantidadTotal || a.cantidad || a.monto), 0);
-}
 }
 interface UserType {
   name: string;
