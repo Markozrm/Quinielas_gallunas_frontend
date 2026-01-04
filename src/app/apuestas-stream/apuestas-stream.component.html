@@ -53,7 +53,7 @@
         <tbody>
           <tr *ngFor="let ronda of resumenRondas">
             <td>Pelea {{ronda.ronda}}</td>
-            <td>${{ronda.cazado | number:'1.0-0'}}</td>
+            <td>${{calcularCazadoPorRonda(ronda.ronda) | number:'1.0-0'}}</td>
           </tr>
         </tbody>
       </table>
