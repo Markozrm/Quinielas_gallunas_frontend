@@ -205,7 +205,7 @@ export class ApuestasStreamComponent implements OnInit,OnDestroy{
 
   closeSidebar() {
     this.isSidebarOpen = false;
-    // Puedes agregar lógica para cerrar la sesión aquí si es necesario
+    // Puededds agregar lógica para cerrar la sesión aquí si es necesario
   }
   logout() {
     // Lógica para cerrar sesión, por ejemplo, limpiar tokens y redirigir a la página de inicio de sesión.
