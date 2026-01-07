@@ -1,0 +1,19 @@
+services:
+  # Aplicación Angular Frontend
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: quinielas_gallunas_frontend_app
+    restart: unless-stopped
+    ports:
+      - "${PORT:-4200}:${PORT:-4200}"
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - PORT=${PORT:-4200}
+    networks:
+      - quinielas_gallunas_frontend_network
+
+networks:
+  quinielas_gallunas_frontend_network:
+    driver: bridge
