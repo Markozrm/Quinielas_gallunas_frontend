@@ -38,9 +38,9 @@
     <div class="apuestas-en-vivo">
       <h3>Tabla de apuestas (Todas las rondas)</h3>
       
-          <!--Muestra del resumen-->
+          <!--Muestra del resumen -->
        <div class="total-cazado">
-       <p>Total cazado en stream: <strong>${{totalStream | number:'1.0-0'}}</strong></p>
+       <p>Total cazado en el stream: <strong>${{ calcularTotalCazado() | number:'1.0-0' }}</strong></p>
     </div>
 
     <!-- Tabla de Resumen por Rondas -->
@@ -53,7 +53,7 @@
         <tbody>
           <tr *ngFor="let ronda of resumenRondas">
             <td>Pelea {{ronda.ronda}}</td>
-            <td>${{ronda.cazado | number:'1.0-0'}}</td>
+            <td>${{calcularCazadoPorRonda(ronda.ronda) | number:'1.0-0'}}</td>
           </tr>
         </tbody>
       </table>

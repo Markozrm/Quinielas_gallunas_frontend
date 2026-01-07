@@ -205,7 +205,7 @@ export class ApuestasStreamComponent implements OnInit,OnDestroy{
 
   closeSidebar() {
     this.isSidebarOpen = false;
-    // Puedes agregar lógica para cerrar la sesión aquí si es necesario
+    // Puededds agregar lógica para cerrar la sesión aquí si es necesario
   }
   logout() {
     // Lógica para cerrar sesión, por ejemplo, limpiar tokens y redirigir a la página de inicio de sesión.
@@ -264,6 +264,18 @@ export class ApuestasStreamComponent implements OnInit,OnDestroy{
       }
     }
 
+    // Agrega este método en tu componente:
+calcularCazadoPorRonda(ronda: number): number {
+  return this.todasLasApuestas
+    .filter(a => a.ronda === ronda && a.estado === 'pagada')
+    .reduce((total, a) => total + Number(a.cantidadTotal || a.cantidad || a.monto), 0);
+}
+
+calcularTotalCazado(): number {
+  return this.todasLasApuestas
+    .filter(a => a.estado === 'pagada')
+    .reduce((total, a) => total + Number(a.cantidadTotal || a.cantidad || a.monto), 0);
+}
 }
 interface UserType {
   name: string;
