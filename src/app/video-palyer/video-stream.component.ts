@@ -16,7 +16,7 @@ export class VideoStreamComponent implements OnInit {
 
   private setMaxVolume(): void {
     if (this.video && this.video.nativeElement) {
-      this.video.nativeElement.muted = false; // Desmutea el video
+      this.video.nativeElement.muted = true; // Desmutea el video
       this.video.nativeElement.volume = 1.0;  // Volumen máximo
       this.video.nativeElement.play().catch((err: any) => {
         console.warn('No se pudo reproducir automáticamente:', err);
