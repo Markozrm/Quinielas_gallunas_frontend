@@ -13,12 +13,12 @@ export class Pm2Service {
 
   constructor(private http: HttpClient) {
 
-     this.baseUrl = `${this.apiUrl}/api/scripts/restart`; 
+     this.baseUrl = `${this.apiUrl}/api/scripts`; 
    }
 
 
   restartProcess(id: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/${id}`, {});
+    return this.http.post(`${this.baseUrl}/restart/${id}`, {});
   }
   restartDockerProcess(): Observable<any> {
     return this.http.post(`${this.baseUrl}/restart-docker`, {});
