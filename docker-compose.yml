@@ -17,3 +17,4 @@ services:
 networks:
   quinielas_gallunas_frontend_network:
     driver: bridge
+

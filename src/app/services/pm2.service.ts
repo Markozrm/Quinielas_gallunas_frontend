@@ -20,4 +20,7 @@ export class Pm2Service {
   restartProcess(id: string): Observable<any> {
     return this.http.post(`${this.baseUrl}/${id}`, {});
   }
+  restartDockerProcess(): Observable<any> {
+    return this.http.post(`${this.baseUrl}/restart-docker`, {});
+  }
 }

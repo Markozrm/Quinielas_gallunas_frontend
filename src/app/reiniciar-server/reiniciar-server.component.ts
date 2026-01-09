@@ -19,6 +19,13 @@ export class StreamControlComponent {
     });
   }
 
+  restartDockerStream(): void {
+    this.pm2Service.restartDockerProcess().subscribe({
+      next: response => alert(`Docker stream 1 restarted successfully`),
+      error: err => console.error(`Failed to restart docker stream:`, err)
+    });
+  }
+
   goToAdminPanel() {
     this.router.navigate(['/Admin']);
   }
