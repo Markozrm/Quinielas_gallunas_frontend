@@ -1,21 +1,18 @@
-
-
 .menu {
   background-color: #ffffff;
-  z-index: 999;
   display: flex;
   align-items: center;
   height: 3rem;
   justify-content: center;
   border-top: 2px solid rgb(255, 255, 255);
-  left: 0;
-  position: fixed; 
   width: 100%;
 }
+
 .user-balance-container {
-  width: 100%;           
-  max-width: 100%;            
-  background: linear-gradient(135deg, #b4952a 0%, #e2c97a 100%);;
+  width: 100%;
+  max-width: 100%;   /* Usa el mismo valor que tu main/apuesta-container */
+  margin: 0 auto;         
+  background: linear-gradient(135deg, #0a1e5c 0%, #0d2a8a 100%);
   color: #000 !important;
   font-family: 'Arial Black', Arial, sans-serif;
   font-size: 1.3em;
@@ -53,31 +50,6 @@ h1 {
   font-weight: bold;
 }
 
-@media screen and (max-height: 400px) {
-  .menu {
-    height: 12%;
-  }
-
-}
-@media screen and (max-width: 600px) {
-
-  .d-flex{
-    height: 2.0rem;
-
-  }
-  .btn-submit{
-    font-size: var(--fontSizeSecondary);
-    width: 20%;
-  }
-  .btn-default{
-    font-size: var(--fontSizeSecondary);
-    width: 40%;
-  }
-  .img-logoPrincipal{
-    align-self: top;
-  }
-}
-
 .stream-button {
   position: absolute;
   left: 12px;
@@ -94,7 +66,15 @@ h1 {
 }
 
 .titulo {
-  height: 3rem;
-  width: 23rem;
-  margin: 10px;
+  height: 6rem;
+  width: 19rem;
+  margin-top: 10px;
+}
+
+@media screen and (max-width: 600px) {
+  .titulo {
+    height: 4rem;
+    width: 12rem;
+    margin-top: 5px;
+  }
 }

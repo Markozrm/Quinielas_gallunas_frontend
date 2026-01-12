@@ -115,10 +115,9 @@
 }
 
 .menuContainer {
-  position: relative; /* Añadir position relative */
   width: 100%;
   height: 10%;
-  z-index: 9999;
+  z-index: 999;
 }
 
 .chat-container{
@@ -156,7 +155,7 @@
   height: auto;
 }
 .btn-submit {
-  right: 0;
+  margin-top: 10px;
   top: 0;
    width: 2.5rem;
   height: 2.5rem;
@@ -309,7 +308,6 @@
 }
 
 .header-container {
-  background-color: #000;
   padding: 8px 10px;
   display: flex;
   justify-content: flex-start;
@@ -352,7 +350,6 @@
   font-weight: bold;
   font-family: 'Chromium', sans-serif;
   letter-spacing: 2px; /* Aumenta el espacio entre letras */
-  background: linear-gradient(135deg, #b4952a 0%, #e2c97a);
 }
 
 .estado-apuestas {
@@ -382,8 +379,7 @@
   margin-bottom: 0;
 }
 
-body, .main, .apuesta-container, .chat-container {
-  background: linear-gradient(135deg, #b4952a 0%, #e2c97a 100%);
+body, .main, .apuesta-container, .chat-container , .header-container{
   padding-top: 80px; /* Deja espacio para la barra negra fija */
 }
 
@@ -484,7 +480,6 @@ input[type="number"]::placeholder {
 }
 
 .boton-apostar {
-  background: linear-gradient(90deg, #b49b5e 0%, #fff3c0 100%) !important;
   color: #000 !important;
   border: none !important;
   border-radius: 30px !important;
@@ -1648,7 +1643,6 @@ input[type="number"]::placeholder {
 
 /* PELEA Y CAZANDO */
 .header-container {
-  background: linear-gradient(135deg, #b4952a 0%, #e2c97a);
   border-bottom: none;
   padding: 0;
   gap: 0;
@@ -1815,8 +1809,11 @@ input[type="number"]::placeholder {
 
 /* FONDO GENERAL */
 body, .main, .apuesta-container, .chat-container {
-  background: linear-gradient(135deg, #b4952a 0%, #e2c97a 100%);
-  padding-top: 0 !important;
+    padding-top: 0 !important;
+  background-image: url('/assets/image/Fond_de_quinielas.jpg') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
 }
 @media (max-width: 600px) {
   .boton-apostar {
