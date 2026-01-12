@@ -99,6 +99,9 @@
     <span>Chat</span>
   </button>
 </div>
+<div class="vs-container">
+  <img src="assets/image/VS.png" alt="VS" class="vs-image">
+</div>
     <button class="team-green" 
             [class.selected]="selectedTeam === 'verde'" 
             (click)="selectTeam('verde')">
@@ -107,7 +110,23 @@
       <p>PTS: {{ greenPoints }}</p>
     </button>
   </div>
-
+  <div class="bet-status-indicator caught" [ngClass]="{'bet-red': colorApuestasCazadas === 'rojo', 'bet-green': colorApuestasCazadas === 'verde', 'bet-mixed': colorApuestasCazadas === 'ambos'}">
+        <ng-container *ngIf="colorApuestasCazadas !== 'ambos'">
+          <span class="bet-status-label">
+            <ng-container *ngIf="colorApuestasCazadas === 'rojo'">Voy jugando al ROJO:</ng-container>
+            <ng-container *ngIf="colorApuestasCazadas === 'verde'">Voy jugando al VERDE:</ng-container>
+            <ng-container *ngIf="colorApuestasCazadas === ''">Voy jugando:</ng-container>
+          </span>
+          <span class="bet-status-amount">${{ montoTotalCazado | number:'1.0-2' }}</span>
+        </ng-container>
+        
+        <ng-container *ngIf="colorApuestasCazadas === 'ambos'">
+          <div class="bet-status-multi">
+            <div class="bet-status-multi-line bet-red-text">Voy jugaando al Rojo: ${{ montoRojoCazado | number:'1.0-2' }}</div>
+            <div class="bet-status-multi-line bet-green-text">Voy jugando al Verde: ${{ montoVerdeCazado | number:'1.0-2' }}</div>
+          </div>
+        </ng-container>
+      </div>
   <div class="betting-container">
     <div class="quick-bets">
       <button class="quick-bet-button" (click)="setBetAmount(100)">100</button>
@@ -129,28 +148,11 @@
     <div class="input-bet-container">
       <input #cantidadApuesta type="number" placeholder="INGRESAR CANTIDAD" [ngModel]="betAmount || ''" (ngModelChange)="setBetAmount($event)"/>
       <button (click)="apostar(cantidadApuesta.value)" class="boton-apostar">
-        <p>APOSTAR</p>
+        <p>JUGAR</p>
       </button>
     </div>
   </div>
 </div>
-<div class="bet-status-indicator caught" [ngClass]="{'bet-red': colorApuestasCazadas === 'rojo', 'bet-green': colorApuestasCazadas === 'verde', 'bet-mixed': colorApuestasCazadas === 'ambos'}">
-        <ng-container *ngIf="colorApuestasCazadas !== 'ambos'">
-          <span class="bet-status-label">
-            <ng-container *ngIf="colorApuestasCazadas === 'rojo'">Voy jugando al ROJO:</ng-container>
-            <ng-container *ngIf="colorApuestasCazadas === 'verde'">Voy jugando al VERDE:</ng-container>
-            <ng-container *ngIf="colorApuestasCazadas === ''">Voy jugando:</ng-container>
-          </span>
-          <span class="bet-status-amount">${{ montoTotalCazado | number:'1.0-2' }}</span>
-        </ng-container>
-        
-        <ng-container *ngIf="colorApuestasCazadas === 'ambos'">
-          <div class="bet-status-multi">
-            <div class="bet-status-multi-line bet-red-text">Voy jugaando al Rojo: ${{ montoRojoCazado | number:'1.0-2' }}</div>
-            <div class="bet-status-multi-line bet-green-text">Voy jugando al Verde: ${{ montoVerdeCazado | number:'1.0-2' }}</div>
-          </div>
-        </ng-container>
-      </div>
   
 
   <!-- Pop-up -->
