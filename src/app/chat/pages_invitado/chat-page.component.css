@@ -317,16 +317,13 @@
 }
 
 .header-left {
-    width: 100%;
-    text-align: center;
-    padding: 10px;
-    color: #0d2a7c;
-    border-radius: 6px;
-    margin-bottom: 1px;
-    font-weight: 400;
-    font-family: 'Chromium', sans-serif;
-    background: white;
-    border: 3px solid #C29248;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: black;
+  border: 10px solid white;
+  padding: 5px 15px;
+  border-radius: 20px;
 }
 
 .header-right, .header-right-cerradas {
@@ -1664,14 +1661,16 @@ input[type="number"]::placeholder {
 }
 
 .header-right {
-  background: #fff;
-  color: #000;
-  border: none;
-  font-family: 'Arial Black', Arial, sans-serif;
-  font-size: 2em;
-  font-weight: bold;
-  padding: 0;
-  border-radius: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    color: #0d2a7c;
+    border-radius: 6px;
+    margin-bottom: 1px;
+    font-weight: 400;
+    font-family: 'Chromium', sans-serif;
+    background: white;
+    border: 3px solid #C29248;
 }
 
 /* CUADROS DE MONTO ROJO Y VERDE */
