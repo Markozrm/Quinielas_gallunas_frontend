@@ -254,4 +254,7 @@ guardarCambios(): void {
       alert('No se pudo obtener la clave del stream. Intenta más tarde.');
     }
   }
+  retorno(): void {
+  this.router.navigate(['/mi-perfil']);
+}
 }

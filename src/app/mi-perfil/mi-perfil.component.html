@@ -8,7 +8,11 @@
       </button>
     </div>
   </div>
+        <button class="btn-wrap btn-wrap-right" (click)="retorno()">
+  <img class="btn-submitRight" src="../../../assets/image/download.png" alt="Descargar">
+</button>
   <div class="perfil-content">
+    <img src="assets/image/Mi_perfil_fondo.png" alt="mi perfil fondo" class="perfil-fondo">
     <h1 class="titulo">{{ nombreUsuario }}</h1>
     
     <div class="perfil-imagen">
@@ -41,8 +45,7 @@
 </div>
     
     <div class="saldo-info">
-      <p class="saldo-label">Mi Saldo:</p>
-      <div class="saldo-valor">{{saldoUsuario}}</div>
+      <div class="saldo-valor"><p class="saldo-label">Mi Saldo:</p> {{saldoUsuario}}</div>
     </div>
     
     <div class="botones-acciones">
@@ -51,7 +54,10 @@
       <button class="btn-accion" (click)="verHistorialApuestas()">HISTORIAL APUESTAS <span class="btn-ir">IR</span></button>
       <button class="btn-accion" (click)="verHistorialRetiros()">HISTORIAL RETIROS <span class="btn-ir">IR</span></button>
       <button class="btn-accion" (click)="toggleEditarPerfil()">EDITAR PERFIL <span class="btn-ir">IR</span></button>
-      <button class="btn-accion btn-stream" (click)="goToStream()">IR AL STREAM <span class="btn-ir">IR</span></button>
+      <!-- <button class="btn-accion btn-stream" (click)="goToStream()">IR AL STREAM <span class="btn-ir">IR</span></button> -->
+      <button class="btn-stream-img" (click)="goToStream()">
+      <img src="assets/image/Ahora_en_vivo.png" alt="Ir al Stream" style="width: 100%; max-width: 220px;">
+      </button>
     </div>
 
 <div class="perfil-content" *ngIf="mostrarEditarPerfil">
