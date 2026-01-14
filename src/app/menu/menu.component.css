@@ -10,7 +10,7 @@
 
 .user-balance-container {
   width: 100%;
-  max-width: 100%;   /* Usa el mismo valor que tu main/apuesta-container */
+  max-width: 100%;
   margin: 0 auto;         
   background: linear-gradient(135deg, #0a1e5c 0%, #0d2a8a 100%);
   color: #000 !important;

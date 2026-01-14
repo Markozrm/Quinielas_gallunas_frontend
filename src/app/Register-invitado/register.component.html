@@ -1,14 +1,14 @@
 <!-- <div class="block-left">
     <app-users-rooms></app-users-rooms> -->
-
     <div class="main">
       <div class="menuContainer">
-        
       </div>
-      <button (click)="volver()" class="btn-volver">Volver</button>
+      <button (click)="volver()" class="btn-volver-invitado">
+      <img src="assets/image/atras.png" alt="">
+      </button>
       <div class="formContainer">
         <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
-          <h2>Registro</h2>
+          <img src="assets/image/Quinielas_Registro.png" alt="imagen_registro" class="img_registro">
 
            <!-- Nuevo campo para la imagen -->
         <div class="profile-section">
@@ -58,7 +58,7 @@
             <option value="administrador">administrador</option>
             <option value="invitado">invitado</option>
           </select> -->
-          <button type="submit" class="btn-iniciar">Registrar</button>
+          <button type="submit" class="btn-iniciar">ENTRAR</button>
         </form>
       </div>
     </div>

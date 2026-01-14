@@ -1,6 +1,6 @@
 .body {
   font-family: Arial, sans-serif;
-    background-image: url('../../assets/image/bg.jpg');
+    background-image: url('../../assets/image/Fond_de_quinielas.jpg');
     background-size: cover; /* Cubre todo el área */
     background-position: center; /* Centra la imagen */
     background-repeat: no-repeat; /* Evita que se repita */
@@ -48,12 +48,11 @@
 
 .price-value {
   
-    background-color: #000000;
+    background: linear-gradient(to bottom, #001a00 0%, #004d00 40%, #006400 70%, #00ff00 100%);
     color: #FFFF;
     font-size: 25px;
     font-weight: bold;
     padding: 1px 35px;
-    border-radius: 10px;
     display: inline-block;
     border: 2px solid #bca35b;
     font-family: 'Arial', sans-serif;
@@ -61,6 +60,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     margin-left: 170PX;
     margin-top: -250px;
+    height: 20px;
 }
 
 .btn-container{
@@ -371,23 +371,39 @@
 
 /* Tarjeta de datos bancarios */
 .datos-bancarios-card {
-  background: #fff;
+  background: linear-gradient(to bottom, #000 0%, #00b4e0 50%, #000 100%);
   border-radius: 10px;
+  border: 2px solid #bca35b;
   padding: 20px;
   margin-bottom: 20px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  max-width: 400px;
+  max-width: 400px; 
+  font-weight: 900 !important;
+}
+
+.btn-ir {
+  background: linear-gradient(to bottom, #000 0%, #c8921c 60%, #c8921c 100%);
+  color: #ffffff;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  height: 20px;
+  width: 50px;
+  margin-left: 10px;
+  font-weight: 1000;
 }
 
 .datos-bancarios-card h3 {
-  color: #222;
+  color: #ffffff;
   margin-bottom: 12px;
 }
 
 .datos-bancarios-card p {
   margin: 6px 0;
+  text-align: center;
   font-size: 16px;
-  color: #222;
+  color: #ffffff;
 }
 
 /* Media Queries para responsive */
@@ -419,7 +435,7 @@
         font-size: 20px;
         margin: 10px 0 0 0;
         padding: 10px 20px;
-        width: auto;
+        width: 90%;
         display: block;
         text-align: center;
     }
@@ -488,4 +504,9 @@
         padding: 8px 12px;
         font-size: 12px;
     }
+}
+
+    .titulo_saldo{
+    align-items: center;
+
 }
