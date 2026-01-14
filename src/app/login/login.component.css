@@ -144,7 +144,7 @@ input:-webkit-autofill:focus {
   background: linear-gradient(to bottom, #000 0%, #2e7d13 40%, #4caf0a 100%);
   color: #ffffff;
   font-weight: bold;
-  font-size: 2rem;
+  font-size: 1rem;
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   transition: all 0.3s ease;

@@ -36,7 +36,6 @@ export class RegisterInvitadoComponent implements OnInit {
         this.noAccentsValidator
       ]],
       password: ['', Validators.required],
-      image: ['', [this.imageRequiredValidator]],
       tipoUsuario: ['invitado', Validators.required],
       // Campos comentados para que NO sean obligatorios en registro de invitado:
       // email: ['', [Validators.required, Validators.email]],
@@ -111,10 +110,6 @@ export class RegisterInvitadoComponent implements OnInit {
       }
       if (this.formulario.get('password')?.errors?.['required']) {
         alert('La contraseña es obligatoria.');
-        return;
-      }
-      if (this.formulario.get('image')?.errors?.['imageRequired']) {
-        alert('Debes seleccionar una imagen de perfil.');
         return;
       }
 
