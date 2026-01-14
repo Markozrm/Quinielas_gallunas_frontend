@@ -101,8 +101,8 @@
   -webkit-text-stroke: 2px #ffffff;
 }
 .saldo-valor {
-  background: #1d5a0c;
-  color: #C29248;
+  background: linear-gradient(to bottom, #001a00 0%, #004d00 40%, #006400 70%, #00ff00 100%);
+  color: #ffffff;
   border: 4px solid #C29248;
   box-shadow: none !important;
    font-family: 'Arial Black', Arial, sans-serif;
