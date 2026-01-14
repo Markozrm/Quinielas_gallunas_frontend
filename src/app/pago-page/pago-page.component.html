@@ -6,10 +6,9 @@
  
 <div class="body">
     <div class="vip-membership">
-        <h2>Recarga tu saldo</h2>
+        <img src="assets/image/Recarga_saldo-removebg-preview.png" alt="titulo_saldo">
         <div class="price">
-            <div class="price-label">MI SALDO:</div>
-             <div class="price-value">{{saldo}}</div>
+             <div class="price-value">MI SALDO: {{saldo}}</div>
        <!-- </div>
         <ul class="benefits">
             Disfruta de:
@@ -18,7 +17,7 @@
             <li>Los Mejores Eventos</li>
         </ul>-->
         <div class="btn-container">
-            <button (click)="irEnviarRecibo()" class="btn">SUBIR COMPROBANTE</button>
+            <button (click)="irEnviarRecibo()" class="btn">SUBIR COMPROBANTE <span class="btn-ir">IR</span></button>
         </div>
     </div>
 
@@ -70,6 +69,8 @@
                     <button (click)="cancelEditing()" class="cancel-btn">Cancelar</button>
                 </div>
             </div>
+
+            
             
             <!-- Logos de establecimientos (solo en la segunda opción de pago) 
             <div *ngIf="payment.id === 'payment2'" class="payment-logos">
@@ -92,3 +93,6 @@
   <p><strong>BANCO:</strong> BANCOPPEL</p>
   <p><strong>CONCEPTO:</strong> TRANSFERENCIA</p>
 </div>
+
+
+<img src="assets/image/Ahora_en_vivo.png" alt="Ir al Stream">

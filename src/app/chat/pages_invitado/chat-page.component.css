@@ -938,13 +938,13 @@ input[type="number"]::placeholder {
 
 .bet-status-indicator.waiting {
   background-color: #ffffff00;
-  border: 2px solid #fff; 
+  border: 2px solid #ffffff; 
   color: black;
 }
 
 .bet-status-indicator.caught {
   
-    background-color: #fff;
+    background-color: #999999;
   border: 2px solid #ffffff;
   color: black;
 }
