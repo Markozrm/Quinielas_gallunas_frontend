@@ -7,6 +7,7 @@
     align-items: center;
     justify-content: center;
     height: 100%;
+    background-image: url('../../assets/image/Fond_de_quinielas.jpg');
   }
   
   .menu-container{
