@@ -510,3 +510,27 @@
     align-items: center;
 
 }
+
+.btn-volver-img {
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  cursor: pointer;
+  width: auto;
+  height: auto;
+}
+
+.btn-volver-img img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  display: block;
+  transition: filter 0.2s;
+
+}
