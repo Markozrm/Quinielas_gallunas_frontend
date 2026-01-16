@@ -997,7 +997,7 @@ input[type="number"]::placeholder {
 
 /* Ajustar el tamaño del contenedor para que quepa bien */
 .bet-status-indicator.caught {
-  min-height: 50px;
+  min-height: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1909,7 +1909,7 @@ body, .main, .apuesta-container, .chat-container {
 }
 
 .saldo-info{
-  font-size: 1.4rem;
+  font-size: 1rem;
   font-weight: bold;
   color: #ffffff;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
