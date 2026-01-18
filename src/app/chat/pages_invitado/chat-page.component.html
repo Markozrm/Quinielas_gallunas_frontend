@@ -45,15 +45,16 @@
     </div>
 
     <!-- CONTENEDOR DE BOTONES VUELVE A SU SITIO ORIGINAL -->
-    <div class="ir-stream-container">
-      <button class="ir-stream-btn" (click)="volver()">
-        IR STREAM
-      </button>
-      <!-- BOTÓN DE CHAT SIN CONDICIÓN *ngIf -->
-      <button class="ir-stream-btn chat-btn" (click)="openChatModal()">
-        CHAT
-      </button>
-    </div>
+<div class="ir-stream-container" style="background: transparent;">
+  <img src="assets/image/recargar-removebg-preview.png"
+       alt="Recargar"
+       style="height: 40px; vertical-align: middle; margin-right: 6px; border: none; background: none; padding: 0; margin: 0; cursor: pointer;"
+       (click)="volver()" />
+  <!-- BOTÓN DE CHAT SIN CONDICIÓN *ngIf -->
+  <button class="ir-stream-btn chat-btn" (click)="openChatModal()">
+    CHAT
+  </button>
+</div>
 
     <div [ngClass]="{'header-right-cerradas': estadoActualApuesta === 'APUESTAS CERRADAS', 'header-right': estadoActualApuesta === 'APUESTAS ABIERTAS'}">
       <span [ngClass]="{'apuestas-status-cerradas': estadoActualApuesta === 'APUESTAS CERRADAS', 'apuestas-status': estadoActualApuesta === 'APUESTAS ABIERTAS'}">
@@ -69,11 +70,6 @@
       <span class="bet-status-amount">${{ montoTotalEnEspera | number:'1.0-2' }}</span>
     </div>-->
     
-  </div>
-  <div class="saldo-info">
-  <div class="saldo-valor">
-  <span class="nombre-usuario">{{ username }}</span>&nbsp;&nbsp; &nbsp;Saldo: {{ balance }}
-</div>
   </div>
   <div class="match-info">
     <button class="team-red" 
@@ -115,7 +111,7 @@
           <span class="bet-status-label">
             <ng-container *ngIf="colorApuestasCazadas === 'rojo'">Voy jugando al ROJO:</ng-container>
             <ng-container *ngIf="colorApuestasCazadas === 'verde'">Voy jugando al VERDE:</ng-container>
-            <ng-container *ngIf="colorApuestasCazadas === ''">Voy jugando:</ng-container>
+            <ng-container *ngIf="colorApuestasCazadas === ''">No voy jugando:</ng-container>
           </span>
           <span class="bet-status-amount">${{ montoTotalCazado | number:'1.0-2' }}</span>
         </ng-container>
@@ -127,6 +123,10 @@
           </div>
         </ng-container>
       </div>
+<div class="saldo-info">
+  <span class="nombre-usuario">{{ username }}</span>
+  <span class="saldo-valor">Saldo: {{ balance }}</span>
+</div>
   <div class="betting-container">
     <div class="quick-bets">
       <button class="quick-bet-button" (click)="setBetAmount(100)">100</button>
@@ -152,8 +152,12 @@
       </button>
     </div>
   </div>
+  <div class="seleccion-info">
+  <p>SELECCIONA UN COLOR</p>
+  <P>SELECCIONA UNA CANTIDAD</P>
+  </div>
 </div>
-  
+ 
 
   <!-- Pop-up -->
   <div *ngIf="isPopupOpen" class="popup-overlay">
