@@ -2,11 +2,11 @@
 <div class="main">
   <div class="menuContainer">
     <app-menu></app-menu>
-    <div>
-      <button class="btn-wrap" (click)="irMiPerfil()">
-        <img class="btn-submit" src="{{userPhoto}}" alt="Foto de perfil">
-      </button>
-    </div>
+<div>
+  <button (click)="irMiPerfil()">
+    <img class="btn-submitRight" src="assets/image/download.png" alt="Foto de perfil">
+  </button>
+</div>
   </div> 
   <!-- El video container ahora está fuera del menuContainer -->
   <div class="videoContainer">
@@ -51,14 +51,16 @@
        style="height: 40px; vertical-align: middle; margin-right: 6px; border: none; background: none; padding: 0; margin: 0; cursor: pointer;"
        (click)="volver()" />
   <!-- BOTÓN DE CHAT SIN CONDICIÓN *ngIf -->
-  <button class="ir-stream-btn chat-btn" (click)="openChatModal()">
-    CHAT
-  </button>
+  <a (click)="openChatModal()" style="border:none;background:none;padding:0;cursor:pointer;">
+    <img src="assets/image/chat-removebg-preview (1).png"
+         alt="Chat"
+         style="height: 40px; vertical-align: middle; border: none; background: none; padding: 0; margin: 0; cursor: pointer;" />
+  </a>
 </div>
 
     <div [ngClass]="{'header-right-cerradas': estadoActualApuesta === 'APUESTAS CERRADAS', 'header-right': estadoActualApuesta === 'APUESTAS ABIERTAS'}">
       <span [ngClass]="{'apuestas-status-cerradas': estadoActualApuesta === 'APUESTAS CERRADAS', 'apuestas-status': estadoActualApuesta === 'APUESTAS ABIERTAS'}">
-  {{ estadoActualApuesta === 'APUESTAS ABIERTAS' ? 'CAZANDO' : 'PELEANDO' }}
+  {{ estadoActualApuesta === 'APUESTAS ABIERTAS' ? 'SE ESTA CAZANDO' : 'PELEANDO' }}
 </span>
     </div>
   </div>
@@ -123,6 +125,10 @@
           </div>
         </ng-container>
       </div>
+<div class="boton-juegos-row">
+  <p class="boton-se-esta-cazando">SE ESTA CAZANDO</p>
+  <p class="boton-los-juego">LOS JUEGO</p>
+</div>
 <div class="saldo-info">
   <span class="nombre-usuario">{{ username }}</span>
   <span class="saldo-valor">Saldo: {{ balance }}</span>
@@ -151,10 +157,10 @@
         <p>JUGAR</p>
       </button>
     </div>
-  </div>
-  <div class="seleccion-info">
+      <div class="seleccion-info">
   <p>SELECCIONA UN COLOR</p>
   <P>SELECCIONA UNA CANTIDAD</P>
+  </div>
   </div>
 </div>
  
