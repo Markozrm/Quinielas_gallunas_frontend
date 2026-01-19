@@ -1,5 +1,5 @@
 services:
-  # Aplicación Angular Frontend
+  # Aplicación Angular Frontend (SSR / Node)
   app:
     build:
       context: .
@@ -11,10 +11,22 @@ services:
     environment:
       - NODE_ENV=${NODE_ENV:-production}
       - PORT=${PORT:-4200}
+      # ESTA ES LA CLAVE: Le decimos que el host no es localhost, sino "redis_db"
+      - REDIS_HOST=redis_db 
+      - REDIS_PORT=6379
+    networks:
+      - quinielas_gallunas_frontend_network
+    depends_on:
+      - redis_db # Espera a que redis inicie primero
+
+  # AGREGAMOS EL SERVICIO DE REDIS QUE FALTABA
+  redis_db:
+    image: redis:alpine
+    container_name: quinielas_gallunas_redis
+    restart: unless-stopped
     networks:
       - quinielas_gallunas_frontend_network
 
 networks:
   quinielas_gallunas_frontend_network:
     driver: bridge
-
