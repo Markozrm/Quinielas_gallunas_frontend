@@ -1501,6 +1501,31 @@ type NotificacionRuleta = {
   }
 }
 
+public montoDisponible: number = 0;
+public disponibleColor: 'rojo' | 'verde' | null = null;
+
+// Llama este método cada vez que cambien las apuestas
+actualizarMontoDisponible() {
+  // Usamos tus variables de ejemplo
+  const rojo = this.cantidadApostadaRojo;
+  const verde = this.cantidadApostadaVerde;
+
+  if (rojo > verde) {
+    this.montoDisponible = rojo - verde;
+    this.disponibleColor = 'rojo';
+  } else if (verde > rojo) {
+    this.montoDisponible = verde - rojo;
+    this.disponibleColor = 'verde';
+  } else {
+    this.montoDisponible = 0;
+    this.disponibleColor = null;
+  }
+}
+
+// Ejemplo: llama a actualizarMontoDisponible() después de actualizar las apuestas
+// this.cantidadApostadaRojo = ...;
+// this.cantidadApostadaVerde = ...;
+// this.actualizarMontoDisponible();
 } // <--- Aquí termina la clase
 
 interface UserType {
