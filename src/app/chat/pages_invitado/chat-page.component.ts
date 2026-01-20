@@ -547,7 +547,9 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
   if (savedImage) {
     this.imagenStreamUrl = savedImage;
   }
-  
+  this.apuestaService.getUsersCount().subscribe((count: any) => {
+    this.connectedUsers = count;
+  });
 }
 
   ngOnDestroy(): void {
