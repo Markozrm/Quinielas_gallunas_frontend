@@ -125,20 +125,6 @@
         </ng-container>
       </div>
 <div class="boton-juegos-row">
-  <p
-    class="boton-se-esta-cazando"
-    [ngClass]="{
-      'disponible-verde': disponibleColor === 'verde',
-      'disponible-rojo': disponibleColor === 'rojo'
-    }"
-  >
-    <ng-container *ngIf="montoDisponible > 0">
-      Disponible {{ disponibleColor | titlecase }}: ${{ montoDisponible | number:'1.0-0' }}
-    </ng-container>
-    <ng-container *ngIf="montoDisponible === 0">
-      SE ESTA CAZANDO
-    </ng-container>
-  </p>
   <p class="boton-los-juego">LOS JUEGO</p>
 </div>
 <div class="saldo-info">
