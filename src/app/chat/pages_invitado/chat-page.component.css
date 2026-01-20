@@ -2065,7 +2065,7 @@ background: linear-gradient( rgb(129, 129, 129)   /* dorado profundo abajo */
 }
 
 .admin-btn.users-btn {
-  background: linear-gradient(135deg, #0010ee 0%, #005fa3 100%);
+  background: #d6a53a;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -2074,11 +2074,4 @@ background: linear-gradient( rgb(129, 129, 129)   /* dorado profundo abajo */
   font-weight: bold;
   display: flex;
   align-items: center;
-  gap: 8px;
-  box-shadow: 0 2px 8px #0002;
-  transition: background 0.2s, filter 0.2s;
-}
-.disabled-btn {
-  opacity: 0.6;
-  pointer-events: none;
 }
