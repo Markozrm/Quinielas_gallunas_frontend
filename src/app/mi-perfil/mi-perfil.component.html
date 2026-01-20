@@ -14,17 +14,7 @@
   <div class="perfil-content">
     <img src="assets/image/Mi_perfil_fondo.png" alt="mi perfil fondo" class="perfil-fondo">
     <h1 class="titulo">{{ nombreUsuario }}</h1>
-    
-    <div class="perfil-imagen">
-      <div class="gallo-circulo"(mouseenter)="showChangePhoto = true" (mouseleave)="showChangePhoto = false">
-        <img [src]="userPhoto" alt="Foto de usuario">
-        <!-- Overlay para cambiar foto -->
-            <div class="change-photo-overlay" *ngIf="showChangePhoto" (click)="toggleCambioFoto()">
-              <i class="fas fa-camera"></i>
-              <span>Cambiar foto</span>
-            </div>
-      </div>
-    </div>
+
     <!-- Formulario para cambiar foto -->
 <div *ngIf="mostrarCambioFoto" class="photo-change-container">
   <div class="photo-preview" *ngIf="previewFoto">
