@@ -466,7 +466,9 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
     
     this.apuestaService.rondaActual.subscribe((ronda: number) => {
       this.rondaActual = ronda;
-      this.yaApostoEstaRonda = false;
+      // Verifica si ya apostó en esta ronda
+      const yaAposto = localStorage.getItem(`apostado_${this.username}_${this.salaActual}_${this.rondaActual}`) === 'true';
+      this.yaApostoEstaRonda = yaAposto;
       if (ronda !== 0) {
         this.guardarDatosEnLocalStorage();
       }
@@ -716,6 +718,11 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
       this.mostrarNotificacion(notificacion);
     });
     this.yaApostoEstaRonda = true;
+    // Guarda el estado en localStorage
+    localStorage.setItem(
+      `apostado_${this.username}_${this.salaActual}_${this.rondaActual}`,
+      'true'
+    );
   }
 
   apostarAllIn(): void {
