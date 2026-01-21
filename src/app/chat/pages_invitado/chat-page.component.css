@@ -2075,3 +2075,9 @@ background: linear-gradient( rgb(129, 129, 129)   /* dorado profundo abajo */
   display: flex;
   align-items: center;
 }
+
+.boton-apostar:disabled {
+  background: #bdbdbd !important;
+  color: #888 !important;
+  border: 4px solid #888 !important;
+}
