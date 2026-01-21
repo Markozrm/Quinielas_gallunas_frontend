@@ -101,8 +101,15 @@ export class VerHistorialUsuariosComponent implements OnInit {
   aplicarFiltros() {
     let datos = [...this.historial];
 
-    // Filtro global: ocultar todos los registros con concepto "correccion" (sin importar el usuario)
+    // Filtro global: ocultar todos los registros con concepto "correccion"
     datos = datos.filter(item => (item.concepto || '').toLowerCase() !== 'correccion');
+
+    // Filtro global: ocultar todos los registros con resultado o queda "Tablas" (empate)
+    datos = datos.filter(item => {
+      const resultado = (item.resultado || '').toString().trim().toLowerCase();
+      const queda = (item.queda || '').toString().trim().toLowerCase();
+      return resultado !== 'tablas' && queda !== 'tablas';
+    });
 
     // Filtro por stream (campo sala)
     if (this.codigoStream && this.codigoStream.trim()) {
