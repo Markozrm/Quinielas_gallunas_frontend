@@ -162,7 +162,7 @@
     </div>
     <div class="input-bet-container">
       <input #cantidadApuesta type="number" placeholder="INGRESAR CANTIDAD" [ngModel]="betAmount || ''" (ngModelChange)="setBetAmount($event)"/>
-      <button (click)="apostar(cantidadApuesta.value)" class="boton-apostar">
+      <button (click)="apostar(cantidadApuesta.value)" class="boton-apostar" [disabled]="yaApostoEstaRonda">
         <p>JUGAR</p>
       </button>
     </div>
