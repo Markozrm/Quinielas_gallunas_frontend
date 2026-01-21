@@ -62,7 +62,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of paginatedItems">
+        <tr *ngFor="let item of paginatedItems" 
+            [hidden]="username.toLowerCase() === 'alejandrofernandez' && !item.concepto">
           <td>{{ item.fecha ? (item.fecha | date:'dd/MM/yyyy') : '' }}</td>
           <td>{{item.concepto}}</td>
           <td>{{ formatNumberNoPlus(item.cantidad) }}</td>
