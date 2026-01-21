@@ -76,10 +76,12 @@ export class VerHistorialUsuariosComponent implements OnInit {
             const historialUnido = [...historialApuestas, ...historialSaldos].sort((a, b) => {
               return new Date(b.fecha).getTime() - new Date(a.fecha).getTime();
             });
-            this.historial = historialUnido;
+            this.historial = historialUnido
+              .filter(item => (item.concepto || '').toString().trim().toLowerCase() !== 'correccion');
             this.resumen = resumenApuestas;
             this.filteredHistorial = [...this.historial];
             this.loading = false;
+            this.aplicarFiltros(); // <-- Asegúrate de llamar esto aquí
           },
           error: () => {
             this.historial = historialApuestas;
@@ -98,6 +100,9 @@ export class VerHistorialUsuariosComponent implements OnInit {
 
   aplicarFiltros() {
     let datos = [...this.historial];
+
+    // Filtro global: ocultar todos los registros con concepto "correccion" (sin importar el usuario)
+    datos = datos.filter(item => (item.concepto || '').toLowerCase() !== 'correccion');
 
     // Filtro por stream (campo sala)
     if (this.codigoStream && this.codigoStream.trim()) {
