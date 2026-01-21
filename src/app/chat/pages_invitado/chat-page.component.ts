@@ -466,6 +466,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
     
     this.apuestaService.rondaActual.subscribe((ronda: number) => {
       this.rondaActual = ronda;
+      this.yaApostoEstaRonda = false;
       if (ronda !== 0) {
         this.guardarDatosEnLocalStorage();
       }
@@ -714,6 +715,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
       };
       this.mostrarNotificacion(notificacion);
     });
+    this.yaApostoEstaRonda = true;
   }
 
   apostarAllIn(): void {
@@ -1505,6 +1507,7 @@ type NotificacionRuleta = {
 
 public montoDisponible: number = 0;
 public disponibleColor: 'rojo' | 'verde' | null = null;
+public yaApostoEstaRonda: boolean = false;
 
 // Llama este método cada vez que cambien las apuestas
 actualizarMontoDisponible() {
