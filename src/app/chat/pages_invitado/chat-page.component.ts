@@ -16,7 +16,6 @@ import { VideoPlayerComponent } from 'src/app/reproductor/reproductor.component'
 import { UsersTypeComponent } from '../components/users-type/users-type.component';
 import { NotificacionPersonalComponent, NotificacionType } from '../components/notificacion-personal/notificacion-personal.component';
 import { ChatModalComponent } from '../components/chat-modal/chat-modal.component';
-import { RuletaService } from 'src/app/services/ruleta.service'; // Asegúrate de importar el servicio
 import { io, Socket } from 'socket.io-client';
 import { environment } from 'src/environments/environment';
 import { TablaPuntosComponent } from 'src/app/tabla-puntos/tabla-puntos.component';
@@ -38,8 +37,7 @@ import { TablaPuntosComponent } from 'src/app/tabla-puntos/tabla-puntos.componen
     TablaPuntosComponent
   ],
 })
-export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewInit {
-  public tituloRuletaActual: string = '';
+export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
   public estadoActualApuesta = '';
   public rondaActual = 0;
   public cantidadApostadaRojo = 0;
@@ -77,7 +75,6 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
   teamRedScore: number = 8;
   teamGreenScore: number = 5;
    matchNumber: number = 31;
-  public mostrarPopupRuleta: boolean = false;
   
   redTeamName: string = '';
   greenTeamName: string = '';
@@ -112,91 +109,6 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
   dragOffset = { x: 0, y: 0 };
   dragStartTime = 0;
   dragStartPosition = { x: 0, y: 0 };
-
-  // Propiedades para el botón flotante de la ruleta (independiente)
-  ruletaIsDragging = false;
-  ruletaButtonPosition = { x: 120, y: 20 };
-  ruletaDragOffset = { x: 0, y: 0 };
-  ruletaDragStartTime = 0;
-  ruletaDragStartPosition = { x: 0, y: 0 };
-  // --- RULETA FLOATING BUTTON DRAG LOGIC ---
-  onRuletaMouseDown(event: MouseEvent): void {
-    this.ruletaIsDragging = true;
-    const rect = (event.target as HTMLElement).getBoundingClientRect();
-    this.ruletaDragOffset.x = event.clientX - rect.left;
-    this.ruletaDragOffset.y = event.clientY - rect.top;
-  }
-
-  onRuletaMouseMove(event: MouseEvent): void {
-    if (this.ruletaIsDragging) {
-      const newX = event.clientX - this.ruletaDragOffset.x;
-      const newY = event.clientY - this.ruletaDragOffset.y;
-      const maxX = window.innerWidth - 80;
-      const maxY = window.innerHeight - 60;
-      this.ruletaButtonPosition.x = Math.max(0, Math.min(newX, maxX));
-      this.ruletaButtonPosition.y = Math.max(0, Math.min(newY, maxY));
-    }
-  }
-
-  onRuletaMouseUp(): void {
-    if (this.ruletaIsDragging) {
-      this.ruletaIsDragging = false;
-      this.saveRuletaButtonPosition();
-    }
-  }
-
-  onRuletaTouchStart(event: TouchEvent): void {
-    this.ruletaIsDragging = true;
-    const touch = event.touches[0];
-    const rect = (event.target as HTMLElement).getBoundingClientRect();
-    this.ruletaDragOffset.x = touch.clientX - rect.left;
-    this.ruletaDragOffset.y = touch.clientY - rect.top;
-  }
-
-  onRuletaTouchMove(event: TouchEvent): void {
-    const touch = event.touches[0];
-    if (this.ruletaIsDragging) {
-      const newX = touch.clientX - this.ruletaDragOffset.x;
-      const newY = touch.clientY - this.ruletaDragOffset.y;
-      const maxX = window.innerWidth - 80;
-      const maxY = window.innerHeight - 60;
-      this.ruletaButtonPosition.x = Math.max(0, Math.min(newX, maxX));
-      this.ruletaButtonPosition.y = Math.max(0, Math.min(newY, maxY));
-    }
-  }
-
-  onRuletaTouchEnd(): void {
-    if (this.ruletaIsDragging) {
-      this.ruletaIsDragging = false;
-      this.saveRuletaButtonPosition();
-    }
-  }
-  private actualizarMisNumerosComprados(): void {
-  this.misNumerosComprados = [];
-  for (const [numStr, username] of Object.entries(this.numerosComprados)) {
-    const num = Number(numStr);
-    if (username === this.username) {
-      this.misNumerosComprados.push(num);
-    }
-  }
-  // Ordenar los números
-  this.misNumerosComprados.sort((a, b) => a - b);
-}
-
-  private loadRuletaButtonPosition(): void {
-    const savedPosition = localStorage.getItem('ruletaButtonPosition');
-    if (savedPosition) {
-      try {
-        this.ruletaButtonPosition = JSON.parse(savedPosition);
-      } catch (error) {
-        console.error('Error loading ruleta button position:', error);
-      }
-    }
-  }
-
-  private saveRuletaButtonPosition(): void {
-    localStorage.setItem('ruletaButtonPosition', JSON.stringify(this.ruletaButtonPosition));
-  }
   isCasinoPopupOpen = false;
   casinoOptions = ['QUINIELA', 'RULETA', 'RIFA', 'VENTAJA'];
   
@@ -209,76 +121,6 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
   private rifasSubscription: Subscription | undefined;
  
 
-  public numeroRuletaSeleccionado: number | null = null;
-
-  // Ruleta properties
-  public ruletaNumbers = [
-    {num: 1, color: 'dorado'},
-    {num: 2, color: 'negro'},
-    {num: 7, color: 'dorado'},
-    {num: 8, color: 'negro'},
-    {num: 13, color: 'dorado'},
-    {num: 9, color: 'negro'},
-    {num: 10, color: 'dorado'},
-    {num: 5, color: 'negro'},
-    {num: 4, color: 'dorado'},
-    {num: 11, color: 'negro'},
-    {num: 14, color: 'dorado'},
-    {num: 3, color: 'negro'},
-    {num: 6, color: 'dorado'},
-    {num: 12, color: 'negro'}
-  ];
-  private ruletaSpinning = false;
-  private ruletaAngle = 0;
-  private ruletaAnimationFrame: number | null = null;
-  private ruletaCanvas: HTMLCanvasElement | null = null;
-  private ruletaCtx: CanvasRenderingContext2D | null = null;
-  public precioUnificado: number = 0;
-
-  // --- MÉTODOS DE RULETA ---
- mostrarPopupRuletaHandler(): void {
-    this.inicializarRuletaSocket();
-    this.mostrarPopupRuleta = true;
-    this.cargarPreciosRuleta();
-    this.cargarTituloRuleta(); // <- AGREGAR ESTA LÍNEA
-    setTimeout(() => this.drawRuletaWheel(), 300);
-    if (this.ruletaSocket && this.ruletaSocket.connected) {
-      this.ruletaSocket.emit('ruleta_obtener_estado', 'global');
-    }
-  }
-
-  // Agregar este nuevo método
-  private cargarTituloRuleta(): void {
-    this.ruletaService.getRuletaTitle('global').subscribe({
-      next: (response: any) => {
-        this.tituloRuletaActual = response.titulo || 'RULETA PLUMASS';
-      },
-      error: (err) => {
-        console.error('Error cargando título de ruleta:', err);
-        this.tituloRuletaActual = 'RULETA PLUMASS'; // Título por defecto
-      }
-    });
-  }
-
-  cerrarPopupRuleta(): void {
-    this.mostrarPopupRuleta = false;
-    this.numeroRuletaSeleccionado = null;
-    if (this.ruletaAnimationFrame) {
-      cancelAnimationFrame(this.ruletaAnimationFrame);
-    }
-  }
-
-  girarRuleta(): void {
-    // Aquí iría la lógica para hacer girar la ruleta.
-    // Basado en el contexto, esta lógica parece faltar.
-    // Por ahora, lo dejamos como un placeholder.
-    console.log('Girando la ruleta...');
-  }
-
-  onSeleccionarNumeroRuleta(numero: number): void {
-    this.numeroRuletaSeleccionado = numero;
-    console.log(`Número seleccionado: ${numero}`);
-  }
 
   constructor(
     private usersService: UsersService,
@@ -287,147 +129,20 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
     private apuestaService: apuestaService,
     private chatService: ChatService, // VERIFICAR QUE ESTÉ AQUÍ
     private quinielaService: QuinielaService ,
-    private ruletaService: RuletaService,
+    // RuletaService eliminado
     private http: HttpClient // AGREGAR ESTA LÍNEA
   ) {
-    this.inicializarRuletaSocket();
   }
 
   public numerosComprados: { [numero: number]: string } = {};
-  public ruletaSocket: any;
-
-  // Llama esto en ngOnInit()
-  inicializarRuletaSocket() {
-  if (this.ruletaSocket && this.ruletaSocket.connected) return;
-
-  if (this.ruletaSocket && !this.ruletaSocket.connected) {
-    this.ruletaSocket.disconnect();
-    this.ruletaSocket = undefined;
-  }
-
-  this.ruletaSocket = io(`${environment.apiUrl_ruleta}:446`, {
-    transports: ['websocket'],
-    reconnection: true,
-    reconnectionAttempts: 5,
-    reconnectionDelay: 1000
-  });
-
-  this.ruletaSocket.on('connect_error', (err: any) => {
-    console.error('Error de conexión al socket de ruleta:', err);
-  });
-
-    this.ruletaSocket.emit('join_room', { sala: 'global', usuario: this.username });
-
-    this.ruletaSocket.on('disconnect', () => {
-      console.warn('Socket de ruleta desconectado. Intentando reconectar...');
-      this.ruletaSocket = undefined;
-    });
-
-    this.ruletaSocket.on('ruleta_numeros_actualizados', (data: any) => {
-      console.log('Actualización de números:', data);
-      this.numerosComprados = {};
-      Object.keys(data.comprados).forEach(num => {
-        this.numerosComprados[Number(num)] = data.comprados[num].buyer;
-      });
-      this.actualizarMisNumerosComprados(); // Actualizar la lista del usuario
-    });
-
-    this.ruletaSocket.on('ruleta_estado_actual', (estado: any) => {
-      this.numerosComprados = {};
-      if (estado && estado.comprados) {
-        Object.keys(estado.comprados).forEach(num => {
-          this.numerosComprados[Number(num)] = estado.comprados[num].buyer;
-        });
-      }
-       this.actualizarMisNumerosComprados();
-      console.log('numerosComprados:', this.numerosComprados);
-    });
-
-    this.ruletaSocket.on('ruleta_comprar', (respuesta: any) => {
-      if (respuesta && respuesta.success) {
-        alert('🎉 ¡Número comprado exitosamente!');
-        this.actualizarSaldo();
-        // El backend ya emite 'ruleta_numeros_actualizados', así que tu UI se actualizará sola
-      } else {
-        alert('❌ Error al comprar número: ' + (respuesta?.error || 'Error desconocido'));
-      }
-    });
-
-    this.ruletaSocket.on('ruleta_empezar_giro', (data: { numeroGanador: number, ganador: string }) => {
-      console.log('Recibido ruleta_empezar_giro:', data);
-      this.datosGanador= data
-      this.animarGiroRuleta(data.numeroGanador);
-    });
-
-    this.ruletaSocket.on('mensaje_ganador_ruleta', (data: { numeroGanador: number, premio: number }) => {
-      this.mensajeGanadorRuleta = `¡Felicidades! Ganaste la ruleta con el número ${data.numeroGanador} y tu premio es $${data.premio.toFixed(2)}.`;
-    });
-
-    this.ruletaSocket.on('nueva_ronda_ruleta', (data: { stream: string, sala: string, numeroRonda: number }) => {
-      console.log('Nueva ronda recibida:', data);
-      this.rondaActualRuleta = data.numeroRonda;
-      this.streamActual = data.stream;
-      this.salaActual = data.sala;
-      this.numerosComprados = {};
-      if (this.ruletaSocket && this.ruletaSocket.connected) {
-        this.ruletaSocket.emit('ruleta_obtener_estado', { stream: data.stream, sala: data.sala });
-      }
-    });
-     this.ruletaSocket.on('ruleta_titulo_actualizado', (data: { titulo: string, sala: string }) => {
-      console.log('Título de ruleta actualizado:', data);
-      if (data.sala === 'global') { // O la sala actual
-        this.tituloRuletaActual = data.titulo;
-      }
-    });
-  }
-
-  // Método para comprar número
-  public comprarNumeroRuleta(num: number) {
-  const precio = this.preciosRuleta[num];
-  if (!precio) return;
-  if (!this.ruletaSocket || !this.ruletaSocket.connected) {
-    alert('No hay conexión con la ruleta. Intenta abrir de nuevo el popup o recargar la página.');
-    this.inicializarRuletaSocket();
-    return;
-  }
-  // Usa el streamActual y salaActual correctos
-  const stream = this.streamActual || 'global';
-  const sala = this.salaActual || 'global';
-
-  this.ruletaSocket.emit(
-    'ruleta_comprar',
-    {
-      username: this.username,
-      number: num,
-      stream: stream,
-      sala: sala,
-      amount: Number(this.precioUnificado)
-    },
-    (respuesta: any) => {
-      if (respuesta && respuesta.success) {
-        alert('🎉 ¡Número comprado exitosamente!');
-        this.actualizarSaldo();
-      } else {
-        alert('❌ Error al comprar número: ' + (respuesta?.error || 'Error desconocido'));
-      }
-    }
-  );
-}
 
   ngOnInit(): void {
     this.restaurarBloqueoApuesta();
     this.cargarEstadoTiempoGracia();
-    
-    // Cargar posición de los botones flotantes desde localStorage
     this.loadButtonPosition();
-    this.loadRuletaButtonPosition();
-    
     document.addEventListener('mouseup', () => this.onMouseUp());
     document.addEventListener('touchend', () => this.onTouchEnd());
-    // Agregar event listeners globales para el arrastre (ruleta)
-    document.addEventListener('mouseup', () => this.onRuletaMouseUp());
-    document.addEventListener('touchend', () => this.onRuletaTouchEnd());
-    
+
     this.route.params.subscribe((params: Params) => {
       const variableValue = params['sala'];
       const port = params['port'];
@@ -469,7 +184,8 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
     
     this.apuestaService.rondaActual.subscribe((ronda: number) => {
       this.rondaActual = ronda;
-      this.yaApostoEstaRonda = false;
+      // Al cambiar de ronda, revisa si ya apostó en esta ronda (por si recarga)
+      this.yaApostoEstaRonda = this.consultarApuestaRondaActual();
       if (ronda !== 0) {
         this.guardarDatosEnLocalStorage();
       }
@@ -530,22 +246,6 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
         r.numeroRifa === this.rifaSeleccionada.numeroRifa);
     }
   });
-  
-  this.inicializarRuletaSocket();
-  this.cargarPreciosRuleta(); // <--- AGREGA ESTA LÍNEA
-  
-  // CAMBIAR ESTAS LÍNEAS (quitar eventos Socket.IO):
-  // this.chatService.socket.on('stream_image_changed', (payload: { imageUrl: string }) => {
-  //   this.imagenStreamUrl = payload.imageUrl;
-  //   localStorage.setItem('imagenStreamUrl', payload.imageUrl);
-  // });
-
-  // this.chatService.socket.on('stream_image_removed', () => {
-  //   this.imagenStreamUrl = null;
-  //   localStorage.removeItem('imagenStreamUrl');
-  // });
-
-
   // Al iniciar, recupera la imagen si existe
   const savedImage = localStorage.getItem('imagenStreamUrl');
   if (savedImage) {
@@ -554,27 +254,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
   this.apuestaService.getUsersCount().subscribe((count: any) => {
     this.connectedUsers = count;
   });
-}
-
-  ngOnDestroy(): void {
-    this.apuestaSubscription?.unsubscribe();
-    this.booleanStateSubscription?.unsubscribe();
-    this.notificacionSubscription?.unsubscribe();
-    this.notificacionGlobalSubscription?.unsubscribe();
-    this.rifasSubscription?.unsubscribe();
-    
-    document.removeEventListener('mouseup', () => this.onMouseUp());
-    document.removeEventListener('touchend', () => this.onTouchEnd());
-    document.removeEventListener('mouseup', () => this.onRuletaMouseUp());
-    document.removeEventListener('touchend', () => this.onRuletaTouchEnd());
-    
-    // Clean up ruleta observer and animation
-    if ((this as any)._ruletaObserver) {
-      (this as any)._ruletaObserver.disconnect();
-    }
-    if (this.ruletaAnimationFrame) cancelAnimationFrame(this.ruletaAnimationFrame);
-  }
-  
+}  
   actualizarSaldo(){
     this.usersService.getSaldo(this.username).subscribe((data: any) => {
       this.balance = data.saldo;
@@ -695,7 +375,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
         alert("El saldo es insuficiente para realizar la apuesta");
         return;
       }
-      
+
       const room = this.route.snapshot.paramMap.get('id');
       this.apuestaService.sendMessage({
         username: this.username,
@@ -705,10 +385,10 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
         cantidad: cantidadNumerica,
         room: room || '',
       });
-      
+
       this.montoTotalEnEspera += cantidadNumerica;
       this.guardarDatosEnLocalStorage();
-      
+
       const notificacion: NotificacionType = {
         tipo: 'informacion',
         mensaje: `Has apostado $${cantidadNumerica} al equipo ${this.apuesta.rojo ? 'ROJO' : 'VERDE'}`,
@@ -720,8 +400,11 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
         }
       };
       this.mostrarNotificacion(notificacion);
+
+      // Guardar que ya apostó en esta ronda
+      this.marcarApuestaRondaActual();
+      this.yaApostoEstaRonda = true;
     });
-    this.yaApostoEstaRonda = true;
   }
 
   apostarAllIn(): void {
@@ -1205,299 +888,19 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
     this.cargarRifasDelStream();
   }
 
-  public preciosRuleta: { [numero: number]: number } = {};
-  public rondaActualRuleta: number = 0;
-  public streamActual: string = '';
-  public mensajeGanadorRuleta: string = '';
-  
-  public cargarPreciosRuleta() {
-    this.ruletaService.getPrices('global').subscribe({
-      next: (respuesta: any) => {
-        let precios: any = {};
-        if ('data' in respuesta) {
-          precios = respuesta.data || {};
-        } else {
-          precios = respuesta || {};
-        }
-        console.log('Precios procesados:', precios);
-        this.preciosRuleta = {};
-        
-        // Obtener el primer precio como precio unificado
-        const preciosArray = Object.values(precios);
-        if (preciosArray.length > 0) {
-          this.precioUnificado = Number(preciosArray[0]);
-        }
-        
-        for (const key in precios) {
-          if (precios.hasOwnProperty(key)) {
-            this.preciosRuleta[Number(key)] = Number(precios[key]);
-          }
-        }
-      },
-      error: (err) => {
-        console.error('Error cargando precios de ruleta:', err);
-        this.preciosRuleta = {};
-        this.precioUnificado = 0;
-      }
-    });
-  }
-
-  animarGiroRuleta(numeroGanador: number) {
-    const index = this.ruletaNumbers.findIndex(n => n.num === numeroGanador);
-    if (index !== -1) {
-      this.spinRuletaToIndex(index);
-    }
-  }
-
-  spinRuletaToIndex(targetIndex: number) {
-    if (this.ruletaSpinning) return;
-    this.ruletaSpinning = true;
-    const n = this.ruletaNumbers.length;
-    const anglePerSector = 2 * Math.PI / n;
-    const targetAngle = (2 * Math.PI * 20) + (2 * Math.PI - (targetIndex + 0.5) * anglePerSector);
-    const duration = 20000;
-    const start = performance.now();
-    const initialAngle = this.ruletaAngle;
-
-    const animate = (now: number) => {
-      const elapsed = now - start;
-      const t = Math.min(elapsed / duration, 1);
-      const ease = 1 - Math.pow(1 - t, 3);
-      this.ruletaAngle = initialAngle + (targetAngle - initialAngle) * ease;
-      this.drawRuletaWheel();
-      if (t < 1) {
-        this.ruletaAnimationFrame = requestAnimationFrame(animate);
-      } else {
-        this.ruletaSpinning = false;
-        this.ruletaAngle = this.ruletaAngle % (2 * Math.PI);
-        this.drawRuletaWheel(targetIndex);
-        this.numeroRuletaSeleccionado = this.ruletaNumbers[targetIndex].num;
-      }
-        // MOSTRAR NOTIFICACIÓN SOLO CUANDO TERMINA EL GIRO
-      if (this.datosGanador && this.datosGanador.ganador === this.username) {
-        this.mostrarNotificacionGanador(this.datosGanador.numeroGanador);
-      }
-      this.datosGanador = null; // Limpiar datos
-    };
-    
-    if (this.ruletaAnimationFrame) cancelAnimationFrame(this.ruletaAnimationFrame);
-    this.ruletaAnimationFrame = requestAnimationFrame(animate);
-  }
-  private mostrarNotificacionGanador(numeroGanador: number): void {
-  // Calcular monto neto (total apostado menos 28.57%)
-  const montoApostado = this.misNumerosComprados.reduce((total, num) => {
-    return total + (this.preciosRuleta[num] || 0);
-  }, 0);
-  
-  const montoNeto = montoApostado * (1 - 0.2857); // Restar 28.57%
-  
- type NotificacionApuesta = {
-  tipo: 'apuesta' | 'cazada';
-  mensaje: string;
-  detalles: {
-    cantidad: number;
-    cantidadOriginal?: number;
-    cantidadDevuelta?: number;
-    cantidadCazada?: number;
-    ronda: number;
-    sala: string;
-    fecha: Date;
-    // Propiedades específicas de apuestas
-    color?: 'rojo' | 'verde';
-    estado?: 'en_espera' | 'cazada';
-  };
-};
-type NotificacionRuleta = {
-  tipo: 'ganancia_ruleta';
-  mensaje: string;
-  detalles: {
-    cantidad: number;
-    ronda: number;
-    sala: string;
-    fecha: Date;
-    // Propiedades específicas de ruleta
-    numeroGanador: number;
-    montoApostado: number;
-    multiplicador: number;
-  };
-};
-  type NotificacionType = NotificacionApuesta | NotificacionRuleta;
+  // --- NUEVOS MÉTODOS PARA PERSISTENCIA POR RONDA Y USUARIO ---
+private getApuestaRondaKey(): string {
+  return `apuesta_realizada_${this.username}_${this.salaActual}_ronda_${this.rondaActual}`;
 }
 
- drawRuletaWheel(selectedIndex?: number) {
-  if (!this.ruletaCanvas) {
-    this.ruletaCanvas = document.getElementById('ruleta-canvas') as HTMLCanvasElement;
-    if (!this.ruletaCanvas) return;
-    this.ruletaCtx = this.ruletaCanvas.getContext('2d');
-  }
-  if (!this.ruletaCtx) return;
-
-  const ctx = this.ruletaCtx;
-  const width = this.ruletaCanvas.width;
-  const height = this.ruletaCanvas.height;
-  const centerX = width / 2;
-  const centerY = height / 2;
-  const radius = Math.min(width, height) / 2 - 25;
-  const innerRadius = 35; // Radio del círculo central
-  const n = this.ruletaNumbers.length;
-  const anglePerSector = 2 * Math.PI / n;
-
-  ctx.clearRect(0, 0, width, height);
-
-  // Borde exterior plateado/metálico
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, radius + 20, 0, 2 * Math.PI);
-  const metalGradient = ctx.createRadialGradient(centerX, centerY, radius + 10, centerX, centerY, radius + 20);
-  metalGradient.addColorStop(0, '#C0C0C0');
-  metalGradient.addColorStop(0.5, '#A0A0A0');
-  metalGradient.addColorStop(1, '#808080');
-  ctx.fillStyle = metalGradient;
-  ctx.fill();
-
-  // Borde dorado intermedio
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, radius + 15, 0, 2 * Math.PI);
-  ctx.fillStyle = '#FFD700';
-  ctx.fill();
-
-  // Borde negro para separación
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, radius + 12, 0, 2 * Math.PI);
-  ctx.fillStyle = '#000000';
-  ctx.fill();
-
-  // Sectores de la ruleta
-  for (let i = 0; i < n; i++) {
-    const angleStart = this.ruletaAngle + i * anglePerSector;
-    const angleEnd = angleStart + anglePerSector;
-    
-    ctx.beginPath();
-    ctx.moveTo(centerX, centerY);
-    ctx.arc(centerX, centerY, radius, angleStart, angleEnd);
-    ctx.lineTo(centerX, centerY);
-    ctx.closePath();
-    
-    // Colores exactos de la imagen: naranja y negro alternados
-    if (this.ruletaNumbers[i].color === 'dorado') {
-      ctx.fillStyle = '#FD9E00'; // Naranja como en la imagen
-    } else {
-      ctx.fillStyle = '#000000'; // Negro
-    }
-    
-    if (selectedIndex === i) {
-      ctx.globalAlpha = 0.9;
-    }
-    ctx.fill();
-    ctx.globalAlpha = 1;
-    
-    // Líneas divisorias doradas entre sectores
-    ctx.beginPath();
-    ctx.moveTo(centerX, centerY);
-    ctx.lineTo(
-      centerX + Math.cos(angleStart) * radius,
-      centerY + Math.sin(angleStart) * radius
-    );
-    ctx.strokeStyle = '#FFD700';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-  }
-
-  // Números en los sectores
-  for (let i = 0; i < n; i++) {
-    const angleStart = this.ruletaAngle + i * anglePerSector;
-    const angle = angleStart + anglePerSector / 2;
-    
-    ctx.save();
-    ctx.translate(centerX, centerY);
-    ctx.rotate(angle);
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.font = 'bold 28px Arial';
-    
-    // Color del texto: blanco siempre
-    ctx.fillStyle = '#FFFFFF';
-    ctx.strokeStyle = '#000000';
-    ctx.lineWidth = 2;
-    
-    const textRadius = radius * 0.7;
-    // Contorno negro para mejor legibilidad
-    ctx.strokeText(this.ruletaNumbers[i].num.toString(), textRadius, 0);
-    ctx.fillText(this.ruletaNumbers[i].num.toString(), textRadius, 0);
-    ctx.restore();
-  }
-
-  // Círculo central negro
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, innerRadius + 10, 0, 2 * Math.PI);
-  ctx.fillStyle = '#000000';
-  ctx.fill();
-
-  // Borde dorado del círculo central
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, innerRadius + 10, 0, 2 * Math.PI);
-  ctx.strokeStyle = '#FFD700';
-  ctx.lineWidth = 3;
-  ctx.stroke();
-
-  // Logo PLUMASS en el centro (exactamente como en la imagen)
-  ctx.save();
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.font = 'bold 14px Arial';
-  ctx.fillStyle = '#FFD700';
-  ctx.fillText('PLUMASS', centerX, centerY);
-  ctx.restore();
-
-  // Indicador triangular blanco en el LADO DERECHO
-  ctx.save();
-  ctx.translate(centerX, centerY);
-  ctx.rotate(0); // Apunta hacia el lado derecho
-  
-  // Triángulo blanco apuntando hacia la izquierda (hacia el centro)
-  ctx.beginPath();
-  ctx.moveTo(radius + 25, 0);          // Punta del triángulo hacia la izquierda
-  ctx.lineTo(radius - 5, -15);         // Esquina superior
-  ctx.lineTo(radius - 5, 15);          // Esquina inferior
-  ctx.closePath();
-  ctx.fillStyle = '#FFFFFF';
-  ctx.fill();
-  
-  // Borde negro del triángulo
-  ctx.strokeStyle = '#000000';
-  ctx.lineWidth = 2;
-  ctx.stroke();
-  
-  ctx.restore();
-
-  // Pequeños detalles decorativos en el borde
-  for (let i = 0; i < 24; i++) {
-    const angle = (i * 2 * Math.PI) / 24;
-    const x1 = centerX + Math.cos(angle) * (radius + 8);
-    const y1 = centerY + Math.sin(angle) * (radius + 8);
-    const x2 = centerX + Math.cos(angle) * (radius + 12);
-    const y2 = centerY + Math.sin(angle) * (radius + 12);
-    
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.strokeStyle = '#FFD700';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-  }
-
-  // Sombra inferior para dar profundidad
-  ctx.save();
-  ctx.globalAlpha = 0.3;
-  ctx.beginPath();
-  ctx.ellipse(centerX, centerY + 8, radius + 20, radius + 15, 0, 0, 2 * Math.PI);
-  ctx.fillStyle = '#000000';
-  ctx.fill();
-  ctx.restore();
+private marcarApuestaRondaActual(): void {
+  localStorage.setItem(this.getApuestaRondaKey(), 'true');
 }
 
-  ngAfterViewInit(): void {
-    // Si necesitas lógica aquí, agrégala. Si no, déjalo vacío.
-  }
+private consultarApuestaRondaActual(): boolean {
+  return localStorage.getItem(this.getApuestaRondaKey()) === 'true';
+}
+
   async volver(): Promise<void> {
   const rol = localStorage.getItem('Rol');
   const puerto = '443';
@@ -1551,12 +954,10 @@ actualizarMontoDisponible() {
     this.disponibleColor = null;
   }
 }
-
-// Ejemplo: llama a actualizarMontoDisponible() después de actualizar las apuestas
-// this.cantidadApostadaRojo = ...;
-// this.cantidadApostadaVerde = ...;
-// this.actualizarMontoDisponible();
-} // <--- Aquí termina la clase
+    
+    ngOnDestroy(): void {
+    }
+} 
 
 interface UserType {
   name: string;

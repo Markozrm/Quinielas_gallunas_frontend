@@ -221,7 +221,6 @@
       <h3>CASINO</h3>
       <div class="options-list">
         <button (click)="seleccionarOpcion('QUINIELA')">QUINIELA</button>
-        <button (click)="mostrarPopupRuletaHandler()">RULETA</button>
         <button (click)="seleccionarOpcion('RIFA')">RIFA</button>
         <button (click)="seleccionarOpcion('VENTAJA')">VENTAJA</button>
       </div>
@@ -229,69 +228,7 @@
   </div>
 </div>
 
-<!-- Ruleta Modal (solo uno, global) -->
-<div *ngIf="mostrarPopupRuleta" class="popup-overlay">
-  <div class="popup">
-    <button class="close-button" (click)="cerrarPopupRuleta()">×</button>
-    <div class="popup-content ruleta-popup-content">
-             <div class="ruleta-title-container">
-        <h2 class="ruleta-title">{{ tituloRuletaActual }}</h2>
-      </div>
-      <div style="display: flex; flex-direction: column; align-items: center;">
-        <div id="spinWheel" style="margin-bottom: 20px;">
-          <canvas id="ruleta-canvas" width="300" height="300"></canvas>
-          <button
-            *ngIf="esAdmin()"
-            id="spin"
-            class="ruleta-spin-btn"
-            (click)="girarRuleta()"
-          >GIRAR</button>
-        </div>
-                <!-- Sección de números comprados por el usuario -->
-        <div class="numeros-comprados-section" *ngIf="misNumerosComprados.length > 0">
-          <h3>Tus números comprados ({{ misNumerosComprados.length }})</h3>
-          <div class="numeros-comprados-grid">
-            <div *ngFor="let num of misNumerosComprados" class="numero-comprado-chip">
-              {{ num }}
-              <span class="precio-chip">${{ preciosRuleta[num] || 0 }}</span>
-            </div>
-          </div>
-        </div>
-
-        <p>Escoge un número</p>
-        <!-- Mostrar precio de referencia basado en el número 1 -->
-        <div *ngIf="preciosRuleta[1]" style="text-align: center; margin-bottom: 15px; font-size: 1.1em; font-weight: bold; color: #ffd700;">
-          Número: ${{ preciosRuleta[1] }}
-        </div>
-        <div class="ruleta-grid">
-          <button
-    *ngFor="let item of [
-      {num:1, color:'dorado'},
-      {num:2, color:'negro'},
-      {num:7, color:'dorado'},
-      {num:8, color:'negro'},
-      {num:13, color:'dorado'},
-      {num:9, color:'negro'},
-      {num:10, color:'dorado'},
-      {num:5, color:'negro'},
-      {num:4, color:'dorado'},
-      {num:11, color:'negro'},
-      {num:14, color:'dorado'},
-      {num:3, color:'negro'},
-      {num:6, color:'dorado'},
-      {num:12, color:'negro'}
-    ]"
-    class="ruleta-btn {{item.color}}"
-    [disabled]="numerosComprados[item.num] || !preciosRuleta[item.num]"
-    (click)="comprarNumeroRuleta(item.num)"
-  >
-    <div style="font-size: 1.2em; font-weight: bold;">{{ item.num }}</div>
-  </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- Ruleta Modal eliminado -->
 
 <!-- Modal de Rifa para usuarios normales -->
 <div *ngIf="isRifaModalOpen" class="modal-overlay">
@@ -400,11 +337,6 @@
           </div>
         </div>
       </div>
-<div *ngIf="numeroRuletaSeleccionado !== null">
-  Número seleccionado: {{ numeroRuletaSeleccionado }}
-</div>
-<div *ngIf="mensajeGanadorRuleta" class="mensaje-ganador-ruleta">
-  {{ mensajeGanadorRuleta }}
-</div>
+<!-- Bloques de ruleta eliminados -->
     </div>
   </div>
