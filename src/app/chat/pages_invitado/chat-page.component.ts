@@ -64,6 +64,8 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
   private intervaloGracia: any = null;
   private bloqueoPorSaldo: boolean = false;
   private readonly TIEMPO_GRACIA_KEY = 'tiempoGraciaData';
+  private readonly COOLDOWN_APUESTA = 6000;
+  private readonly LAST_BET_KEY = 'ultimaApuestaTimestamp';
   public misNumerosComprados: number[] = [];
   private datosGanador: {numeroGanador: number, ganador: string} | null = null;
   public imagenStreamUrl: string | null = null;
@@ -413,6 +415,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
 }
 
   ngOnInit(): void {
+    this.restaurarBloqueoApuesta();
     this.cargarEstadoTiempoGracia();
     
     // Cargar posición de los botones flotantes desde localStorage
@@ -676,12 +679,15 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
     if (!confirm("Estás seguro de que quieres volver a apostar?")){
       return;
     }
-    this.isBotonApostarDisabled = true;
-    setTimeout(()=>{
-      this.isBotonApostarDisabled = false;
-    }, 6000);
    }
    this.tiempoUltimaApuesta = Date.now();
+   localStorage.setItem(this.LAST_BET_KEY, this.tiempoUltimaApuesta.toString());
+
+    this.isBotonApostarDisabled = true;
+    setTimeout(() => {
+      this.isBotonApostarDisabled = false;
+      localStorage.removeItem(this.LAST_BET_KEY);
+    }, this.COOLDOWN_APUESTA);
     
     this.usersService.getSaldo(this.username).subscribe((data: any) => {
       const saldoActual = data.saldo;
@@ -987,6 +993,25 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
         }
       );
     });
+  }
+
+  private restaurarBloqueoApuesta(): void {
+    const lastBet = localStorage.getItem(this.LAST_BET_KEY);
+    if (!lastBet) return;
+
+    const lastBetTime = Number(lastBet);
+    const elapsed = Date.now() - lastBetTime;
+    const remaining = this.COOLDOWN_APUESTA - elapsed;
+
+    if (remaining > 0) {
+      this.isBotonApostarDisabled = true;
+      setTimeout(() => {
+        this.isBotonApostarDisabled = false;
+        localStorage.removeItem(this.LAST_BET_KEY);
+      }, remaining);
+    } else {
+      localStorage.removeItem(this.LAST_BET_KEY);
+    }
   }
 
   private iniciarTiempoGracia(): void {
