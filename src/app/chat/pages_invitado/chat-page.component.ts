@@ -112,13 +112,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
   isCasinoPopupOpen = false;
   casinoOptions = ['QUINIELA', 'RULETA', 'RIFA', 'VENTAJA'];
   
-  // Propiedades para el modal de rifa
-  isRifaModalOpen = false;
-  rifas: any[] = [];
-  rifaSeleccionada: any = null;
-  loadingRifas = false;
-  comprandoNumero = false;
-  private rifasSubscription: Subscription | undefined;
+  // ...existing code...
  
 
 
@@ -238,14 +232,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
     this.apuestaService.getSaldoActualizado().subscribe((nuevoSaldo: number) => {
       this.balance = nuevoSaldo;
     });
-    document.addEventListener('rifasActualizadas', (event: any) => {
-    this.rifas = event.detail.rifas;
-    // Mantener la rifa seleccionada si sigue existiendo
-    if (this.rifaSeleccionada) {
-      this.rifaSeleccionada = this.rifas.find((r: any) => 
-        r.numeroRifa === this.rifaSeleccionada.numeroRifa);
-    }
-  });
+    // Eliminado: event listener y referencias a rifas/rifaSeleccionada
   // Al iniciar, recupera la imagen si existe
   const savedImage = localStorage.getItem('imagenStreamUrl');
   if (savedImage) {
@@ -757,14 +744,6 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
     localStorage.removeItem(this.TIEMPO_GRACIA_KEY);
   }
 
-  abrirCasino() {
-    this.isCasinoPopupOpen = true;
-  }
-
-  cerrarCasino() {
-    this.isCasinoPopupOpen = false;
-  }
-
   // --- MÉTODOS DE QUINIELA ---
 
   seleccionarOpcion(opcion: string) {
@@ -773,7 +752,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
       if (this.verificarSiEsAdmin()) {
         this.router.navigate(['/rifa', this.salaActual]);
       } else {
-        this.abrirModalRifa();
+        // Modal de rifa eliminado
       }
     }
   }
@@ -781,111 +760,6 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
   private verificarSiEsAdmin(): boolean {
     const userRole = localStorage.getItem('Rol');
     return userRole === 'superUsuario' || userRole === 'administrador';
-  }
-
-  abrirModalRifa() {
-    this.isRifaModalOpen = true;
-    this.cargarRifasDelStream();
-  }
-
-  cerrarModalRifa() {
-    this.isRifaModalOpen = false;
-    this.rifaSeleccionada = null;
-    if (this.rifasSubscription) {
-      this.rifasSubscription.unsubscribe();
-    }
-  }
-
-  // MÉTODO CORREGIDO Y SIMPLIFICADO
-  cargarRifasDelStream() {
-    this.loadingRifas = true;
-    if (this.rifasSubscription) {
-      this.rifasSubscription.unsubscribe();
-    }
-    
-    this.rifasSubscription = this.quinielaService.obtenerRifasPorSala('global').subscribe({
-      next: (data: any[]) => {
-        // SIMPLIFICACIÓN: Ya no necesitamos generar ni calcular nada aquí.
-        // El backend ya nos da toda la información que necesitamos.
-        this.rifas = data; 
-        this.loadingRifas = false;
-      },
-      error: (error) => {
-        this.loadingRifas = false;
-        console.error('Error al cargar las quinielas globales:', error);
-        this.rifas = [];
-      }
-    });
-  }
-
-  getNumerosVendidos(rifa: any) {
-    return Object.entries(rifa.numerosVendidos || {}).map(([numero, username]) => ({
-      numero,
-      username
-    }));
-  }
-
-  // MÉTODO 'comprarNumero' MEJORADO Y MÁS SEGURO
-  comprarNumero(rifa: any, numero: number) {
-    this.comprandoNumero = true;
-
-    // --- VALIDACIONES ---
-    if (!rifa || !rifa.numeroRifa) {
-      this.comprandoNumero = false;
-      alert('Error: No se ha podido seleccionar una quiniela válida.');
-      return;
-    }
-    if (!rifa.estadoVentas) {
-      this.comprandoNumero = false;
-      alert('⚠️ Las ventas están cerradas para esta quiniela.');
-      return;
-    }
-    if (this.balance < rifa.precioNumero) {
-      this.comprandoNumero = false;
-      alert(`❌ No tienes saldo suficiente.`);
-      return;
-    }
-    if (!this.username) { // Ya no necesitamos validar salaActual aquí
-        this.comprandoNumero = false;
-        alert('Error: No se pudo identificar al usuario.');
-        return;
-    }
-
-    // --- LLAMADA AL SERVICIO ---
-    // CORRECCIÓN: El último parámetro ahora es 'global' para coincidir con cómo se cargan las rifas.
-    this.quinielaService.comprarNumeroHTTP(rifa.numeroRifa.toString(), numero, this.username, 'global').subscribe({
-      next: () => {
-        this.comprandoNumero = false;
-        this.actualizarSaldo();
-        this.cargarRifasDelStream(); // Recargamos los datos para ver el cambio
-        setTimeout(() => {
-          // Actualizamos la rifa seleccionada en el modal
-          const rifaActualizada = this.rifas.find(r => r.numeroRifa === rifa.numeroRifa);
-          if (rifaActualizada) {
-            this.rifaSeleccionada = rifaActualizada;
-          }
-        }, 300);
-        alert(`🎉 ¡Número ${numero} comprado exitosamente!`);
-      },
-      error: (err: any) => {
-        this.comprandoNumero = false;
-        const mensaje = err.error?.error || 'Error desconocido. Verifique la consola.';
-        alert(`❌ Error al comprar número: ${mensaje}`);
-        console.error("Error detallado de la API:", err);
-      }
-    });
-  }
-
-  seleccionarRifa(rifa: any) {
-    this.rifaSeleccionada = rifa;
-  }
-
-  volverAListaRifas() {
-    this.rifaSeleccionada = null;
-  }
-
-  actualizarRifasManualmente() {
-    this.cargarRifasDelStream();
   }
 
   // --- NUEVOS MÉTODOS PARA PERSISTENCIA POR RONDA Y USUARIO ---
