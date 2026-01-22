@@ -1601,7 +1601,7 @@ background: linear-gradient(
     z-index: 9999;
     width: 4rem;
     height: 3.3rem;
-    right: 0;
+    left: 0;
     top: 0;
     margin-top: 6px;
 }
