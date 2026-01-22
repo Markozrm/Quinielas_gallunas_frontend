@@ -905,6 +905,9 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
       this.colorApuestasCazadas = '';
     }
     this.guardarDatosEnLocalStorage();
+
+    // DESHABILITA EL BOTÓN SI YA APOSTÓ EN LA RONDA ACTUAL
+    this.yaApostoEstaRonda = (this.montoRojoCazado > 0 || this.montoVerdeCazado > 0);
   }
   
   guardarDatosEnLocalStorage(): void {
