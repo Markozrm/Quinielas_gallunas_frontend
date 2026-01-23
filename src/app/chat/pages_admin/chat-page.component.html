@@ -37,6 +37,9 @@
   </div>
 
   <div *ngIf="esAdmin()" class="admin-buttons-container">
+    <div class="ronda-actual-admin" style="text-align:center; font-weight:bold; margin-bottom:10px; font-size:1.2em;">
+      Ronda actual: {{ numeroPelea }}
+    </div>
     <!-- Botón de usuarios conectados - siempre visible -->
     <button class="admin-btn users-btn" (click)="openPopup()">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="user-icon">
