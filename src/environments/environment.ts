@@ -10,7 +10,7 @@ export const environment = {
   apiUrl_live: 'https://serverstream1.cheapserverhub.com',
   apiUrl_live_2: 'https://serverstream2.cheapserverhub.com',
   apiUrl_live_3: 'https://serverstream3.cheapserverhub.com',
-  apiUrl_apuestas: 'https://cheapserverhub.com',
+  apiUrl_apuestas: 'https://serverapuestas.cheapserverhub.com',
   apiUrl_quiniela: 'https://cheapserverhub.com',
   quiniela_PORT: '3449',
   apiUrl_ruleta: 'https://cheapserverhub.com',
@@ -29,7 +29,10 @@ export const environment = {
   //apiUrl_ruleta: 'http://localhost',
   //ruleta_PORT: '3444',
   //apiUrl_chat: 'http://localhost',
-  //chat_PORT: '3010'
+  //chat_PORT: '3010',
+  //apiUrl_live: 'http://localhost',      
+  //apiUrl_live_2: 'http://localhost',
+  //apiUrl_live_3: 'http://localhost' 
 };
 
 /*
