@@ -29,7 +29,10 @@ export const environment = {
   //apiUrl_ruleta: 'http://localhost',
   //ruleta_PORT: '3444',
   //apiUrl_chat: 'http://localhost',
-  //chat_PORT: '3010'
+  //chat_PORT: '3010',
+  //apiUrl_live: 'http://localhost',      
+  //apiUrl_live_2: 'http://localhost',
+  //apiUrl_live_3: 'http://localhost' 
 };
 
 /*
