@@ -487,6 +487,9 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy, AfterViewIn
     
     this.apuestaService.getEstadoApuesta().subscribe((data: any) => {
       this.isApuestaAbierta = data.estadoApuesta;
+      if (typeof data.rondaActual === 'number') {
+        this.rondaActual = data.rondaActual;
+      }
       if (data.teamInfo) {
         this.redTeamName = data.teamInfo.redTeamName;
         this.greenTeamName = data.teamInfo.greenTeamName;
