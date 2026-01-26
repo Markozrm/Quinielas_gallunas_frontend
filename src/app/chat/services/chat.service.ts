@@ -207,21 +207,53 @@ clearUnreadCount(username: string) {
     // Procesar mensajeSala como historial (compatibilidad)
     socket.fromEvent<any[]>('mensajeSala').subscribe((data) => {
       console.log('Recibido evento: mensajeSala', data);
-      
-      // Solo aceptar historial si el chat está vacío
+      // LOG DETALLADO DE LOS DATOS
+      if (data && Array.isArray(data)) {
+        console.log('=== DEBUG mensajeSala ===');
+        data.forEach((item, index) => {
+          console.log(`Mensaje ${index}:`, {
+            fecha: item.fecha,
+            date: item.date,
+            createdAt: item.createdAt,
+            timestamp: item.timestamp,
+            fechaType: typeof item.fecha,
+            dateType: typeof item.date,
+            rawItem: item
+          });
+        });
+        console.log('=== FIN DEBUG ===');
+      }
       const currentMessages = this._chat$.getValue();
       if (currentMessages.length > 0) {
-        console.log('🚫 Chat ya tiene mensajes, ignorando historial para preservar conversación actual');
+        console.log('Chat ya tiene mensajes, ignorando historial para preservar conversación actual');
         return;
       }
-      
       if (data && Array.isArray(data) && data.length > 0) {
-        console.log('✅ Chat vacío, cargando historial');
+        console.log('Chat vacío, cargando historial');
         this._chat$.next([]);
         data.forEach((item: any) => {
           const {_id, message, contenido, image, username, fecha, date} = item;
           const msgText = message ?? contenido;
-          const msgDate = date || fecha || new Date();
+          // DEBUG: Ver qué fecha estamos usando
+          console.log('Procesando fecha para mensaje:', {
+            fecha,
+            date,
+            fechaType: typeof fecha,
+            dateType: typeof date,
+            tieneFecha: !!fecha,
+            tieneDate: !!date
+          });
+          let msgDate: Date;
+          if (date || fecha) {
+            const fechaUsada = date || fecha;
+            console.log('Usando fecha del mensaje:', fechaUsada);
+            msgDate = new Date(fechaUsada);
+          } else {
+            console.log('No hay fecha específica, usando fecha de creación');
+            msgDate = new Date(item.createdAt || item.timestamp || Date.now());
+          }
+          // DEBUG: Ver si la fecha es válida
+          console.log('Fecha resultante:', msgDate, 'Válida?', !isNaN(msgDate.getTime()));
           var validImage = image !== '';
           const chatObject: ChatType = {
             _id: _id,
@@ -246,19 +278,51 @@ clearUnreadCount(username: string) {
     // Suscribirse a mensajes históricos enviados por el backend
     socket.fromEvent<any[]>('mensajes_historial').subscribe((data) => {
       console.log('[Socket] Recibido evento: mensajes_historial', data);
-      // Solo limpiar si recibimos datos del historial y no hay mensajes actuales
+      // DEBUG similar
+      if (data && Array.isArray(data)) {
+        console.log('=== DEBUG mensajes_historial ===');
+        data.forEach((item, index) => {
+          console.log(`Mensaje histórico ${index}:`, {
+            fecha: item.fecha,
+            date: item.date,
+            createdAt: item.createdAt,
+            timestamp: item.timestamp,
+            rawDateValue: item.date || item.fecha,
+            typeOfDate: typeof (item.date || item.fecha)
+          });
+        });
+      }
       const currentMessages = this._chat$.getValue();
       if (data && Array.isArray(data) && data.length > 0) {
-        // Solo limpiar si es realmente necesario (cuando es un nuevo conjunto de mensajes históricos)
         if (currentMessages.length === 0 || data.length > currentMessages.length) {
           this._chat$.next([]);
         }
         data.forEach((item: any) => {
-          const {_id, contenido, image, username, fecha} = item;
+          const {_id, contenido, image, username, fecha, createdAt, timestamp} = item;
           const message = contenido;
-          const date = fecha;
+          // DEBUG
+          console.log('Procesando mensaje histórico fecha:', {
+            fecha,
+            createdAt,
+            timestamp,
+            tieneFecha: !!fecha,
+            tieneCreatedAt: !!createdAt
+          });
+          let msgDate: Date;
+          if (fecha) {
+            msgDate = new Date(fecha);
+          } else if (createdAt) {
+            msgDate = new Date(createdAt);
+          } else if (timestamp) {
+            msgDate = new Date(timestamp);
+          } else {
+            console.log('No hay fecha en mensaje histórico, usando fecha actual');
+            msgDate = new Date(item.date || Date.now());
+          }
+          console.log('Fecha histórica procesada:', msgDate, 'Válida?', !isNaN(msgDate.getTime()));
           var validImage = image !== '';
           const chatObject: ChatType = {
+            _id: _id,
             user: {
               avatar: '',
               name: username,
@@ -268,7 +332,7 @@ clearUnreadCount(username: string) {
             message,
             image,
             validImage,
-            date
+            date: msgDate
           };
           this.setChat(chatObject);
         });
@@ -278,11 +342,18 @@ clearUnreadCount(username: string) {
     });
     socket.fromEvent('new_message').subscribe((data:any) => {
       console.log('[Socket] Recibido evento: new_message', data);
-      const { _id, message, contenido, username, date, fecha} = data;
+      const { _id, message, contenido, username, date, fecha, createdAt} = data;
       const msgText = message || contenido;
-      const msgDate = date || fecha || new Date();
+      // CORREGIDO: Procesar fecha correctamente
+      let msgDate: Date;
+      if (date || fecha) {
+        msgDate = new Date(date || fecha);
+      } else if (createdAt) {
+        msgDate = new Date(createdAt);
+      } else {
+        msgDate = new Date();
+      }
       const image = null;
-      
       const chatObject: ChatType = {
         _id: _id,
         user: {
@@ -301,8 +372,16 @@ clearUnreadCount(username: string) {
 
     socket.fromEvent('new_message_with_image').subscribe((data:any) => {
       console.log('[Socket] Recibido evento: new_message_with_image', data);
-      const { _id,message, username ,image,date} = data
-      
+      const { _id, message, username, image, date, fecha, createdAt } = data;
+      // CORREGIDO: Procesar fecha correctamente
+      let msgDate: Date;
+      if (date || fecha) {
+        msgDate = new Date(date || fecha);
+      } else if (createdAt) {
+        msgDate = new Date(createdAt);
+      } else {
+        msgDate = new Date();
+      }
       const chatObject: ChatType = {
         _id: _id,
         user: {
@@ -314,7 +393,7 @@ clearUnreadCount(username: string) {
         message,
         image,
         validImage: !!(image && image !== '' && image !== 'image'),
-        date: date || new Date()
+        date: msgDate
       };
       this.setChat(chatObject);
     });
@@ -405,32 +484,35 @@ clearUnreadCount(username: string) {
   sendMessage(payload: {username:string, message: string, room?:string }) {
     const roomCurrent = this._room$.getValue();
     if (roomCurrent) {
-      payload = { ...payload,room: roomCurrent };
-      
-      // Primero enviar por HTTP para obtener el ID
+      payload = { ...payload, room: roomCurrent };
+      // Incluir la fecha actual en el payload
+      const nowIso = new Date().toISOString();
       const httpPayload = {
         username: payload.username,
         message: payload.message,
-        room: roomCurrent
+        room: roomCurrent,
+        date: nowIso // ¡IMPORTANTE! Enviar fecha
       };
-      
       this.httpClient.post<any>(`${this.baseUrl}/enviarMensaje`, httpPayload)
         .subscribe(
           (response) => {
-            // El backend ya guardó el mensaje
-            // Emitir event_message con el messageId para que el gateway solo emita sin guardar de nuevo
             const payloadWithId = {
               ...payload,
               messageId: response.messageId,
-              alreadySaved: true // Flag para indicar que ya fue guardado
+              date: response.fecha || nowIso, // Usar la fecha del backend si está, si no la actual
+              alreadySaved: true
             };
             this.socket.emit('event_message', payloadWithId);
-            console.log('Mensaje enviado exitosamente');
+            console.log('Mensaje enviado exitosamente con fecha:', payloadWithId.date);
           },
           (error) => {
             console.error('Error al enviar mensaje:', error);
-            // Si falla HTTP, enviar por socket como fallback (sin el flag)
-            this.socket.emit('event_message', payload);
+            // Si falla HTTP, enviar por socket con fecha
+            const fallbackPayload = {
+              ...payload,
+              date: nowIso
+            };
+            this.socket.emit('event_message', fallbackPayload);
           }
         );
     }
@@ -527,13 +609,31 @@ interface UserType {
   rol?: string;
 }
 
+
 interface ChatType {
-  _id?: string; // ID del mensaje desde MongoDB
+  _id?: string;
   user: UserType;
   message: string;
-  date: Date | string; // Permitir tanto Date como string
-  image:any;
-  validImage:boolean;
+  date: Date | string | any; // Permitir más tipos
+  image: any;
+  validImage: boolean;
+  // Opcional: campos adicionales para mejor manejo
+  timestamp?: number;
+  createdAt?: Date | string;
+}
+
+// Interfaz auxiliar para validación de datos crudos
+interface RawChatData {
+  _id?: string;
+  username: string;
+  message?: string;
+  contenido?: string;
+  image?: any;
+  fecha?: Date | string;
+  date?: Date | string;
+  createdAt?: Date | string;
+  timestamp?: number;
+  [key: string]: any;
 }
 
 interface PrivateMessageType {

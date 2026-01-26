@@ -97,43 +97,91 @@ export class UsersChatComponent implements OnInit, OnDestroy {
     return urlPattern.test(str);
   }
 
-  public formatDate(date: Date | string): string {
-    let messageDate: Date;
-    
-    // Manejar diferentes tipos de entrada de fecha
-    if (date instanceof Date) {
-      messageDate = date;
-    } else if (typeof date === 'string') {
-      messageDate = new Date(date);
-    } else {
-      return 'fecha inválida';
+  // Formato exacto HH:mm
+  public formatDate(dateInput: Date | string | any): string {
+    try {
+      let date: Date;
+      if (dateInput instanceof Date) {
+        date = dateInput;
+      } else if (typeof dateInput === 'string' || typeof dateInput === 'number') {
+        date = new Date(dateInput);
+      } else {
+        console.warn('Formato de fecha no válido:', dateInput);
+        return '--:--';
+      }
+      if (isNaN(date.getTime())) {
+        console.warn('Fecha inválida:', dateInput);
+        return '--:--';
+      }
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      return `${hours}:${minutes}`;
+    } catch (error) {
+      console.error('Error al formatear fecha:', error, dateInput);
+      return '--:--';
     }
-    
-    // Verificar si la fecha es válida
-    if (isNaN(messageDate.getTime())) {
-      return 'fecha inválida';
-    }
-    
-    const now = new Date();
-    const diffMs = now.getTime() - messageDate.getTime();
-    const diffMin = Math.round(diffMs / 60000);
+  }
 
-    if (diffMin < 1) {
-      return 'hace unos segundos';
-    } else if (diffMin === 1) {
-      return 'hace 1 minuto';
-    } else if (diffMin < 60) {
-      return `hace ${diffMin} minutos`;
-    } else if (diffMin < 120) {
-      return 'hace 1 hora';
-    } else if (diffMin < 1440) {
-      const diffHrs = Math.floor(diffMin / 60);
-      return `hace ${diffHrs} horas`;
-    } else if (diffMin < 2880) {
-      return 'hace 1 día';
-    } else {
-      const diffDays = Math.floor(diffMin / 1440);
-      return `hace ${diffDays} días`;
+  // Opción alternativa usando toLocaleTimeString
+  public formatTime(dateInput: Date | string | any): string {
+    try {
+      let date: Date;
+      if (dateInput instanceof Date) {
+        date = dateInput;
+      } else if (typeof dateInput === 'string' || typeof dateInput === 'number') {
+        date = new Date(dateInput);
+      } else {
+        return '--:--';
+      }
+      if (isNaN(date.getTime())) {
+        return '--:--';
+      }
+      return date.toLocaleTimeString('es-ES', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      });
+    } catch (error) {
+      return '--:--';
+    }
+  }
+
+  // Tiempo relativo (hace X minutos)
+  public formatRelativeTime(dateInput: Date | string | any): string {
+    try {
+      let date: Date;
+      if (dateInput instanceof Date) {
+        date = dateInput;
+      } else if (typeof dateInput === 'string' || typeof dateInput === 'number') {
+        date = new Date(dateInput);
+      } else {
+        return 'fecha inválida';
+      }
+      if (isNaN(date.getTime())) {
+        return 'fecha inválida';
+      }
+      const now = new Date();
+      const diffMs = now.getTime() - date.getTime();
+      const diffMin = Math.round(diffMs / 60000);
+      if (diffMin < 1) {
+        return 'hace unos segundos';
+      } else if (diffMin === 1) {
+        return 'hace 1 minuto';
+      } else if (diffMin < 60) {
+        return `hace ${diffMin} minutos`;
+      } else if (diffMin < 120) {
+        return 'hace 1 hora';
+      } else if (diffMin < 1440) {
+        const diffHrs = Math.floor(diffMin / 60);
+        return `hace ${diffHrs} horas`;
+      } else if (diffMin < 2880) {
+        return 'hace 1 día';
+      } else {
+        const diffDays = Math.floor(diffMin / 1440);
+        return `hace ${diffDays} días`;
+      }
+    } catch (error) {
+      return 'fecha inválida';
     }
   }
 
