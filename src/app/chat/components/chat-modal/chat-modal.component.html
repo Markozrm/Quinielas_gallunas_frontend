@@ -2,14 +2,14 @@
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <h3>
-        <span *ngIf="currentView === 'general'">Chat</span>
+        <span class="chat_titulo" *ngIf="currentView === 'general'">CHAT EN VIVO</span>
         <span *ngIf="currentView === 'private' && !selectedUser">Chat</span>
         <span *ngIf="currentView === 'private' && selectedUser">Chat con {{selectedUser.name}}</span>
       </h3>
-      <div class="chat-mode-tabs">
+      <!--<div class="chat-mode-tabs">
         <span (click)="switchToGeneralChat()" [class.active]="currentView === 'general'">General</span>
         <span (click)="handlePrivateChat()" [class.active]="currentView === 'private'">Privado</span>
-      </div>
+      </div>-->
       <button class="close-button" (click)="onClose()">×</button>
     </div>
 
