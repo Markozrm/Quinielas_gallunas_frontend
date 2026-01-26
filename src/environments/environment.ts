@@ -15,7 +15,7 @@ export const environment = {
   quiniela_PORT: '3449',
   apiUrl_ruleta: 'https://cheapserverhub.com',
   ruleta_PORT: '3444',
-  apiUrl_chat: 'http://localhost:3001',
+  apiUrl_chat: 'https://serverchat.cheapserverhub.com',
   
 
   // CONFIGURACIÓN LOCAL (DESCOMENTA si quieres usar local en este mismo archivo)

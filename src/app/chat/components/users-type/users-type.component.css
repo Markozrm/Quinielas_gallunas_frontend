@@ -12,15 +12,15 @@
 
 .input-wrapper input {
   border: 1px solid #ddd;
-  border-radius: 0.4rem;
+  border-radius: 1.4rem;
   flex: 1;
-  padding: 8px 12px;
   font-size: 14px;
   word-wrap: break-word;
+  background: #3a3b3c;
+  color: white;
 }
 .input-wrapper button {
-  border: 0;
-  padding: 8px 16px;
+  border: 0 ;
   height: auto;
   color: white;
   font-weight: 500;
@@ -42,7 +42,7 @@
   }
   .input-wrapper button {
     margin-right: 0;
-    width: 15%;
+    width: 18%;
   }
 
 }
