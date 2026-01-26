@@ -38,6 +38,47 @@ import { TablaPuntosComponent } from 'src/app/tabla-puntos/tabla-puntos.componen
   ],
 })
 export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
+    // Helper para formatear fechas de mensajes
+    formatMessageDate(dateInput: Date | string): string {
+      try {
+        const date = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
+        if (!(date instanceof Date) || isNaN(date.getTime())) {
+          return 'Fecha inválida';
+        }
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        return `${day}/${month}/${year} ${hours}:${minutes}`;
+      } catch (error) {
+        console.error('Error al formatear fecha:', error);
+        return 'Fecha desconocida';
+      }
+    }
+
+    formatDate(dateInput: Date | string, includeTime: boolean = true): string {
+      try {
+        const date = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
+        if (!(date instanceof Date) || isNaN(date.getTime())) {
+          return '--/--/----';
+        }
+        const options: Intl.DateTimeFormatOptions = {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          ...(includeTime && {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+          })
+        };
+        return new Intl.DateTimeFormat('es-ES', options).format(date);
+      } catch (error) {
+        console.error('Error formateando fecha:', error);
+        return '--/--/----';
+      }
+    }
   public estadoActualApuesta = '';
   public rondaActual = 0;
   public cantidadApostadaRojo = 0;
