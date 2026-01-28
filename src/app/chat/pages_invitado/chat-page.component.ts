@@ -38,47 +38,47 @@ import { TablaPuntosComponent } from 'src/app/tabla-puntos/tabla-puntos.componen
   ],
 })
 export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
-    // Helper para formatear fechas de mensajes
-    formatMessageDate(dateInput: Date | string): string {
-      try {
-        const date = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
-        if (!(date instanceof Date) || isNaN(date.getTime())) {
-          return 'Fecha inválida';
-        }
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const year = date.getFullYear();
-        const hours = date.getHours().toString().padStart(2, '0');
-        const minutes = date.getMinutes().toString().padStart(2, '0');
-        return `${day}/${month}/${year} ${hours}:${minutes}`;
-      } catch (error) {
-        console.error('Error al formatear fecha:', error);
-        return 'Fecha desconocida';
+  // Helper para formatear fechas de mensajes
+  formatMessageDate(dateInput: Date | string): string {
+    try {
+      const date = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
+      if (!(date instanceof Date) || isNaN(date.getTime())) {
+        return 'Fecha inválida';
       }
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const year = date.getFullYear();
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      return `${day}/${month}/${year} ${hours}:${minutes}`;
+    } catch (error) {
+      console.error('Error al formatear fecha:', error);
+      return 'Fecha desconocida';
     }
+  }
 
-    formatDate(dateInput: Date | string, includeTime: boolean = true): string {
-      try {
-        const date = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
-        if (!(date instanceof Date) || isNaN(date.getTime())) {
-          return '--/--/----';
-        }
-        const options: Intl.DateTimeFormatOptions = {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-          ...(includeTime && {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false
-          })
-        };
-        return new Intl.DateTimeFormat('es-ES', options).format(date);
-      } catch (error) {
-        console.error('Error formateando fecha:', error);
+  formatDate(dateInput: Date | string, includeTime: boolean = true): string {
+    try {
+      const date = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
+      if (!(date instanceof Date) || isNaN(date.getTime())) {
         return '--/--/----';
       }
+      const options: Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        ...(includeTime && {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        })
+      };
+      return new Intl.DateTimeFormat('es-ES', options).format(date);
+    } catch (error) {
+      console.error('Error formateando fecha:', error);
+      return '--/--/----';
     }
+  }
   public estadoActualApuesta = '';
   public rondaActual = 0;
   public cantidadApostadaRojo = 0;
@@ -95,7 +95,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
   private apuestaSubscription: Subscription | undefined;
   private booleanStateSubscription: Subscription | undefined;
   private notificacionSubscription: Subscription | undefined;
-  private contadorApuestas: number =0;
+  private contadorApuestas: number = 0;
   private isBotonApostarDisabled: boolean = false;
   private tiempoUltimaApuesta: number = 0;
   private tiempoGraciaInicio: number | null = null;
@@ -106,44 +106,44 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
   private readonly COOLDOWN_APUESTA = 6000;
   private readonly LAST_BET_KEY = 'ultimaApuestaTimestamp';
   public misNumerosComprados: number[] = [];
-  private datosGanador: {numeroGanador: number, ganador: string} | null = null;
+  private datosGanador: { numeroGanador: number, ganador: string } | null = null;
   public imagenStreamUrl: string | null = null;
 
   username: string = localStorage.getItem('nombreUsuario') ?? '';
   userPhoto: string = this.usersService.getImageUrl(this.username);
 
-  balance: number = 0; 
+  balance: number = 0;
   teamRedScore: number = 8;
   teamGreenScore: number = 5;
-   matchNumber: number = 31;
-  
+  matchNumber: number = 31;
+
   redTeamName: string = '';
   greenTeamName: string = '';
   redPoints: number = 0;
   greenPoints: number = 0;
-  
-  apuestaSugerida:any;
+
+  apuestaSugerida: any;
   isApuestasAbiertas: boolean = true;
   quickBetAmounts: number[] = [100, 200, 300, 500, 1000, 2000, 3000, 5000, 10000, 20000];
   betAmount: number = 0;
   isApuestaAbierta: boolean = false;
-  
+
   notificacionActual: NotificacionType | null = null;
   historialNotificaciones: NotificacionType[] = [];
   mostrarHistorialNotificaciones: boolean = false;
-  
+
   montoTotalEnEspera: number = 0;
   montoTotalCazado: number = 0;
   montoRojoCazado: number = 0;
   montoVerdeCazado: number = 0;
   colorApuestasCazadas: string = '';
   private salaActual: string = '';
-  
+
   notificacionGlobal: NotificacionType | null = null;
   private notificacionGlobalSubscription: Subscription | undefined;
-  
+
   isChatModalOpen = false;
-  
+
   // Propiedades para el botón flotante arrastrable (chat)
   isDragging = false;
   buttonPosition = { x: 20, y: 20 };
@@ -152,9 +152,9 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
   dragStartPosition = { x: 0, y: 0 };
   isCasinoPopupOpen = false;
   casinoOptions = ['QUINIELA', 'RULETA', 'RIFA', 'VENTAJA'];
-  
+
   // ...existing code...
- 
+
 
 
   constructor(
@@ -163,7 +163,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
     private router: Router,
     private apuestaService: apuestaService,
     private chatService: ChatService, // VERIFICAR QUE ESTÉ AQUÍ
-    private quinielaService: QuinielaService ,
+    private quinielaService: QuinielaService,
     // RuletaService eliminado
     private http: HttpClient // AGREGAR ESTA LÍNEA
   ) {
@@ -182,22 +182,22 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
       const variableValue = params['sala'];
       const port = params['port'];
       this.salaActual = variableValue;
-      
+
       // Establece la sala en el servicio de quiniela para que otros componentes la conozcan
       this.quinielaService.setRoom(this.salaActual);
 
       this.verificarVIP(port);
       this.cargarDatosDeLocalStorage();
-      
+
       this.apuestaService.leaveRoom();
       this.apuestaService.initChat();
       const username: string = localStorage.getItem('nombreUsuario') || '';
       this.apuestaService.joinRoom(variableValue, username);
-      
+
       this.chatService.leaveRoom();
       this.chatService.initChat(); // Asegúrate que esto se llama antes
       this.chatService.joinRoom('global', this.username); // Asegúrate que la sala es 'global'
-      
+
       this.apuestaService.getCantidades().subscribe((data: any) => {
         console.log('Cantidades actualizadas:', data);
       });
@@ -216,7 +216,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
         this.guardarDatosEnLocalStorage();
       }
     });
-    
+
     this.apuestaService.rondaActual.subscribe((ronda: number) => {
       this.rondaActual = ronda;
       // Al cambiar de ronda, revisa si ya apostó en esta ronda (por si recarga)
@@ -225,21 +225,21 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
         this.guardarDatosEnLocalStorage();
       }
     });
-    
+
     this.apuestaService.cantidadApuestasRojo.subscribe((cantidad: number) => {
       this.cantidadApostadaRojo = cantidad;
       this.actualizarSaldo();
     });
-    
+
     this.apuestaService.cantidadApuestasVerde.subscribe((cantidad: number) => {
       this.cantidadApostadaVerde = cantidad;
       this.guardarDatosEnLocalStorage();
     });
-    
+
     this.apuestaService.apuestaSugerida.subscribe((data) => {
       this.apuestaSugerida = data;
     });
-    
+
     this.apuestaService.getEstadoApuesta().subscribe((data: any) => {
       this.isApuestaAbierta = data.estadoApuesta;
       if (typeof data.rondaActual === 'number') {
@@ -252,21 +252,21 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
         this.greenPoints = data.teamInfo.greenPoints;
       }
     });
-    
+
     this.usersService.getSaldo(this.username).subscribe((data: any) => {
       this.balance = data.saldo;
-    });    
-    
-    this.apuestaService.ganador.subscribe((data:any) => {
+    });
+
+    this.apuestaService.ganador.subscribe((data: any) => {
       this.actualizarSaldo();
     });
-    
+
     this.notificacionSubscription = this.apuestaService.notificacionPersonal.subscribe((notificacion) => {
       if (notificacion) {
         this.mostrarNotificacion(notificacion);
       }
     });
-    
+
     this.notificacionGlobalSubscription = this.apuestaService.notificacionGlobal.subscribe((notificacion) => {
       if (notificacion) {
         this.mostrarNotificacionGlobal(notificacion);
@@ -277,27 +277,42 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
       this.balance = nuevoSaldo;
     });
     // Eliminado: event listener y referencias a rifas/rifaSeleccionada
-  // Al iniciar, recupera la imagen si existe
-  const savedImage = localStorage.getItem('imagenStreamUrl');
-  if (savedImage) {
-    this.imagenStreamUrl = savedImage;
+    // Al iniciar, recupera la imagen si existe
+    const savedImage = localStorage.getItem('imagenStreamUrl');
+    if (savedImage) {
+      this.imagenStreamUrl = savedImage;
+    }
+    this.apuestaService.getUsersCount().subscribe((count: any) => {
+      this.connectedUsers = count;
+    });
+    this.getStreamTitle();
   }
-  this.apuestaService.getUsersCount().subscribe((count: any) => {
-    this.connectedUsers = count;
-  });
-}  
-  actualizarSaldo(){
+
+  getStreamTitle() {
+    this.http.get<any>(`${environment.apiUrl}/api/settings/title`).subscribe({
+      next: (res) => {
+        if (res && res.title) {
+          this.streamTitle = res.title;
+        }
+      },
+      error: (err) => console.error('Error fetching stream title:', err)
+    });
+  }
+
+  streamTitle: string = 'QUINIELAS GALLISTICAS'; // Default fallback
+
+  actualizarSaldo() {
     this.usersService.getSaldo(this.username).subscribe((data: any) => {
       this.balance = data.saldo;
-       if (this.balance === 0 && !this.tiempoGraciaInicio && !this.bloqueoPorSaldo) {
+      if (this.balance === 0 && !this.tiempoGraciaInicio && !this.bloqueoPorSaldo) {
         this.iniciarTiempoGracia();
       } else if (this.balance > 0 && this.tiempoGraciaInicio) {
         this.limpiarTiempoGracia();
       }
       this.guardarDatosEnLocalStorage();
-    }); 
+    });
   }
-  
+
   selectTeam(team: 'rojo' | 'verde'): void {
     this.apuesta = team === 'rojo' ? { rojo: 'rojo', verde: '' } : { rojo: '', verde: 'verde' };
     this.selectedTeam = team;
@@ -352,8 +367,8 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
     return this.usersService.getImageUrl(username);
   }
 
-  voy(cantidad:number): void {
-    if (this.apuestaSugerida.color === 'rojo'){
+  voy(cantidad: number): void {
+    if (this.apuestaSugerida.color === 'rojo') {
       this.apuesta.rojo = 'rojo'
       this.apuesta.verde = ''
     }
@@ -383,23 +398,23 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
       alert("La cantidad debe ser de 10 en adelante");
       return;
     }
-    if (this.isBotonApostarDisabled){
+    if (this.isBotonApostarDisabled) {
       return;
     }
-   if (this.tiempoUltimaApuesta !== 0){
-    if (!confirm("Estás seguro de que quieres volver a apostar?")){
-      return;
+    if (this.tiempoUltimaApuesta !== 0) {
+      if (!confirm("Estás seguro de que quieres volver a apostar?")) {
+        return;
+      }
     }
-   }
-   this.tiempoUltimaApuesta = Date.now();
-   localStorage.setItem(this.LAST_BET_KEY, this.tiempoUltimaApuesta.toString());
+    this.tiempoUltimaApuesta = Date.now();
+    localStorage.setItem(this.LAST_BET_KEY, this.tiempoUltimaApuesta.toString());
 
     this.isBotonApostarDisabled = true;
     setTimeout(() => {
       this.isBotonApostarDisabled = false;
       localStorage.removeItem(this.LAST_BET_KEY);
     }, this.COOLDOWN_APUESTA);
-    
+
     this.usersService.getSaldo(this.username).subscribe((data: any) => {
       const saldoActual = data.saldo;
       if (saldoActual < cantidadNumerica) {
@@ -412,7 +427,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
         username: this.username,
         rojo: this.apuesta.rojo,
         verde: this.apuesta.verde,
-        empate:"",
+        empate: "",
         cantidad: cantidadNumerica,
         room: room || '',
       });
@@ -455,7 +470,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
   apostarWithAmount() {
     this.apostar(this.betAmount.toString());
   }
-  
+
   mostrarNotificacion(notificacion: NotificacionType): void {
     this.historialNotificaciones.unshift(notificacion);
     if (this.historialNotificaciones.length > 10) {
@@ -469,7 +484,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
       });
     }
   }
-  
+
   mostrarNotificacionGlobal(notificacion: NotificacionType): void {
     this.historialNotificaciones.unshift(notificacion);
     if (this.historialNotificaciones.length > 10) {
@@ -479,11 +494,11 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
     this.actualizarSaldo();
     this.reiniciarValoresApuestas();
   }
-  
+
   cerrarNotificacion(): void {
     this.notificacionActual = null;
   }
-  
+
   toggleHistorialNotificaciones(): void {
     this.mostrarHistorialNotificaciones = !this.mostrarHistorialNotificaciones;
   }
@@ -619,7 +634,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
     }
     this.guardarDatosEnLocalStorage();
   }
-  
+
   guardarDatosEnLocalStorage(): void {
     const datosApuestas = {
       sala: this.salaActual,
@@ -632,7 +647,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
     };
     localStorage.setItem(`apuestas_${this.username}_${this.salaActual}`, JSON.stringify(datosApuestas));
   }
-  
+
   cargarDatosDeLocalStorage(): void {
     try {
       const datosGuardados = localStorage.getItem(`apuestas_${this.username}_${this.salaActual}`);
@@ -655,7 +670,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
       this.reiniciarValoresApuestas();
     }
   }
-  
+
   reiniciarValoresApuestas(): void {
     this.montoTotalEnEspera = 0;
     this.montoTotalCazado = 0;
@@ -666,7 +681,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
   }
 
   async verificarVIP(sala: string) {
-    if (await this.esStreamVIP(sala) && !(await this.tieneSaldoSuficiente()) && this.bloqueoPorSaldo){
+    if (await this.esStreamVIP(sala) && !(await this.tieneSaldoSuficiente()) && this.bloqueoPorSaldo) {
       alert("No tienes saldo suficiente para acceder a este stream");
       this.router.navigate(['/mi-perfil']);
     }
@@ -807,75 +822,75 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
   }
 
   // --- NUEVOS MÉTODOS PARA PERSISTENCIA POR RONDA Y USUARIO ---
-private getApuestaRondaKey(): string {
-  return `apuesta_realizada_${this.username}_${this.salaActual}_ronda_${this.rondaActual}`;
-}
+  private getApuestaRondaKey(): string {
+    return `apuesta_realizada_${this.username}_${this.salaActual}_ronda_${this.rondaActual}`;
+  }
 
-private marcarApuestaRondaActual(): void {
-  localStorage.setItem(this.getApuestaRondaKey(), 'true');
-}
+  private marcarApuestaRondaActual(): void {
+    localStorage.setItem(this.getApuestaRondaKey(), 'true');
+  }
 
-private consultarApuestaRondaActual(): boolean {
-  return localStorage.getItem(this.getApuestaRondaKey()) === 'true';
-}
+  private consultarApuestaRondaActual(): boolean {
+    return localStorage.getItem(this.getApuestaRondaKey()) === 'true';
+  }
 
   async volver(): Promise<void> {
-  const rol = localStorage.getItem('Rol');
-  const puerto = '443';
-  console.log('VOLVER DEBUG -> Rol localStorage:', rol);
+    const rol = localStorage.getItem('Rol');
+    const puerto = '443';
+    console.log('VOLVER DEBUG -> Rol localStorage:', rol);
 
-  try {
-    console.log('Solicitando clave más reciente al backend...');
-    const res: any = await firstValueFrom(this.usersService.getClaveStream('1'));
-    const nuevaClave = res?.stream?.clave;
-    console.log('Respuesta getClaveStream:', res);
+    try {
+      console.log('Solicitando clave más reciente al backend...');
+      const res: any = await firstValueFrom(this.usersService.getClaveStream('1'));
+      const nuevaClave = res?.stream?.clave;
+      console.log('Respuesta getClaveStream:', res);
 
-    if (!nuevaClave) {
-      alert('No se encontró la clave del stream activo.');
-      return;
+      if (!nuevaClave) {
+        alert('No se encontró la clave del stream activo.');
+        return;
+      }
+
+      localStorage.setItem('streamClave', nuevaClave);
+      console.log('streamClave actualizada en localStorage:', nuevaClave);
+
+      const target = (rol === 'superUsuario' || rol === 'administrador')
+        ? `/live-admin/${nuevaClave}/${puerto}`
+        : `/live-inv/${nuevaClave}/${puerto}`;
+
+      if (window.location.pathname !== target) {
+        await this.router.navigateByUrl(target);
+      }
+    } catch (err: any) {
+      console.error('Error obteniendo clave del stream:', err);
+      alert('No se pudo obtener la clave del stream. Intenta más tarde.');
     }
+  }
 
-    localStorage.setItem('streamClave', nuevaClave);
-    console.log('streamClave actualizada en localStorage:', nuevaClave);
+  public montoDisponible: number = 0;
+  public disponibleColor: 'rojo' | 'verde' | null = null;
+  public yaApostoEstaRonda: boolean = false;
 
-    const target = (rol === 'superUsuario' || rol === 'administrador')
-      ? `/live-admin/${nuevaClave}/${puerto}`
-      : `/live-inv/${nuevaClave}/${puerto}`;
+  // Llama este método cada vez que cambien las apuestas
+  actualizarMontoDisponible() {
+    // Usamos tus variables de ejemplo
+    const rojo = this.cantidadApostadaRojo;
+    const verde = this.cantidadApostadaVerde;
 
-    if (window.location.pathname !== target) {
-      await this.router.navigateByUrl(target);
+    if (rojo > verde) {
+      this.montoDisponible = rojo - verde;
+      this.disponibleColor = 'rojo';
+    } else if (verde > rojo) {
+      this.montoDisponible = verde - rojo;
+      this.disponibleColor = 'verde';
+    } else {
+      this.montoDisponible = 0;
+      this.disponibleColor = null;
     }
-  } catch (err: any) {
-    console.error('Error obteniendo clave del stream:', err);
-    alert('No se pudo obtener la clave del stream. Intenta más tarde.');
+  }
+
+  ngOnDestroy(): void {
   }
 }
-
-public montoDisponible: number = 0;
-public disponibleColor: 'rojo' | 'verde' | null = null;
-public yaApostoEstaRonda: boolean = false;
-
-// Llama este método cada vez que cambien las apuestas
-actualizarMontoDisponible() {
-  // Usamos tus variables de ejemplo
-  const rojo = this.cantidadApostadaRojo;
-  const verde = this.cantidadApostadaVerde;
-
-  if (rojo > verde) {
-    this.montoDisponible = rojo - verde;
-    this.disponibleColor = 'rojo';
-  } else if (verde > rojo) {
-    this.montoDisponible = verde - rojo;
-    this.disponibleColor = 'verde';
-  } else {
-    this.montoDisponible = 0;
-    this.disponibleColor = null;
-  }
-}
-    
-    ngOnDestroy(): void {
-    }
-} 
 
 interface UserType {
   name: string;

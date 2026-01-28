@@ -1708,7 +1708,7 @@ body,
   height: 3.3rem;
   left: 0;
   top: 0;
-  margin-top: 6px;
+  margin-top: 45px;
 }
 
 .boton-juegos-row {
@@ -2176,6 +2176,42 @@ body,
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  /* Custom Input Desktop */
+  .desktop-custom-input-container {
+    width: 100%;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .desktop-custom-input {
+    width: 70% !important;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #C29248;
+    color: #fff;
+    padding: 12px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 6px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+    transition: all 0.2s;
+  }
+
+  .desktop-custom-input:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #fff;
+    outline: none;
+    box-shadow: 0 0 10px rgba(194, 146, 72, 0.5);
+  }
+
+  .desktop-custom-input::placeholder {
+    color: #aaa;
+    font-size: 1rem;
+    font-weight: normal;
   }
 
   .amount-btn {
