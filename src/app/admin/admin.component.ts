@@ -16,8 +16,8 @@ import { firstValueFrom } from 'rxjs';
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css'],
-  standalone:true,
-  imports:[MenuComponent,CommonModule,NgIf,FormsModule],
+  standalone: true,
+  imports: [MenuComponent, CommonModule, NgIf, FormsModule],
 })
 export class AdminComponent implements OnInit { // ← Agregar implements OnInit
   constructor(
@@ -27,29 +27,27 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
     private quinielaService: QuinielaService,
     private http: HttpClient, // AGREGAR ESTE PARÁMETRO
     private corteDiarioService: CorteDiarioService // <--- NUEVO  
-    ) 
-  {}
-  irChats()
-  {
+  ) { }
+  irChats() {
     this.router.navigate([`/Panel`]);
   }
-  irRegistro(){
+  irRegistro() {
     this.router.navigate(['/Register']);
   }
-  irUsuarios(){
+  irUsuarios() {
     this.router.navigate(['/Usuarios']);
   }
-  irIniciarStream(){
+  irIniciarStream() {
     this.router.navigate(['/IniciarStream']);
   }
 
-  irVideos(){
+  irVideos() {
     this.router.navigate(['/Videos']);
   }
-  irPM2(){
+  irPM2() {
     this.router.navigate(['/Reiniciar']);
   }
-  irRecibos(){
+  irRecibos() {
     this.router.navigate(['/Ver-recibos']);
   }
   irRetiros() {
@@ -59,18 +57,18 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
     this.router.navigate(['/Ver-apuestas']);
   }
   irScreenshots() {
-  this.router.navigate(['/Screenshots']);
+    this.router.navigate(['/Screenshots']);
   }
   irHistorialSaldos() {
     this.router.navigate(['/historial-saldos']);
   }
-   irRuletaAdmin() {
+  irRuletaAdmin() {
     this.router.navigate(['/admin/ruleta']);
   }
   irCorte() {
     this.router.navigate(['/admin/corte']);
   }
-  
+
   apiUrl: string = environment.apiUrl;
 
   isSidebarOpen = false;
@@ -78,7 +76,7 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
   userPhoto: string = this.getImage(this.username);
   corteDiario: any = null;
   corteStreamSeleccionado: string = '';
-    mostrarCorteDiario = false;
+  mostrarCorteDiario = false;
   corteInterval: any = null;
   // Propiedades para el casino admin
   isCasinoAdminOpen = false;
@@ -202,7 +200,7 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
   cargarRifasAdmin() {
     this.loadingRifasAdmin = true;
     console.log('Cargando rifas admin...');
-    
+
     this.quinielaService.obtenerTodasLasRifas().subscribe({
       next: (data: any) => {
         console.log('Rifas cargadas:', data);
@@ -265,14 +263,14 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
   }
 
   cerrarVentasRifa(rifa: any) {
-  this.quinielaService.cerrarVentas(rifa.numeroRifa).subscribe({
-    next: () => {
-      alert('Ventas cerradas');
-      this.cargarRifasAdmin();
-    },
-    error: (error) => alert('Error al cerrar ventas: ' + error.message)
-  });
-}
+    this.quinielaService.cerrarVentas(rifa.numeroRifa).subscribe({
+      next: () => {
+        alert('Ventas cerradas');
+        this.cargarRifasAdmin();
+      },
+      error: (error) => alert('Error al cerrar ventas: ' + error.message)
+    });
+  }
 
 
   abrirVentasRifa(rifa: any) {
@@ -294,8 +292,8 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
     this.rifaSeleccionadaAdmin = null;
   }
 
- // MÉTODO CORREGIDO
- seleccionarGanadorAdmin(rifa: any, numeroGanador: number) {
+  // MÉTODO CORREGIDO
+  seleccionarGanadorAdmin(rifa: any, numeroGanador: number) {
     console.log('Seleccionando ganador:', { rifa: rifa.numeroRifa, numeroGanador });
 
     if (!rifa.room) {
@@ -305,7 +303,7 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
 
     // 1. Establecemos la sala para que el servicio sepa dónde escuchar la respuesta.
     this.quinielaService.setRoom(rifa.room);
-    
+
     // 2. LLAMADA ACTUALIZADA: Pasamos el ID de la rifa ('rifa.numeroRifa') como primer argumento.
     this.quinielaService.seleccionarGanador(rifa.numeroRifa, numeroGanador, this.isSuperAdmin()).subscribe({
       next: (response) => {
@@ -317,7 +315,7 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
       // --- INICIO DE LA CORRECCIÓN ---
       error: (error) => {
         console.error('Error al seleccionar ganador:', error);
-        
+
         // Lógica de error robusta
         let mensaje: string;
         if (typeof error === 'string') {
@@ -327,14 +325,14 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
           // Si es un objeto, intentamos buscar el mensaje dentro.
           mensaje = error.error?.error || error.message || 'Error desconocido';
         }
-        
+
         alert(`Error al seleccionar ganador: ${mensaje}`);
       }
       // --- FIN DE LA CORRECCIÓN ---
     });
   }
 
-  
+
   eliminarRifa(rifa: any) {
     if (confirm(`¿Estás seguro de eliminar la rifa #${rifa.numeroRifa}?`)) {
       this.quinielaService.eliminarRifa(rifa.numeroRifa).subscribe({ // Cambado a quinielaService
@@ -358,179 +356,215 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
     return Object.keys(rifa.numerosVendidos || {}).length;
   }
   // Añade este método en tu AdminComponent
-getTotalRecaudado(rifa: any): number {
-  const numerosVendidos = this.getNumeroVendidosCount(rifa);
-  return numerosVendidos * (rifa.precioNumero || 0);
-}
-
- // Propiedades necesarias:
- isImagenStreamModalOpen = false;
- imagenStreamUrl: string | null = null;
- streamSeleccionado: string = '';
-
- irImagenStream() {
-  this.isImagenStreamModalOpen = true;
-  this.streamSeleccionado = '';
-  this.imagenStreamUrl = null; // Limpiar imagen previa
-  localStorage.removeItem('imagenStreamUrlAdmin'); // Limpiar localStorage
-}
-
-cerrarImagenStreamModal() {
-  this.isImagenStreamModalOpen = false;
-  this.streamSeleccionado = '';
-  this.imagenStreamUrl = null;
-}
-
-onImagenSeleccionada(event: any) {
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (e: any) => {
-      this.imagenStreamUrl = e.target.result;
-    };
-    reader.readAsDataURL(file);
+  getTotalRecaudado(rifa: any): number {
+    const numerosVendidos = this.getNumeroVendidosCount(rifa);
+    return numerosVendidos * (rifa.precioNumero || 0);
   }
-}
 
-// NUEVO MÉTODO: Consultar imagen overlay actual
-consultarImagenOverlay() {
-  if (!this.streamSeleccionado) return;
-  
-  this.http.get<{hasImage: boolean, imageUrl: string}>(`${this.apiUrl}/api/streams/imagen-overlay/${this.streamSeleccionado}`)
-    .subscribe({
-      next: (data) => {
-        if (data.hasImage && data.imageUrl) {
-          this.imagenStreamUrl = '${this.apiUrl}' + data.imageUrl;
-          localStorage.setItem('imagenStreamUrlAdmin', this.imagenStreamUrl);
-        } else {
-          this.imagenStreamUrl = null;
-          localStorage.removeItem('imagenStreamUrlAdmin');
-        }
-      },
-      error: (error) => {
-        console.log('No hay imagen overlay o error:', error);
-        this.imagenStreamUrl = null;
-      }
+  // Propiedades necesarias:
+  isImagenStreamModalOpen = false;
+  imagenStreamUrl: string | null = null;
+  streamSeleccionado: string = '';
+
+  irImagenStream() {
+    this.isImagenStreamModalOpen = true;
+    this.streamSeleccionado = '';
+    this.imagenStreamUrl = null; // Limpiar imagen previa
+    localStorage.removeItem('imagenStreamUrlAdmin'); // Limpiar localStorage
+  }
+
+  // --- LOGICA TITULO STREAM ---
+  isTitleModalOpen = false;
+  newStreamTitle = '';
+
+  openTitleModal() {
+    this.isTitleModalOpen = true;
+    // Opcional: Podríamos cargar el título actual primero
+    this.http.get<any>(`${this.apiUrl}/api/settings/title`).subscribe({
+      next: (res) => { if (res.title) this.newStreamTitle = res.title; },
+      error: () => this.newStreamTitle = ''
     });
-}
-
-// NUEVO MÉTODO: Al seleccionar stream, cargar su imagen actual
-onStreamSeleccionado() {
-  if (this.streamSeleccionado) {
-    this.consultarImagenOverlay();
-  }
-}
-
-subirImagenStream() {
-  if (!this.streamSeleccionado) {
-    alert('⚠️ Por favor selecciona un stream primero');
-    return;
   }
 
-  if (this.imagenStreamUrl) {
-    const formData = new FormData();
-    
-    if (this.imagenStreamUrl.startsWith('data:')) {
-      const base64Data = this.imagenStreamUrl.split(',')[1];
-      const byteCharacters = atob(base64Data);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-      const blob = new Blob([byteArray], { type: 'image/png' });
-      formData.append('file', blob, `stream-overlay-${Date.now()}.png`);
+  closeTitleModal() {
+    this.isTitleModalOpen = false;
+  }
+
+  saveStreamTitle() {
+    if (!this.newStreamTitle.trim()) {
+      alert('El título no puede estar vacío');
+      return;
     }
-    
-    formData.append('tituloStream', `Imagen Overlay Stream ${this.streamSeleccionado}`);
+    this.http.post(`${this.apiUrl}/api/settings/title`, { title: this.newStreamTitle })
+      .subscribe({
+        next: (res: any) => {
+          alert('Título actualizado correctamente');
+          this.closeTitleModal();
+        },
+        error: (err) => {
+          console.error('Error updating title:', err);
+          alert('Error al actualizar el título');
+        }
+      });
+  }
 
-    this.http.post(`${this.apiUrl}/api/streams/setImagenOverlay/${this.streamSeleccionado}`, formData).subscribe({
+
+  cerrarImagenStreamModal() {
+    this.isImagenStreamModalOpen = false;
+    this.streamSeleccionado = '';
+    this.imagenStreamUrl = null;
+  }
+
+  onImagenSeleccionada(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.imagenStreamUrl = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // NUEVO MÉTODO: Consultar imagen overlay actual
+  consultarImagenOverlay() {
+    if (!this.streamSeleccionado) return;
+
+    this.http.get<{ hasImage: boolean, imageUrl: string }>(`${this.apiUrl}/api/streams/imagen-overlay/${this.streamSeleccionado}`)
+      .subscribe({
+        next: (data) => {
+          if (data.hasImage && data.imageUrl) {
+            this.imagenStreamUrl = '${this.apiUrl}' + data.imageUrl;
+            localStorage.setItem('imagenStreamUrlAdmin', this.imagenStreamUrl);
+          } else {
+            this.imagenStreamUrl = null;
+            localStorage.removeItem('imagenStreamUrlAdmin');
+          }
+        },
+        error: (error) => {
+          console.log('No hay imagen overlay o error:', error);
+          this.imagenStreamUrl = null;
+        }
+      });
+  }
+
+  // NUEVO MÉTODO: Al seleccionar stream, cargar su imagen actual
+  onStreamSeleccionado() {
+    if (this.streamSeleccionado) {
+      this.consultarImagenOverlay();
+    }
+  }
+
+  subirImagenStream() {
+    if (!this.streamSeleccionado) {
+      alert('⚠️ Por favor selecciona un stream primero');
+      return;
+    }
+
+    if (this.imagenStreamUrl) {
+      const formData = new FormData();
+
+      if (this.imagenStreamUrl.startsWith('data:')) {
+        const base64Data = this.imagenStreamUrl.split(',')[1];
+        const byteCharacters = atob(base64Data);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'image/png' });
+        formData.append('file', blob, `stream-overlay-${Date.now()}.png`);
+      }
+
+      formData.append('tituloStream', `Imagen Overlay Stream ${this.streamSeleccionado}`);
+
+      this.http.post(`${this.apiUrl}/api/streams/setImagenOverlay/${this.streamSeleccionado}`, formData).subscribe({
+        next: (response: any) => {
+          console.log('Imagen overlay subida:', response);
+          alert(`✅ Imagen enviada al Stream ${this.streamSeleccionado}`);
+
+          // Consultar la imagen después de subirla
+          setTimeout(() => {
+            this.consultarImagenOverlay();
+          }, 500);
+
+          this.cerrarImagenStreamModal();
+        },
+        error: (error: any) => {
+          console.error('Error subiendo imagen overlay:', error);
+          alert('❌ Error al subir imagen overlay: ' + error.message);
+        }
+      });
+    } else {
+      alert('⚠️ Por favor selecciona una imagen primero');
+    }
+  }
+
+  resetearImagenStream() {
+    if (!this.streamSeleccionado) {
+      alert('⚠️ Por favor selecciona un stream primero');
+      return;
+    }
+
+    this.http.post(`${this.apiUrl}/api/streams/removeImagenOverlay/${this.streamSeleccionado}`, {}).subscribe({
       next: (response: any) => {
-        console.log('Imagen overlay subida:', response);
-        alert(`✅ Imagen enviada al Stream ${this.streamSeleccionado}`);
-        
-        // Consultar la imagen después de subirla
-        setTimeout(() => {
-          this.consultarImagenOverlay();
-        }, 500);
-        
+        console.log('Imagen overlay removida:', response);
+
+        // LIMPIAR INMEDIATAMENTE LA VISTA
+        this.imagenStreamUrl = null;
+        localStorage.removeItem('imagenStreamUrlAdmin');
+
+        alert(`✅ Imagen removida del Stream ${this.streamSeleccionado}`);
         this.cerrarImagenStreamModal();
       },
       error: (error: any) => {
-        console.error('Error subiendo imagen overlay:', error);
-        alert('❌ Error al subir imagen overlay: ' + error.message);
+        console.error('Error removiendo imagen overlay:', error);
+        alert('❌ Error al remover imagen overlay: ' + (error.error?.error || error.message));
       }
     });
-  } else {
-    alert('⚠️ Por favor selecciona una imagen primero');
   }
-}
-
-resetearImagenStream() {
-  if (!this.streamSeleccionado) {
-    alert('⚠️ Por favor selecciona un stream primero');
-    return;
+  // Métodos para el corte diario
+  abrirCorteDiario() {
+    this.mostrarCorteDiario = true;
+    this.cargarCorteDiario();
+    if (this.corteInterval) clearInterval(this.corteInterval);
+    this.corteInterval = setInterval(() => this.cargarCorteDiario(), 2000);
   }
 
-  this.http.post(`${this.apiUrl}/api/streams/removeImagenOverlay/${this.streamSeleccionado}`, {}).subscribe({
-    next: (response: any) => {
-      console.log('Imagen overlay removida:', response);
-      
-      // LIMPIAR INMEDIATAMENTE LA VISTA
-      this.imagenStreamUrl = null;
-      localStorage.removeItem('imagenStreamUrlAdmin');
-      
-      alert(`✅ Imagen removida del Stream ${this.streamSeleccionado}`);
-      this.cerrarImagenStreamModal();
-    },
-    error: (error: any) => {
-      console.error('Error removiendo imagen overlay:', error);
-      alert('❌ Error al remover imagen overlay: ' + (error.error?.error || error.message));
+  cargarCorteDiario() {
+    if (!this.corteStreamSeleccionado) return;
+    const hoy = new Date();
+    const fecha = `${hoy.getDate().toString().padStart(2, '0')}-${(hoy.getMonth() + 1).toString().padStart(2, '0')}-${hoy.getFullYear()}`;
+    this.corteDiarioService.getCorteDiario(this.corteStreamSeleccionado).subscribe(data => {
+      this.corteDiario = data;
+    });
+  }
+
+  cerrarCorteDiario() {
+    this.mostrarCorteDiario = false;
+    if (this.corteInterval) clearInterval(this.corteInterval);
+  }
+  ngOnDestroy() {
+    if (this.corteInterval) clearInterval(this.corteInterval);
+  }
+  // Al iniciar el componente, recupera la imagen si existe
+  ngOnInit(): void {
+    const savedImage = localStorage.getItem('imagenStreamUrlAdmin');
+    if (savedImage) {
+      this.imagenStreamUrl = savedImage;
     }
-  });
-}
-// Métodos para el corte diario
-abrirCorteDiario() {
-  this.mostrarCorteDiario = true;
-  this.cargarCorteDiario();
-  if (this.corteInterval) clearInterval(this.corteInterval);
-  this.corteInterval = setInterval(() => this.cargarCorteDiario(), 2000);
-}
 
-cargarCorteDiario() {
-  if (!this.corteStreamSeleccionado) return;
-  const hoy = new Date();
-  const fecha = `${hoy.getDate().toString().padStart(2, '0')}-${(hoy.getMonth()+1).toString().padStart(2, '0')}-${hoy.getFullYear()}`;
-  this.corteDiarioService.getCorteDiario(this.corteStreamSeleccionado).subscribe(data => {
-    this.corteDiario = data;
-  });
-}
-
-cerrarCorteDiario() {
-  this.mostrarCorteDiario = false;
-  if (this.corteInterval) clearInterval(this.corteInterval);
-}
-ngOnDestroy() {
-  if (this.corteInterval) clearInterval(this.corteInterval);
-}
-// Al iniciar el componente, recupera la imagen si existe
-ngOnInit(): void {
-  const savedImage = localStorage.getItem('imagenStreamUrlAdmin');
-  if (savedImage) {
-    this.imagenStreamUrl = savedImage;
+    // AGREGAR: Consultar imagen overlay al inicializar
+    this.consultarImagenOverlay();
   }
-  
-  // AGREGAR: Consultar imagen overlay al inicializar
-  this.consultarImagenOverlay();
-}
 
 }
 interface rifaData {
-    numeroRifa: number;
-    nombre: string;
-    cantidadNumeros: number;
-    precioNumero: number;
-    sala: string;
-    // otras propiedades si las hay
+  numeroRifa: number;
+  nombre: string;
+  cantidadNumeros: number;
+  precioNumero: number;
+  sala: string;
+  // otras propiedades si las hay
 }
 //Prueba de commitss

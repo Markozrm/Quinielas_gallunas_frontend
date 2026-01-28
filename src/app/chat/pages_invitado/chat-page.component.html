@@ -228,6 +228,7 @@
         onerror="this.style.display='none'">
       <img src="assets/image/Titulo_de_quinielas-removebg-preview.png" alt="Quinielas Gallisticas"
         class="banner-title-img">
+      <h1 class="desktop-stream-title">{{ streamTitle }}</h1>
     </div>
 
     <!-- Video Player -->
@@ -311,6 +312,12 @@
         <button class="amount-btn" (click)="setBetAmount(5000)">$5,000</button>
         <button class="amount-btn" (click)="setBetAmount(10000)">$10,000</button>
         <button class="amount-btn" (click)="setBetAmount(50000)">$50,000</button>
+      </div>
+
+      <!-- Custom Amount Input -->
+      <div class="desktop-custom-input-container">
+        <input type="number" placeholder="OTRA CANTIDAD" [ngModel]="betAmount || ''"
+          (ngModelChange)="setBetAmount($event)" class="desktop-custom-input" />
       </div>
 
       <div class="menu-icon-desktop" (click)="irMiPerfil()">
