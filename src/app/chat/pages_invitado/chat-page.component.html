@@ -243,7 +243,7 @@
     <div class="desktop-match-info">
       <!-- Rojo -->
       <div class="desktop-team red-team-box">
-        <h3>CARBONERAS</h3> <!-- Placeholder or variable? Using variable from TS -->
+        <h3>{{ redTeamName || 'ROJO' }}</h3>
         <div class="team-stats">
           <span class="money-stat">${{ cantidadApostadaRojo | number:'1.0-0' }}</span>
           <span class="points-stat">PTS: {{ redPoints }}</span>
@@ -257,7 +257,7 @@
 
       <!-- Verde -->
       <div class="desktop-team green-team-box">
-        <h3>CASCABELES Y LA MECA</h3> <!-- Placeholder or variable? -->
+        <h3>{{ greenTeamName || 'VERDE' }}</h3>
         <div class="team-stats">
           <span class="money-stat">${{ cantidadApostadaVerde | number:'1.0-0' }}</span>
           <span class="points-stat">PTS: {{ greenPoints }}</span>
