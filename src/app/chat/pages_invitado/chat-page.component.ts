@@ -178,7 +178,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
     document.addEventListener('mouseup', () => this.onMouseUp());
     document.addEventListener('touchend', () => this.onTouchEnd());
 
-    this.route.params.subscribe((params: Params) => {
+    this.route.params.subscribe(async (params: Params) => {
       const variableValue = params['sala'];
       const port = params['port'];
       this.salaActual = variableValue;
@@ -194,9 +194,53 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
       const username: string = localStorage.getItem('nombreUsuario') || '';
       this.apuestaService.joinRoom(variableValue, username);
 
+
+
+      // --- LOGICA DE CHAT CON PRIORIDAD DE FECHA EN URL ---
+
+      let roomClave = '';
+
+      // 1. Verificar si la URL ya trae una fecha (ej: "Stream1-25-01-2026")
+      // Regex para detectar formato: ID + "-" + DD + "-" + MM + "-" + YYYY
+      const formatoFechaRegex = /(Stream\d+)-(\d{2}-\d{2}-\d{4})/;
+      const matchFecha = variableValue.match(formatoFechaRegex);
+
+      if (matchFecha) {
+        // CASO A: La URL es específica de una fecha (Historial) -> Usar esa sala
+        roomClave = variableValue;
+        console.log(`[ChatInvitado] URL con fecha detectada. Usando sala histórica: ${roomClave}`);
+      } else {
+        // CASO B: La URL es genérica (ej: "Stream1" o "1") -> Generar sala con fecha de HOY
+        let streamId = variableValue;
+        const matchId = variableValue.match(/Stream(\d+)|(^(\d+)$)/i);
+        if (matchId) {
+          streamId = matchId[1] || matchId[3] || variableValue;
+        }
+
+        const targetDate = new Date();
+        const dia = targetDate.getDate().toString().padStart(2, '0');
+        const mes = (targetDate.getMonth() + 1).toString().padStart(2, '0');
+        const año = targetDate.getFullYear();
+        const fechaFormateada = `${dia}-${mes}-${año}`;
+
+        roomClave = `Stream${streamId}-${fechaFormateada}`;
+        console.log(`[ChatInvitado] URL genérica. Generando sala para HOY: ${roomClave}`);
+      }
+
       this.chatService.leaveRoom();
-      this.chatService.initChat(); // Asegúrate que esto se llama antes
-      this.chatService.joinRoom('global', this.username); // Asegúrate que la sala es 'global'
+      this.chatService.initChat();
+      // IMPORTANTE: Unirse a la sala determinada
+      this.chatService.joinRoom(roomClave, this.username);
+
+      // Solicitar historial de ESA sala
+      this.chatService.emitirGetMensajesHistorial(roomClave);
+
+
+
+
+
+
+
 
       this.apuestaService.getCantidades().subscribe((data: any) => {
         console.log('Cantidades actualizadas:', data);

@@ -1,5 +1,5 @@
 import { MenuComponent } from '../../menu/menu.component';
-import { Component, OnInit ,OnDestroy} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ChatService } from '../services/chat.service';
 import { UsersChatComponent } from '../components/users-chat/users-chat.component';
@@ -9,43 +9,65 @@ import { Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { UsersService } from 'src/app/services/users.service';
 import { CommonModule } from '@angular/common';
-import { Subscription,of,Observable } from 'rxjs';
+import { Subscription, of, Observable, firstValueFrom } from 'rxjs';
 import { SharedService } from 'src/app/services/shared.service';
 import { take } from 'rxjs/operators';
 import { UsersTypeComponent } from '../components/users-type/users-type.component';
 
 @Component({
-    selector: 'app-chat-page',
-    templateUrl: './chat-page.component.html',
-    styleUrls: ['./chat-page.component.css'],
-    standalone: true,
-    imports: [UsersRoomsComponent,CommonModule, UsersChatComponent,UsersTypeComponent,VideoPlayerComponent,MenuComponent],
+  selector: 'app-chat-page',
+  templateUrl: './chat-page.component.html',
+  styleUrls: ['./chat-page.component.css'],
+  standalone: true,
+  imports: [UsersRoomsComponent, CommonModule, UsersChatComponent, UsersTypeComponent, VideoPlayerComponent, MenuComponent],
 })
 export class ChatPageComponent implements OnInit, OnDestroy {
   isLoadingUsers: boolean = false;
   currentUsername: string = localStorage.getItem("nombreUsuario") || "";
   public textButton = 'desactivar scroll'
   constructor(private usersService: UsersService,
-    private route: ActivatedRoute,private router: Router,
+    private route: ActivatedRoute, private router: Router,
     private chatService: ChatService,
     private sharedService: SharedService
-  ) {}
+  ) { }
   private chatSubscription: Subscription | undefined;
   private usersSubscription: Subscription | undefined;
   private booleanStateSubscription: Subscription | undefined;
   public messages: any[] = [];
 
-  ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      const room = params['sala'];
-      this.chatService.leaveRoom();
-      this.chatService.initChat();
+  async ngOnInit(): Promise<void> {
+    this.route.params.subscribe(async params => {
+      const roomId = params['sala'];
 
-      const username = localStorage.getItem("nombreUsuario") || "Invitado";
-      this.chatService.joinRoom(room, username);
+      try {
+        console.log(`[ChatPage] Resolviendo sala para: ${roomId}`);
 
-      // Solicitar mensajes históricos al entrar a la sala
-      this.chatService.emitirGetMensajesHistorial(room);
+        // CORRECCIÓN: Usar la clave de la base de datos para permitir que el stream cruce la medianoche
+        // sin romper el chat. La clave (ej. Stream1-30-01-2026) se mantiene constante mientras dure el stream.
+        const streamResponse = await firstValueFrom(this.usersService.getClaveStream(roomId)) as any;
+        const roomClave = streamResponse.stream.clave || roomId;
+
+        console.log(`[ChatPage] Uniendo a sala oficial (DB): ${roomClave}`);
+
+        this.chatService.leaveRoom();
+        this.chatService.initChat();
+
+        const username = localStorage.getItem("nombreUsuario") || "Invitado";
+        this.chatService.joinRoom(roomClave, username);
+
+        // Solicitar mensajes históricos
+        this.chatService.emitirGetMensajesHistorial(roomClave);
+
+      } catch (error) {
+        console.error('[ChatPage] Error al obtener la clave del stream, usando ID por defecto:', error);
+
+        // Fallback al ID de la sala si falla la obtención de la clave
+        this.chatService.leaveRoom();
+        this.chatService.initChat();
+        const username = localStorage.getItem("nombreUsuario") || "Invitado";
+        this.chatService.joinRoom(roomId, username);
+        this.chatService.emitirGetMensajesHistorial(roomId);
+      }
     });
 
     // Suscríbete a users$ para el pop-up de usuarios conectados
@@ -76,7 +98,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   }
 
 
-  public connectedUsers:any;
+  public connectedUsers: any;
   isSidebarOpen = false;
   isChatVisible = false; // Controla la visibilidad del chat
   username: string = localStorage.getItem('nombreUsuario') ?? '';
@@ -112,7 +134,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     this.router.navigate([`/`]);
     // Otra lógica de cierre de sesión que puedas necesitar...
   }
-  inicio(){
+  inicio() {
     this.router.navigate([`/`]);
   }
   esAdmin(): boolean {
@@ -122,7 +144,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
 
     return esSuperAdmin;
   }
-  esInvitado():boolean{
+  esInvitado(): boolean {
     const rol = localStorage.getItem("Rol") || "";
     //console.log("rol: ",rol);
     const esInvitado = rol === 'invitado';
@@ -133,36 +155,36 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     this.sharedService.currentBooleanState.pipe(take(1)).subscribe(state => {
       this.sharedService.changeBooleanState(!state);
     });
-    
+
   }
-    // Métodos para manejar el pop-up
-    openPopup() {
-      if (this.esAdmin()){
-        this.isPopupOpen = true;
-      }
-      
+  // Métodos para manejar el pop-up
+  openPopup() {
+    if (this.esAdmin()) {
+      this.isPopupOpen = true;
     }
-    irRecargar() {
-      this.router.navigate(['/recargar']);
-    }
-  
-    closePopup() {
-      this.isPopupOpen = false;
-    }
-  
-    getUserPhoto(username: string): string {
-      return this.usersService.getImageUrl(username);
-    }
-    
-    selectedUser: any = null;
-    isPrivateChatOpen = false;
-  
-    abrirChatPrivado(user: any) {
-      this.selectedUser = user;
-      this.isPrivateChatOpen = true;
-      this.isPopupOpen = false; // Opcional: cierra el popup al abrir el chat privado
-    }
-    
+
+  }
+  irRecargar() {
+    this.router.navigate(['/recargar']);
+  }
+
+  closePopup() {
+    this.isPopupOpen = false;
+  }
+
+  getUserPhoto(username: string): string {
+    return this.usersService.getImageUrl(username);
+  }
+
+  selectedUser: any = null;
+  isPrivateChatOpen = false;
+
+  abrirChatPrivado(user: any) {
+    this.selectedUser = user;
+    this.isPrivateChatOpen = true;
+    this.isPopupOpen = false; // Opcional: cierra el popup al abrir el chat privado
+  }
+
 
 }
 interface UserType {
