@@ -1,5 +1,5 @@
 .menu {
-  background-color: #ffffff;
+  background-color: transparent;
   display: flex;
   align-items: center;
   height: auto;
@@ -14,12 +14,12 @@
   width: 100%;
   max-width: 100%;
   margin: 0 auto;
-  background: linear-gradient(135deg, #0a1e5c 0%, #0d2a8a 100%);
+  background: transparent;
   color: #000 !important;
   font-family: 'Arial Black', Arial, sans-serif;
   font-size: 1.3em;
   font-weight: bold;
-  padding: 10px 0;
+  padding: 2px 0;
   /* Vertical padding */
   border-bottom: 2px solid #000;
   letter-spacing: 1px;
@@ -98,10 +98,6 @@ h1 {
   }
 
   h1 {
-    font-size: 1.6rem;
-  }
-
-  .user-balance-container {
-    padding: 15px 0;
+    font-size: 1.1rem;
   }
 }
