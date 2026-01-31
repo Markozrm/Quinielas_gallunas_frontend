@@ -1,0 +1,89 @@
+<div class="page-container">
+    <div class="header">
+        <h1>Tablas de Apuestas Históricas</h1>
+    </div>
+
+    <div class="filters">
+        <div class="filter-group">
+            <label>Fecha del Stream:</label>
+            <input type="date" [(ngModel)]="fecha" class="input-date">
+        </div>
+        <div class="filter-group">
+            <label>Número de Pelea:</label>
+            <input type="number" [(ngModel)]="ronda" placeholder="Ej: 1" class="input-number">
+        </div>
+        <button (click)="buscar()" class="btn-buscar">BUSCAR</button>
+    </div>
+
+    <div class="tables-container" *ngIf="apuestasVerde.length > 0 || apuestasRojo.length > 0">
+        <!-- COLUMNA VERDE -->
+        <div class="bets-column green-column">
+            <div class="column-header green-header">
+                <h2>VERDE</h2>
+            </div>
+            <div class="bets-list">
+                <div class="bet-row header-row">
+                    <span>Usuario</span>
+                    <span>Apostado</span>
+                </div>
+                <div *ngFor="let bet of apuestasVerde" class="bet-row">
+                    <span class="username">{{ bet.username }}</span>
+                    <span class="amount">{{ bet.cantidad | currency }}</span>
+                </div>
+                <div *ngIf="apuestasVerde.length === 0" class="no-bets">
+                    Sin apuestas
+                </div>
+            </div>
+            <div class="column-footer">
+                <span class="total-label">TOTAL VERDE:</span>
+                <span class="total-badge">{{ totalVerde | currency }}</span>
+            </div>
+        </div>
+
+        <!-- COLUMNA ROJA -->
+        <div class="bets-column red-column">
+            <div class="column-header red-header">
+                <h2>ROJO</h2>
+            </div>
+            <div class="bets-list">
+                <div class="bet-row header-row">
+                    <span>Usuario</span>
+                    <span>Apostado</span>
+                </div>
+                <div *ngFor="let bet of apuestasRojo" class="bet-row">
+                    <span class="username">{{ bet.username }}</span>
+                    <span class="amount">{{ bet.cantidad | currency }}</span>
+                </div>
+                <div *ngIf="apuestasRojo.length === 0" class="no-bets">
+                    Sin apuestas
+                </div>
+            </div>
+            <div class="column-footer">
+                <span class="total-label">TOTAL ROJO:</span>
+                <span class="total-badge">{{ totalRojo | currency }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCION DEVUELTAS -->
+    <div class="returned-section" *ngIf="apuestasDevueltas.length > 0">
+        <div class="returned-header">
+            <h3>Lo que se devolvió (Tablas/Empates/Canceladas)</h3>
+            <span class="total-devuelto">{{ totalDevuelto | currency }}</span>
+        </div>
+        <div class="returned-list">
+            <div class="bet-row header-row">
+                <span>Usuario</span>
+                <span>Color</span>
+                <span>Monto</span>
+            </div>
+            <div *ngFor="let bet of apuestasDevueltas" class="bet-row returned-row">
+                <span class="username">{{ bet.username }}</span>
+                <span class="color-tag" [class.ver]="bet.verde" [class.roj]="bet.rojo">
+                    {{ bet.verde ? 'VERDE' : 'ROJO' }}
+                </span>
+                <span class="amount">{{ bet.cantidad | currency }}</span>
+            </div>
+        </div>
+    </div>
+</div>

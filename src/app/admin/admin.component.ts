@@ -59,6 +59,14 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
   irScreenshots() {
     this.router.navigate(['/Screenshots']);
   }
+  irTablasApuestasH() {
+    const password = prompt('Ingrese la contraseña:');
+    if (password === 'cartera') {
+      this.router.navigate(['/admin/apuestas-historial']);
+    } else {
+      alert('Contraseña incorrecta');
+    }
+  }
   irHistorialSaldos() {
     this.router.navigate(['/historial-saldos']);
   }

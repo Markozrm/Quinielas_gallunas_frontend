@@ -27,7 +27,7 @@ export class apuestaService {
 
   //Nueva propiedad para validar las rondas 
   private _ultimaRondaValida = new BehaviorSubject<number>(0);
-public ultimaRondaValida = this._ultimaRondaValida.asObservable();
+  public ultimaRondaValida = this._ultimaRondaValida.asObservable();
 
   // Nueva propiedad para manejar rondas en espera
   private _rondasEnEspera = new BehaviorSubject<number[]>([]);
@@ -36,7 +36,7 @@ public ultimaRondaValida = this._ultimaRondaValida.asObservable();
   // Verde
   private _cantidadApuestasVerde = new BehaviorSubject<number>(0);
   public cantidadApuestasVerde = this._cantidadApuestasVerde.asObservable();
-  
+
   // Rojo
   private _cantidadApuestasRojo = new BehaviorSubject<number>(0);
   public cantidadApuestasRojo = this._cantidadApuestasRojo.asObservable();
@@ -65,7 +65,7 @@ public ultimaRondaValida = this._ultimaRondaValida.asObservable();
 
   constructor() {
     this.baseUrl = `${this.apiUrl}/api/apuestas`;
-    
+
     // Inicializa el socket usando la librería nativa de socket.io-client
     this.socket = io(`${this.apiUrl_apuestas}`, {
       transports: ['websocket'],
@@ -97,44 +97,44 @@ public ultimaRondaValida = this._ultimaRondaValida.asObservable();
       this.setChat(chatObject);
     });
     fromEvent(this.socket, 'error_ronda').subscribe((mensaje: string) => {
-  alert(`Error en ronda: ${mensaje}`); // O usar tu sistema de notificaciones
-});
+      alert(`Error en ronda: ${mensaje}`); // O usar tu sistema de notificaciones
+    });
 
-//Metodo parsa las rondas 
-fromEvent(this.socket, 'update_ultima_ronda').subscribe((numero: number) => {
-  this._ultimaRondaValida.next(numero);
-});
+    //Metodo parsa las rondas 
+    fromEvent(this.socket, 'update_ultima_ronda').subscribe((numero: number) => {
+      this._ultimaRondaValida.next(numero);
+    });
     fromEvent(this.socket, 'users_change').subscribe((users: any) => {
       this._users$.next(users);
     });
-    
+
     fromEvent(this.socket, 'getApuesta').subscribe((data: any) => {
       console.log("data del estado de las apuestas", data);
       this._estadoApuesta.next(data.estadoApuesta);
       this._rondaActual.next(data.rondaActual);
-      
+
       // Manejar información de rondas en espera
       if (data.rondasEnEspera) {
         this._rondasEnEspera.next(data.rondasEnEspera);
       }
-      
+
       // Emitir datos de los equipos si existen
       if (data.teamInfo) {
         console.log("Información de equipos recibida:", data.teamInfo);
       }
     });
-    
+
     // Escuchar actualizaciones de rondas en espera
     fromEvent(this.socket, 'rondas_en_espera').subscribe((rondas: any) => {
       console.log("Rondas en espera recibidas:", rondas);
       this._rondasEnEspera.next(rondas);
     });
-    
+
     fromEvent(this.socket, 'rondas_en_espera_actualizadas').subscribe((rondas: any) => {
       console.log("Rondas en espera actualizadas:", rondas);
       this._rondasEnEspera.next(rondas);
     });
-    
+
     fromEvent(this.socket, 'ronda_en_espera').subscribe((data: any) => {
       console.log("Ronda pasada a espera:", data);
       // Actualizar la lista de rondas en espera
@@ -143,7 +143,7 @@ fromEvent(this.socket, 'update_ultima_ronda').subscribe((numero: number) => {
         this._rondasEnEspera.next([...rondasActuales, data.numeroRonda]);
       }
     });
-    
+
     // Nueva suscripción al evento update_cantidades
     fromEvent(this.socket, 'update_cantidades').subscribe((data: any) => {
       console.log("Actualización de cantidades recibida:", data);
@@ -151,18 +151,18 @@ fromEvent(this.socket, 'update_ultima_ronda').subscribe((numero: number) => {
       this._cantidadApuestasRojo.next(data.cantidadApostadaRojo);
       this._cantidadApuestasEmpate.next(data.cantidadApostadaEmpate);
     });
-    
+
     fromEvent(this.socket, 'notificacion_personal').subscribe((notificacion: any) => {
       console.log('Notificación personal recibida:', notificacion);
       this._notificacionPersonal.next(notificacion);
     });
-    
+
     // Agregar listener para la notificación global
     fromEvent(this.socket, 'notificacion_global').subscribe((notificacion: any) => {
       console.log('Notificación global recibida:', notificacion);
       this._notificacionGlobal.next(notificacion);
     });
-    
+
     fromEvent(this.socket, 'sugerencia_apuesta').subscribe((data: any) => {
       if (data != null) {
         this._apuestaSugerida.next(data);
@@ -170,12 +170,12 @@ fromEvent(this.socket, 'update_ultima_ronda').subscribe((numero: number) => {
         this._apuestaSugerida.next(null);
       }
     });
-    
+
     fromEvent(this.socket, 'publicarGanador').subscribe((data: any) => {
       console.log("GANADOR!: ", data);
       this._ganador.next(data.ganador);
     });
-    
+
     fromEvent(this.socket, 'leave_user').subscribe(() => {
       this.getUsersCount();
     });
@@ -223,8 +223,8 @@ fromEvent(this.socket, 'update_ultima_ronda').subscribe((numero: number) => {
     this._users$.next(state);
   }
   public reiniciarContadorRondas(room: string): void {
-  this.socket.emit('reiniciar_contador_rondas', room);
-}
+    this.socket.emit('reiniciar_contador_rondas', room);
+  }
   public setChat(message: ChatType): void {
     const current = this._chat$.getValue();
     const state = [...current, message];
@@ -266,21 +266,21 @@ fromEvent(this.socket, 'update_ultima_ronda').subscribe((numero: number) => {
 
   cerrarApuestas(room: string): void {
     this._room$.next(room);
-    console.log("room:",this._room$.getValue())
+    console.log("room:", this._room$.getValue())
     this.socket.emit('cerrar_apuestas', room);
   }
-  
+
   abrirApuestas(room: string, ronda: number, redTeamName: string, greenTeamName: string, redPoints: number, greenPoints: number): void {
-  const ultimaValida = this.getUltimaRondaValida();
-  
-  if (ronda <= ultimaValida) {
-    alert(`Error: La ronda ${ronda} debe ser mayor a ${ultimaValida}`);
-    return;
-  } 
-    console.log("numero de pelea: ",ronda);
+    const ultimaValida = this.getUltimaRondaValida();
+
+    if (ronda <= ultimaValida) {
+      alert(`Error: La ronda ${ronda} debe ser mayor a ${ultimaValida}`);
+      return;
+    }
+    console.log("numero de pelea: ", ronda);
     this._room$.next(room);
     this.initChat();
-    console.log("room:",this._room$.getValue())
+    console.log("room:", this._room$.getValue())
     const payload = {
       room,
       ronda,
@@ -291,14 +291,14 @@ fromEvent(this.socket, 'update_ultima_ronda').subscribe((numero: number) => {
     }
     this.socket.emit('abrir_apuestas', payload);
   }
-  
+
   escogerGanador(room: string, ganador: string, ronda: number): void {
     this._room$.next(room);
     console.log(`Escogiendo ganador ${ganador} para la ronda ${ronda} en sala ${room}`);
-    const payload = {room, ganador, ronda};
+    const payload = { room, ganador, ronda };
     this.socket.emit('escoger_ganador', payload);
   }
-  
+
   // Método para obtener información de una ronda específica
   getRondaInfo(ronda: number): Observable<any> {
     const room = this._room$.getValue();
@@ -307,23 +307,23 @@ fromEvent(this.socket, 'update_ultima_ronda').subscribe((numero: number) => {
     }
     return fromEvent(this.socket, 'ronda_info');
   }
-  
-  getEstadoApuesta(): Observable<any>{
+
+  getEstadoApuesta(): Observable<any> {
     const room = this._room$.getValue();
     if (room) {
       this.socket.emit('getEstadoApuesta', room);
     }
-    return fromEvent(this.socket,'getApuesta'); 
+    return fromEvent(this.socket, 'getApuesta');
   }
-  
-  getCantidades(): Observable<any>{
+
+  getCantidades(): Observable<any> {
     const room = this._room$.getValue();
     if (room) {
       this.socket.emit('get_cantidades', room);
     }
-    return fromEvent(this.socket,'update_cantidades_client'); 
+    return fromEvent(this.socket, 'update_cantidades_client');
   }
-  
+
   getMessage(): Observable<any> {
     return fromEvent(this.socket, 'message');
   }
@@ -355,27 +355,31 @@ fromEvent(this.socket, 'update_ultima_ronda').subscribe((numero: number) => {
   public getCurrentUsers(): UserType[] {
     return this._users$.getValue();
   }
-    public getUltimaRondaValida(): number {
-  return this._ultimaRondaValida.getValue();
-    }
+  public getUltimaRondaValida(): number {
+    return this._ultimaRondaValida.getValue();
+  }
   // Método para obtener todas las apuestas de una sala (todas las rondas)
   public obtenerTodasApuestas(sala: string): Observable<any> {
     return this.httpClient.get(`${this.baseUrl}/obtenerapuestasBySala/${sala}`);
- 
+
   }
-    // Método para obtener todas las apuestas de una sala (todas las rondas)
-    public obtenerTodasApuestasAgrupadas(sala: string): Observable<any> {
-      return this.httpClient.get(`${this.baseUrl}/obtenerapuestasAgrupadasBySala/${sala}`);
-   
-    }
-  public obtenerResumenStream(sala: string): Observable<{totalStream: number, detalles: any[]}> {
-  return this.httpClient.get<{totalStream: number, detalles: any[]}>(
-    `${this.baseUrl}/resumen-stream/${sala}`
-  );
-}
+  // Método para obtener todas las apuestas de una sala (todas las rondas)
+  public obtenerTodasApuestasAgrupadas(sala: string): Observable<any> {
+    return this.httpClient.get(`${this.baseUrl}/obtenerapuestasAgrupadasBySala/${sala}`);
+
+  }
+  public obtenerResumenStream(sala: string): Observable<{ totalStream: number, detalles: any[] }> {
+    return this.httpClient.get<{ totalStream: number, detalles: any[] }>(
+      `${this.baseUrl}/resumen-stream/${sala}`
+    );
+  }
   public obtenerMontosCazados(sala: string): Observable<any> {
-  return this.httpClient.get(`${this.baseUrl}/montos-cazados/${sala}`);
-}
+    return this.httpClient.get(`${this.baseUrl}/montos-cazados/${sala}`);
+  }
+
+  public obtenerHistorialPorFecha(fecha: string, ronda: number): Observable<any[]> {
+    return this.httpClient.get<any[]>(`${this.baseUrl}/historial/${fecha}/${ronda}`);
+  }
 }
 
 interface UserType {
@@ -393,8 +397,8 @@ interface ChatType {
   verde: string;
   cantidad: number;
   date: Date;
-  ronda:number;
-  estado:string;
+  ronda: number;
+  estado: string;
 }
 interface NotificacionType {
   tipo: string;
