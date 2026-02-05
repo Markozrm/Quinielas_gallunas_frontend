@@ -1,5 +1,5 @@
-import { Injectable,inject } from '@angular/core';
-import {HttpClient} from  '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
@@ -22,21 +22,21 @@ export class UsersService {
     formData.append('password', formValue.password);
     formData.append('tipoUsuario', formValue.tipoUsuario);
     formData.append('email', formValue.email);
-    formData.append('nombre', formValue.nombre);    
+    formData.append('nombre', formValue.nombre);
     formData.append('apellido', formValue.apellido);
     formData.append('telefono', formValue.telefono);
     formData.append('fechaNacimiento', formValue.fechaNacimiento);
     return firstValueFrom(this.httpClient.post<any>(`${this.baseUrl}/register`, formData));
   }
 
-  login(formValue:any){
+  login(formValue: any) {
     console.log("logeando(service)");
     return firstValueFrom(
-      this.httpClient.post<any>(`${this.baseUrl}/login`,formValue)
+      this.httpClient.post<any>(`${this.baseUrl}/login`, formValue)
     )
   }
 
-  getImage(username:string){
+  getImage(username: string) {
     console.log(`${this.baseUrl}/get-image/${username}`);
     const image = this.httpClient.get<any>(`${this.baseUrl}/get-image/${username}`);
     console.log(image);
@@ -50,49 +50,60 @@ export class UsersService {
     // Construir y devolver la URL de la imagen del usuario
     return `${this.apiUrl}/api/mensajes/get-image/${id}`;
   }
-  setClaveStream(id:string,tituloStream:string,image:any,clave:string,esVIP:string): any {
+  setClaveStream(id: string, tituloStream: string, image: any, clave: string, esVIP: string): any {
     //console.log('Tamaño de la imagen antes de enviar la solicitud POST:', image.size, 'bytes');
 
     const formData = new FormData();
     formData.append('file', image);  // 'file' debe coincidir con el nombre esperado en el servidor
     formData.append('tituloStream', tituloStream);
-    formData.append('clave',clave);
-    formData.append('esVIP',esVIP);
+    formData.append('clave', clave);
+    formData.append('esVIP', esVIP);
     return firstValueFrom(
-      this.httpClient.post<any>(`${this.apiUrl}/api/streams/setClave/${id}`,formData)
+      this.httpClient.post<any>(`${this.apiUrl}/api/streams/setClave/${id}`, formData)
     );
   }
-  getClaveStream(id:string): any {
+  getStreamLiveData(streamId: string): any {
+    return this.httpClient.get<any>(`${this.apiUrl}/api/streams/liveData/${streamId}`);
+  }
+  getClaveStream(id: string): any {
     return this.httpClient.get<any>(`${this.apiUrl}/api/streams/getClave/${id}`);
   }
-  getImagenStream(id:string): any {
+  getImagenStream(id: string): any {
     return `${this.apiUrl}/api/streams/getImagen/${id}`;
   }
 
+  finalizeStream(streamId: string): any {
+    return this.httpClient.post<any>(`${this.apiUrl}/api/streams/finalize/${streamId}`, {});
+  }
 
-  getUsers(){
+  resetStream(streamId: string): any {
+    return this.httpClient.post<any>(`${this.apiUrl}/api/streams/reset/${streamId}`, {});
+  }
+
+
+  getUsers() {
     return this.httpClient.get<any>(`${this.baseUrl}/get-all-users`);
   }
-  editUser(id: any, editedUser: any){
+  editUser(id: any, editedUser: any) {
     return this.httpClient.put<any>(`${this.baseUrl}/edit-user/${id}`, editedUser);
   }
-  banUser(username: any,){
-    return this.httpClient.put<any>(`${this.baseUrl}/ban-user/${username}`,username);
+  banUser(username: any,) {
+    return this.httpClient.put<any>(`${this.baseUrl}/ban-user/${username}`, username);
   }
-  desBanUser(username: any,){
-    return this.httpClient.put<any>(`${this.baseUrl}/desban-user/${username}`,username);
+  desBanUser(username: any,) {
+    return this.httpClient.put<any>(`${this.baseUrl}/desban-user/${username}`, username);
   }
-  editUserImage(id: any, editedUser: any,image:any){
+  editUserImage(id: any, editedUser: any, image: any) {
     const formData = new FormData();
     formData.append('_id', editedUser._id);
     formData.append('file', image);  // 'file' debe coincidir con el nombre esperado en el servidor
     formData.append('username', editedUser.username);
-    if (editedUser.newPassword){
+    if (editedUser.newPassword) {
       formData.append('newPassword', editedUser.newPassword);
     }
-    
+
     return this.httpClient.put<any>(`${this.baseUrl}/edit-user-with-image/${id}`, formData);
-  }  
+  }
 
   checkBanStatus(username: string) {
     return firstValueFrom(this.httpClient.get<any>(`${this.baseUrl}/check-ban/${username}`));
@@ -102,22 +113,22 @@ export class UsersService {
   }
 
   updateSaldo(username: string, monto: number, concepto: string, tipo: string, sala?: string) {
-    const body = { "monto":monto, "concepto": concepto, "tipo": tipo };  // El cuerpo de la petición contiene la cantidad a sumar
+    const body = { "monto": monto, "concepto": concepto, "tipo": tipo };  // El cuerpo de la petición contiene la cantidad a sumar
     return firstValueFrom(
       this.httpClient.put<any>(`${this.baseUrl}/add-saldo/${username}`, body)
     );
   }
 
   restarSaldo(username: string, monto: number, concepto: string) {
-    const body = { "monto":monto, "concepto": concepto };  // El cuerpo de la petición contiene la cantidad a restar y el concepto
+    const body = { "monto": monto, "concepto": concepto };  // El cuerpo de la petición contiene la cantidad a restar y el concepto
     return firstValueFrom(
       this.httpClient.put<any>(`${this.baseUrl}/subtract-saldo/${username}`, body)
     );
   }
   //Ruta para el historial de Usuarios
   getUserHistory(username: string) {
-  return this.httpClient.get<any>(`${this.apiUrl}/api/apuestas/historialDetallado/${username}`);
-}
+    return this.httpClient.get<any>(`${this.apiUrl}/api/apuestas/historialDetallado/${username}`);
+  }
 
   //Ruta para el historial agrupado por rondas
   getUserHistoryByRounds(username: string) {
@@ -128,15 +139,15 @@ export class UsersService {
     return this.httpClient.get<any>(`${this.baseUrl}/get-saldo/${username}`);
   }
   // Agregar este método a tu UsersService
-uploadProfilePhoto(username: string, photo: File): Promise<any>{
-  const formData = new FormData();
-  formData.append('username', username);
-  formData.append('file', photo); // 'file' debe coincidir con el nombre esperado en el servidor
+  uploadProfilePhoto(username: string, photo: File): Promise<any> {
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('file', photo); // 'file' debe coincidir con el nombre esperado en el servidor
 
-  return firstValueFrom(
-    this.httpClient.post<any>(`${this.baseUrl}/change-profile-photo/${username}`, formData)
-  );
-}
+    return firstValueFrom(
+      this.httpClient.post<any>(`${this.baseUrl}/change-profile-photo/${username}`, formData)
+    );
+  }
 
   // Obtener registros de saldos por usuario
   getUserSaldoRecords(username: string) {

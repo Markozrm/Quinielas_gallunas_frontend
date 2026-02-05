@@ -5,7 +5,7 @@ import { LoginGuard } from './guards/login.guard';
 import { AppComponent } from './app.component';
 import { IndexComponent } from './index/index.component';
 import { RegisterComponent } from './Register/register.component';
-import {ActivatedRouteSnapshot} from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import { PanelComponent } from './panel/panel.component';
 import { PanelGuard } from './guards/panel.guard';
 import { AdminComponent } from './admin/admin.component';
@@ -32,6 +32,7 @@ import { RuletaComponent } from './ruleta-admin/ruleta';
 import { CorteDiarioComponent } from './Corte-Diario/corte-diario.component';
 import { CodigoIngresoComponent } from './codigo-ingreso/codigo-ingreso.component';
 import { HistorialRetirosUsuariosComponent } from './historial-retiros-usuario/historial-retiros-usuarios';
+import { FiltroComponent } from './admin/filtro/filtro.component';
 const routes: Routes = [
   {
     path: '',
@@ -43,34 +44,34 @@ const routes: Routes = [
   },
   {
     path: 'Admin',
-    component:AdminComponent,
-    canActivate:[PanelGuard]
+    component: AdminComponent,
+    canActivate: [PanelGuard]
     // loadChildren: () => import('./login/login.component').then((m) => m.LoginComponent),
   },
   {
     path: 'Usuarios',
-    component:UsuariosComponent,
-    canActivate:[PanelGuard]
+    component: UsuariosComponent,
+    canActivate: [PanelGuard]
     // loadChildren: () => import('./login/login.component').then((m) => m.LoginComponent),
   },
   {
     path: 'IniciarStream',
-    component:IniciardorStreamsComponent,
-    canActivate:[PanelGuard]
+    component: IniciardorStreamsComponent,
+    canActivate: [PanelGuard]
     // loadChildren: () => import('./login/login.component').then((m) => m.LoginComponent),
   },
   {
     path: 'Reiniciar',
-    component:StreamControlComponent,
-    canActivate:[PanelGuard]
+    component: StreamControlComponent,
+    canActivate: [PanelGuard]
     // loadChildren: () => import('./login/login.component').then((m) => m.LoginComponent),
   },
   {
     path: 'Panel',
-    component:PanelComponent,
-    canActivate:[PanelGuard]
+    component: PanelComponent,
+    canActivate: [PanelGuard]
   },
-   {
+  {
     path: 'Screenshots',
     component: ScreenshotsComponent,
     canActivate: [PanelGuard]
@@ -80,21 +81,21 @@ const routes: Routes = [
     component: HistorialSaldosComponent,
     canActivate: [PanelGuard]
   },
-    { 
-      path: 'cambiar-contrasena', component: ChangePasswordComponent 
-    },
+  {
+    path: 'cambiar-contrasena', component: ChangePasswordComponent
+  },
   {
     path: 'Register',
-    component:RegisterComponent
-  
+    component: RegisterComponent
+
   },
   {
     path: 'RegistroInvitado',
-    component:RegisterInvitadoComponent
+    component: RegisterInvitadoComponent
   },
-    {
+  {
     path: 'RegistroInvitado/:sala/:port',
-    component:RegisterInvitadoComponent
+    component: RegisterInvitadoComponent
     // loadChildren: () => import('./login/login.component').then((m) => m.LoginComponent),
   },
   {
@@ -109,18 +110,18 @@ const routes: Routes = [
   },
   {
     path: 'Login',
-    component:LoginComponent
- 
+    component: LoginComponent
+
   },
   {
     path: 'Login/:sala/:port',
-    component:LoginComponent
+    component: LoginComponent
     // loadChildren: () => import('./login/login.component').then((m) => m.LoginComponent),
   },
   {
     path: 'recargar',
-    component:PagoPageComponent
-  
+    component: PagoPageComponent
+
   },
   {
     path: 'Subir-recibo',
@@ -139,7 +140,7 @@ const routes: Routes = [
   {
     path: 'mi-perfil',
     component: MiPerfilComponent,
-    canActivate:[LoginGuard]
+    canActivate: [LoginGuard]
   },
   {
     path: 'retirar-saldo',
@@ -152,11 +153,11 @@ const routes: Routes = [
   {
     path: 'initialize-payment',
     component: PaymentInitializeComponent,
-    canActivate:[PanelGuard]
+    canActivate: [PanelGuard]
   },
   {
     path: 'live/:sala/:port',
-    canActivate:[LoginGuard],
+    canActivate: [LoginGuard],
     data: {
       guardSnapshot: ActivatedRouteSnapshot, // Pasa el ActivatedRouteSnapshot al guard
     },
@@ -164,20 +165,20 @@ const routes: Routes = [
   },
   {
     path: 'live-inv/:sala/:port',
-    canActivate:[LoginGuard],
+    canActivate: [LoginGuard],
     data: {
       guardSnapshot: ActivatedRouteSnapshot, // Pasa el ActivatedRouteSnapshot al guard
     },
     loadChildren: () => import('./chat/chat-invitado.module').then((m) => m.ChatInvitadoModule),
   },
-    {
+  {
     path: 'historial-usuario/:username',
     component: VerHistorialUsuariosComponent,
     canActivate: [LoginGuard] // protegen que solamente usuarios logeados
   },
   {
     path: 'live-admin/:sala/:port',
-    canActivate:[LoginGuard],
+    canActivate: [LoginGuard],
     data: {
       guardSnapshot: ActivatedRouteSnapshot, // Pasa el ActivatedRouteSnapshot al guard
     },
@@ -187,28 +188,33 @@ const routes: Routes = [
     path: 'rifa/:sala',
     component: RifaPageComponent
   },
-  { 
-    path: 'admin/ruleta', 
+  {
+    path: 'admin/ruleta',
     component: RuletaComponent,
     canActivate: [PanelGuard] // Protege la ruta para que solo los administradores puedan acceder
   },
   {
-  path: 'admin/corte',
-  component: CorteDiarioComponent,
-  canActivate: [PanelGuard]
-},
-{
-  path: 'codigo-ingreso/:email',
-  component: CodigoIngresoComponent
-},
-{
-  path: 'historial-retiros',
-  component: HistorialRetirosUsuariosComponent
-},
+    path: 'admin/corte',
+    component: CorteDiarioComponent,
+    canActivate: [PanelGuard]
+  },
+  {
+    path: 'codigo-ingreso/:email',
+    component: CodigoIngresoComponent
+  },
+  {
+    path: 'historial-retiros',
+    component: HistorialRetirosUsuariosComponent
+  },
+  {
+    path: 'admin/filtro',
+    component: FiltroComponent,
+    canActivate: [PanelGuard]
+  },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes),LoginComponent],
+  imports: [RouterModule.forRoot(routes), LoginComponent],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
