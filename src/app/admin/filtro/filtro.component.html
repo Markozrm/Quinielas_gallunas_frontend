@@ -1,0 +1,203 @@
+<div class="filtro-container">
+    <div class="header">
+        <button class="btn-back" (click)="volver()">Volver</button>
+
+        <div class="stream-select-container">
+            <select [(ngModel)]="streamSeleccionado" (change)="onStreamChange()" class="stream-selector">
+                <option value="1">Stream 1</option>
+            </select>
+        </div>
+
+        <div class="logo-container">
+            <img src="assets/image/Titulo_de_quinielas-removebg-preview.png" alt="Quinielas Gallisticas"
+                class="logo-img">
+        </div>
+    </div>
+
+    <div class="main-card">
+        <!-- Top Section: Saldo de Inicio -->
+        <h3 class="section-title">SALDO DE INICIO</h3>
+        <div class="info-section inicio-section">
+            <div class="snapshot-data" *ngIf="snapshot; else noSnapshot">
+                <div class="data-group hora-container">
+                    <span class="label-hora">HORA DE INICIO: {{ snapshot.startedAt | date:'HH:mm' }}</span>
+                </div>
+
+                <div class="data-group">
+                    <span class="label">SALDO GLOBAL</span>
+                    <span class="value">{{ snapshot.saldoGlobal | currency }}</span>
+                </div>
+
+                <div class="operator">+</div>
+
+                <div class="data-group">
+                    <span class="label">RETIROS</span>
+                    <span class="value">{{ snapshot.retiros | currency }}</span>
+                </div>
+
+                <div class="operator">=</div>
+
+                <div class="data-group total-group">
+                    <span class="label">TOTAL</span>
+                    <span class="value total-pill">{{ snapshot.total | currency }}</span>
+                </div>
+            </div>
+
+            <ng-template #noSnapshot>
+                <div class="no-data">Esperando inicio de stream...</div>
+            </ng-template>
+        </div>
+
+        <!-- Middle Section (Saldo en Vivo) -->
+        <h3 class="section-title">SALDO EN VIVO</h3>
+        <div class="info-section live-section">
+            <div class="snapshot-data full-width-data" *ngIf="liveData; else loadingLive">
+
+                <div class="data-group hora-container red-gradient">
+                    <span class="label-hora">EN VIVO: {{ liveData.now | date:'HH:mm' }}</span>
+                    <!-- Or current time? Usually 'En Vivo' shows current clock. -->
+                </div>
+
+                <div class="data-group">
+                    <span class="label">SALDO GLOBAL</span>
+                    <span class="value">{{ liveData.saldoGlobal | currency }}</span>
+                </div>
+
+                <div class="operator">+</div>
+
+                <div class="data-group">
+                    <span class="label">RETIROS</span>
+                    <span class="value">{{ liveData.retiros | currency }}</span>
+                </div>
+
+                <div class="operator">+</div>
+
+                <div class="data-group">
+                    <span class="label">DEPOSITOS</span>
+                    <span class="value">{{ liveData.depositos | currency }}</span>
+                </div>
+
+                <div class="operator">+</div>
+
+                <div class="data-group">
+                    <span class="label">SALDO MANUAL</span>
+                    <span class="value">{{ liveData.saldoManual | currency }}</span>
+                </div>
+
+                <div class="operator">-</div>
+
+                <div class="data-group">
+                    <span class="label">RESTA MANUAL</span>
+                    <span class="value">{{ liveData.restaManual | currency }}</span>
+                </div>
+
+                <div class="operator">-</div>
+
+                <div class="data-group">
+                    <span class="label">CAZADO</span>
+                    <span class="value">{{ liveData.cazado | currency }}</span>
+                </div>
+
+                <div class="operator">=</div>
+
+                <div class="data-group total-group">
+                    <span class="label">TOTAL</span>
+                    <span class="value total-pill">{{ liveData.total | currency }}</span>
+                </div>
+            </div>
+            <ng-template #loadingLive>
+                <div class="no-data">Cargando datos en vivo...</div>
+            </ng-template>
+        </div>
+
+
+
+        <!-- Bottom Section (Final Snapshot) -->
+        <h3 class="section-title" *ngIf="finalSnapshot">SALDO FINAL</h3>
+        <div class="info-section final-section" *ngIf="finalSnapshot">
+            <div class="snapshot-data full-width-data">
+
+                <div class="data-group hora-container gray-gradient">
+                    <span class="label-hora">FINAL: {{ finalSnapshot.endedAt | date:'HH:mm' }}</span>
+                </div>
+
+                <div class="data-group">
+                    <span class="label">SALDO GLOBAL</span>
+                    <span class="value">{{ finalSnapshot.saldoGlobal | currency }}</span>
+                </div>
+
+                <div class="operator">+</div>
+
+                <div class="data-group">
+                    <span class="label">RETIROS</span>
+                    <span class="value">{{ finalSnapshot.retiros | currency }}</span>
+                </div>
+
+                <div class="operator">+</div>
+
+                <div class="data-group">
+                    <span class="label">DEPOSITOS</span>
+                    <span class="value">{{ finalSnapshot.depositos | currency }}</span>
+                </div>
+
+                <div class="operator">+</div>
+
+                <div class="data-group">
+                    <span class="label">SALDO MANUAL</span>
+                    <span class="value">{{ finalSnapshot.saldoManual | currency }}</span>
+                </div>
+
+                <div class="operator">-</div>
+
+                <div class="data-group">
+                    <span class="label">RESTA MANUAL</span>
+                    <span class="value">{{ finalSnapshot.restaManual | currency }}</span>
+                </div>
+
+                <div class="operator">-</div>
+
+                <div class="data-group">
+                    <span class="label">CAZADO</span>
+                    <span class="value">{{ finalSnapshot.cazado | currency }}</span>
+                </div>
+
+                <div class="operator">=</div>
+
+                <div class="data-group total-group">
+                    <span class="label">TOTAL</span>
+                    <span class="value total-pill gray-pill">{{ finalSnapshot.total | currency }}</span>
+                </div>
+            </div>
+
+            <!-- Button to Reset Stream (Inside Final Section or below) -->
+            <div class="action-container" style="margin-top: 20px;">
+                <button class="btn-finalize btn-reset" (click)="confirmarReiniciar()">REINICIAR DATOS</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Confirmation Finalizar -->
+<div class="modal-overlay" *ngIf="mostrarModalFinalizar">
+    <div class="modal-content">
+        <h3>¿Estás seguro de finalizar el stream?</h3>
+        <p>Se guardará el saldo actual como saldo final.</p>
+        <div class="modal-actions">
+            <button class="btn-cancel" (click)="cancelarFinalizar()">Cancelar</button>
+            <button class="btn-confirm" (click)="finalizarStream()">Aceptar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Confirmation Reiniciar -->
+<div class="modal-overlay" *ngIf="mostrarModalReiniciar">
+    <div class="modal-content">
+        <h3>¿Estás seguro de REINICIAR DATOS?</h3>
+        <p>Esto borrará el saldo inicial y final guardado previamente.</p>
+        <p style="font-size: 0.9em; color: gray;">Úsalo cuando vayas a empezar un stream nuevo desde cero.</p>
+        <div class="modal-actions">
+            <button class="btn-cancel" (click)="cancelarReiniciar()">Cancelar</button>
+            <button class="btn-confirm btn-danger" (click)="reiniciarDatos()">REINICIAR</button>
+        </div>
+    </div>
+</div>

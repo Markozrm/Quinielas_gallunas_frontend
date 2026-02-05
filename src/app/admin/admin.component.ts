@@ -183,6 +183,10 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
     this.router.navigate(['/admin/ventaja']);
   }
 
+  irFiltro() {
+    this.router.navigate(['/admin/filtro']);
+  }
+
   volverAlMenu() {
     this.showRifaPanel = false;
   }

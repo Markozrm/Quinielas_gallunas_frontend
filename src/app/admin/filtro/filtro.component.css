@@ -1,0 +1,306 @@
+.filtro-container {
+    padding: 20px;
+    background-color: #1a4f94;
+    /* Blue background matching the image */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Arial', sans-serif;
+}
+
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    /* Spread items: Back -- Select -- Logo */
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
+    padding: 0 20px;
+}
+
+.stream-select-container {
+    z-index: 10;
+}
+
+.stream-selector {
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 2px solid #e0b045;
+    background-color: #1a4f94;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+}
+
+.stream-selector:hover {
+    background-color: #2b6cb0;
+}
+
+.logo-container {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    pointer-events: none;
+    /* Let clicks pass through if it overlaps */
+}
+
+.logo-img {
+    max-width: 300px;
+    height: auto;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+}
+
+.btn-back {
+    padding: 8px 20px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.btn-back:hover {
+    background-color: #c82333;
+}
+
+.main-card {
+    background-color: white;
+    width: 90%;
+    max-width: 800px;
+    border-radius: 40px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.info-section {
+    border: 3px solid #3b74b8;
+    border-radius: 30px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 120px;
+    /* Reduced min-height */
+}
+
+.inicio-section {
+    width: 100%;
+    align-items: center;
+    /* Center content horizontally */
+    position: relative;
+    padding-top: 25px;
+}
+
+.section-title {
+    align-self: flex-start;
+    margin-bottom: -15px;
+    /* Pull closer to border */
+    margin-left: 30px;
+    background: white;
+    /* Cut border effect maybe? No, title usually inside or above */
+    padding: 0 10px;
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #000;
+    z-index: 5;
+    position: absolute;
+    top: 25px;
+    /* Adjust according to card padding */
+    left: 60px;
+    background-color: #fff;
+    /* Match card bg */
+    z-index: 10;
+}
+
+.info-section.middle {
+    height: 120px;
+    flex-direction: column;
+}
+
+.total-label {
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.total-amount {
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.snapshot-data {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    flex-wrap: wrap;
+    /* responsive */
+    gap: 10px;
+}
+
+.data-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.label {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    color: #333;
+    /* Explicitly dark text */
+}
+
+.value {
+    font-weight: bold;
+    font-size: 18px;
+    color: #444;
+    /* Explicitly dark text for values */
+}
+
+.operator {
+    font-size: 24px;
+    font-weight: bold;
+    color: #3b74b8;
+    /* Blue color for operators to match theme */
+}
+
+/* Hora pill style */
+.hora-container {
+    background: linear-gradient(180deg, #0f5132, #003300);
+    /* Dark green gradient */
+    border-radius: 20px;
+    padding: 5px 15px;
+    color: white;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
+}
+
+.label-hora {
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: white;
+    /* Force white text in pill */
+}
+
+/* Total pill style */
+.total-pill {
+    background: linear-gradient(180deg, #0f5132, #003300);
+    /* Dark green gradient */
+    border-radius: 20px;
+    padding: 5px 20px;
+    color: white;
+    /* Force white text in pill */
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
+    font-size: 20px;
+}
+
+.no-data {
+    color: #666;
+    font-style: italic;
+}
+
+/* Specific styling for the middle one which usually holds the total and might need to be highlighted or just formatted as text */
+.middle .content-text {
+    text-align: center;
+    color: #3b74b8;
+    /* Blue text to match border */
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.content-text .amount {
+    display: block;
+    font-size: 2rem;
+    margin-top: 5px;
+}
+
+/* Reset Button Styles */
+.btn-reset {
+    background-color: #d32f2f;
+    /* Red */
+    border: none;
+    color: white;
+}
+
+.btn-reset:hover {
+    background-color: #b71c1c;
+}
+
+.btn-danger {
+    background-color: #d32f2f;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #b71c1c;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    /* Ensure on top of everything */
+}
+
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.modal-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+.btn-cancel,
+.btn-confirm {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.btn-cancel {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-confirm {
+    background-color: #28a745;
+    color: white;
+}

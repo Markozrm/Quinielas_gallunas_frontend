@@ -45,20 +45,23 @@ export class ChatAdminPageComponent implements OnInit, OnDestroy {
   public salaActual: string = '';
   public portActual: string = '';
   public ultimaRondaValida: number = 0;
-  
+
   // Nuevas propiedades para manejo de rondas en espera
   public rondasEnEspera: number[] = [];
   public rondaSeleccionada: number = 0;
-  
+
   public cantidadApostadaRojo: number = 0;
   public cantidadApostadaVerde: number = 0;
   public redTeamName: string = '';
   public greenTeamName: string = '';
   public redPoints: number = 0;
   public greenPoints: number = 0;
- // Notificaciones
+  // Notificaciones
   notificaciones: any[] = [];
   mostrarNotificaciones: boolean = false;
+
+  // Finalizar Stream State
+  mostrarModalFinalizar: boolean = false;
 
   constructor(private usersService: UsersService,
     private route: ActivatedRoute, private router: Router,
@@ -70,20 +73,20 @@ export class ChatAdminPageComponent implements OnInit, OnDestroy {
       this.salaActual = params['sala'];
       this.portActual = params['port'];
       const isInvitado = localStorage.getItem('Rol') === 'invitado';
-      if(isInvitado){
+      if (isInvitado) {
         this.router.navigate([`/live-inv/${this.salaActual || 'Live'}/${this.portActual}`]);
       }
     });
-   }
+  }
   private apuestaSubscription: Subscription | undefined;
   private booleanStateSubscription: Subscription | undefined;
   isOpenBetModalOpen = false;
   isCloseBetModalOpen = false;
   isChooseModalOpen = false;
-  
+
   // Propiedad para el modal del chat
   isChatModalOpen = false;
-  
+
   // Propiedades para el botón flotante arrastrable
   isDragging = false;
   buttonPosition = { x: 20, y: 20 }; // Posición inicial
@@ -95,12 +98,12 @@ export class ChatAdminPageComponent implements OnInit, OnDestroy {
     this.apuestaService.getEstadoApuesta().pipe(take(1)).subscribe((data: { estadoApuesta: boolean; rondaActual: number, ganador: string, rondasEnEspera?: number[] }) => {
       const state = data.estadoApuesta;
       this.estadoApuesta = state;
-      
+
       // Actualizar la lista de rondas en espera
       if (data.rondasEnEspera) {
         this.rondasEnEspera = data.rondasEnEspera;
       }
-      
+
       if (state) {
         // Si el estado actual es "abierto", abrir el modal de "Cerrar Apuestas"
         this.isCloseBetModalOpen = true;
@@ -128,11 +131,11 @@ export class ChatAdminPageComponent implements OnInit, OnDestroy {
       this.ganadorPublicado = data;
     });
   }
-    reiniciarContadorRondas() {
-  if(confirm('¿Estás seguro de reiniciar el contador de rondas? Esto debe hacerse solo al iniciar un nuevo stream.')) {
-    this.apuestaService.reiniciarContadorRondas(this.salaActual);
-    this.ultimaRondaValida = 0;
-  }
+  reiniciarContadorRondas() {
+    if (confirm('¿Estás seguro de reiniciar el contador de rondas? Esto debe hacerse solo al iniciar un nuevo stream.')) {
+      this.apuestaService.reiniciarContadorRondas(this.salaActual);
+      this.ultimaRondaValida = 0;
+    }
   }
   // Método para abrir directamente el modal de nueva ronda
   abrirNuevaRonda() {
@@ -142,17 +145,17 @@ export class ChatAdminPageComponent implements OnInit, OnDestroy {
     this.isChooseModalOpen = false;
   }
 
-  handleOpenBets(data: {fightNumber: number, redTeamName: string, greenTeamName: string, redPoints: number, greenPoints: number}) {
-     if (data.fightNumber <= this.ultimaRondaValida) {
-    alert(`Error: La ronda ${data.fightNumber} debe ser mayor a ${this.ultimaRondaValida}`);
-    return;
-  }
+  handleOpenBets(data: { fightNumber: number, redTeamName: string, greenTeamName: string, redPoints: number, greenPoints: number }) {
+    if (data.fightNumber <= this.ultimaRondaValida) {
+      alert(`Error: La ronda ${data.fightNumber} debe ser mayor a ${this.ultimaRondaValida}`);
+      return;
+    }
     // Si estamos abriendo una nueva ronda sin escoger ganador de la anterior
     if (this.numeroPelea > 0 && !this.estadoApuesta && this.textButton === 'Escoger Ganador') {
       // Guardar la ronda actual como ronda anterior
       this.rondaAnterior = this.numeroPelea;
     }
-    
+
     this.numeroPelea = data.fightNumber;
     this.apuestaService.abrirApuestas(this.salaActual, data.fightNumber, data.redTeamName, data.greenTeamName, data.redPoints, data.greenPoints);
     this.closeOpenBetModal();
@@ -161,12 +164,12 @@ export class ChatAdminPageComponent implements OnInit, OnDestroy {
   handleChooseWinner(winner: string) {
     console.log("Escogiendo ganador:", winner, "para la ronda:", this.rondaSeleccionada);
     this.apuestaService.escogerGanador(this.salaActual, winner, this.rondaSeleccionada);
-    
+
     // Si la ronda seleccionada es la que acaba de cerrarse, limpiar la variable
     if (this.rondaSeleccionada === this.rondaActualCerrada) {
       this.rondaActualCerrada = 0;
     }
-    
+
     // Si la ronda seleccionada es la anterior, limpiar la variable
     if (this.rondaSeleccionada === this.rondaAnterior) {
       this.rondaAnterior = 0;
@@ -230,20 +233,20 @@ export class ChatAdminPageComponent implements OnInit, OnDestroy {
         Math.pow(event.clientX - this.dragStartPosition.x, 2) +
         Math.pow(event.clientY - this.dragStartPosition.y, 2)
       );
-      
+
       if (distance > 5 && Date.now() - this.dragStartTime > 100) {
         this.isDragging = true;
       }
     }
-    
+
     if (this.isDragging) {
       const newX = event.clientX - this.dragOffset.x;
       const newY = event.clientY - this.dragOffset.y;
-      
+
       // Limitar el botón dentro de los límites de la ventana
       const maxX = window.innerWidth - 80; // Ancho del botón
       const maxY = window.innerHeight - 60; // Alto del botón
-      
+
       this.buttonPosition.x = Math.max(0, Math.min(newX, maxX));
       this.buttonPosition.y = Math.max(0, Math.min(newY, maxY));
     }
@@ -266,27 +269,27 @@ export class ChatAdminPageComponent implements OnInit, OnDestroy {
 
   onTouchMove(event: TouchEvent): void {
     const touch = event.touches[0];
-    
+
     if (!this.isDragging) {
       // Verificar si está arrastrando (distancia mínima y tiempo)
       const distance = Math.sqrt(
         Math.pow(touch.clientX - this.dragStartPosition.x, 2) +
         Math.pow(touch.clientY - this.dragStartPosition.y, 2)
       );
-      
+
       if (distance > 10 && Date.now() - this.dragStartTime > 150) {
         this.isDragging = true;
       }
     }
-    
+
     if (this.isDragging) {
       const newX = touch.clientX - this.dragOffset.x;
       const newY = touch.clientY - this.dragOffset.y;
-      
+
       // Limitar el botón dentro de los límites de la ventana
       const maxX = window.innerWidth - 80;
       const maxY = window.innerHeight - 60;
-      
+
       this.buttonPosition.x = Math.max(0, Math.min(newX, maxX));
       this.buttonPosition.y = Math.max(0, Math.min(newY, maxY));
     }
@@ -315,11 +318,11 @@ export class ChatAdminPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Cargar posición del botón desde localStorage
     this.loadButtonPosition();
-    
+
     // Agregar event listeners globales para el arrastre
     document.addEventListener('mouseup', () => this.onMouseUp());
     document.addEventListener('touchend', () => this.onTouchEnd());
-    
+
     this.route.params.subscribe(params => {
       this.salaActual = params['sala'];
       this.portActual = params['port'];
@@ -338,31 +341,31 @@ export class ChatAdminPageComponent implements OnInit, OnDestroy {
       this.chatService.initChat();
       this.chatService.joinRoom(this.salaActual, username);
     });
-    
+
     this.apuestaSubscription = this.apuestaService.getEstadoApuesta().subscribe((data: any) => {
       this.numeroPelea = data.rondaActual;
       this.estadoApuesta = data.estadoApuesta;
-      
+
       // Actualizar la lista de rondas en espera
       if (data.rondasEnEspera) {
         this.rondasEnEspera = data.rondasEnEspera;
-        
+
         // Si hay una ronda anterior y no está en las rondas en espera, resetearla
         if (this.rondaAnterior > 0 && !this.rondasEnEspera.includes(this.rondaAnterior)) {
           this.rondaAnterior = 0;
         }
-        
+
         // Si hay una ronda actual cerrada y no está en las rondas en espera, resetearla
         if (this.rondaActualCerrada > 0 && !this.rondasEnEspera.includes(this.rondaActualCerrada)) {
           this.rondaActualCerrada = 0;
         }
         //Suscripción para delimitar usuarios
         this.apuestaService.ultimaRondaValida.subscribe(numero => {
-       this.ultimaRondaValida = numero;
-      console.log('Última ronda válida actualizada:', numero);
-      });
+          this.ultimaRondaValida = numero;
+          console.log('Última ronda válida actualizada:', numero);
+        });
       }
-      
+
       console.log("estado: ", data);
       if (data.estadoApuesta) {
         this.textButton = 'Cerrar Apuestas';
@@ -377,39 +380,39 @@ export class ChatAdminPageComponent implements OnInit, OnDestroy {
         }
       }
     });
-    
+
     // Suscribirse a actualizaciones de rondas en espera
     this.apuestaService.rondasEnEspera.subscribe((rondas: number[]) => {
       this.rondasEnEspera = rondas;
       console.log('Rondas en espera actualizadas:', this.rondasEnEspera);
-      
+
       // Si hay una ronda anterior y no está en las rondas en espera, resetearla
       if (this.rondaAnterior > 0 && !this.rondasEnEspera.includes(this.rondaAnterior)) {
         this.rondaAnterior = 0;
       }
-      
+
       // Si hay una ronda actual cerrada y no está en las rondas en espera, resetearla
       if (this.rondaActualCerrada > 0 && !this.rondasEnEspera.includes(this.rondaActualCerrada)) {
         this.rondaActualCerrada = 0;
       }
     });
-    
 
-    
+
+
     this.apuestaSubscription = this.apuestaService.chat$.subscribe(messages => {
       console.log("apuestas: ", this.chat$);
     });
-    
+
     this.apuestaSubscription = this.apuestaService.users$.subscribe(users => {
       this.users = users;
       console.log('Usuarios actualizados:', this.users);
     });
-    
+
     this.apuestaSubscription = this.apuestaService.getUsersCount().subscribe((count: any) => {
       // Lógica que quieres ejecutar cuando chat$ se actualiza
       this.connectedUsers = count;
     });
-    
+
     this.apuestaService.estadoApuesta.subscribe((valor) => {
       console.log('Estado actual:', valor);
       this.estadoApuesta = valor as boolean;
@@ -464,7 +467,7 @@ export class ChatAdminPageComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.apuestaSubscription?.unsubscribe();
     this.booleanStateSubscription?.unsubscribe();
-    
+
     // Limpiar event listeners globales
     document.removeEventListener('mouseup', () => this.onMouseUp());
     document.removeEventListener('touchend', () => this.onTouchEnd());
@@ -559,7 +562,57 @@ export class ChatAdminPageComponent implements OnInit, OnDestroy {
   irMiPerfil(): void {
     this.router.navigate(['/mi-perfil']);
   }
-  
+
+  // Finalizar Stream Methods
+  confirmarFinalizar() {
+    this.mostrarModalFinalizar = true;
+  }
+
+  cancelarFinalizar() {
+    this.mostrarModalFinalizar = false;
+  }
+
+  finalizarStream() {
+    let streamId = this.salaActual;
+
+    // Extract ID if it follows StreamX pattern or StreamX-Date pattern
+    // Case 1: Stream1-05-02-2026 -> 1
+    // Case 2: Stream1 -> 1
+    const match = streamId.match(/^Stream(\d+)/i);
+    if (match) {
+      streamId = match[1]; // Returns the digits after Stream (e.g. "1")
+    }
+
+    console.log('Finalizing Stream ID:', streamId);
+
+    this.usersService.finalizeStream(streamId).subscribe({
+      next: (res: any) => {
+        if (res.success) {
+          alert('Stream finalizado correctamente.');
+          this.mostrarModalFinalizar = false;
+        }
+      },
+      error: (err: any) => {
+        console.error('Error finalizando stream:', err);
+        // Fallback: If stripping didn't work or wasn't applicable, try '1' as a safe default if stream appears to be 1
+        if (streamId !== '1' && this.salaActual.includes('Stream1')) {
+          console.log('Reintentando con ID 1...');
+          this.usersService.finalizeStream('1').subscribe({
+            next: (res2: any) => {
+              if (res2.success) {
+                alert('Stream finalizado correctamente (Fallback ID 1).');
+                this.mostrarModalFinalizar = false;
+              }
+            },
+            error: (err2: any) => alert('No se pudo finalizar. Error: ' + (err2.error?.error || 'Desconocido'))
+          });
+        } else {
+          alert('Error al finalizar el stream: ' + (err.error?.error || err.message || 'Error Desconocido'));
+        }
+      }
+    });
+  }
+
 }
 
 interface UserType {

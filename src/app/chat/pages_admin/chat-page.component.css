@@ -74,7 +74,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  
+
 }
 
 .menuContainer {
@@ -84,26 +84,27 @@
   z-index: 9999;
 }
 
-.chat-container{
+.chat-container {
   width: 100%;
   height: 100%;
- 
- 
+
+
 }
 
-.videoContainer{
-  padding-top: 10% ;
+.videoContainer {
+  padding-top: 10%;
 }
 
-.app-users-type{
+.app-users-type {
   width: 100%;
   height: 100%;
-} 
+}
 
-.btn-wrap{
+.btn-wrap {
   border: none;
   background: none;
 }
+
 .btn-submit,
 .btn-submitLeft {
   font-size: var(--fontSizeMessage);
@@ -114,6 +115,7 @@
   width: 2.5rem;
   height: auto;
 }
+
 .btn-submit {
   right: 0;
   top: 0;
@@ -125,10 +127,12 @@
   top: 0;
 
 }
-.live-admin{
+
+.live-admin {
   display: flex;
   flex-direction: row;
 }
+
 .live-status {
   display: flex;
   align-items: center;
@@ -140,8 +144,10 @@
 
 .fa-eye {
   margin-right: 5px;
-  color: #007BFF; /* Puedes ajustar el color según tu preferencia */
+  color: #007BFF;
+  /* Puedes ajustar el color según tu preferencia */
 }
+
 .input-container {
   width: 100%;
   justify-content: center;
@@ -167,7 +173,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10000; /* Asegúrate de que esté por encima de otros elementos */
+  z-index: 10000;
+  /* Asegúrate de que esté por encima de otros elementos */
 }
 
 .popup {
@@ -189,7 +196,7 @@
   border: none;
   font-size: 20px;
   cursor: pointer;
- color: #f00;
+  color: #f00;
 }
 
 .popup-content {
@@ -214,6 +221,7 @@
   border-radius: 50%;
   margin-right: 10px;
 }
+
 .apuesta-container {
   width: 90%;
   margin: 20px auto;
@@ -251,16 +259,20 @@
 
 .team-green:hover {
   background-color: gold;
-} 
+}
+
 .team-red:hover {
   background-color: gold;
-} 
+}
+
 .apuestas-en-vivo {
-  background: linear-gradient(135deg, #b4952a 0%, #e2c97a 100%); /* Fondo oscuro */
+  background: linear-gradient(135deg, #b4952a 0%, #e2c97a 100%);
+  /* Fondo oscuro */
   padding: 10px;
   border-radius: 5%;
   color: white;
-  margin: 0 auto; /* Centrar el contenedor */
+  margin: 0 auto;
+  /* Centrar el contenedor */
   font-family: Arial, sans-serif;
   overflow-y: auto;
   max-height: 400px;
@@ -284,12 +296,15 @@
 }
 
 .apuestas-en-vivo ul li {
-  display: table-row; /* Cada fila de la tabla */
-  border-bottom: 1px solid #555; /* Línea divisoria */
+  display: table-row;
+  /* Cada fila de la tabla */
+  border-bottom: 1px solid #555;
+  /* Línea divisoria */
 }
 
 .apuestas-en-vivo ul li span {
-  display: table-cell; /* Cada celda de la tabla */
+  display: table-cell;
+  /* Cada celda de la tabla */
   padding: 10px;
   text-align: center;
 }
@@ -298,19 +313,24 @@
   color: #f00;
   font-weight: bold;
 }
+
 .input-apuesta-container {
   display: flex;
-  justify-content: center; /* Alinea el input horizontalmente */
-  align-items: center;     /* Alinea el input verticalmente si es necesario */
+  justify-content: center;
+  /* Alinea el input horizontalmente */
+  align-items: center;
+  /* Alinea el input verticalmente si es necesario */
   margin-top: 20px;
 }
 
 input[type="number"] {
   padding: 10px;
-  width: 60%;              /* Ajusta el tamaño del input */
-  border: solid black; 
+  width: 60%;
+  /* Ajusta el tamaño del input */
+  border: solid black;
   border-radius: 5px;
-  margin: 0 auto;          /* Asegura que esté centrado */
+  margin: 0 auto;
+  /* Asegura que esté centrado */
 }
 
 .boton-apostar {
@@ -321,11 +341,15 @@ input[type="number"] {
   background-color: #FE9C03;
   border: 2px solid #f8b954;
 }
-.team-green p,.team-red p, .boton-apostar p{
+
+.team-green p,
+.team-red p,
+.boton-apostar p {
   margin: 5px 0;
   font-weight: bold;
   font-size: 1.2em;
 }
+
 .boton-apostar:hover {
   background-color: gold;
 }
@@ -365,9 +389,7 @@ input[type="number"] {
   transform: scale(1.05);
 }
 
-@media screen and (max-width: 700px) {
-
-}
+@media screen and (max-width: 700px) {}
 
 .user-icon {
   fill: rgba(0, 0, 0, 1);
@@ -454,7 +476,7 @@ input[type="number"] {
   font-size: 14px;
   transition: all 0.3s ease;
   color: white;
-  box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
   min-width: 150px;
   text-align: center;
 }
@@ -562,11 +584,14 @@ input[type="number"] {
 }
 
 .admin-bet-box {
-  min-width: 220px;      /* Más ancho */
-  max-width: 320px;      /* Más ancho */
+  min-width: 220px;
+  /* Más ancho */
+  max-width: 320px;
+  /* Más ancho */
   border: 3px solid;
   border-radius: 22px;
-  padding: 10px 32px;    /* Más padding horizontal */
+  padding: 10px 32px;
+  /* Más padding horizontal */
   text-align: center;
   background: #000;
   color: #fff;
@@ -586,13 +611,15 @@ input[type="number"] {
   border-color: #22cc22 !important;
 }
 
-.betting-control-buttons > .admin-bet-box.red {
-  margin-right: 32px; /* separa el recuadro rojo del primer botón */
+.betting-control-buttons>.admin-bet-box.red {
+  margin-right: 32px;
+  /* separa el recuadro rojo del primer botón */
   margin-left: 0;
 }
 
-.betting-control-buttons > .admin-bet-box.green {
-  margin-left: 32px;  /* separa el recuadro verde del último botón */
+.betting-control-buttons>.admin-bet-box.green {
+  margin-left: 32px;
+  /* separa el recuadro verde del último botón */
   margin-right: 0;
 }
 
@@ -602,11 +629,13 @@ input[type="number"] {
     max-width: 200px;
     padding: 8px 10px;
   }
-  .betting-control-buttons > .admin-bet-box.red {
+
+  .betting-control-buttons>.admin-bet-box.red {
     margin-right: 12px;
     border-color: red;
   }
-  .betting-control-buttons > .admin-bet-box.green {
+
+  .betting-control-buttons>.admin-bet-box.green {
     margin-left: 12px;
     border-color: #22cc22;
   }
@@ -633,6 +662,7 @@ input[type="number"] {
   color: #ff0400;
   font-weight: bold;
 }
+
 .verde-text {
   color: #00e60b;
   font-weight: bold;
@@ -641,4 +671,93 @@ input[type="number"] {
 /* Agrega esto a tu archivo de estilos correspondiente */
 .blanco-texto {
   color: #fff;
+}
+
+/* Finalize Button & Modal Styles */
+.btn-finalize-red {
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  /* Slightly more rounded */
+  cursor: pointer;
+  transition: background 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  /* Make it full width of container? Or specific. */
+  max-width: 300px;
+}
+
+.btn-finalize-red:hover {
+  background-color: #b71c1c;
+}
+
+/* Modal Styling Specific to Chat Page */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  /* Darker overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-content-finalize {
+  background: #1a1a1a;
+  /* Dark background to match theme */
+  color: white;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  max-width: 400px;
+  width: 90%;
+  border: 2px solid #333;
+}
+
+.modal-content-finalize h3 {
+  margin-top: 0;
+  color: #e0e0e0;
+}
+
+.modal-actions-finalize {
+  margin-top: 25px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.btn-cancel-finalize {
+  background: #444;
+  color: #ddd;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-cancel-finalize:hover {
+  background: #555;
+}
+
+.btn-confirm-finalize {
+  background: #2e7d32;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-confirm-finalize:hover {
+  background: #1b5e20;
 }
