@@ -15,6 +15,7 @@ export class FiltroComponent implements OnInit {
 
     snapshot: any = null;
     liveData: any = null;
+    hybridData: any = null;
     finalSnapshot: any = null;
     loading = true;
     streamSeleccionado: string = '1';
@@ -70,24 +71,33 @@ export class FiltroComponent implements OnInit {
                 if (res.success && res.data) {
                     /*
                       Formula: Global + Retiros + Depositos + Manual - Resta - Cazado = TOTAL
-                      Note: 'Cazado' behavior was "saldo cazado en vivo *.10".
-                      If we assume 'Total' is the result of the equation, we do the math here.
                     */
                     const d = res.data;
-                    const cazadoAdjusted = d.cazado; // Use raw or adjusted? Assuming RAW substraction based on image formula
-                    // Or "Cazado * .10"?
-                    // User said: "+ saldo cazado en vivo *.10 = total".
-                    // The image text says: "... - CAZADO = TOTAL".
-                    // I will implement the image formula: Global + Retiros + Depositos + Manual - Resta - Cazado.
-                    // But I'll display Cazado.
-                    // Wait, if user wants "* .10", I will calculate total with * .10?
-                    // Let's stick to the image formula for the "Total" display, but maybe display "Cazado" raw.
-                    // Actually, if I look at the image `105,650` everywhere, it's dummy data.
-                    // The safest bet is `Global + Retiros + Depositos + Manual - Resta - Cazado`.
+                    const totalLive = d.saldoGlobal + d.retiros + d.depositos + d.saldoManual - d.restaManual - d.cazado;
+                    this.liveData = { ...d, total: totalLive };
 
-                    const total = d.saldoGlobal + d.retiros + d.depositos + d.saldoManual - d.restaManual - d.cazado;
-
-                    this.liveData = { ...d, total };
+                    // Hybrid Data (Saldo Inicio Stream)
+                    // Global from snapshot, everything else from liveData
+                    if (this.snapshot) {
+                        const globalInicio = this.snapshot.saldoGlobal || 0;
+                        const totalHybrid = globalInicio + d.retiros + d.depositos + d.saldoManual - d.restaManual - d.cazado;
+                        this.hybridData = {
+                            ...d,
+                            saldoGlobal: globalInicio, // OVERRIDE
+                            total: totalHybrid
+                        };
+                    } else {
+                        // If no snapshot yet, maybe just use same data but with 0 global? Or wait for snapshot.
+                        // Setting it null if no snapshot means the section won't show or will show empty.
+                        // Let's set it if we have at least liveData, defaulting global to 0 if snapshot is missing but stream is live.
+                        const globalInicio = 0;
+                        const totalHybrid = globalInicio + d.retiros + d.depositos + d.saldoManual - d.restaManual - d.cazado;
+                        this.hybridData = {
+                            ...d,
+                            saldoGlobal: globalInicio,
+                            total: totalHybrid
+                        };
+                    }
                 }
             },
             error: (err: any) => console.error('Error live data:', err)

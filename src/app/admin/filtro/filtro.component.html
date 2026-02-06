@@ -48,6 +48,68 @@
             </ng-template>
         </div>
 
+        <!-- Middle Section (Saldo Inicio Stream) -->
+        <h3 class="section-title">SALDO INICIO STREAM</h3>
+        <div class="info-section hybrid-section">
+            <div class="snapshot-data full-width-data" *ngIf="hybridData; else loadingHybrid">
+
+                <div class="data-group hora-container"
+                    style="background: linear-gradient(135deg, #f39c12 0%, #d35400 100%);">
+                    <span class="label-hora">SALDO INICIO STREAM</span>
+                </div>
+
+                <div class="data-group">
+                    <span class="label">SALDO GLOBAL</span>
+                    <span class="value">{{ hybridData.saldoGlobal | currency }}</span>
+                </div>
+
+                <div class="operator">+</div>
+
+                <div class="data-group">
+                    <span class="label">RETIROS</span>
+                    <span class="value">{{ hybridData.retiros | currency }}</span>
+                </div>
+
+                <div class="operator">+</div>
+
+                <div class="data-group">
+                    <span class="label">DEPOSITOS</span>
+                    <span class="value">{{ hybridData.depositos | currency }}</span>
+                </div>
+
+                <div class="operator">+</div>
+
+                <div class="data-group">
+                    <span class="label">SALDO MANUAL</span>
+                    <span class="value">{{ hybridData.saldoManual | currency }}</span>
+                </div>
+
+                <div class="operator">-</div>
+
+                <div class="data-group">
+                    <span class="label">RESTA MANUAL</span>
+                    <span class="value">{{ hybridData.restaManual | currency }}</span>
+                </div>
+
+                <div class="operator">-</div>
+
+                <div class="data-group">
+                    <span class="label">CAZADO</span>
+                    <span class="value">{{ hybridData.cazado | currency }}</span>
+                </div>
+
+                <div class="operator">=</div>
+
+                <div class="data-group total-group">
+                    <span class="label">TOTAL</span>
+                    <span class="value total-pill" style="background: #e67e22;">{{ hybridData.total | currency }}</span>
+                </div>
+            </div>
+            <ng-template #loadingHybrid>
+                <div class="no-data">Esperando datos...</div>
+            </ng-template>
+        </div>
+
         <!-- Middle Section (Saldo en Vivo) -->
         <h3 class="section-title">SALDO EN VIVO</h3>
         <div class="info-section live-section">
