@@ -15,39 +15,6 @@
     </div>
 
     <div class="main-card">
-        <!-- Top Section: Saldo de Inicio -->
-        <h3 class="section-title">SALDO DE INICIO</h3>
-        <div class="info-section inicio-section">
-            <div class="snapshot-data" *ngIf="snapshot; else noSnapshot">
-                <div class="data-group hora-container">
-                    <span class="label-hora">HORA DE INICIO: {{ snapshot.startedAt | date:'HH:mm' }}</span>
-                </div>
-
-                <div class="data-group">
-                    <span class="label">SALDO GLOBAL</span>
-                    <span class="value">{{ snapshot.saldoGlobal | currency }}</span>
-                </div>
-
-                <div class="operator">+</div>
-
-                <div class="data-group">
-                    <span class="label">RETIROS</span>
-                    <span class="value">{{ snapshot.retiros | currency }}</span>
-                </div>
-
-                <div class="operator">=</div>
-
-                <div class="data-group total-group">
-                    <span class="label">TOTAL</span>
-                    <span class="value total-pill">{{ snapshot.total | currency }}</span>
-                </div>
-            </div>
-
-            <ng-template #noSnapshot>
-                <div class="no-data">Esperando inicio de stream...</div>
-            </ng-template>
-        </div>
-
         <!-- Middle Section (Saldo Inicio Stream) -->
         <h3 class="section-title">SALDO INICIO STREAM</h3>
         <div class="info-section hybrid-section">
@@ -60,14 +27,16 @@
 
                 <div class="data-group">
                     <span class="label">SALDO GLOBAL</span>
-                    <span class="value">{{ hybridData.saldoGlobal | currency }}</span>
+                    <!-- <span class="value">{{ hybridData.saldoGlobal | currency }}</span> -->
+                    <span class="value">$712,277.10</span>
                 </div>
 
                 <div class="operator">+</div>
 
                 <div class="data-group">
                     <span class="label">RETIROS</span>
-                    <span class="value">{{ hybridData.retiros | currency }}</span>
+                    <!-- <span class="value">{{ hybridData.retiros | currency }}</span> -->
+                    <span class="value">$19,425.00</span>
                 </div>
 
                 <div class="operator">+</div>
@@ -102,7 +71,8 @@
 
                 <div class="data-group total-group">
                     <span class="label">TOTAL</span>
-                    <span class="value total-pill" style="background: #e67e22;">{{ hybridData.total | currency }}</span>
+                    <!-- <span class="value total-pill" style="background: #e67e22;">{{ hybridData.total | currency }}</span> -->
+                    <span class="value total-pill" style="background: #e67e22;">$731,702.10</span>
                 </div>
             </div>
             <ng-template #loadingHybrid>
