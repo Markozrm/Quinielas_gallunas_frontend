@@ -3,7 +3,8 @@ import { CommonModule, DecimalPipe, CurrencyPipe, DatePipe } from '@angular/comm
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UsersService } from '../../services/users.service';
-import { apuestaService } from '../../services/apuestas.service'; // Start lower case based on previous file view
+import { apuestaService } from '../../services/apuestas.service';
+import { RetirosService } from '../../services/retiros.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { firstValueFrom, forkJoin } from 'rxjs';
@@ -31,7 +32,8 @@ export class FiltroComponent implements OnInit, OnDestroy {
         private router: Router,
         private usersService: UsersService,
         private apuestasService: apuestaService,
-        private http: HttpClient
+        private http: HttpClient,
+        private retirosService: RetirosService
     ) { }
 
     ngOnInit() {
@@ -62,11 +64,36 @@ export class FiltroComponent implements OnInit, OnDestroy {
                 if (res.stream) {
                     this.snapshot = res.stream.snapshot || null;
                     this.finalSnapshot = res.stream.finalSnapshot || null;
+
+                    // FIX: Override historical retiros with current pending retiros (Frontend-only request)
+                    if (this.snapshot) {
+                        this.retirosService.getAllSolicitudes().subscribe({
+                            next: (retiros: any[]) => {
+                                const retirosPendientes = retiros.filter(r => r.estado === 'pendiente');
+                                const totalPendiente = retirosPendientes.reduce((acc, r) => {
+                                    const cantidad = typeof r.cantidad === 'string' ? Number(r.cantidad.replace(/[^0-9.]/g, '')) : Number(r.cantidad || 0);
+                                    return acc + (isNaN(cantidad) ? 0 : cantidad);
+                                }, 0);
+
+                                this.snapshot.retiros = totalPendiente;
+                                // Recalculate total for display consistency
+                                this.snapshot.total = (this.snapshot.saldoGlobal || 0) + this.snapshot.retiros;
+                                this.loading = false;
+                            },
+                            error: (err) => {
+                                console.error('Error loading pending retiros for snapshot override:', err);
+                                this.loading = false;
+                            }
+                        });
+                    } else {
+                        this.loading = false;
+                    }
+
                 } else {
                     this.snapshot = null;
                     this.finalSnapshot = null;
+                    this.loading = false;
                 }
-                this.loading = false;
             },
             error: (err: any) => {
                 console.error('Error cargando snapshot:', err);
