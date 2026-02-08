@@ -144,6 +144,10 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
     return (this.username || '').toLowerCase() === 'blanco';
   }
 
+  isCristianQuiroz(): boolean {
+    return (this.username || '').toLowerCase() === 'cristianquiroz';
+  }
+
   // Modifica los métodos de permisos para incluir a "blanco"
   isSuperAdmin() {
     const rol = localStorage.getItem("Rol") || "";

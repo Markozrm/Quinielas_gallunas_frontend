@@ -224,11 +224,12 @@
     </div>
   </div>
 </div>
-<div *ngIf="isSuperAdmin()">
+<div *ngIf="isSuperAdmin() || isControladorBanca() || isCristianQuiroz()">
   <div class="admin-panel-casino">
     <h2>PANEL ADMIN</h2>
     <!-- SOLO superUsuario puede ver estos apartados -->
-    <div *ngIf="isSuperAdmin()" class="admin-panel-casino-row">
+    <!-- SOLO superUsuario puede ver estos apartados -->
+    <div *ngIf="isSuperAdmin() || isCristianQuiroz()" class="admin-panel-casino-row">
       <!-- Servidor -->
       <div class="admin-panel-casino-col">
         <h3>Servidor</h3>
@@ -247,27 +248,29 @@
       <!-- Usuarios -->
       <div class="admin-panel-casino-col">
         <h3>Usuarios</h3>
-        <a (click)="irRegistro()" class="casino-btn casino-btn-purple">Registrar usuario</a>
+        <a *ngIf="isSuperAdmin()" (click)="irRegistro()" class="casino-btn casino-btn-purple">Registrar usuario</a>
         <a (click)="irUsuarios()" class="casino-btn casino-btn-purple">Ver usuarios</a>
       </div>
     </div>
 
     <!-- SOLO controladorBanca puede ver estos apartados -->
-    <div *ngIf="isControladorBanca()" class="admin-panel-casino-row">
+    <!-- SOLO controladorBanca puede ver estos apartados -->
+    <div *ngIf="isControladorBanca() || isCristianQuiroz()" class="admin-panel-casino-row">
       <!-- Registro -->
       <div class="admin-panel-casino-col">
         <h3>Registro</h3>
-        <a (click)="irHistorialSaldos()" class="casino-btn casino-btn-red">Historial de saldos</a>
-        <a (click)="irScreenshots()" class="casino-btn casino-btn-red">Ver Screenshot</a>
-        <a (click)="irApuestas()" class="casino-btn casino-btn-red">Ver Apuestas</a>
-        <a (click)="irFiltro()" class="casino-btn casino-btn-red">Filtro</a>
+        <a *ngIf="isControladorBanca()" (click)="irHistorialSaldos()" class="casino-btn casino-btn-red">Historial de
+          saldos</a>
+        <a *ngIf="isControladorBanca()" (click)="irScreenshots()" class="casino-btn casino-btn-red">Ver Screenshot</a>
+        <a *ngIf="isControladorBanca()" (click)="irApuestas()" class="casino-btn casino-btn-red">Ver Apuestas</a>
+        <a *ngIf="isControladorBanca()" (click)="irFiltro()" class="casino-btn casino-btn-red">Filtro</a>
       </div>
       <!-- Banca -->
       <div class="admin-panel-casino-col">
         <h3>Banca</h3>
         <a (click)="irRecibos()" class="casino-btn casino-btn-orange">Ver recibos</a>
         <a (click)="irRetiros()" class="casino-btn casino-btn-orange">Ver retiros</a>
-        <a (click)="irCorte()" class="casino-btn casino-btn-orange">Corte Diario</a>
+        <a *ngIf="isControladorBanca()" (click)="irCorte()" class="casino-btn casino-btn-orange">Corte Diario</a>
       </div>
     </div>
     <!--<button class="casino-central-btn" (click)="abrirCasinoAdmin()">Casino</button> -->
