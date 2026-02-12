@@ -25,8 +25,7 @@
             <button class="ver-recibo-btn" (click)="verRecibo(recipe)">Ver Recibo</button>
           </td>
           <td>
-            <span *ngIf="recipe.estado; else pendiente"
-              [ngClass]="{
+            <span *ngIf="recipe.estado; else pendiente" [ngClass]="{
                 'estado-aprobado': recipe.estado === 'aprobado',
                 'estado-rechazado': recipe.estado === 'rechazado'
               }">
@@ -46,10 +45,9 @@
 <div *ngIf="modalVisible" class="modal-overlay" (click)="cerrarModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <h3>Recibo</h3>
-        <ng-container *ngIf="!modalImageError; else noDisponible">
-      <img [src]="modalImageUrl" alt="Recibo"
-           style="max-width:100%;max-height:400px;"
-           (error)="modalImageError = true">
+    <ng-container *ngIf="!modalImageError; else noDisponible">
+      <img [src]="modalImageUrl" alt="Recibo" style="max-width:100%;max-height:400px;" (load)="logImageSuccess()"
+        (error)="logImageError($event)">
     </ng-container>
     <ng-template #noDisponible>
       <div style="color: #FD9E00; font-weight: bold; margin: 24px 0;">
@@ -57,14 +55,11 @@
       </div>
     </ng-template>
     <br>
-    <button class="save-button"
-            *ngIf="selectedUser?.estado === 'pendiente'"
-            (click)="aceptar(selectedUser.username, selectedUser._id, selectedUser.monto)">
+    <button class="save-button" *ngIf="selectedUser?.estado === 'pendiente'"
+      (click)="aceptar(selectedUser.username, selectedUser._id, selectedUser.monto)">
       Aceptar
     </button>
-    <button class="borrar-btn"
-            *ngIf="selectedUser?.estado === 'pendiente'"
-            (click)="rechazar(selectedUser._id)">
+    <button class="borrar-btn" *ngIf="selectedUser?.estado === 'pendiente'" (click)="rechazar(selectedUser._id)">
       Rechazar
     </button>
     <button class="cancel-btn-borrar" (click)="cerrarModal()">Cerrar</button>
@@ -89,7 +84,7 @@
 <!-- Tabla de historial de recibos aceptados -->
 <div class="historial-recibos">
   <h3>Historial de Recibos Aceptados</h3>
-   <div class="total-dia-container" *ngIf="diaSeleccionado">
+  <div class="total-dia-container" *ngIf="diaSeleccionado">
     <h4>Total del día: ${{ totalPorDia | number:'1.2-2' }}</h4>
   </div>
   <button (click)="resetHistorialAceptados()" class="borrar-btn" style="margin-bottom: 12px;">Reset historial</button>
@@ -117,7 +112,7 @@
       </tr>
     </tbody>
   </table>
-    <!-- Controles de paginación por día -->
+  <!-- Controles de paginación por día -->
   <div class="paginacion-historial" *ngIf="diasOperativos.length > 0">
     <button (click)="cambiarDia('anterior')" [disabled]="esPrimerDia">Anterior</button>
     <span *ngIf="diaSeleccionado">
