@@ -30,8 +30,8 @@ export class RecipesService {
     return image;
   }
   getImageUrl(id: string): string {
-    // Construir y devolver la URL de la imagen del usuario
-    return `${this.baseUrl}/get-image/${id}`;
+    // Construir y devolver la URL de la imagen del usuario con timestamp para evitar caché
+    return `${this.baseUrl}/get-image/${id}?t=${Date.now()}`;
   }
 
   getAll() {
@@ -53,19 +53,19 @@ export class RecipesService {
       const response = await firstValueFrom(
         this.httpClient.put(`${this.baseUrl}/update-estado/${id}`, { estado })
       );
-      
+
       // Verificamos que el backend respondió correctamente
       if (!response) {
         throw new Error('No se recibió respuesta del servidor');
       }
-      
+
       return response;
     } catch (error) {
       console.error('Error al actualizar estado:', error);
       throw error; // Re-lanzamos el error para manejarlo en el componente
     }
   }
-    createManualRecibo(data: any) {
+  createManualRecibo(data: any) {
     return this.httpClient.post(`${this.baseUrl}/manual`, data);
   }
 }

@@ -17,14 +17,14 @@ export class VerReciboComponent implements OnInit {
   modalVisible: boolean = false;
   modalImageUrl: string = '';
   selectedUser: any = null;
-  loadingStates: {[id: string]: boolean} = {}; // Para manejar el estado de carga de cada recibo
+  loadingStates: { [id: string]: boolean } = {}; // Para manejar el estado de carga de cada recibo
 
   // NUEVO: Propiedades para el resumen
   recibosAceptados: number = 0;
   recibosRechazados: number = 0;
   montoAcumulado: number = 0;
   recibosAceptadosHistorial: any[] = [];
-    diasOperativos: string[] = [];
+  diasOperativos: string[] = [];
   diaSeleccionado: string | null = null;
   paginaActual: number = 1;
   recibosPorPagina: number = 40;
@@ -34,14 +34,14 @@ export class VerReciboComponent implements OnInit {
   }
 
   get recibosPaginados() {
-  if (!this.diaSeleccionado) {
+    if (!this.diaSeleccionado) {
       return [];
     }
-      const inicioDia = new Date(this.diaSeleccionado + 'T00:00:00Z');
+    const inicioDia = new Date(this.diaSeleccionado + 'T00:00:00Z');
     inicioDia.setUTCHours(7, 0, 0, 0);
 
     const finDia = new Date(inicioDia);
-   finDia.setUTCDate(finDia.getUTCDate() + 1);
+    finDia.setUTCDate(finDia.getUTCDate() + 1);
 
     return this.recibosAceptadosHistorial.filter(recibo => {
       const fechaRecibo = new Date(recibo.fecha);
@@ -56,7 +56,7 @@ export class VerReciboComponent implements OnInit {
   cambiarDia(direccion: 'anterior' | 'siguiente') {
     if (!this.diaSeleccionado) return;
     const indiceActual = this.diasOperativos.indexOf(this.diaSeleccionado);
-    
+
     if (direccion === 'siguiente' && indiceActual > 0) {
       this.diaSeleccionado = this.diasOperativos[indiceActual - 1];
     } else if (direccion === 'anterior' && indiceActual < this.diasOperativos.length - 1) {
@@ -99,7 +99,7 @@ export class VerReciboComponent implements OnInit {
     private recipeService: RecipesService,
     private router: Router,
     private notificacionService: NotificacionGlobalService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.recipeService.getAll().subscribe(recipes => {
@@ -130,7 +130,7 @@ export class VerReciboComponent implements OnInit {
         }))
         .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime()); // Ordena descendente por fecha
 
-           // NUEVO: Agrupar por día operativo
+      // NUEVO: Agrupar por día operativo
       const dias = new Set<string>();
       this.recibosAceptadosHistorial.forEach(recibo => {
         const fecha = new Date(recibo.fecha);
@@ -140,7 +140,7 @@ export class VerReciboComponent implements OnInit {
         dias.add(diaOperativo);
       });
       this.diasOperativos = Array.from(dias); // Ya está ordenado por la naturaleza del sort previo
-      
+
       if (!this.diaSeleccionado && this.diasOperativos.length > 0) {
         this.diaSeleccionado = this.diasOperativos[0];
       }
@@ -168,23 +168,41 @@ export class VerReciboComponent implements OnInit {
   verRecibo(recipe: any) {
     this.selectedUser = recipe;
     this.modalImageUrl = this.getImageUrl(recipe._id);
+    console.log(`[FRONTEND-DEBUG] verRecibo: Abriendo recibo ID: ${recipe._id}`);
+    console.log(`[FRONTEND-DEBUG] verRecibo: URL generada: ${this.modalImageUrl}`);
     this.modalVisible = true;
+    this.modalImageError = false;
   }
-    modalImageError: boolean = false; // Nueva variable
+
+  modalImageError: boolean = false; // Nueva variable
 
   verReciboAceptado(recibo: any) {
     this.selectedUser = recibo;
     this.modalImageUrl = this.getImageUrl(recibo._id);
+    console.log(`[FRONTEND-DEBUG] verReciboAceptado: Abriendo recibo ID: ${recibo._id}`);
+    console.log(`[FRONTEND-DEBUG] verReciboAceptado: URL generada: ${this.modalImageUrl}`);
     this.modalVisible = true;
     this.modalImageError = false; // Reinicia el error
   }
 
 
   cerrarModal() {
+    console.log(`[FRONTEND-DEBUG] cerrarModal: Cerrando modal.`);
     this.modalVisible = false;
     this.modalImageUrl = '';
     this.selectedUser = null;
     this.modalImageError = false; // Reinicia el error
+  }
+
+  // Métodos para logs desde el HTML
+  logImageSuccess() {
+    console.log(`[FRONTEND-DEBUG] EXITO: La imagen del recibo cargó correctamente.`);
+  }
+
+  logImageError(event: any) {
+    console.error(`[FRONTEND-DEBUG] ERROR: Falló la carga de la imagen.`);
+    console.error(event);
+    this.modalImageError = true;
   }
 
   getImageUrl(id: string): string {
@@ -195,24 +213,24 @@ export class VerReciboComponent implements OnInit {
     this.router.navigate(['/Admin']);
   }
 
- async aceptar(username: string, id: string, monto: number): Promise<void> {
+  async aceptar(username: string, id: string, monto: number): Promise<void> {
     this.loadingStates[id] = true;
-    
+
     try {
       // 1. Actualizar saldo del usuario
       await this.userService.updateSaldo(username, monto, "recarga de saldo", "recarga");
-      
+
       // 2. Actualizar estado del recibo (sin toPromise() porque ya es una Promesa)
       await this.recipeService.updateEstado(id, 'aprobado');
-      
+
       // 3. Actualizar vista
       this.recipes = this.recipes.filter(r => r._id !== id);
       this.cerrarModal();
-      
+
       // 4. Actualizar resumen inmediatamente
       this.actualizarResumen();
       this.notificacionService.restarPendiente();
-      
+
     } catch (error) {
       console.error('Error en aceptar recibo:', error);
       alert('Error al procesar la solicitud');
@@ -224,15 +242,15 @@ export class VerReciboComponent implements OnInit {
   // Método rechazar corregido
   async rechazar(id: string): Promise<void> {
     this.loadingStates[id] = true;
-    
+
     try {
       // 1. Actualizar estado del recibo (sin toPromise())
       await this.recipeService.updateEstado(id, 'rechazado');
-      
+
       // 2. Actualizar vista
       this.recipes = this.recipes.filter(r => r._id !== id);
       this.cerrarModal();
-      
+
       // 3. Actualizar resumen inmediatamente
       this.actualizarResumen();
       this.notificacionService.restarPendiente();

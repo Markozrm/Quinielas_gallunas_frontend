@@ -1,44 +1,45 @@
 <div class="main">
 
-    <div class="menuContainer">
-      <div>
-<button class="btn-volver-img" (click)="Volver()">
-  <img src="assets/image/atras.png" alt="Volver">
-</button>
+  <div class="menuContainer">
+    <div>
+      <button class="btn-volver-img" (click)="Volver()">
+        <img src="assets/image/atras.png" alt="Volver">
+      </button>
 
-      </div>
-      <img src="assets/image/enviar_comprobante-removebg-preview.png" alt="">
     </div>
-  
-      <div class="formContainer">
-        <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
-          <h2>Envía tu recibo</h2>
-          <label for="username">Nombre de usuario:</label>
-          <input type="text" formControlName="username" id="username" required>
-          <label for="Monto">Cantidad en pesos:</label>
-          <input type="number" formControlName="monto" id="monto" required>
-          <label for="userImage">Recibo:</label>
-          <input type="file" id="userImage" name="userImage" accept="image/*" required (change)="handleImageChange($event)" formControlName ="image">
-          <div *ngIf="imagePreview" class="image-preview-container">
-            <img [src]="imagePreview" alt="Vista previa de la imagen" class="profile-image" >
-          </div>
-          <p>¿A qué banco depositaste?</p>
-          <label>Banco:</label>
-          <div style="display: flex; gap: 10px; margin-bottom: 16px;">
-            <label>
-              <input type="radio" formControlName="banco" value="Bancopel" required>
-              Bancopel
-            </label>
-            <label>
-              <input type="radio" formControlName="banco" value="NU" required>
-              BanBajío
-            </label>
-          </div>
-          <div *ngIf="formulario.get('banco')?.invalid && formulario.get('banco')?.touched" style="color: red;">
-            Debes seleccionar un banco.
-          </div>
-    
-          <button type="submit" class="btn-iniciar"> Enviar </button>
-        </form>
+    <img src="assets/image/enviar_comprobante-removebg-preview.png" alt="">
+  </div>
+
+  <div class="formContainer">
+    <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
+      <h2>Envía tu recibo</h2>
+      <label for="username">Nombre de usuario:</label>
+      <input type="text" formControlName="username" id="username" required>
+      <label for="Monto">Cantidad en pesos:</label>
+      <input type="number" formControlName="monto" id="monto" required>
+      <label for="userImage">Recibo:</label>
+      <input type="file" id="userImage" name="userImage" accept="image/*" required (change)="handleImageChange($event)"
+        formControlName="image">
+      <div *ngIf="imagePreview" class="image-preview-container">
+        <img [src]="imagePreview" alt="Vista previa de la imagen" class="profile-image">
       </div>
+      <p>¿A qué banco depositaste?</p>
+      <label>Banco:</label>
+      <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+        <label>
+          <input type="radio" formControlName="banco" value="Bancopel" required>
+          Bancopel
+        </label>
+        <label>
+          <input type="radio" formControlName="banco" value="BanBajío" required>
+          BanBajío
+        </label>
       </div>
+      <div *ngIf="formulario.get('banco')?.invalid && formulario.get('banco')?.touched" style="color: red;">
+        Debes seleccionar un banco.
+      </div>
+
+      <button type="submit" class="btn-iniciar"> Enviar </button>
+    </form>
+  </div>
+</div>
