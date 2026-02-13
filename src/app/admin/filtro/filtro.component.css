@@ -1,3 +1,55 @@
+/* Difference Display Styles */
+.difference-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: -10px 0;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.05);
+    /* Grey-ish for visibility on white */
+    border-radius: 12px;
+}
+
+.diff-pill {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    color: white;
+    font-size: 1.1rem;
+    min-width: 100px;
+    text-align: center;
+}
+
+.orange-pill {
+    background: linear-gradient(135deg, #f39c12 0%, #d35400 100%);
+    border: 2px solid #e67e22;
+}
+
+.green-pill {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    border: 2px solid #2ecc71;
+}
+
+.diff-operator {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    /* Dark text for visibility */
+}
+
+.diff-result {
+    font-size: 1.5rem;
+    /* Slightly larger */
+    font-weight: bold;
+    color: #333;
+    /* Dark text for visibility */
+    background: #e9ecef;
+    /* Light background pill for result */
+    padding: 5px 15px;
+    border-radius: 10px;
+}
+
 .filtro-container {
     padding: 20px;
     background-color: #1a4f94;
