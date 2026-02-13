@@ -119,6 +119,15 @@
             </ng-template>
         </div>
 
+        <!-- Difference Display 2 (Second Circle - Third Circle) -->
+        <div class="difference-container" *ngIf="hybridData && liveData">
+            <span class="diff-pill orange-pill">{{ hybridData.total | currency }}</span>
+            <span class="diff-operator">-</span>
+            <span class="diff-pill green-pill">{{ liveData.total | currency }}</span>
+            <span class="diff-operator">=</span>
+            <span class="diff-result">{{ diferenciaVivo | currency }}</span>
+        </div>
+
         <!-- Middle Section (Saldo en Vivo) -->
         <h3 class="section-title">SALDO EN VIVO</h3>
         <div class="info-section live-section">
