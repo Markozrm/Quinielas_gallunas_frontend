@@ -356,3 +356,40 @@
     background-color: #28a745;
     color: white;
 }
+
+@media (max-width: 600px) {
+    .difference-container {
+        flex-wrap: wrap;
+        /* Allow wrapping if absolutely necessary, but prefer fitting */
+        gap: 5px;
+        padding: 5px;
+        width: 100%;
+    }
+
+    .diff-pill {
+        padding: 4px 8px;
+        /* Reduce padding */
+        font-size: 0.9rem;
+        /* Smaller font */
+        min-width: unset;
+        /* Remove min-width constraint */
+    }
+
+    .diff-operator {
+        font-size: 1rem;
+        /* Smaller operator */
+        margin: 0 2px;
+    }
+
+    .diff-result {
+        font-size: 1rem;
+        /* Smaller result */
+        padding: 4px 8px;
+        margin-top: 5px;
+        /* Add margin if it wraps */
+        width: 100%;
+        /* Make result take full width if wrapped */
+        text-align: center;
+        background: #e9ecef;
+    }
+}
