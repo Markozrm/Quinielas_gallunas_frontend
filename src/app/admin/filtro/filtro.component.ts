@@ -27,6 +27,7 @@ export class FiltroComponent implements OnInit, OnDestroy {
     intervalId: any;
     mostrarModalFinalizar: boolean = false;
     mostrarModalReiniciar: boolean = false; // Moved here for better organization
+    diferenciaSaldo: number = 0;
 
     constructor(
         private router: Router,
@@ -66,10 +67,18 @@ export class FiltroComponent implements OnInit, OnDestroy {
                     this.finalSnapshot = res.stream.finalSnapshot || null;
 
                     // FIX: Override historical retiros with current pending retiros (Frontend-only request)
+                    // STATIC BEHAVIOR FIX: Only count withdrawals created BEFORE the stream started
                     if (this.snapshot) {
                         this.retirosService.getAllSolicitudes().subscribe({
                             next: (retiros: any[]) => {
-                                const retirosPendientes = retiros.filter(r => r.estado === 'pendiente');
+                                const startedAtDate = new Date(this.snapshot.startedAt); // Timestamp from backend snapshot
+
+                                const retirosPendientes = retiros.filter(r => {
+                                    // Must be pending AND created before or at stream start time
+                                    const fechaSolicitud = new Date(r.fechaSolicitud);
+                                    return r.estado === 'pendiente' && fechaSolicitud.getTime() <= startedAtDate.getTime();
+                                });
+
                                 const totalPendiente = retirosPendientes.reduce((acc, r) => {
                                     const cantidad = typeof r.cantidad === 'string' ? Number(r.cantidad.replace(/[^0-9.]/g, '')) : Number(r.cantidad || 0);
                                     return acc + (isNaN(cantidad) ? 0 : cantidad);
@@ -122,9 +131,13 @@ export class FiltroComponent implements OnInit, OnDestroy {
                                     apuestasRequest = firstValueFrom(this.apuestasService.obtenerTodasApuestasAgrupadas(streamClave));
                                 }
 
-                                const [apuestasAgrupadas, saldosRecords] = await Promise.all([
+                                // Request pending withdrawals for Hybrid Data (Second Circle)
+                                const retirosRequest = firstValueFrom(this.retirosService.getAllSolicitudes());
+
+                                const [apuestasAgrupadas, saldosRecords, retiros] = await Promise.all([
                                     apuestasRequest,
-                                    firstValueFrom(saldoRequest)
+                                    firstValueFrom(saldoRequest),
+                                    retirosRequest
                                 ]);
 
 
@@ -158,35 +171,54 @@ export class FiltroComponent implements OnInit, OnDestroy {
                                 d.cazado = cazadoDisplay;
                                 d.saldoManual = saldoManualReal;
 
+                                // 3. FIX RETIROS (Second Circle Only): Calculate pending withdrawals
+                                const retirosPendientes = (retiros as any[]).filter(r => r.estado === 'pendiente');
+                                const totalPendiente = retirosPendientes.reduce((acc, r) => {
+                                    const cantidad = typeof r.cantidad === 'string' ? Number(r.cantidad.replace(/[^0-9.]/g, '')) : Number(r.cantidad || 0);
+                                    return acc + (isNaN(cantidad) ? 0 : cantidad);
+                                }, 0);
+
+                                // Assign to a local var
+                                const retirosForHybrid = totalPendiente;
+
+                                // Re-calculate local variables if try-catch scope issue (d is modified in place so it persists)
+                                // Correcting calculation to use displayed cazado (10%) for visual consistency
+                                const cazadoForCalc = d.cazado;
+
+                                // USER REQUEST: Third Circle (Live) must ALSO show real-time pending withdrawals
+                                d.retiros = retirosForHybrid;
+
+                                /* TOTAL CALCULATION (Use 10%, i.e., Displayed Value) */
+                                const totalLive = d.saldoGlobal + d.retiros + d.depositos + d.saldoManual - d.restaManual - cazadoForCalc;
+                                this.liveData = { ...d, total: totalLive };
+
+                                if (this.snapshot) {
+                                    const globalInicio = this.snapshot.saldoGlobal || 0;
+                                    // Use retirosForHybrid here!
+                                    const totalHybrid = globalInicio + retirosForHybrid + d.depositos + d.saldoManual - d.restaManual - cazadoForCalc;
+                                    this.hybridData = {
+                                        ...d,
+                                        saldoGlobal: globalInicio,
+                                        retiros: retirosForHybrid, // Override retiros for Second Circle
+                                        total: totalHybrid
+                                    };
+                                    this.hybridData = {
+                                        ...d,
+                                        saldoGlobal: globalInicio,
+                                        retiros: retirosForHybrid, // Override retiros for Second Circle
+                                        total: totalHybrid
+                                    };
+                                }
+
+                                // NEW: Calculate difference (Second Circle - First Circle)
+                                if (this.snapshot && this.hybridData) {
+                                    this.diferenciaSaldo = (this.hybridData.total || 0) - (this.snapshot.total || 0);
+                                }
+
+
                             } catch (err) {
                                 console.error('Error calculating corrected values:', err);
                                 // Fallback logic if needed, or initialized variables above handle scoped access issue if defined outside try-catch
-                            }
-
-                            // Re-calculate local variables if try-catch scope issue (d is modified in place so it persists)
-                            // Correcting calculation to use displayed cazado (10%) for visual consistency
-                            const cazadoForCalc = d.cazado;
-
-                            /* TOTAL CALCULATION (Use 10%, i.e., Displayed Value) */
-                            const totalLive = d.saldoGlobal + d.retiros + d.depositos + d.saldoManual - d.restaManual - cazadoForCalc;
-                            this.liveData = { ...d, total: totalLive };
-
-                            if (this.snapshot) {
-                                const globalInicio = this.snapshot.saldoGlobal || 0;
-                                const totalHybrid = globalInicio + d.retiros + d.depositos + d.saldoManual - d.restaManual - cazadoForCalc;
-                                this.hybridData = {
-                                    ...d,
-                                    saldoGlobal: globalInicio,
-                                    total: totalHybrid
-                                };
-                            } else {
-                                const globalInicio = 0;
-                                const totalHybrid = globalInicio + d.retiros + d.depositos + d.saldoManual - d.restaManual - cazadoForCalc;
-                                this.hybridData = {
-                                    ...d,
-                                    saldoGlobal: globalInicio,
-                                    total: totalHybrid
-                                };
                             }
                         }
                     },

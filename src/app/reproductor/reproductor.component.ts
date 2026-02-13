@@ -30,23 +30,27 @@ export class VideoPlayerComponent implements OnInit {
       this.video.nativeElement.playsinline = true;
       this.video.nativeElement.muted = true;
       this.video.nativeElement.autoplay = true;
-      
+
       // Prevenir comportamiento de pantalla completa en iOS
       this.video.nativeElement.setAttribute('webkit-playsinline', 'true');
       this.video.nativeElement.setAttribute('x5-video-player-type', 'h5');
       this.video.nativeElement.setAttribute('x5-video-player-fullscreen', 'false');
-      
-      this.user = this.route.snapshot.paramMap.get('sala') || 'HOME';
-      this.port = this.route.snapshot.paramMap.get('port') || '443';
-      if (this.port == '443') {
-        this.load(`${this.apiUrl_live}/live/${this.user}/index.m3u8`);
-      } else if (this.port == '442') {
-        this.load(`${this.apiUrl_live_2}/live/${this.user}/index.m3u8`);
-      } else {
-        this.load(`${this.apiUrl_live_3}/live/${this.user}/index.m3u8`);
-      }
-      console.log("Despues de cargar",this.user);
-      console.log("Despues de cargar",this.port);
+
+      // Suscribirse a cambios en los parámetros de la URL
+      this.route.paramMap.subscribe(params => {
+        this.user = params.get('sala') || 'HOME';
+        this.port = params.get('port') || '443';
+
+        if (this.port == '443') {
+          this.load(`${this.apiUrl_live}/live/${this.user}/index.m3u8`);
+        } else if (this.port == '442') {
+          this.load(`${this.apiUrl_live_2}/live/${this.user}/index.m3u8`);
+        } else {
+          this.load(`${this.apiUrl_live_3}/live/${this.user}/index.m3u8`);
+        }
+        console.log("Cargando stream para:", this.user, "Puerto:", this.port);
+      });
+
     } catch (error) {
       console.error('Error loading video:', error);
     }
@@ -54,10 +58,10 @@ export class VideoPlayerComponent implements OnInit {
   ngAfterViewInit(): void {
     // Configuración adicional para iOS después de que la vista se inicialice
     this.setupVideoForIOS();
-    
+
     // Agregar eventos para manejar el comportamiento de pantalla completa
     this.addVideoEventListeners();
-    
+
     this.video.nativeElement.play().catch((error: any) => {
       console.error('Error al reproducir el video:', error);
     });
@@ -65,12 +69,12 @@ export class VideoPlayerComponent implements OnInit {
 
   private setupVideoForIOS(): void {
     const videoElement = this.video.nativeElement;
-    
+
     // Configuración específica para iOS
     videoElement.playsinline = true;
     videoElement.muted = true;
     videoElement.autoplay = true;
-    
+
     // Atributos adicionales para prevenir pantalla completa
     videoElement.setAttribute('webkit-playsinline', 'true');
     videoElement.setAttribute('x5-video-player-type', 'h5');
@@ -79,12 +83,12 @@ export class VideoPlayerComponent implements OnInit {
 
   private addVideoEventListeners(): void {
     const videoElement = this.video.nativeElement;
-    
+
     // Manejar cuando el video entra en pantalla completa
     videoElement.addEventListener('webkitbeginfullscreen', () => {
       console.log('Video entró en pantalla completa');
     });
-    
+
     // Manejar cuando el video sale de pantalla completa
     videoElement.addEventListener('webkitendfullscreen', () => {
       console.log('Video salió de pantalla completa');
@@ -98,7 +102,7 @@ export class VideoPlayerComponent implements OnInit {
         }
       }, 100);
     });
-    
+
     // Eventos estándar de pantalla completa
     videoElement.addEventListener('fullscreenchange', () => {
       if (!document.fullscreenElement && videoElement.paused) {
@@ -110,8 +114,8 @@ export class VideoPlayerComponent implements OnInit {
       }
     });
   }
-  
-  public loadInit(): void{
+
+  public loadInit(): void {
     console.log('El componente se ha inicializado');
   }
 
@@ -124,11 +128,11 @@ export class VideoPlayerComponent implements OnInit {
       this.video.nativeElement.src = currentVideo;
       //this.video.nativeElement.muted = true;
       this.video.nativeElement.setAttribute('playsinline', 'true');
-      
+
       // this.video.nativeElement.addEventListener('loadedmetadata', () => {
       //   // Aquí puedes buscar el segmento más reciente y establecer el tiempo actual del video
       //   this.video.nativeElement.currentTime = this.video.nativeElement.duration;
-        
+
       //   // Iniciar la reproducción después de configurar el tiempo actual
       //   this.video.nativeElement.play();
       // });
@@ -142,11 +146,11 @@ export class VideoPlayerComponent implements OnInit {
     this.video.nativeElement.addEventListener('loadedmetadata', () => {
       // Aquí puedes buscar el segmento más reciente y establecer el tiempo actual del video
       this.video.nativeElement.currentTime = this.video.nativeElement.duration;
-      
+
       // Iniciar la reproducción después de configurar el tiempo actual
       //this.video.nativeElement.play();
     });
-  
+
   }
 
 };

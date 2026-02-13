@@ -3,8 +3,8 @@ import { Component, OnInit, OnDestroy, inject, Input } from '@angular/core';
 import { ChatService } from '../../services/chat.service';
 import { UsersTypeComponent } from '../users-type/users-type.component';
 import { NgFor, AsyncPipe } from '@angular/common';
-import { ElementRef ,ViewChild} from '@angular/core';
-import { Subscription,of,Observable } from 'rxjs';
+import { ElementRef, ViewChild } from '@angular/core';
+import { Subscription, of, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { UsersService } from './../../../services/users.service';
@@ -13,22 +13,24 @@ import { SharedService } from 'src/app/services/shared.service';
 
 
 @Component({
-    selector: 'app-users-chat',
-    templateUrl: './users-chat.component.html',
-    styleUrls: ['./users-chat.component.css'],
-    standalone: true,
-    imports: [NgFor, UsersTypeComponent, AsyncPipe, CommonModule]
+  selector: 'app-users-chat',
+  templateUrl: './users-chat.component.html',
+  styleUrls: ['./users-chat.component.css'],
+  standalone: true,
+  imports: [NgFor, UsersTypeComponent, AsyncPipe, CommonModule]
 })
 export class UsersChatComponent implements OnInit, OnDestroy {
   private chatSubscription: Subscription | undefined;
   @ViewChild('chatContainer', { read: ElementRef })
   chatContainer: ElementRef | undefined;
   public scrollable: boolean = true;
-  public chat$ = this.chatService.chat$;
+  public chat$ = this.chatService.chat$.pipe(
+    map(messages => (messages || []).slice().reverse())
+  );
   public privateChat$: Observable<any[]> = of([]);
   showDeleteModal: boolean = false;
   selectedMessage: any = null;
-  @Input() isPrivate: boolean = false;  
+  @Input() isPrivate: boolean = false;
   @Input() targetUser: any = null;
 
   constructor(
@@ -37,23 +39,27 @@ export class UsersChatComponent implements OnInit, OnDestroy {
     private sharedService: SharedService,
     private sanitizer: DomSanitizer,
     private cd: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Configurar el observable correcto según el tipo de chat
     if (this.isPrivate && this.targetUser) {
       // Para chat privado, filtrar mensajes del chat general que sean relevantes
       this.privateChat$ = this.chatService.chat$.pipe(
-        map(messages => messages.filter(msg => {
-          const currentUser = localStorage.getItem('nombreUsuario') || 'Anónimo';
-          const isPrivateMessage = msg.message.includes('[PRIVADO para');
-          const isForThisUser = msg.message.includes(`[PRIVADO para ${currentUser}]`) || 
-                               msg.message.includes(`[PRIVADO para ${this.targetUser.name}]`);
-          const isFromThisConversation = (msg.user.name === currentUser && msg.message.includes(`[PRIVADO para ${this.targetUser.name}]`)) ||
-                                       (msg.user.name === this.targetUser.name && msg.message.includes(`[PRIVADO para ${currentUser}]`));
-          
-          return isPrivateMessage && isFromThisConversation;
-        }))
+        map(messages => {
+          const filtered = messages.filter(msg => {
+            const currentUser = localStorage.getItem('nombreUsuario') || 'Anónimo';
+            const isPrivateMessage = msg.message.includes('[PRIVADO para');
+            const isForThisUser = msg.message.includes(`[PRIVADO para ${currentUser}]`) ||
+              msg.message.includes(`[PRIVADO para ${this.targetUser.name}]`);
+            const isFromThisConversation = (msg.user.name === currentUser && msg.message.includes(`[PRIVADO para ${this.targetUser.name}]`)) ||
+              (msg.user.name === this.targetUser.name && msg.message.includes(`[PRIVADO para ${currentUser}]`));
+
+            return isPrivateMessage && isFromThisConversation;
+          });
+          // Also reverse private messages
+          return filtered.slice().reverse();
+        })
       );
     } else {
     }
@@ -65,9 +71,7 @@ export class UsersChatComponent implements OnInit, OnDestroy {
     // Suscribirse al observable correcto
     const chatObservable = (this.isPrivate && this.targetUser) ? this.privateChat$ : this.chat$;
     this.chatSubscription = chatObservable.subscribe(messages => {
-      if (this.scrollable) {
-        this.scrollToBottom();
-      }
+      // Removed scrollToBottom() as newest messages are now at the top
       this.cd.detectChanges(); // Detectar cambios manualmente
     });
   }

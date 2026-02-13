@@ -901,7 +901,12 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
         ? `/live-admin/${nuevaClave}/${puerto}`
         : `/live-inv/${nuevaClave}/${puerto}`;
 
-      if (window.location.pathname !== target) {
+      console.log('Navegando a target:', target);
+      if (window.location.pathname === target) {
+        // Force full reload if already on the correct page
+        console.log('Ya estamos en la página correcta. Forzando recarga...');
+        window.location.reload();
+      } else {
         await this.router.navigateByUrl(target);
       }
     } catch (err: any) {
