@@ -189,7 +189,8 @@ export class FiltroComponent implements OnInit, OnDestroy {
                                 d.retiros = retirosForHybrid;
 
                                 /* TOTAL CALCULATION (Use 10%, i.e., Displayed Value) */
-                                const totalLive = d.saldoGlobal + d.retiros + d.depositos + d.saldoManual - d.restaManual - cazadoForCalc;
+                                // USER REQUEST: Third Circle (Live) only Global + Retiros
+                                const totalLive = d.saldoGlobal + d.retiros;
                                 this.liveData = { ...d, total: totalLive };
 
                                 if (this.snapshot) {
