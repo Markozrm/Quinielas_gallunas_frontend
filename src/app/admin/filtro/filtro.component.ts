@@ -28,6 +28,7 @@ export class FiltroComponent implements OnInit, OnDestroy {
     mostrarModalFinalizar: boolean = false;
     mostrarModalReiniciar: boolean = false; // Moved here for better organization
     diferenciaSaldo: number = 0;
+    diferenciaVivo: number = 0;
 
     constructor(
         private router: Router,
@@ -214,6 +215,11 @@ export class FiltroComponent implements OnInit, OnDestroy {
                                 // NEW: Calculate difference (Second Circle - First Circle)
                                 if (this.snapshot && this.hybridData) {
                                     this.diferenciaSaldo = (this.hybridData.total || 0) - (this.snapshot.total || 0);
+                                }
+
+                                // NEW 2: Calculate difference (Second Circle - Third Circle)
+                                if (this.hybridData && this.liveData) {
+                                    this.diferenciaVivo = (this.hybridData.total || 0) - (this.liveData.total || 0);
                                 }
 
 
