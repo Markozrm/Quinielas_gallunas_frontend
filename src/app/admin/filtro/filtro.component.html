@@ -97,10 +97,10 @@
         </div>
 
         <!-- --- NEW SECOND ROW (DIFFERENCE / DIO DE MAS) --- -->
-        <div class="second-row-diff" *ngIf="snapshot && liveData">
+        <div class="second-row-diff" *ngIf="hybridData && liveData">
             <div class="diff-box">
                 <span class="diff-box-label">SALDO DE INICIO</span>
-                <span class="pill-large green-gradient">{{ snapshot.total | currency }}</span>
+                <span class="pill-large green-gradient">{{ hybridData.total | currency }}</span>
             </div>
             <span class="diff-operator-large">-</span>
             <div class="diff-box">
@@ -182,12 +182,12 @@
                 <div class="abierta-inner">
                     <div class="bet-col">
                         <span class="bet-col-label">ROJO</span>
-                        <span class="bet-pill green">{{ totalRojoLive | currency }}</span>
+                        <span class="bet-pill red">{{ totalRojoLive | currency }}</span>
                     </div>
                     <span class="operator-small plus">+</span>
                     <div class="bet-col">
                         <span class="bet-col-label">VERDE</span>
-                        <span class="bet-pill red">{{ totalVerdeLive | currency }}</span>
+                        <span class="bet-pill green">{{ totalVerdeLive | currency }}</span>
                     </div>
                     <span class="operator-small equals">=</span>
                     <div class="bet-col">
@@ -207,12 +207,12 @@
                 <div class="abierta-inner">
                     <div class="bet-col">
                         <span class="bet-col-label">ROJO</span>
-                        <span class="bet-pill green">{{ 0 | currency }}</span>
+                        <span class="bet-pill red">{{ 0 | currency }}</span>
                     </div>
                     <span class="operator-small plus">+</span>
                     <div class="bet-col">
                         <span class="bet-col-label">VERDE</span>
-                        <span class="bet-pill red">{{ 0 | currency }}</span>
+                        <span class="bet-pill green">{{ 0 | currency }}</span>
                     </div>
                     <span class="operator-small equals">=</span>
                     <div class="bet-col">
@@ -232,12 +232,12 @@
                 <div class="abierta-inner">
                     <div class="bet-col">
                         <span class="bet-col-label">ROJO</span>
-                        <span class="bet-pill green">{{ 0 | currency }}</span>
+                        <span class="bet-pill red">{{ 0 | currency }}</span>
                     </div>
                     <span class="operator-small plus">+</span>
                     <div class="bet-col">
                         <span class="bet-col-label">VERDE</span>
-                        <span class="bet-pill red">{{ 0 | currency }}</span>
+                        <span class="bet-pill green">{{ 0 | currency }}</span>
                     </div>
                     <span class="operator-small equals">=</span>
                     <div class="bet-col">
@@ -247,78 +247,84 @@
                 </div>
             </div>
 
+            <!-- --- NEW ROW (SUMA DIO DE MAS) --- -->
+            <div class="second-row-diff" *ngIf="hybridData" style="margin-top: 20px; justify-content: center;">
+                <div class="diff-box">
+                    <span class="diff-box-label">SUMA TIENEN DE MÁS (Usuarios)</span>
+                    <span class="pill-large red-gradient">{{ totalFalta | currency }}</span>
+                </div>
+            </div>
+
+
+
+            <!-- Bottom Section (Final Snapshot) -->
+            <!-- Botón para Reiniciar Datos Centrado -->
+            <div class="action-container centered-action" style="margin-top: 20px;">
+                <button class="btn-finalize btn-reset" (click)="confirmarReiniciar()">REINICIAR DATOS</button>
+            </div>
         </div>
 
+        <!-- SEXTA FILA: DESGLOSE POR USUARIO -->
+        <div class="table-container" *ngIf="usuariosDesglose.length > 0">
+            <table class="desglose-table">
+                <thead>
+                    <tr>
+                        <th>USUARIO</th>
+                        <th>SALDO INICIAL</th>
+                        <th>GANA</th>
+                        <th>PIERDE</th>
+                        <th>DEPOSITOS</th>
+                        <th>RETIROS</th>
+                        <th>AUM MANUAL</th>
+                        <th>RESTA MAN</th>
+                        <th>TIENE</th>
+                        <th>DEBERIA TENER</th>
+                        <th><span class="purple-outline">TIENE DE MAS</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let u of usuariosDesglose">
+                        <td><b>{{ u.username | uppercase }}</b></td>
+                        <td><b>{{ u.saldoInicial | currency:'':'$':'1.2-2' }}</b></td>
+                        <td><b>{{ u.gana | currency:'':'$':'1.2-2' }}</b></td>
+                        <td><b>{{ u.pierde | currency:'':'$':'1.2-2' }}</b></td>
+                        <td><b>{{ u.depositos | currency:'':'$':'1.2-2' }}</b></td>
+                        <td><b>{{ u.retiros | currency:'':'$':'1.2-2' }}</b></td>
+                        <td><b>{{ u.aumManual | currency:'':'$':'1.2-2' }}</b></td>
+                        <td><b>{{ u.restaMan | currency:'':'$':'1.2-2' }}</b></td>
+                        <td><b>{{ u.tiene | currency:'':'$':'1.2-2' }}</b></td>
+                        <td><b>{{ u.deberiaTener | currency:'':'$':'1.2-2' }}</b></td>
+                        <td><b>{{ u.tieneDeMas | currency:'':'$':'1.2-2' }}</b></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
+    </div>
 
-        <!-- Bottom Section (Final Snapshot) -->
-        <!-- Botón para Reiniciar Datos Centrado -->
-        <div class="action-container centered-action" style="margin-top: 20px;">
-            <button class="btn-finalize btn-reset" (click)="confirmarReiniciar()">REINICIAR DATOS</button>
+    <!-- SPINNERS Y MODALES OMITIDOS PARA BREVEDAD (Y SE MANTIENEN ABAJO DE ESTO) -->
+
+    <!-- Modal Confirmation Finalizar -->
+    <div class="modal-overlay" *ngIf="mostrarModalFinalizar">
+        <div class="modal-content">
+            <h3>¿Estás seguro de finalizar el stream?</h3>
+            <p>Se guardará el saldo actual como saldo final.</p>
+            <div class="modal-actions">
+                <button class="btn-cancel" (click)="cancelarFinalizar()">Cancelar</button>
+                <button class="btn-confirm" (click)="finalizarStream()">Aceptar</button>
+            </div>
         </div>
     </div>
 
-    <!-- SEXTA FILA: DESGLOSE POR USUARIO -->
-    <div class="table-container" *ngIf="usuariosDesglose.length > 0">
-        <table class="desglose-table">
-            <thead>
-                <tr>
-                    <th>USUARIO</th>
-                    <th>SALDO INICIAL</th>
-                    <th>GANA</th>
-                    <th>PIERDE</th>
-                    <th>DEPOSITOS</th>
-                    <th>RETIROS</th>
-                    <th>AUM MANUAL</th>
-                    <th>RESTA MAN</th>
-                    <th>TIENE</th>
-                    <th>DEBERIA TENER</th>
-                    <th><span class="purple-outline">TIENE DE MAS</span></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let u of usuariosDesglose">
-                    <td><b>{{ u.username | uppercase }}</b></td>
-                    <td><b>{{ u.saldoInicial | currency:'':'$':'1.2-2' }}</b></td>
-                    <td><b>{{ u.gana | currency:'':'$':'1.2-2' }}</b></td>
-                    <td><b>{{ u.pierde | currency:'':'$':'1.2-2' }}</b></td>
-                    <td><b>{{ u.depositos | currency:'':'$':'1.2-2' }}</b></td>
-                    <td><b>{{ u.retiros | currency:'':'$':'1.2-2' }}</b></td>
-                    <td><b>{{ u.aumManual | currency:'':'$':'1.2-2' }}</b></td>
-                    <td><b>{{ u.restaMan | currency:'':'$':'1.2-2' }}</b></td>
-                    <td><b>{{ u.tiene | currency:'':'$':'1.2-2' }}</b></td>
-                    <td><b>{{ u.deberiaTener | currency:'':'$':'1.2-2' }}</b></td>
-                    <td><b>{{ u.tieneDeMas | currency:'':'$':'1.2-2' }}</b></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-</div>
-
-<!-- SPINNERS Y MODALES OMITIDOS PARA BREVEDAD (Y SE MANTIENEN ABAJO DE ESTO) -->
-
-<!-- Modal Confirmation Finalizar -->
-<div class="modal-overlay" *ngIf="mostrarModalFinalizar">
-    <div class="modal-content">
-        <h3>¿Estás seguro de finalizar el stream?</h3>
-        <p>Se guardará el saldo actual como saldo final.</p>
-        <div class="modal-actions">
-            <button class="btn-cancel" (click)="cancelarFinalizar()">Cancelar</button>
-            <button class="btn-confirm" (click)="finalizarStream()">Aceptar</button>
+    <!-- Modal Confirmation Reiniciar -->
+    <div class="modal-overlay" *ngIf="mostrarModalReiniciar">
+        <div class="modal-content">
+            <h3>¿Estás seguro de REINICIAR DATOS?</h3>
+            <p>Esto borrará el saldo inicial y final guardado previamente.</p>
+            <p style="font-size: 0.9em; color: gray;">Úsalo cuando vayas a empezar un stream nuevo desde cero.</p>
+            <div class="modal-actions">
+                <button class="btn-cancel" (click)="cancelarReiniciar()">Cancelar</button>
+                <button class="btn-confirm btn-danger" (click)="reiniciarDatos()">REINICIAR</button>
+            </div>
         </div>
     </div>
-</div>
-
-<!-- Modal Confirmation Reiniciar -->
-<div class="modal-overlay" *ngIf="mostrarModalReiniciar">
-    <div class="modal-content">
-        <h3>¿Estás seguro de REINICIAR DATOS?</h3>
-        <p>Esto borrará el saldo inicial y final guardado previamente.</p>
-        <p style="font-size: 0.9em; color: gray;">Úsalo cuando vayas a empezar un stream nuevo desde cero.</p>
-        <div class="modal-actions">
-            <button class="btn-cancel" (click)="cancelarReiniciar()">Cancelar</button>
-            <button class="btn-confirm btn-danger" (click)="reiniciarDatos()">REINICIAR</button>
-        </div>
-    </div>
-</div>
