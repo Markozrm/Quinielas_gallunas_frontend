@@ -45,13 +45,14 @@
 
             <!-- Right Box (Saldo En Vivo - Hybrid Logic) -->
             <div class="box-wrapper right-side" *ngIf="hybridData; else loadingHybrid">
-                <div class="box-labels">
+                <div class="box-labels" style="justify-content: flex-start; gap: 30px;">
                     <span>SALDO EN VIVO</span>
                     <span>HORA: {{ hybridData.now | date:'HH:mm' }}</span>
+                    <span>DEBERIA DE HABER</span>
                 </div>
                 <div class="box-outline">
                     <div class="data-item">
-                        <span class="data-item-label">SALDO GLOBAL</span>
+                        <span class="data-item-label">SALDO INICIO</span>
                         <span class="data-item-value">{{ hybridData.saldoGlobal | currency }}</span>
                     </div>
                     <span class="operator-inline plus">+</span>
@@ -98,13 +99,13 @@
         <!-- --- NEW SECOND ROW (DIFFERENCE / DIO DE MAS) --- -->
         <div class="second-row-diff" *ngIf="snapshot && hybridData">
             <div class="diff-box">
-                <span class="diff-box-label">SALDO DE INICIO</span>
-                <span class="pill-large green-gradient">{{ snapshot.total | currency }}</span>
+                <span class="diff-box-label">SALDO EN VIVO</span>
+                <span class="pill-large red-gradient">{{ hybridData.total | currency }}</span>
             </div>
             <span class="diff-operator-large">-</span>
             <div class="diff-box">
-                <span class="diff-box-label">SALDO EN VIVO</span>
-                <span class="pill-large red-gradient">{{ hybridData.total | currency }}</span>
+                <span class="diff-box-label">SALDO DE INICIO</span>
+                <span class="pill-large green-gradient">{{ snapshot.total | currency }}</span>
             </div>
             <span class="diff-operator-large equals">=</span>
             <div class="diff-box">
@@ -112,6 +113,60 @@
                 <span class="pill-large gold-gradient">{{ diferenciaSaldo | currency }}</span>
             </div>
         </div>
+
+        <!-- --- NEW THIRD ROW (SALDO EN VIVO HAY ACTUALMENTE) --- -->
+        <div class="top-row-horizontal" *ngIf="liveData; else loadingLive" style="margin-top: 20px;">
+            <div class="box-wrapper right-side" style="flex: 1 1 100%;">
+                <div class="box-labels" style="justify-content: flex-start; gap: 30px;">
+                    <span>SALDO EN VIVO</span>
+                    <span>HAY ACTUALMENTE</span>
+                </div>
+                <div class="box-outline">
+                    <div class="data-item">
+                        <span class="data-item-label">SALDO GLOBAL</span>
+                        <span class="data-item-value">{{ liveData.saldoGlobal | currency }}</span>
+                    </div>
+                    <span class="operator-inline plus">+</span>
+                    <div class="data-item">
+                        <span class="data-item-label">RETIROS</span>
+                        <span class="data-item-value">{{ liveData.retiros | currency }}</span>
+                    </div>
+                    <span class="operator-inline plus">+</span>
+                    <div class="data-item">
+                        <span class="data-item-label">DEPOSITOS</span>
+                        <span class="data-item-value">{{ liveData.depositos | currency }}</span>
+                    </div>
+                    <span class="operator-inline plus">+</span>
+                    <div class="data-item">
+                        <span class="data-item-label">SALDO MANUAL</span>
+                        <span class="data-item-value">{{ liveData.saldoManual | currency }}</span>
+                    </div>
+                    <span class="operator-inline minus">-</span>
+                    <div class="data-item">
+                        <span class="data-item-label">RESTA MANUAL</span>
+                        <span class="data-item-value">{{ liveData.restaManual | currency }}</span>
+                    </div>
+                    <span class="operator-inline minus">-</span>
+                    <div class="data-item">
+                        <span class="data-item-label">CAZADO</span>
+                        <span class="data-item-value">{{ liveData.cazado | currency }}</span>
+                    </div>
+                    <span class="operator-inline equals">=</span>
+                    <div class="data-item">
+                        <span class="data-item-label">TOTAL</span>
+                        <span class="pill-value" style="background: linear-gradient(180deg, #0d47a1, #002171);">{{
+                            hybridData.total | currency }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ng-template #loadingLive>
+            <div class="box-wrapper" style="width: 100%; margin-bottom: 20px; margin-top: 20px;">
+                <div class="box-outline" style="justify-content: center;">
+                    <span>Esperando datos en vivo...</span>
+                </div>
+            </div>
+        </ng-template>
 
         <!-- --- NEW FIFTH ROW (APUESTAS ABIERTAS Y PENDIENTES) --- -->
         <div class="open-bets-row" *ngIf="hybridData">
