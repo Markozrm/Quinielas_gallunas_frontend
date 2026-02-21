@@ -237,8 +237,8 @@ export class FiltroComponent implements OnInit, OnDestroy {
                                 }
 
                                 // NEW: Calculate difference (Second Circle - First Circle)
-                                if (this.snapshot && this.hybridData) {
-                                    this.diferenciaSaldo = (this.hybridData.total || 0) - (this.snapshot.total || 0);
+                                if (this.snapshot && this.liveData) {
+                                    this.diferenciaSaldo = (this.snapshot.total || 0) - (this.liveData.total || 0);
                                 }
 
                                 // NEW 2: Calculate difference (Second Circle - Third Circle)
