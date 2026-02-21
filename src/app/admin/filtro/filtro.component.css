@@ -124,8 +124,9 @@
 
 .main-card {
     background-color: white;
-    width: 90%;
-    max-width: 800px;
+    width: 95%;
+    max-width: 1200px;
+    /* Increased from 800px to fit the new wide layout */
     border-radius: 40px;
     padding: 40px;
     display: flex;
@@ -133,6 +134,8 @@
     gap: 30px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     position: relative;
+    overflow-x: auto;
+    /* Allow scrolling if it still overflows horizontally */
 }
 
 .info-section {
@@ -285,6 +288,12 @@
 }
 
 /* Reset Button Styles */
+.centered-action {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
 .btn-reset {
     background-color: #d32f2f;
     /* Red */
@@ -391,5 +400,575 @@
         /* Make result take full width if wrapped */
         text-align: center;
         background: #e9ecef;
+    }
+}
+
+/* --- NEW HORIZONTAL LAYOUT STYLES --- */
+.top-row-horizontal {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /* Allow wrapping on small screens */
+    gap: 15px;
+    width: 100%;
+    margin-bottom: 20px;
+    justify-content: space-between;
+}
+
+.box-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+    /* Ensure boxes don't get too squeezed before wrapping */
+}
+
+.box-wrapper.left-side {
+    flex: 1 1 300px;
+    /* Allow growing, shrinking, basis 300px */
+}
+
+.box-wrapper.right-side {
+    flex: 2 1 600px;
+    /* Make it take more space, basis 600px */
+}
+
+.box-labels {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 15px;
+    margin-bottom: 5px;
+    flex-wrap: wrap;
+    /* Prevent labels from overlapping on tight screens */
+    gap: 5px;
+}
+
+.box-labels span {
+    font-weight: 800;
+    font-size: 13px;
+    color: #222;
+    text-transform: uppercase;
+}
+
+.box-outline {
+    border: 2px solid #1a4f94;
+    border-radius: 40px;
+    background-color: #f8f9fa;
+    padding: 15px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    /* Wrap elements inside the box if they overflow */
+    align-items: center;
+    justify-content: center;
+    /* Center items when they wrap */
+    gap: 10px;
+    min-height: 80px;
+}
+
+.data-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    flex: 0 0 auto;
+    /* Keep items their natural size */
+}
+
+.data-item-label {
+    font-size: 13px;
+    font-weight: 800;
+    color: #222;
+    white-space: nowrap;
+    text-transform: uppercase;
+}
+
+.data-item-value {
+    font-size: 16px;
+    font-weight: 900;
+    color: #111;
+}
+
+.operator-inline {
+    font-size: 20px;
+    font-weight: 900;
+    align-self: center;
+    margin-top: 5px;
+    /* Adjusting for flex wrap layout */
+}
+
+.operator-inline.plus {
+    color: #2ecc71;
+}
+
+.operator-inline.minus {
+    color: #e74c3c;
+}
+
+.operator-inline.equals {
+    color: #222;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+
+/* SEXTA FILA: DESGLOSE POR USUARIO (TABLA) */
+.table-container {
+    width: 100%;
+    margin-top: 15px;
+    background-color: #f7fbff;
+    /* matching the general blueish-white background */
+    border-radius: 20px;
+    border: 3px solid #29478f;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.desglose-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+}
+
+.desglose-table thead th {
+    font-weight: 800;
+    color: #111;
+    text-transform: uppercase;
+    padding: 15px 5px;
+    border-bottom: 2px solid #29478f;
+    border-right: 2px solid #29478f;
+}
+
+.desglose-table thead th:last-child {
+    border-right: none;
+}
+
+.desglose-table tbody td {
+    padding: 12px 5px;
+    color: #111;
+    border-bottom: 2px solid #29478f;
+    border-right: 2px solid #29478f;
+    font-weight: 900;
+}
+
+.desglose-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.desglose-table tbody td:last-child {
+    border-right: none;
+}
+
+/* Purple box specifically around TIENE DE MAS text */
+.purple-outline {
+    border: 2px solid #6b15a1;
+    padding: 4px 6px;
+    color: #6b15a1;
+}
+
+.pill-value {
+    background: linear-gradient(180deg, #0f5132, #003300);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+    /* Prevent pill from breaking into two lines */
+    margin-top: 5px;
+}
+
+.pill-value.red-pill {
+    background: linear-gradient(180deg, #b71c1c, #7f0000);
+}
+
+/* Responsiveness for new layout */
+@media (max-width: 900px) {
+    .top-row-horizontal {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .box-wrapper.left-side,
+    .box-wrapper.right-side {
+        width: 100%;
+        flex: 1 1 auto;
+    }
+
+    .main-card {
+        padding: 20px;
+        /* Reduce padding on smaller screens */
+        border-radius: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .box-outline {
+        border-radius: 20px;
+        /* Round less aggressively on mobile */
+        padding: 10px;
+        gap: 5px;
+    }
+
+    .data-item-label {
+        font-size: 11px;
+    }
+
+    .data-item-value {
+        font-size: 14px;
+    }
+
+    .operator-inline {
+        font-size: 16px;
+        margin: 0 2px;
+    }
+
+    .pill-value {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+
+    .box-labels span {
+        font-size: 11px;
+    }
+}
+
+/* --- NEW SECOND ROW (DIFFERENCE / DIO DE MAS) STYLES --- */
+.second-row-diff {
+    border: 2px solid #1a4f94;
+    border-radius: 40px;
+    background-color: #f8f9fa;
+    padding: 15px 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.diff-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.diff-box-label {
+    font-size: 14px;
+    font-weight: 800;
+    color: #222;
+    text-transform: uppercase;
+}
+
+.diff-operator-large {
+    font-size: 30px;
+    font-weight: 900;
+    color: #e74c3c;
+    /* Red minus */
+    margin: 0 10px;
+    align-self: flex-end;
+    /* Align operators lower if labels are on top */
+    margin-bottom: 5px;
+}
+
+.diff-operator-large.equals {
+    color: #222;
+    /* Black equals */
+}
+
+.pill-large {
+    color: white;
+    padding: 10px 40px;
+    border-radius: 30px;
+    font-size: 24px;
+    font-weight: 900;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+}
+
+.pill-large.green-gradient {
+    background: linear-gradient(180deg, #0f5132, #003300);
+}
+
+.pill-large.red-gradient {
+    background: linear-gradient(180deg, #b71c1c, #7f0000);
+}
+
+.pill-large.gold-gradient {
+    background: linear-gradient(90deg, #b8860b 0%, #000000 30%, #000000 70%, #b8860b 100%);
+    color: #fff;
+    border: 1px solid #d4af37;
+}
+
+@media (max-width: 900px) {
+    .second-row-diff {
+        flex-direction: column;
+        border-radius: 20px;
+        padding: 15px;
+    }
+
+    .diff-operator-large {
+        align-self: center;
+        margin: 5px 0;
+        transform: rotate(90deg);
+        /* Rotate operators when stacked vertically */
+    }
+}
+
+/* --- NEW THIRD ROW (EN VIVO BLUE OUTLINE) STYLES --- */
+.third-row-en-vivo {
+    border: 2px solid #3b74b8;
+    border-radius: 40px;
+    background-color: #f8f9fa;
+    padding: 20px 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    /* Align left */
+    width: 100%;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+    position: relative;
+}
+
+.en-vivo-label {
+    background: linear-gradient(180deg, #0f5132, #003300);
+    color: white;
+    padding: 5px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 900;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+    margin-right: 20px;
+}
+
+.blue-operator-box {
+    background-color: #1a4f94;
+    color: white;
+    border-radius: 5px;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 16px;
+    margin: 0 10px;
+}
+
+.data-item-blue-label {
+    font-size: 12px;
+    font-weight: 800;
+    color: #1a4f94;
+    /* Blue text */
+    text-transform: uppercase;
+    text-decoration: underline;
+    margin-bottom: 5px;
+}
+
+.data-item-blue-value {
+    font-size: 18px;
+    font-weight: 900;
+    color: #1a4f94;
+    padding: 2px 10px;
+    border: 1px solid #1a4f94;
+    border-radius: 5px;
+    background: #fff;
+}
+
+.data-item-blue {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* --- NEW FOURTH ROW (COLOR TOTALS) STYLES --- */
+.color-totals-container {
+    border: 2px solid #3b74b8;
+    border-radius: 40px;
+    background-color: #f8f9fa;
+    padding: 20px 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.color-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-left: 4px solid transparent;
+    padding-left: 10px;
+    min-width: 250px;
+}
+
+.color-box.red-team {
+    border-left-color: #e74c3c;
+}
+
+.color-box.green-team {
+    border-left-color: #2ecc71;
+}
+
+.color-box-label {
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.color-box-value {
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.red-team .color-box-label,
+.red-team .color-box-value {
+    color: #e74c3c;
+}
+
+.green-team .color-box-label,
+.green-team .color-box-value {
+    color: #2ecc71;
+}
+
+/* --- NEW FIFTH ROW (APUESTAS ABIERTAS Y PENDIENTES) STYLES --- */
+.open-bets-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    width: 100%;
+    margin-bottom: 20px;
+    justify-content: space-between;
+}
+
+.abiertas-box {
+    border: 2px solid #1a4f94;
+    border-radius: 40px;
+    background-color: #f8f9fa;
+    padding: 15px 25px;
+    flex: 1 1 350px;
+    /* Takes a bit more space if possible */
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-top: 15px;
+    /* Space for the floating top title */
+}
+
+.pendientes-box {
+    border: 2px solid #1a4f94;
+    border-radius: 40px;
+    background-color: #f8f9fa;
+    padding: 15px 15px;
+    flex: 1 1 250px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-top: 15px;
+}
+
+.floating-title {
+    position: absolute;
+    top: -25px;
+    left: 20px;
+    font-weight: 900;
+    font-size: 14px;
+    color: #000;
+    text-transform: uppercase;
+}
+
+.box-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+    font-weight: 800;
+    font-size: 13px;
+    text-transform: uppercase;
+    color: #111;
+    /* Make explicitly dark to avoid invisible text */
+}
+
+.abierta-inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    gap: 10px;
+    width: 100%;
+}
+
+.bet-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.bet-col-label {
+    font-size: 13px;
+    font-weight: 900;
+    color: #111;
+}
+
+.bet-pill {
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 900;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+}
+
+.bet-pill.green {
+    background: linear-gradient(180deg, #0f5132, #003300);
+}
+
+.bet-pill.red {
+    background: linear-gradient(180deg, #b71c1c, #7f0000);
+}
+
+.bet-pill.gold {
+    background: linear-gradient(90deg, #b8860b 0%, #000000 30%, #000000 70%, #b8860b 100%);
+    border: 1px solid #d4af37;
+}
+
+.operator-small {
+    font-size: 14px;
+    font-weight: 900;
+    align-self: flex-end;
+    /* Align to bottom so they sit near the pills */
+    margin-bottom: 8px;
+}
+
+.operator-small.plus {
+    color: #2ecc71;
+}
+
+.operator-small.equals {
+    color: #222;
+}
+
+@media (max-width: 900px) {
+
+    .abiertas-box,
+    .pendientes-box {
+        margin-top: 25px;
+        /* more space for title when stacked */
+        border-radius: 20px;
     }
 }
