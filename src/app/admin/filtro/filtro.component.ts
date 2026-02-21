@@ -214,8 +214,8 @@ export class FiltroComponent implements OnInit, OnDestroy {
                                 d.retiros = retirosForHybrid;
 
                                 /* TOTAL CALCULATION (Use 10%, i.e., Displayed Value) */
-                                // USER REQUEST: Third Circle (Live) only Global + Retiros
-                                const totalLive = d.saldoGlobal + d.retiros;
+                                // USER REQUEST: Third Circle (Live) full calculation
+                                const totalLive = d.saldoGlobal + d.retiros + d.depositos + d.saldoManual - d.restaManual - cazadoForCalc;
                                 this.liveData = { ...d, total: totalLive };
 
                                 if (this.snapshot) {
@@ -322,6 +322,9 @@ export class FiltroComponent implements OnInit, OnDestroy {
                                                 tieneDeMas
                                             };
                                         });
+
+                                    // Sort to put negative "tieneDeMas" at the top
+                                    desglose.sort((a: any, b: any) => a.tieneDeMas - b.tieneDeMas);
 
                                     this.usuariosDesglose = desglose;
                                 }
