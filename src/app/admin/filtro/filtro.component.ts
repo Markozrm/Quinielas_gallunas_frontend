@@ -248,78 +248,80 @@ export class FiltroComponent implements OnInit, OnDestroy {
 
                                 // NEW 3: Compute User Breakdown List
                                 if (this.snapshot && this.snapshot.usuarios && d.usuarios) {
-                                    const desglose = this.snapshot.usuarios.map((usu: any) => {
-                                        const username = usu.username;
-                                        const saldoInicial = usu.saldoInicial || 0;
+                                    const desglose = this.snapshot.usuarios
+                                        .filter((usu: any) => (usu.saldoInicial || 0) > 0)
+                                        .map((usu: any) => {
+                                            const username = usu.username;
+                                            const saldoInicial = usu.saldoInicial || 0;
 
-                                        // 1. Current balance (from liveData usuarios)
-                                        const foundLive = d.usuarios.find((u: any) => u.username === username);
-                                        const tiene = foundLive ? (foundLive.saldoActual || 0) : 0;
+                                            // 1. Current balance (from liveData usuarios)
+                                            const foundLive = d.usuarios.find((u: any) => u.username === username);
+                                            const tiene = foundLive ? (foundLive.saldoActual || 0) : 0;
 
-                                        // 2. Apuestas
-                                        const misApuestas = todasLasApuestas.filter(a => (a.username === username || a.usuario === username));
-                                        let gana = 0;
-                                        let pierde = 0;
-                                        misApuestas.forEach(a => {
-                                            const betAmount = Number(a.cantidadTotal || a.cantidad || a.monto || 0);
-                                            if (a.estado === 'pagada') {
-                                                gana += (betAmount * 0.9);
-                                            } else if (a.estado === 'cazada' || a.estado === 'perdida') {
-                                                // Consider losing bets and currently matched (but unsettled) bets as negative value for calculation
-                                                pierde += betAmount;
-                                            }
-                                        });
-
-                                        // 3. Saldos manuales and Depositos
-                                        let depositos = 0;
-                                        let aumManual = 0;
-                                        let restaMan = 0;
-
-                                        // Using the already fetched `saldosRecords` unfiltered list
-                                        const misSaldos = saldosRecords.filter(r => r.usuario === username || r.username === username);
-                                        misSaldos.forEach(r => {
-                                            const recordDate = new Date(r.fecha);
-                                            if (recordDate >= startedAtDate) {
-                                                const amount = Number(r.saldo) || 0;
-                                                if (r.tipo === 'recarga') {
-                                                    depositos += amount;
-                                                } else if (r.tipo === 'restar_saldo') {
-                                                    restaMan += amount; // keep it positive here, subtract later
-                                                } else { // add_saldo or general
-                                                    aumManual += amount;
+                                            // 2. Apuestas
+                                            const misApuestas = todasLasApuestas.filter(a => (a.username === username || a.usuario === username));
+                                            let gana = 0;
+                                            let pierde = 0;
+                                            misApuestas.forEach(a => {
+                                                const betAmount = Number(a.cantidadTotal || a.cantidad || a.monto || 0);
+                                                if (a.estado === 'pagada') {
+                                                    gana += (betAmount * 0.9);
+                                                } else if (a.estado === 'cazada' || a.estado === 'perdida') {
+                                                    // Consider losing bets and currently matched (but unsettled) bets as negative value for calculation
+                                                    pierde += betAmount;
                                                 }
-                                            }
+                                            });
+
+                                            // 3. Saldos manuales and Depositos
+                                            let depositos = 0;
+                                            let aumManual = 0;
+                                            let restaMan = 0;
+
+                                            // Using the already fetched `saldosRecords` unfiltered list
+                                            const misSaldos = saldosRecords.filter(r => r.usuario === username || r.username === username);
+                                            misSaldos.forEach(r => {
+                                                const recordDate = new Date(r.fecha);
+                                                if (recordDate >= startedAtDate) {
+                                                    const amount = Number(r.saldo) || 0;
+                                                    if (r.tipo === 'recarga') {
+                                                        depositos += amount;
+                                                    } else if (r.tipo === 'restar_saldo') {
+                                                        restaMan += amount; // keep it positive here, subtract later
+                                                    } else { // add_saldo or general
+                                                        aumManual += amount;
+                                                    }
+                                                }
+                                            });
+
+                                            // 4. Retiros
+                                            let retirosSuma = 0;
+                                            const misRetiros = (retiros as any[]).filter(r => (r.username === username || r.usuario === username || r.usuario_enviar === username));
+                                            misRetiros.forEach(r => {
+                                                const fechaSol = new Date(r.fechaSolicitud);
+                                                if (fechaSol >= startedAtDate && (r.estado === 'aprobado' || r.estado === 'pendiente')) {
+                                                    const cant = typeof r.cantidad === 'string' ? Number(r.cantidad.replace(/[^0-9.]/g, '')) : Number(r.cantidad || 0);
+                                                    retirosSuma += isNaN(cant) ? 0 : cant;
+                                                }
+                                            });
+
+                                            // Math calculation
+                                            const deberiaTener = saldoInicial + gana + depositos + aumManual - pierde - retirosSuma - restaMan;
+                                            const tieneDeMas = tiene - deberiaTener;
+
+                                            return {
+                                                username,
+                                                saldoInicial,
+                                                gana,
+                                                pierde,
+                                                depositos,
+                                                retiros: retirosSuma,
+                                                aumManual,
+                                                restaMan,
+                                                tiene,
+                                                deberiaTener,
+                                                tieneDeMas
+                                            };
                                         });
-
-                                        // 4. Retiros
-                                        let retirosSuma = 0;
-                                        const misRetiros = (retiros as any[]).filter(r => (r.username === username || r.usuario === username || r.usuario_enviar === username));
-                                        misRetiros.forEach(r => {
-                                            const fechaSol = new Date(r.fechaSolicitud);
-                                            if (fechaSol >= startedAtDate && (r.estado === 'aprobado' || r.estado === 'pendiente')) {
-                                                const cant = typeof r.cantidad === 'string' ? Number(r.cantidad.replace(/[^0-9.]/g, '')) : Number(r.cantidad || 0);
-                                                retirosSuma += isNaN(cant) ? 0 : cant;
-                                            }
-                                        });
-
-                                        // Math calculation
-                                        const deberiaTener = saldoInicial + gana + depositos + aumManual - pierde - retirosSuma - restaMan;
-                                        const tieneDeMas = tiene - deberiaTener;
-
-                                        return {
-                                            username,
-                                            saldoInicial,
-                                            gana,
-                                            pierde,
-                                            depositos,
-                                            retiros: retirosSuma,
-                                            aumManual,
-                                            restaMan,
-                                            tiene,
-                                            deberiaTener,
-                                            tieneDeMas
-                                        };
-                                    });
 
                                     this.usuariosDesglose = desglose;
                                 }
