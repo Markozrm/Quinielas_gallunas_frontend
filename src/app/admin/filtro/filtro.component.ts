@@ -36,6 +36,8 @@ export class FiltroComponent implements OnInit, OnDestroy {
 
     // DESGLOSE USUARIOS
     usuariosDesglose: any[] = [];
+    totalTieneDeMas: number = 0;
+    totalFalta: number = 0;
 
     constructor(
         private router: Router,
@@ -237,8 +239,8 @@ export class FiltroComponent implements OnInit, OnDestroy {
                                 }
 
                                 // NEW: Calculate difference (Second Circle - First Circle)
-                                if (this.snapshot && this.liveData) {
-                                    this.diferenciaSaldo = (this.snapshot.total || 0) - (this.liveData.total || 0);
+                                if (this.hybridData && this.liveData) {
+                                    this.diferenciaSaldo = (this.hybridData.total || 0) - (this.liveData.total || 0);
                                 }
 
                                 // NEW 2: Calculate difference (Second Circle - Third Circle)
@@ -327,6 +329,8 @@ export class FiltroComponent implements OnInit, OnDestroy {
                                     desglose.sort((a: any, b: any) => a.tieneDeMas - b.tieneDeMas);
 
                                     this.usuariosDesglose = desglose;
+                                    this.totalTieneDeMas = desglose.reduce((acc: number, u: any) => acc + (u.tieneDeMas > 0 ? u.tieneDeMas : 0), 0);
+                                    this.totalFalta = desglose.reduce((acc: number, u: any) => acc + (u.tieneDeMas < 0 ? u.tieneDeMas : 0), 0);
                                 }
 
 
