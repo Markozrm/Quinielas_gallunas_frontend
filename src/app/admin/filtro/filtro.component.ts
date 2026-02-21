@@ -166,11 +166,14 @@ export class FiltroComponent implements OnInit, OnDestroy {
                                 // Calculate 10% for display
                                 const cazadoDisplay = cazadoFull * 0.10;
 
-                                // 1.1 ADDITION: Calculate total for Red and Green (regardless of state)
+                                // 1.1 ADDITION: Calculate total for Red and Green (only active bets)
                                 let tempTotalRojo = 0;
                                 let tempTotalVerde = 0;
 
-                                todasLasApuestas.forEach(apuesta => {
+                                // Filter only unsettled/active bets for the UI (Apuestas Abiertas)
+                                const apuestasActivas = todasLasApuestas.filter(a => a.estado === 'en_espera' || a.estado === 'cazada');
+
+                                apuestasActivas.forEach(apuesta => {
                                     // Based on how apuestas-stream checks green: if (verde != "") it's green
                                     const montoApuesta = Number(apuesta.cantidadTotal || apuesta.cantidad || apuesta.monto || 0);
                                     if (apuesta.verde && apuesta.verde !== '') {
