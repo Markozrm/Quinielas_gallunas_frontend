@@ -15,221 +15,233 @@
     </div>
 
     <div class="main-card">
-        <!-- Top Section: Saldo de Inicio -->
-        <h3 class="section-title">SALDO DE INICIO</h3>
-        <div class="info-section inicio-section">
-            <div class="snapshot-data" *ngIf="snapshot; else noSnapshot">
-                <div class="data-group hora-container">
-                    <span class="label-hora">HORA DE INICIO: {{ snapshot.startedAt | date:'HH:mm' }}</span>
+        <!-- --- NEW TOP LINE (SALDO DE INICIO & SALDO EN VIVO) --- -->
+        <div class="top-row-horizontal">
+            <!-- Left Box (Saldo de Inicio) -->
+            <div class="box-wrapper left-side" *ngIf="snapshot; else noSnapshot">
+                <div class="box-labels">
+                    <span>SALDO DE INICIO</span>
+                    <span>HORA DE INICIO: {{ snapshot.startedAt | date:'HH:mm' }}</span>
                 </div>
-
-                <div class="data-group">
-                    <span class="label">SALDO GLOBAL</span>
-                    <span class="value">{{ snapshot.saldoGlobal | currency }}</span>
-                </div>
-
-                <div class="operator">+</div>
-
-                <div class="data-group">
-                    <span class="label">RETIROS</span>
-                    <span class="value">{{ snapshot.retiros | currency }}</span>
-                </div>
-
-                <div class="operator">=</div>
-
-                <div class="data-group total-group">
-                    <span class="label">TOTAL</span>
-                    <span class="value total-pill">{{ snapshot.total | currency }}</span>
+                <div class="box-outline">
+                    <div class="data-item">
+                        <span class="data-item-label">SALDO GLOBAL</span>
+                        <span class="data-item-value">{{ snapshot.saldoGlobal | currency }}</span>
+                    </div>
+                    <span class="operator-inline equals">=</span>
+                    <div class="data-item">
+                        <span class="data-item-label">TOTAL</span>
+                        <span class="pill-value">{{ snapshot.total | currency }}</span>
+                    </div>
                 </div>
             </div>
-
             <ng-template #noSnapshot>
-                <div class="no-data">Esperando inicio de stream...</div>
+                <div class="box-wrapper left-side">
+                    <div class="box-outline" style="justify-content: center;">
+                        <span>Esperando inicio de stream...</span>
+                    </div>
+                </div>
             </ng-template>
-        </div>
 
-        <!-- Difference Display (Second Circle - First Circle) -->
-        <div class="difference-container" *ngIf="snapshot && hybridData">
-            <span class="diff-pill green-pill">{{ hybridData.total | currency }}</span>
-            <span class="diff-operator">-</span>
-            <span class="diff-pill orange-pill">{{ snapshot.total | currency }}</span>
-            <span class="diff-operator">=</span>
-            <span class="diff-result">{{ diferenciaSaldo | currency }}</span>
-        </div>
-
-        <!-- Middle Section (Saldo Inicio Stream) -->
-        <h3 class="section-title">SALDO INICIO STREAM</h3>
-        <div class="info-section hybrid-section">
-            <div class="snapshot-data full-width-data" *ngIf="hybridData; else loadingHybrid">
-
-                <div class="data-group hora-container"
-                    style="background: linear-gradient(135deg, #f39c12 0%, #d35400 100%);">
-                    <span class="label-hora">SALDO INICIO STREAM</span>
+            <!-- Right Box (Saldo En Vivo - Hybrid Logic) -->
+            <div class="box-wrapper right-side" *ngIf="hybridData; else loadingHybrid">
+                <div class="box-labels">
+                    <span>SALDO EN VIVO</span>
+                    <span>HORA: {{ hybridData.now | date:'HH:mm' }}</span>
                 </div>
-
-                <div class="data-group">
-                    <span class="label">SALDO GLOBAL</span>
-                    <span class="value">{{ hybridData.saldoGlobal | currency }}</span>
-                </div>
-
-                <div class="operator">+</div>
-
-                <div class="data-group">
-                    <span class="label">RETIROS</span>
-                    <span class="value">{{ hybridData.retiros | currency }}</span>
-                </div>
-
-                <div class="operator">+</div>
-
-                <div class="data-group">
-                    <span class="label">DEPOSITOS</span>
-                    <span class="value">{{ hybridData.depositos | currency }}</span>
-                </div>
-
-                <div class="operator">+</div>
-
-                <div class="data-group">
-                    <span class="label">SALDO MANUAL</span>
-                    <span class="value">{{ hybridData.saldoManual | currency }}</span>
-                </div>
-
-                <div class="operator">-</div>
-
-                <div class="data-group">
-                    <span class="label">RESTA MANUAL</span>
-                    <span class="value">{{ hybridData.restaManual | currency }}</span>
-                </div>
-
-                <div class="operator">-</div>
-
-                <div class="data-group">
-                    <span class="label">CAZADO</span>
-                    <span class="value">{{ hybridData.cazado | currency }}</span>
-                </div>
-
-                <div class="operator">=</div>
-
-                <div class="data-group total-group">
-                    <span class="label">TOTAL</span>
-                    <span class="value total-pill" style="background: #e67e22;">{{ hybridData.total | currency }}</span>
+                <div class="box-outline">
+                    <div class="data-item">
+                        <span class="data-item-label">SALDO GLOBAL</span>
+                        <span class="data-item-value">{{ hybridData.saldoGlobal | currency }}</span>
+                    </div>
+                    <span class="operator-inline plus">+</span>
+                    <div class="data-item">
+                        <span class="data-item-label">RETIROS</span>
+                        <span class="data-item-value">{{ hybridData.retiros | currency }}</span>
+                    </div>
+                    <span class="operator-inline plus">+</span>
+                    <div class="data-item">
+                        <span class="data-item-label">DEPOSITOS</span>
+                        <span class="data-item-value">{{ hybridData.depositos | currency }}</span>
+                    </div>
+                    <span class="operator-inline plus">+</span>
+                    <div class="data-item">
+                        <span class="data-item-label">SALDO MANUAL</span>
+                        <span class="data-item-value">{{ hybridData.saldoManual | currency }}</span>
+                    </div>
+                    <span class="operator-inline minus">-</span>
+                    <div class="data-item">
+                        <span class="data-item-label">RESTA MANUAL</span>
+                        <span class="data-item-value">{{ hybridData.restaManual | currency }}</span>
+                    </div>
+                    <span class="operator-inline minus">-</span>
+                    <div class="data-item">
+                        <span class="data-item-label">CAZADO</span>
+                        <span class="data-item-value">{{ hybridData.cazado | currency }}</span>
+                    </div>
+                    <span class="operator-inline equals">=</span>
+                    <div class="data-item">
+                        <span class="data-item-label">TOTAL</span>
+                        <span class="pill-value red-pill">{{ hybridData.total | currency }}</span>
+                    </div>
                 </div>
             </div>
             <ng-template #loadingHybrid>
-                <div class="no-data">Esperando datos...</div>
+                <div class="box-wrapper right-side">
+                    <div class="box-outline" style="justify-content: center;">
+                        <span>Esperando datos en vivo...</span>
+                    </div>
+                </div>
             </ng-template>
         </div>
 
-        <!-- Difference Display 2 (Second Circle - Third Circle) -->
-        <div class="difference-container" *ngIf="hybridData && liveData">
-            <span class="diff-pill orange-pill">{{ hybridData.total | currency }}</span>
-            <span class="diff-operator">-</span>
-            <span class="diff-pill green-pill">{{ liveData.total | currency }}</span>
-            <span class="diff-operator">=</span>
-            <span class="diff-result">{{ diferenciaVivo | currency }}</span>
+        <!-- --- NEW SECOND ROW (DIFFERENCE / DIO DE MAS) --- -->
+        <div class="second-row-diff" *ngIf="snapshot && hybridData">
+            <div class="diff-box">
+                <span class="diff-box-label">SALDO DE INICIO</span>
+                <span class="pill-large green-gradient">{{ snapshot.total | currency }}</span>
+            </div>
+            <span class="diff-operator-large">-</span>
+            <div class="diff-box">
+                <span class="diff-box-label">SALDO EN VIVO</span>
+                <span class="pill-large red-gradient">{{ hybridData.total | currency }}</span>
+            </div>
+            <span class="diff-operator-large equals">=</span>
+            <div class="diff-box">
+                <span class="diff-box-label">DIO DE MAS</span>
+                <span class="pill-large gold-gradient">{{ diferenciaSaldo | currency }}</span>
+            </div>
         </div>
 
-        <!-- Middle Section (Saldo en Vivo) -->
-        <h3 class="section-title">SALDO EN VIVO</h3>
-        <div class="info-section live-section">
-            <div class="snapshot-data full-width-data" *ngIf="liveData; else loadingLive">
+        <!-- --- NEW FIFTH ROW (APUESTAS ABIERTAS Y PENDIENTES) --- -->
+        <div class="open-bets-row" *ngIf="hybridData">
 
-                <div class="data-group hora-container red-gradient">
-                    <span class="label-hora">EN VIVO: {{ liveData.now | date:'HH:mm' }}</span>
-                    <!-- Or current time? Usually 'En Vivo' shows current clock. -->
+            <!-- ABIRTA BOX -->
+            <div class="abiertas-box">
+                <span class="floating-title">APUESTAS ABIERTAS</span>
+                <div class="box-header-row">
+                    <span>APUESTA ABIERTA</span>
+                    <span>HORA: {{ hybridData.now | date:'HH:mm' }}</span>
+                    <span>P-ACTUAL</span>
                 </div>
-
-                <div class="data-group">
-                    <span class="label">SALDO GLOBAL</span>
-                    <span class="value">{{ liveData.saldoGlobal | currency }}</span>
-                </div>
-
-                <div class="operator">+</div>
-
-                <div class="data-group">
-                    <span class="label">RETIROS</span>
-                    <span class="value">{{ liveData.retiros | currency }}</span>
-                </div>
-
-                <!-- Removed Depositos, Saldo Manual, Resta Manual, Cazado as per request -->
-
-                <div class="operator">=</div>
-
-                <div class="data-group total-group">
-                    <span class="label">TOTAL</span>
-                    <span class="value total-pill">{{ liveData.total | currency }}</span>
+                <div class="abierta-inner">
+                    <div class="bet-col">
+                        <span class="bet-col-label">ROJO</span>
+                        <span class="bet-pill green">{{ totalRojoLive | currency }}</span>
+                    </div>
+                    <span class="operator-small plus">+</span>
+                    <div class="bet-col">
+                        <span class="bet-col-label">VERDE</span>
+                        <span class="bet-pill red">{{ totalVerdeLive | currency }}</span>
+                    </div>
+                    <span class="operator-small equals">=</span>
+                    <div class="bet-col">
+                        <span class="bet-col-label">TOTAL</span>
+                        <span class="bet-pill gold">{{ totalRojoLive + totalVerdeLive | currency }}</span>
+                    </div>
                 </div>
             </div>
-            <ng-template #loadingLive>
-                <div class="no-data">Cargando datos en vivo...</div>
-            </ng-template>
+
+            <!-- PENDIENTE 1 -->
+            <div class="pendientes-box">
+                <div class="box-header-row">
+                    <span>P-ANT1</span>
+                    <span>APUESTA PENDIENTE 1</span>
+                    <span>HORA: --:--</span>
+                </div>
+                <div class="abierta-inner">
+                    <div class="bet-col">
+                        <span class="bet-col-label">ROJO</span>
+                        <span class="bet-pill green">{{ 0 | currency }}</span>
+                    </div>
+                    <span class="operator-small plus">+</span>
+                    <div class="bet-col">
+                        <span class="bet-col-label">VERDE</span>
+                        <span class="bet-pill red">{{ 0 | currency }}</span>
+                    </div>
+                    <span class="operator-small equals">=</span>
+                    <div class="bet-col">
+                        <span class="bet-col-label">TOTAL</span>
+                        <span class="bet-pill gold">{{ 0 | currency }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PENDIENTE 2 -->
+            <div class="pendientes-box">
+                <div class="box-header-row">
+                    <span>P-ANT2</span>
+                    <span>APUESTA PENDIENTE 2</span>
+                    <span>HORA: --:--</span>
+                </div>
+                <div class="abierta-inner">
+                    <div class="bet-col">
+                        <span class="bet-col-label">ROJO</span>
+                        <span class="bet-pill green">{{ 0 | currency }}</span>
+                    </div>
+                    <span class="operator-small plus">+</span>
+                    <div class="bet-col">
+                        <span class="bet-col-label">VERDE</span>
+                        <span class="bet-pill red">{{ 0 | currency }}</span>
+                    </div>
+                    <span class="operator-small equals">=</span>
+                    <div class="bet-col">
+                        <span class="bet-col-label">TOTAL</span>
+                        <span class="bet-pill gold">{{ 0 | currency }}</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
 
 
         <!-- Bottom Section (Final Snapshot) -->
-        <h3 class="section-title" *ngIf="finalSnapshot">SALDO FINAL</h3>
-        <div class="info-section final-section" *ngIf="finalSnapshot">
-            <div class="snapshot-data full-width-data">
-
-                <div class="data-group hora-container gray-gradient">
-                    <span class="label-hora">FINAL: {{ finalSnapshot.endedAt | date:'HH:mm' }}</span>
-                </div>
-
-                <div class="data-group">
-                    <span class="label">SALDO GLOBAL</span>
-                    <span class="value">{{ finalSnapshot.saldoGlobal | currency }}</span>
-                </div>
-
-                <div class="operator">+</div>
-
-                <div class="data-group">
-                    <span class="label">RETIROS</span>
-                    <span class="value">{{ finalSnapshot.retiros | currency }}</span>
-                </div>
-
-                <div class="operator">+</div>
-
-                <div class="data-group">
-                    <span class="label">DEPOSITOS</span>
-                    <span class="value">{{ finalSnapshot.depositos | currency }}</span>
-                </div>
-
-                <div class="operator">+</div>
-
-                <div class="data-group">
-                    <span class="label">SALDO MANUAL</span>
-                    <span class="value">{{ finalSnapshot.saldoManual | currency }}</span>
-                </div>
-
-                <div class="operator">-</div>
-
-                <div class="data-group">
-                    <span class="label">RESTA MANUAL</span>
-                    <span class="value">{{ finalSnapshot.restaManual | currency }}</span>
-                </div>
-
-                <div class="operator">-</div>
-
-                <div class="data-group">
-                    <span class="label">CAZADO</span>
-                    <span class="value">{{ finalSnapshot.cazado | currency }}</span>
-                </div>
-
-                <div class="operator">=</div>
-
-                <div class="data-group total-group">
-                    <span class="label">TOTAL</span>
-                    <span class="value total-pill gray-pill">{{ finalSnapshot.total | currency }}</span>
-                </div>
-            </div>
-
-            <!-- Button to Reset Stream (Inside Final Section or below) -->
-            <div class="action-container" style="margin-top: 20px;">
-                <button class="btn-finalize btn-reset" (click)="confirmarReiniciar()">REINICIAR DATOS</button>
-            </div>
+        <!-- Botón para Reiniciar Datos Centrado -->
+        <div class="action-container centered-action" style="margin-top: 20px;">
+            <button class="btn-finalize btn-reset" (click)="confirmarReiniciar()">REINICIAR DATOS</button>
         </div>
     </div>
+
+    <!-- SEXTA FILA: DESGLOSE POR USUARIO -->
+    <div class="table-container" *ngIf="usuariosDesglose.length > 0">
+        <table class="desglose-table">
+            <thead>
+                <tr>
+                    <th>USUARIO</th>
+                    <th>SALDO INICIAL</th>
+                    <th>GANA</th>
+                    <th>PIERDE</th>
+                    <th>DEPOSITOS</th>
+                    <th>RETIROS</th>
+                    <th>AUM MANUAL</th>
+                    <th>RESTA MAN</th>
+                    <th>TIENE</th>
+                    <th>DEBERIA TENER</th>
+                    <th><span class="purple-outline">TIENE DE MAS</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let u of usuariosDesglose">
+                    <td><b>{{ u.username | uppercase }}</b></td>
+                    <td><b>{{ u.saldoInicial | currency:'':'$':'1.2-2' }}</b></td>
+                    <td><b>{{ u.gana | currency:'':'$':'1.2-2' }}</b></td>
+                    <td><b>{{ u.pierde | currency:'':'$':'1.2-2' }}</b></td>
+                    <td><b>{{ u.depositos | currency:'':'$':'1.2-2' }}</b></td>
+                    <td><b>{{ u.retiros | currency:'':'$':'1.2-2' }}</b></td>
+                    <td><b>{{ u.aumManual | currency:'':'$':'1.2-2' }}</b></td>
+                    <td><b>{{ u.restaMan | currency:'':'$':'1.2-2' }}</b></td>
+                    <td><b>{{ u.tiene | currency:'':'$':'1.2-2' }}</b></td>
+                    <td><b>{{ u.deberiaTener | currency:'':'$':'1.2-2' }}</b></td>
+                    <td><b>{{ u.tieneDeMas | currency:'':'$':'1.2-2' }}</b></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
 </div>
+
+<!-- SPINNERS Y MODALES OMITIDOS PARA BREVEDAD (Y SE MANTIENEN ABAJO DE ESTO) -->
 
 <!-- Modal Confirmation Finalizar -->
 <div class="modal-overlay" *ngIf="mostrarModalFinalizar">
