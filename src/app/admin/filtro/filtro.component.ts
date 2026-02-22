@@ -39,6 +39,13 @@ export class FiltroComponent implements OnInit, OnDestroy {
     totalTieneDeMas: number = 0;
     totalFalta: number = 0;
 
+    // DESGLOSE APUESTA ACTUAL
+    rondaActual: number = 0;
+    abierta = { rojo: 0, verde: 0, total: 0 };
+    cazado = { rojo: 0, verde: 0, total: 0 };
+    devuelto = { rojo: 0, verde: 0, total: 0 };
+    resumenApuesta = { cobrado: 0, pagado: 0, cazado10: 0, total: 0 };
+
     constructor(
         private router: Router,
         private usersService: UsersService,
@@ -165,6 +172,52 @@ export class FiltroComponent implements OnInit, OnDestroy {
 
                                 // Calculate 10% for display
                                 const cazadoDisplay = cazadoFull * 0.10;
+
+                                // --- NUEVO: DESGLOSE APUESTA ACTUAL ---
+                                let maxRonda = 0;
+                                todasLasApuestas.forEach(a => {
+                                    const r = Number(a.ronda) || 0;
+                                    if (r > maxRonda) maxRonda = r;
+                                });
+                                this.rondaActual = maxRonda;
+
+                                // Reiniciar valores al recalcular
+                                this.abierta = { rojo: 0, verde: 0, total: 0 };
+                                this.cazado = { rojo: 0, verde: 0, total: 0 };
+                                this.devuelto = { rojo: 0, verde: 0, total: 0 };
+                                this.resumenApuesta = { cobrado: 0, pagado: 0, cazado10: 0, total: 0 };
+
+                                const apuestasRondaActual = todasLasApuestas.filter(a => (Number(a.ronda) || 0) === this.rondaActual);
+
+                                apuestasRondaActual.forEach(apuesta => {
+                                    const monto = Number(apuesta.cantidadTotal || apuesta.cantidad || apuesta.monto || 0);
+                                    const esVerde = apuesta.verde && apuesta.verde !== '';
+
+                                    if (apuesta.estado === 'en_espera') {
+                                        if (esVerde) this.abierta.verde += monto;
+                                        else this.abierta.rojo += monto;
+                                        this.abierta.total += monto;
+                                    } else if (apuesta.estado === 'cazada') {
+                                        if (esVerde) this.cazado.verde += monto;
+                                        else this.cazado.rojo += monto;
+                                        this.cazado.total += monto;
+                                    } else if (apuesta.estado === 'devuelta') {
+                                        if (esVerde) this.devuelto.verde += monto;
+                                        else this.devuelto.rojo += monto;
+                                        this.devuelto.total += monto;
+                                    }
+
+                                    // Para el resumen final: COBRADO, PAGADO, CAZADO 10%
+                                    if (apuesta.estado === 'perdida') {
+                                        this.resumenApuesta.cobrado += monto;
+                                    } else if (apuesta.estado === 'pagada') {
+                                        this.resumenApuesta.pagado += (monto * 0.9);
+                                        this.resumenApuesta.cazado10 += (monto * 0.1);
+                                    }
+                                });
+
+                                this.resumenApuesta.total = this.resumenApuesta.cobrado - this.resumenApuesta.pagado + this.resumenApuesta.cazado10;
+                                // --------------------------------------
 
                                 // 1.1 ADDITION: Calculate total for Red and Green (only active bets)
                                 let tempTotalRojo = 0;
@@ -332,8 +385,14 @@ export class FiltroComponent implements OnInit, OnDestroy {
                                     desglose.sort((a: any, b: any) => a.tieneDeMas - b.tieneDeMas);
 
                                     this.usuariosDesglose = desglose;
-                                    this.totalTieneDeMas = desglose.reduce((acc: number, u: any) => acc + (u.tieneDeMas > 0 ? u.tieneDeMas : 0), 0);
-                                    this.totalFalta = desglose.reduce((acc: number, u: any) => acc + (u.tieneDeMas < 0 ? u.tieneDeMas : 0), 0);
+
+                                    // Calculate the total of "tiene de mas" (which are represented as negative differences in deberiaTener logic)
+                                    // Sum all the negative tieneDeMas values, but display them as a positive total.
+                                    this.totalTieneDeMas = desglose.reduce((acc: number, u: any) => {
+                                        return acc + (u.tieneDeMas < 0 ? Math.abs(u.tieneDeMas) : 0);
+                                    }, 0);
+
+                                    this.totalFalta = desglose.reduce((acc: number, u: any) => acc + (u.tieneDeMas > 0 ? u.tieneDeMas : 0), 0);
                                 }
 
 
