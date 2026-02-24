@@ -320,13 +320,26 @@ export class FiltroComponent implements OnInit, OnDestroy {
                                             const misApuestas = todasLasApuestas.filter(a => (a.username === username || a.usuario === username));
                                             let gana = 0;
                                             let pierde = 0;
+                                            let aposto = 0;
+                                            let vaJugando = 0;
+                                            let enEspera = 0;
+                                            let devuelto = 0;
                                             misApuestas.forEach(a => {
                                                 const betAmount = Number(a.cantidadTotal || a.cantidad || a.monto || 0);
+                                                aposto += betAmount;
                                                 if (a.estado === 'pagada') {
                                                     gana += (betAmount * 0.9);
                                                 } else if (a.estado === 'cazada' || a.estado === 'perdida') {
                                                     // Consider losing bets and currently matched (but unsettled) bets as negative value for calculation
                                                     pierde += betAmount;
+                                                }
+
+                                                if (a.estado === 'cazada') {
+                                                    vaJugando += betAmount;
+                                                } else if (a.estado === 'en_espera') {
+                                                    enEspera += betAmount;
+                                                } else if (a.estado === 'devuelta') {
+                                                    devuelto += betAmount;
                                                 }
                                             });
 
@@ -377,7 +390,11 @@ export class FiltroComponent implements OnInit, OnDestroy {
                                                 restaMan,
                                                 tiene,
                                                 deberiaTener,
-                                                tieneDeMas
+                                                tieneDeMas,
+                                                aposto,
+                                                vaJugando,
+                                                enEspera,
+                                                devuelto
                                             };
                                         });
 

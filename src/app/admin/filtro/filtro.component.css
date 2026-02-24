@@ -566,6 +566,10 @@
     color: #6b15a1;
 }
 
+.bg-amarillo {
+    background-color: #ffeb3b !important;
+}
+
 .pill-value {
     background: linear-gradient(180deg, #0f5132, #003300);
     color: white;

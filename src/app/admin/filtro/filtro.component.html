@@ -318,6 +318,10 @@
                     <th>TIENE</th>
                     <th>DEBERIA TENER</th>
                     <th><span class="purple-outline">TIENE DE MAS</span></th>
+                    <th>APOSTÓ</th>
+                    <th>VA JUGANDO</th>
+                    <th>EN ESPERA</th>
+                    <th>DEVUELTO</th>
                 </tr>
             </thead>
             <tbody>
@@ -331,8 +335,14 @@
                     <td><b>{{ u.aumManual | currency:'':'$':'1.2-2' }}</b></td>
                     <td><b>{{ u.restaMan | currency:'':'$':'1.2-2' }}</b></td>
                     <td><b>{{ u.tiene | currency:'':'$':'1.2-2' }}</b></td>
-                    <td><b>{{ u.deberiaTener | currency:'':'$':'1.2-2' }}</b></td>
-                    <td><b>{{ u.tieneDeMas | currency:'':'$':'1.2-2' }}</b></td>
+                    <td><b>{{ u.deberiaTener
+                            | currency:'':'$':'1.2-2' }}</b></td>
+                    <td [ngClass]="{'bg-amarillo': u.tieneDeMas <= -0.01 || u.tieneDeMas >= 0.01}"><b>{{ u.tieneDeMas |
+                            currency:'':'$':'1.2-2' }}</b></td>
+                    <td><b>{{ u.aposto | currency:'':'$':'1.2-2' }}</b></td>
+                    <td><b>{{ u.vaJugando | currency:'':'$':'1.2-2' }}</b></td>
+                    <td><b>{{ u.enEspera | currency:'':'$':'1.2-2' }}</b></td>
+                    <td><b>{{ u.devuelto | currency:'':'$':'1.2-2' }}</b></td>
                 </tr>
             </tbody>
         </table>
