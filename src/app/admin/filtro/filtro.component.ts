@@ -307,97 +307,126 @@ export class FiltroComponent implements OnInit, OnDestroy {
 
                                 // NEW 3: Compute User Breakdown List
                                 if (this.snapshot && this.snapshot.usuarios && d.usuarios) {
-                                    const desglose = this.snapshot.usuarios
-                                        .filter((usu: any) => (usu.saldoInicial || 0) > 0)
-                                        .map((usu: any) => {
-                                            const username = usu.username;
-                                            const saldoInicial = usu.saldoInicial || 0;
+                                    const allUsernamesSet = new Set<string>();
 
-                                            // 1. Current balance (from liveData usuarios)
-                                            const foundLive = d.usuarios.find((u: any) => u.username === username);
-                                            const tiene = foundLive ? (foundLive.saldoActual || 0) : 0;
+                                    this.snapshot.usuarios.forEach((u: any) => { if (u.username) allUsernamesSet.add(u.username); });
+                                    if (Array.isArray(d.usuarios)) {
+                                        d.usuarios.forEach((u: any) => { if (u.username) allUsernamesSet.add(u.username); });
+                                    }
+                                    todasLasApuestas.forEach((a: any) => {
+                                        if (a.username) allUsernamesSet.add(a.username);
+                                        if (a.usuario) allUsernamesSet.add(a.usuario);
+                                    });
+                                    saldosRecords.forEach((r: any) => {
+                                        const recordDate = new Date(r.fecha);
+                                        if (recordDate >= startedAtDate) {
+                                            if (r.usuario) allUsernamesSet.add(r.usuario);
+                                            if (r.username) allUsernamesSet.add(r.username);
+                                        }
+                                    });
 
-                                            // 2. Apuestas
-                                            const misApuestas = todasLasApuestas.filter(a => (a.username === username || a.usuario === username));
-                                            let gana = 0;
-                                            let pierde = 0;
-                                            let aposto = 0;
-                                            let vaJugando = 0;
-                                            let enEspera = 0;
-                                            let devuelto = 0;
-                                            misApuestas.forEach(a => {
-                                                const betAmount = Number(a.cantidadTotal || a.cantidad || a.monto || 0);
-                                                aposto += betAmount;
-                                                if (a.estado === 'pagada') {
-                                                    gana += (betAmount * 0.9);
-                                                } else if (a.estado === 'cazada' || a.estado === 'perdida') {
-                                                    // Consider losing bets and currently matched (but unsettled) bets as negative value for calculation
-                                                    pierde += betAmount;
-                                                }
+                                    let desglose = Array.from(allUsernamesSet).map((username: string) => {
+                                        const usuSnapshot = this.snapshot.usuarios.find((u: any) => u.username === username);
+                                        const saldoInicial = usuSnapshot ? (usuSnapshot.saldoInicial || 0) : 0;
 
-                                                if (a.estado === 'cazada') {
-                                                    vaJugando += betAmount;
-                                                } else if (a.estado === 'en_espera') {
-                                                    enEspera += betAmount;
-                                                } else if (a.estado === 'devuelta') {
-                                                    devuelto += betAmount;
-                                                }
-                                            });
+                                        // 1. Current balance (from liveData usuarios)
+                                        const foundLive = d.usuarios.find((u: any) => u.username === username);
+                                        const tiene = foundLive ? (foundLive.saldoActual || 0) : 0;
 
-                                            // 3. Saldos manuales and Depositos
-                                            let depositos = 0;
-                                            let aumManual = 0;
-                                            let restaMan = 0;
+                                        // 2. Apuestas
+                                        const misApuestas = todasLasApuestas.filter(a => (a.username === username || a.usuario === username));
+                                        let gana = 0;
+                                        let pierde = 0;
+                                        let aposto = 0;
+                                        let vaJugando = 0;
+                                        let enEspera = 0;
+                                        let devuelto = 0;
+                                        misApuestas.forEach(a => {
+                                            const betAmount = Number(a.cantidadTotal || a.cantidad || a.monto || 0);
+                                            aposto += betAmount;
+                                            if (a.estado === 'pagada') {
+                                                gana += (betAmount * 0.9);
+                                            } else if (a.estado === 'cazada' || a.estado === 'perdida') {
+                                                // Consider losing bets and currently matched (but unsettled) bets as negative value for calculation
+                                                pierde += betAmount;
+                                            }
 
-                                            // Using the already fetched `saldosRecords` unfiltered list
-                                            const misSaldos = saldosRecords.filter(r => r.usuario === username || r.username === username);
-                                            misSaldos.forEach(r => {
-                                                const recordDate = new Date(r.fecha);
-                                                if (recordDate >= startedAtDate) {
-                                                    const amount = Number(r.saldo) || 0;
-                                                    if (r.tipo === 'recarga') {
-                                                        depositos += amount;
-                                                    } else if (r.tipo === 'restar_saldo') {
-                                                        restaMan += amount; // keep it positive here, subtract later
-                                                    } else if (r.tipo !== 'retiro_aprobado') { // add_saldo or general
-                                                        aumManual += amount;
-                                                    }
-                                                }
-                                            });
-
-                                            // 4. Retiros
-                                            let retirosSuma = 0;
-                                            const misRetiros = (retiros as any[]).filter(r => (r.username === username || r.usuario === username || r.usuario_enviar === username));
-                                            misRetiros.forEach(r => {
-                                                const fechaSol = new Date(r.fechaSolicitud);
-                                                if (fechaSol >= startedAtDate && (r.estado === 'aprobado' || r.estado === 'pendiente')) {
-                                                    const cant = typeof r.cantidad === 'string' ? Number(r.cantidad.replace(/[^0-9.]/g, '')) : Number(r.cantidad || 0);
-                                                    retirosSuma += isNaN(cant) ? 0 : cant;
-                                                }
-                                            });
-
-                                            // Math calculation
-                                            const deberiaTener = saldoInicial + gana + depositos + aumManual - pierde - retirosSuma - restaMan;
-                                            const tieneDeMas = tiene - deberiaTener;
-
-                                            return {
-                                                username,
-                                                saldoInicial,
-                                                gana,
-                                                pierde,
-                                                depositos,
-                                                retiros: retirosSuma,
-                                                aumManual,
-                                                restaMan,
-                                                tiene,
-                                                deberiaTener,
-                                                tieneDeMas,
-                                                aposto,
-                                                vaJugando,
-                                                enEspera,
-                                                devuelto
-                                            };
+                                            if (a.estado === 'cazada') {
+                                                vaJugando += betAmount;
+                                            } else if (a.estado === 'en_espera') {
+                                                enEspera += betAmount;
+                                            } else if (a.estado === 'devuelta') {
+                                                devuelto += betAmount;
+                                            }
                                         });
+
+                                        // 3. Saldos manuales and Depositos
+                                        let depositos = 0;
+                                        let aumManual = 0;
+                                        let restaMan = 0;
+
+                                        // Using the already fetched `saldosRecords` unfiltered list
+                                        const misSaldos = saldosRecords.filter(r => r.usuario === username || r.username === username);
+                                        misSaldos.forEach(r => {
+                                            const recordDate = new Date(r.fecha);
+                                            if (recordDate >= startedAtDate) {
+                                                const amount = Number(r.saldo) || 0;
+                                                if (r.tipo === 'recarga') {
+                                                    depositos += amount;
+                                                } else if (r.tipo === 'restar_saldo') {
+                                                    restaMan += amount; // keep it positive here, subtract later
+                                                } else if (r.tipo !== 'retiro_aprobado') { // add_saldo or general
+                                                    aumManual += amount;
+                                                }
+                                            }
+                                        });
+
+                                        // 4. Retiros
+                                        let retirosSuma = 0;
+                                        const misRetiros = (retiros as any[]).filter(r => (r.username === username || r.usuario === username || r.usuario_enviar === username));
+                                        misRetiros.forEach(r => {
+                                            const fechaSol = new Date(r.fechaSolicitud);
+                                            if (fechaSol >= startedAtDate && (r.estado === 'aprobado' || r.estado === 'pendiente')) {
+                                                const cant = typeof r.cantidad === 'string' ? Number(r.cantidad.replace(/[^0-9.]/g, '')) : Number(r.cantidad || 0);
+                                                retirosSuma += isNaN(cant) ? 0 : cant;
+                                            }
+                                        });
+
+                                        // Math calculation
+                                        const deberiaTener = saldoInicial + gana + depositos + aumManual - pierde - retirosSuma - restaMan;
+                                        const tieneDeMas = tiene - deberiaTener;
+
+                                        return {
+                                            username,
+                                            saldoInicial,
+                                            gana,
+                                            pierde,
+                                            depositos,
+                                            retiros: retirosSuma,
+                                            aumManual,
+                                            restaMan,
+                                            tiene,
+                                            deberiaTener,
+                                            tieneDeMas,
+                                            aposto,
+                                            vaJugando,
+                                            enEspera,
+                                            devuelto
+                                        };
+                                    });
+
+                                    // Filter out 0-value users
+                                    desglose = desglose.filter((u: any) =>
+                                        u.saldoInicial > 0 ||
+                                        u.tiene > 0 ||
+                                        u.deberiaTener !== 0 ||
+                                        u.tieneDeMas !== 0 ||
+                                        u.aposto > 0 ||
+                                        u.depositos > 0 ||
+                                        u.retiros > 0 ||
+                                        u.aumManual > 0 ||
+                                        u.restaMan > 0
+                                    );
 
                                     // Sort to put negative "tieneDeMas" at the top
                                     desglose.sort((a: any, b: any) => a.tieneDeMas - b.tieneDeMas);
