@@ -246,7 +246,8 @@ export class FiltroComponent implements OnInit, OnDestroy {
                                         const recordDate = new Date(r.fecha);
                                         return recordDate >= startedAtDate &&
                                             r.tipo !== 'recarga' &&
-                                            r.tipo !== 'restar_saldo';
+                                            r.tipo !== 'restar_saldo' &&
+                                            r.tipo !== 'retiro_aprobado';
                                     })
                                     .reduce((acc, r) => acc + (Number(r.saldo) || 0), 0);
 
@@ -358,7 +359,7 @@ export class FiltroComponent implements OnInit, OnDestroy {
                                                         depositos += amount;
                                                     } else if (r.tipo === 'restar_saldo') {
                                                         restaMan += amount; // keep it positive here, subtract later
-                                                    } else { // add_saldo or general
+                                                    } else if (r.tipo !== 'retiro_aprobado') { // add_saldo or general
                                                         aumManual += amount;
                                                     }
                                                 }
