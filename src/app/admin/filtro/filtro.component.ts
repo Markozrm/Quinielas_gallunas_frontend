@@ -343,7 +343,9 @@ export class FiltroComponent implements OnInit, OnDestroy {
                                         let devuelto = 0;
                                         misApuestas.forEach(a => {
                                             const betAmount = Number(a.cantidadTotal || a.cantidad || a.monto || 0);
-                                            aposto += betAmount;
+                                            const aRonda = Number(a.ronda) || 0;
+
+                                            // GLOBAL: Must count all rounds to keep "Deberia Tener" math accurate
                                             if (a.estado === 'pagada') {
                                                 gana += (betAmount * 0.9);
                                             } else if (a.estado === 'cazada' || a.estado === 'perdida') {
@@ -351,12 +353,17 @@ export class FiltroComponent implements OnInit, OnDestroy {
                                                 pierde += betAmount;
                                             }
 
-                                            if (a.estado === 'cazada') {
-                                                vaJugando += betAmount;
-                                            } else if (a.estado === 'en_espera') {
-                                                enEspera += betAmount;
-                                            } else if (a.estado === 'devuelta') {
-                                                devuelto += betAmount;
+                                            // DISPLAY: Only show stats for the current active round
+                                            if (aRonda === this.rondaActual) {
+                                                aposto += betAmount;
+
+                                                if (a.estado === 'cazada') {
+                                                    vaJugando += betAmount;
+                                                } else if (a.estado === 'en_espera') {
+                                                    enEspera += betAmount;
+                                                } else if (a.estado === 'devuelta') {
+                                                    devuelto += betAmount;
+                                                }
                                             }
                                         });
 
