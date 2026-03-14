@@ -239,7 +239,7 @@ export class FiltroComponent implements OnInit, OnDestroy {
                                 this.totalRojoLive = tempTotalRojo;
                                 this.totalVerdeLive = tempTotalVerde;
 
-                                // 2. FIX SALDO MANUAL: Matches HistorialSaldosService logic
+                                // 2. FIX SALDO MANUAL y RESTA MANUAL: recalcular desde saldosRecords del frontend
                                 const startedAtDate = new Date(d.startedAt);
                                 const saldoManualReal = saldosRecords
                                     .filter(r => {
@@ -251,9 +251,19 @@ export class FiltroComponent implements OnInit, OnDestroy {
                                     })
                                     .reduce((acc, r) => acc + (Number(r.saldo) || 0), 0);
 
+                                // FIX RESTA MANUAL: calcular desde saldosRecords igual que saldoManual
+                                const restaManualReal = saldosRecords
+                                    .filter(r => {
+                                        const recordDate = new Date(r.fecha);
+                                        return recordDate >= startedAtDate &&
+                                            r.tipo === 'restar_saldo';
+                                    })
+                                    .reduce((acc, r) => acc + (Number(r.saldo) || 0), 0);
+
                                 // Overwrite with DISPLAY value (10%)
                                 d.cazado = cazadoDisplay;
                                 d.saldoManual = saldoManualReal;
+                                d.restaManual = restaManualReal;
 
                                 // 3. FIX RETIROS (Second Circle Only): Calculate pending withdrawals
                                 const retirosPendientes = (retiros as any[]).filter(r => r.estado === 'pendiente');
@@ -274,7 +284,7 @@ export class FiltroComponent implements OnInit, OnDestroy {
 
                                 /* TOTAL CALCULATION (Use 10%, i.e., Displayed Value) */
                                 // USER REQUEST: Third Circle (Live) full calculation
-                                const totalLive = d.saldoGlobal + d.retiros + d.depositos + d.saldoManual - d.restaManual - cazadoForCalc;
+                                const totalLive = d.saldoGlobal + d.depositos + d.saldoManual - d.restaManual - cazadoForCalc;
                                 this.liveData = { ...d, total: totalLive };
 
                                 if (this.snapshot) {
