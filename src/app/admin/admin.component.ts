@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http'; // AGREGAR ESTE IMPORT
 import { environment } from '../../environments/environment'; // AGREGAR ESTE IMPORT
 import { CorteDiarioService } from '../services/corte-diario.service';
 import { firstValueFrom } from 'rxjs';
+import { NotificacionGlobalService } from '../chat/notification.service';
 
 
 @Component({
@@ -26,7 +27,8 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
     private route: ActivatedRoute,
     private quinielaService: QuinielaService,
     private http: HttpClient, // AGREGAR ESTE PARÁMETRO
-    private corteDiarioService: CorteDiarioService // <--- NUEVO  
+    private corteDiarioService: CorteDiarioService, // <--- NUEVO  
+    private notificacionGlobalService: NotificacionGlobalService
   ) { }
   irChats() {
     this.router.navigate([`/Panel`]);
