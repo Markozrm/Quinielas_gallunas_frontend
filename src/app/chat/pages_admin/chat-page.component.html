@@ -1,191 +1,447 @@
-<div class="main">
-  <div class="menuContainer">
-    <!--<app-menu></app-menu>-->
-    <div>
-      <button class="btn-wrap" (click)="inicio()">
-        <img class="btn-submitLeft" src="../../../assets/image/atras.png" alt="Logo">
-      </button>
-    </div>
+<!-- ══════════════════════════════════════════
+     NAVBAR
+══════════════════════════════════════════ -->
+<div class="navbar">
+  <button class="nav-link" (click)="inicio()">INICIO</button>
+  <span class="nav-title">QUINIELAS GALLISTICAS</span>
+  <button class="nav-link derecha" (click)="irMiPerfil()">
+    <img [src]="userPhoto" alt="Mi Perfil">
+    MI PERFIL
+  </button>
+</div>
 
-    <div>
-      <button class="btn-wrap" (click)="irMiPerfil()">
-        <img class="btn-submit" src="{{userPhoto}}" alt="Foto de perfil">
-      </button>
-    </div>
+<!-- ══════════════════════════════════════════
+     LAYOUT PRINCIPAL
+══════════════════════════════════════════ -->
+<div class="main-layout">
 
+  <!-- ────────────────────────────────────────
+       COLUMNA IZQUIERDA
+  ────────────────────────────────────────── -->
+  <div class="col-left">
 
-    <div class="videoContainer">
+    <!-- Video -->
+    <div class="video-wrapper">
       <app-video-player></app-video-player>
     </div>
 
-    <!-- Botón flotante arrastrable para abrir el chat modal -->
-    <div class="chat-button-container" [style.left.px]="buttonPosition.x" [style.top.px]="buttonPosition.y"
-      (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp()"
-      (touchstart)="onTouchStart($event)" (touchmove)="onTouchMove($event)" (touchend)="onTouchEnd()">
-      <button class="chat-button" (click)="openChatModal()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
-        </svg>
-        <span>Chat</span>
-      </button>
-    </div>
+    <!-- ── Stats Bar ── -->
+    <div class="stats-bar">
 
-    <div *ngIf="esAdmin()" class="admin-buttons-container">
-      <!-- Botón de usuarios conectados - siempre visible -->
-      <button class="admin-btn users-btn" (click)="openPopup()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="user-icon">
-          <path
-            d="M7.5 6.5C7.5 8.981 9.519 11 12 11s4.5-2.019 4.5-4.5S14.481 2 12 2 7.5 4.019 7.5 6.5zM20 21h1v-1c0-3.859-3.141-7-7-7h-4c-3.86 0-7 3.141-7 7v1h17z">
-          </path>
+      <!-- ABRIR APUESTA (solo cuando corresponde) -->
+      <button *ngIf="esAdmin() && !estadoApuesta && textButton === 'Abrir Apuestas'"
+              class="btn-abrir" (click)="toggleBooleanState()">
+        ABRIR APUESTA
+      </button>
+
+      <!--
+        USUARIOS CONECTADOS (socket en tiempo real)
+        Usa connectedUsers del servicio de socket
+      -->
+      <button *ngIf="esAdmin()" class="stat-btn" (click)="openPopup()" title="Usuarios conectados ahora">
+        <!-- Ícono persona individual -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+          <path d="M7.5 6.5C7.5 8.981 9.519 11 12 11s4.5-2.019 4.5-4.5S14.481 2 12 2 7.5 4.019 7.5 6.5zM20 21h1v-1c0-3.859-3.141-7-7-7h-4c-3.86 0-7 3.141-7 7v1h17z"/>
         </svg>
         <span>{{ connectedUsers }}</span>
       </button>
 
-      <!-- Contenedor de botones de control de apuestas 
-    <div class="betting-control-buttons">
-      <div class="admin-bet-box red">
-        <div class="admin-bet-title">{{ redTeamName || 'Rojo' }}</div>
-        <div class="admin-bet-amount">{{ cantidadApostadaRojo }}$</div>
-        <div class="admin-bet-points">PTS: {{ redPoints }}</div>
+      <!--
+        USUARIOS REGISTRADOS TOTALES
+        Necesitas agregar en el TS:
+          public totalUsuariosRegistrados: number = 0;
+        y en ngOnInit:
+          this.usersService.getTotalUsers().subscribe(total => this.totalUsuariosRegistrados = total);
+        (o el método equivalente que uses en usersService para contar usuarios)
+      -->
+      <div class="stat-item" title="Usuarios registrados en la plataforma">
+        <!-- Ícono grupo de personas -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+          <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+        </svg>
+        <span>{{ totalUsuariosRegistrados }}</span>
       </div>
--->
-      <!-- Botón principal para abrir/cerrar apuestas cuando corresponda -->
-      <button *ngIf="estadoApuesta" class="admin-btn close-bets-btn" (click)="toggleBooleanState()">
+
+      <!--
+        NÚMERO DE PELEA ACTUAL
+        Usa numeroPelea del TS
+      -->
+      <div class="stat-item" title="Número de pelea actual">
+        <!-- Ícono documento/lista -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+          <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 7V3.5L18.5 9H13z"/>
+        </svg>
+        <span>{{ numeroPelea }}</span>
+      </div>
+
+    </div><!-- /stats-bar -->
+
+    <!-- ── Balance Box: Debería de Haber | Hay Actualmente | Dio de Más ──
+         Los valores reales deben venir de tu servicio.
+         Agrega en el TS:
+           public deberiaDeHaber: number = 0;
+           public hayActualmente: number = 0;
+         y suscríbete a usersService.getBalanceStream() o equivalente.
+         "Dio de Más" = deberiaDeHaber - hayActualmente
+    -->
+    <div *ngIf="esAdmin()" class="balance-box">
+      <div class="balance-item">
+        <span class="balance-label">DEBERIA DE HABER</span>
+        <span class="balance-value rojo">${{ deberiaDeHaber | number:'1.2-2' }}</span>
+      </div>
+      <span class="balance-sep">-</span>
+      <div class="balance-item">
+        <span class="balance-label">HAY ACTUALMENTE</span>
+        <span class="balance-value azul">${{ hayActualmente | number:'1.2-2' }}</span>
+      </div>
+      <span class="balance-sep igual">=</span>
+      <div class="balance-item">
+        <span class="balance-label">DIO DE MAS</span>
+        <span class="balance-value oro">${{ (deberiaDeHaber - hayActualmente) | number:'1.2-2' }}</span>
+      </div>
+    </div>
+
+    <!-- ── Saldo Inicio / Saldo en Vivo ──
+         Agrega en el TS:
+           public saldoInicio: number = 0;
+           public saldoEnVivo: number = 0;
+         y suscríbete al servicio correspondiente.
+    -->
+    <div *ngIf="esAdmin()" class="saldo-box">
+      <div class="saldo-item">
+        <span class="saldo-label">SALDO DE INICIO</span>
+        <span class="saldo-value verde">${{ saldoInicio | number:'1.2-2' }}</span>
+      </div>
+      <span class="saldo-sep">-</span>
+      <div class="saldo-item">
+        <span class="saldo-label">SALDO EN VIVO</span>
+        <span class="saldo-value rojo">${{ saldoEnVivo | number:'1.2-2' }}</span>
+      </div>
+    </div>
+
+    <!-- ══ DEPÓSITOS PENDIENTES ══
+         Los depósitos reales vienen de tu servicio backend.
+         Agrega en el TS:
+           public depositosPendientes: any[] = [];
+           public totalDepositosPendientes: number = 0;
+         y en ngOnInit:
+           this.usersService.getDepositosPendientes().subscribe(data => {
+             this.depositosPendientes = data.depositos;
+             this.totalDepositosPendientes = data.total;
+           });
+         El botón "VER TODOS" navega a /ver-depositos (tu página existente).
+    -->
+    <div *ngIf="esAdmin()" class="pending-block">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div class="pending-title">
+          Depositos Pendientes: ${{ totalDepositosPendientes | number:'1.2-2' }}
+        </div>
+        <button class="btn-ver-todos" (click)="irVerDepositos()">VER TODOS →</button>
+      </div>
+
+      <div class="pending-table-card">
+        <div class="pending-header-row">
+          <span>FECHA</span>
+          <span>HORA</span>
+          <span>USUARIO</span>
+          <span>CANTIDAD</span>
+          <span></span>
+        </div>
+        <!-- Máximo 2 depósitos recientes visibles; el resto en /ver-depositos -->
+<ng-container *ngIf="(depositosPendientes?.length || 0) > 0; else sinDepositos">          <div class="pending-data-row"
+               *ngFor="let dep of depositosPendientes | slice:0:2">
+            <span>{{ dep.fecha | date:'dd/MM/yy' }}</span>
+            <span>{{ dep.hora }}</span>
+            <span>{{ dep.usuario }}</span>
+            <span>${{ dep.cantidad | number:'1.0-0' }}</span>
+            <button class="btn-ver-recibo" (click)="verReciboDeposito(dep)">VER RECIBO</button>
+          </div>
+        </ng-container>
+        <ng-template #sinDepositos>
+          <div class="pending-data-row" style="color:#aaa; font-style:italic; grid-template-columns:1fr;">
+            <span>Sin depósitos pendientes</span>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- ══ RETIROS PENDIENTES ══
+         Igual que depósitos, datos reales del servicio.
+         Agrega en el TS:
+           public retirosPendientes: any[] = [];
+           public totalRetirosPendientes: number = 0;
+         y en ngOnInit:
+           this.usersService.getRetirosPendientes().subscribe(data => {
+             this.retirosPendientes = data.retiros;
+             this.totalRetirosPendientes = data.total;
+           });
+         El botón "VER TODOS" navega a /ver-retiros (tu página existente).
+    -->
+    <div *ngIf="esAdmin()" class="pending-block">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div class="pending-title">
+          Retiros Pendientes: ${{ totalRetirosPendientes | number:'1.2-2' }}
+        </div>
+        <button class="btn-ver-todos" (click)="irVerRetiros()">VER TODOS →</button>
+      </div>
+
+      <div class="pending-table-card">
+        <div class="pending-header-row">
+          <span>FECHA</span>
+          <span>HORA</span>
+          <span>USUARIO</span>
+          <span>CANTIDAD</span>
+          <span></span>
+        </div>
+<ng-container *ngIf="(retirosPendientes?.length || 0) > 0; else sinRetiros">          <div class="pending-data-row"
+               *ngFor="let ret of retirosPendientes | slice:0:2">
+            <span>{{ ret.fecha | date:'dd/MM/yy' }}</span>
+            <span>{{ ret.hora }}</span>
+            <span>{{ ret.usuario }}</span>
+            <span>${{ ret.cantidad | number:'1.0-0' }}</span>
+            <button class="btn-ver-recibo" (click)="verReciboRetiro(ret)">VER RECIBO</button>
+          </div>
+        </ng-container>
+        <ng-template #sinRetiros>
+          <div class="pending-data-row" style="color:#aaa; font-style:italic; grid-template-columns:1fr;">
+            <span>Sin retiros pendientes</span>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- ── Botones de control admin ── -->
+    <div *ngIf="esAdmin()" class="admin-controls">
+
+      <button *ngIf="estadoApuesta"
+              class="admin-btn btn-cerrar" (click)="toggleBooleanState()">
         Cerrar Apuestas
       </button>
 
-      <button *ngIf="!estadoApuesta && textButton === 'Abrir Apuestas'" class="admin-btn open-bets-btn"
-        (click)="toggleBooleanState()">
+      <button *ngIf="!estadoApuesta && textButton === 'Abrir Apuestas'"
+              class="admin-btn btn-abrir-ap" (click)="toggleBooleanState()">
         Abrir Apuestas
       </button>
 
-      <!-- Cuando las apuestas están cerradas y hay que seleccionar ganador -->
-      <button *ngIf="!estadoApuesta && textButton === 'Escoger Ganador'" class="admin-btn select-winner-btn"
-        (click)="toggleBooleanState()">
-        Escoger Ganador ronda {{ this.numeroPelea }}
+      <button *ngIf="!estadoApuesta && textButton === 'Escoger Ganador'"
+              class="admin-btn btn-ganador" (click)="toggleBooleanState()">
+        Escoger Ganador Ronda {{ numeroPelea }}
       </button>
 
-      <!-- Botón para abrir una nueva ronda sin seleccionar ganador (solo aparece cuando está cerrada la ronda) -->
-      <button *ngIf="!estadoApuesta && textButton === 'Escoger Ganador'" class="admin-btn new-round-btn"
-        (click)="abrirNuevaRonda()">
+      <button *ngIf="!estadoApuesta && textButton === 'Escoger Ganador'"
+              class="admin-btn btn-nueva" (click)="abrirNuevaRonda()">
         Abrir Nueva Ronda
       </button>
 
-      <div class="top-row">
-        <div class="admin-bet-box red">
-          <div class="admin-bet-title">{{ redTeamName || 'Rojo' }}</div>
-          <div class="admin-bet-amount">{{ cantidadApostadaRojo }}$</div>
-          <div class="admin-bet-points">PTS: {{ redPoints }}</div>
-        </div>
+      <button class="chat-button" (click)="openChatModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+        </svg>
+        Chat
+      </button>
 
-        <div class="admin-bet-box green">
-          <div class="admin-bet-title">{{ greenTeamName || 'Verde' }}</div>
-          <div class="admin-bet-amount">{{ cantidadApostadaVerde }}$</div>
-          <div class="admin-bet-points">PTS: {{ greenPoints }}</div>
-        </div>
-      </div>
-      <!-- 
-      <div class="admin-bet-box green">
-        <div class="admin-bet-title">{{ greenTeamName || 'Verde' }}</div>
-        <div class="admin-bet-amount">{{ cantidadApostadaVerde }}$</div>
-        <div class="admin-bet-points">PTS: {{ greenPoints }}</div>
-      </div>
-    </div>-->
-
-      <!-- Sección para rondas en espera -->
-      <div *ngIf="rondasEnEspera.length > 0" class="rondas-espera">
-        <h4>Rondas pendientes de ganador:</h4>
-        <div class="rondas-list">
-          <button *ngFor="let ronda of rondasEnEspera" class="ronda-espera-btn" (click)="seleccionarRonda(ronda)">
-            Ronda {{ronda}}
-          </button>
-        </div>
-      </div>
-
-      <!-- INSERTADO: tabla de puntos justo debajo del bloque de botones y centrada -->
-      <div class="tabla-puntos-admin-wrapper">
-        <app-tabla-puntos [isSuperUser]="true"></app-tabla-puntos>
-      </div>
-
-      <!-- Botón Finalizar Stream (Ubicado al final de la sección admin) -->
-      <div class="finalize-container" style="margin-top: 20px; text-align: center;">
-        <button class="btn-finalize-red" (click)="confirmarFinalizar()">FINALIZAR STREAM</button>
-      </div>
+      <button class="admin-btn btn-finalizar" (click)="confirmarFinalizar()">
+        FINALIZAR STREAM
+      </button>
 
     </div>
-    <!-- Modales -->
-    <app-open-bet-modal *ngIf="isOpenBetModalOpen" (onOpenBets)="handleOpenBets($event)"
-      (onClose)="closeOpenBetModal()"></app-open-bet-modal>
-    <app-close-bet-modal *ngIf="isCloseBetModalOpen" [numeroPelea]="this.numeroPelea" (onCloseBets)="handleCloseBets()"
-      (onClose)="closeCloseBetModal()"></app-close-bet-modal>
-    <app-choose-winner-modal *ngIf="isChooseModalOpen" [numeroPelea]="this.rondaSeleccionada"
-      (onCloseBets)="handleChooseWinner($event)" (onClose)="closeChooseModal()"></app-choose-winner-modal>
-    <!-- Sección de apuestas -->
-    <div class="apuesta-container">
-      <div *ngIf="esInvitado()">
-        <input #cantidadApuesta type="number" placeholder="Ingresar cantidad" />
-        <div class="match-info">
-          <button class="team-red" [class.selected]="selectedTeam === 'rojo'" (click)="selectTeam('rojo')">
-            <p>Voy Rojo</p>
-          </button>
-          <button class="team-green" [class.selected]="selectedTeam === 'verde'" (click)="selectTeam('verde')">
-            <p>Voy Verde</p>
-          </button>
-        </div>
 
-        <button (click)="apostar(cantidadApuesta.value)" class="boton-apostar">
-          <p>Apostar</p>
+    <!-- Rondas en espera -->
+    <div *ngIf="esAdmin() && rondasEnEspera.length > 0" class="rondas-espera">
+      <h4>Rondas pendientes de ganador:</h4>
+      <div class="rondas-list">
+        <button *ngFor="let ronda of rondasEnEspera"
+                class="ronda-espera-btn" (click)="seleccionarRonda(ronda)">
+          Ronda {{ ronda }}
         </button>
       </div>
-
-      <div class="apuestas-en-vivo">
-        <h3>Tabla de apuestas</h3>
-        <!-- Solo el color tiene clase, el estado NO -->
-        <ul>
-          <li *ngFor="let chat of chat$ | async" class="chat-message">
-            <span>{{ chat.user.name }}</span>
-            <span>{{ chat.cantidad }}</span>
-            <span [ngClass]="esVerde(chat.verde) ? 'verde-text' : 'rojo-text'">
-              {{ esVerde(chat.verde) ? 'VERDE' : 'ROJO' }}
-            </span>
-            <span class="estado-jugando"
-              [ngClass]="(chat.estado === 'cazada' || chat.estado === 'devuelta' || chat.estado === 'pagada') ? 'blanco-texto' : ''">
-              {{chat.estado}}
-            </span>
-            <span>Ronda: {{chat.ronda}}</span>
-          </li>
-        </ul>
-      </div>
     </div>
 
-    <!-- Pop-up -->
-    <div *ngIf="isPopupOpen" class="popup-overlay">
-      <div class="popup">
-        <button class="close-button" (click)="closePopup()">&#10005;</button>
-        <div class="popup-content">
-          <h3>Usuarios Conectados</h3>
-          <div class="user-list">
-            <div *ngFor="let user of users" class="user-item">
-              <img [src]="getUserPhoto(user.name)" alt="User Photo" class="user-photo">
-              <p>{{ user.name }}</p>
-            </div>
+    <!-- Tabla de puntos -->
+    <div *ngIf="esAdmin()" class="tabla-puntos-admin-wrapper">
+      <app-tabla-puntos [isSuperUser]="true"></app-tabla-puntos>
+    </div>
+
+    <!-- ── Apuesta para invitados ── -->
+    <div *ngIf="esInvitado()" class="apuesta-invitado">
+      <input #cantidadApuesta type="number" placeholder="Ingresar cantidad" />
+      <div class="equipos-row">
+        <button class="btn-equipo rojo"
+                [class.selected]="selectedTeam === 'rojo'"
+                (click)="selectTeam('rojo')">Voy Rojo</button>
+        <button class="btn-equipo verde"
+                [class.selected]="selectedTeam === 'verde'"
+                (click)="selectTeam('verde')">Voy Verde</button>
+      </div>
+      <button class="btn-apostar" (click)="apostar(cantidadApuesta.value)">APOSTAR</button>
+    </div>
+
+  </div><!-- /col-left -->
+
+
+  <!-- ────────────────────────────────────────
+       COLUMNA DERECHA — TABLERO
+  ────────────────────────────────────────── -->
+  <div class="col-right">
+
+    <!-- Header Pelea -->
+    <div class="pelea-header">
+      <div class="pelea-titulo">PELEA {{ numeroPelea }}</div>
+    </div>
+
+    <!-- Labels Partido -->
+    <div class="partido-labels">
+      <span class="partido-label">PARTIDO ROJO</span>
+      <span></span>
+      <span class="partido-label">PARTIDO VERDE</span>
+    </div>
+
+    <!-- Fila VS con amounts -->
+    <div class="vs-row">
+      <span class="pts-num">{{ redPoints }}</span>
+      <div class="partido-pill rojo">${{ cantidadApostadaRojo | number:'1.2-2' }}</div>
+      <span class="vs-label">VS</span>
+      <div class="partido-pill verde">${{ cantidadApostadaVerde | number:'1.2-2' }}</div>
+      <span class="pts-num">{{ greenPoints }}</span>
+    </div>
+
+    <!-- ══ TABLA APOSTADORES (dos lados) ══
+         chat$ ya viene procesado (agrupado por usuario+ronda+estado) del TS.
+         Separamos rojo (izquierda) y verde (derecha) con el separador.
+         Los estados "cazada"/"devuelta"/"pagada" se usan para estilos.
+    -->
+    <div class="apuestas-tabla-wrap">
+
+      <!-- LADO ROJO -->
+      <div class="apuestas-lado rojo-lado">
+        <ng-container *ngFor="let bet of chat$ | async">
+          <div *ngIf="!esVerde(bet.verde)"
+               class="apuesta-fila"
+               [class.fila-tachado]="bet.estado === 'devuelta' || bet.estado === 'pagada'"
+               [class.fila-highlight]="bet.estado === 'cazada'">
+            <span class="fila-monto-izq">{{ bet.cantidad }}</span>
+            <span class="fila-nombre">{{ bet.user.name }}</span>
+            <span class="fila-monto-der">{{ bet.cantidad }}</span>
           </div>
+        </ng-container>
+
+        <!-- Total rojo -->
+        <div class="fila-total">
+          <span class="total-word">Total</span>
+          <span class="total-num">{{ cantidadApostadaRojo }}</span>
         </div>
       </div>
-    </div>
 
-    <!-- Modal Finalizar Stream -->
-    <div class="modal-overlay" *ngIf="mostrarModalFinalizar" style="z-index: 9999;">
-      <div class="modal-content-finalize">
-        <h3>¿Estás seguro de finalizar el stream?</h3>
-        <p>Se guardará el saldo actual como saldo final.</p>
-        <div class="modal-actions-finalize">
-          <button class="btn-cancel-finalize" (click)="cancelarFinalizar()">Cancelar</button>
-          <button class="btn-confirm-finalize" (click)="finalizarStream()">Aceptar</button>
+      <!-- Separador vertical -->
+      <div class="separador-centro"></div>
+
+      <!-- LADO VERDE -->
+      <div class="apuestas-lado verde-lado">
+        <ng-container *ngFor="let bet of chat$ | async">
+          <div *ngIf="esVerde(bet.verde)"
+               class="apuesta-fila"
+               [class.fila-tachado]="bet.estado === 'devuelta' || bet.estado === 'pagada'"
+               [class.fila-highlight]="bet.estado === 'cazada'">
+            <span class="fila-monto-izq">{{ bet.cantidad }}</span>
+            <span class="fila-nombre">{{ bet.user.name }}</span>
+            <span class="fila-monto-der">{{ bet.cantidad }}</span>
+          </div>
+        </ng-container>
+
+        <!-- Total verde -->
+        <div class="fila-total">
+          <span class="total-num">{{ cantidadApostadaVerde }}</span>
+          <span class="total-word">Total</span>
         </div>
       </div>
+
+    </div><!-- /apuestas-tabla-wrap -->
+
+    <!-- ══ FOOTER: APOSTARON / CAZADO / NO CAZADO ══
+
+         APOSTADO  = cantidadApostadaRojo + cantidadApostadaVerde
+                     (todo lo que se apostó en ambos bandos)
+
+         CAZADO    = suma de apuestas con estado === 'cazada'
+                     Se calcula en el TS con:
+                       public montoCazadoRojo: number = 0;
+                       public montoCazadoVerde: number = 0;
+                     Suscríbete a chat$ y filtra estado === 'cazada':
+                       this.apuestaService.chat$.subscribe(bets => {
+                         this.montoCazadoRojo  = bets.filter(b => !b.verde && b.estado === 'cazada').reduce((s,b) => s+b.cantidad, 0);
+                         this.montoCazadoVerde = bets.filter(b => b.verde  && b.estado === 'cazada').reduce((s,b) => s+b.cantidad, 0);
+                       });
+
+         NO CAZADO = apostado − cazado (por bando)
+                       public montoNoCazadoRojo  = cantidadApostadaRojo  - montoCazadoRojo;
+                       public montoNoCazadoVerde = cantidadApostadaVerde - montoCazadoVerde;
+    -->
+    <div class="apuestas-footer">
+
+      <span class="footer-label">APOSTARON</span>
+      <span class="footer-val rojo-text">${{ cantidadApostadaRojo | number:'1.2-2' }}</span>
+      <span class="footer-val verde-text">${{ cantidadApostadaVerde | number:'1.2-2' }}</span>
+
+      <span class="footer-label">CAZADO</span>
+      <span class="footer-val rojo-text">${{ montoCazadoRojo | number:'1.2-2' }}</span>
+      <span class="footer-val verde-text">${{ montoCazadoVerde | number:'1.2-2' }}</span>
+
+      <span class="footer-label">NO CAZADO</span>
+      <span class="footer-val rojo-text">${{ (cantidadApostadaRojo - montoCazadoRojo) | number:'1.2-2' }}</span>
+      <span class="footer-val verde-text">${{ (cantidadApostadaVerde - montoCazadoVerde) | number:'1.2-2' }}</span>
+
     </div>
 
-    <!-- Modal del chat -->
-    <app-chat-modal *ngIf="isChatModalOpen" (closeModal)="closeChatModal()"></app-chat-modal>
+  </div><!-- /col-right -->
+
+</div><!-- /main-layout -->
+
+
+<!-- ══════════════════════════════════════════
+     MODALES
+══════════════════════════════════════════ -->
+<app-open-bet-modal *ngIf="isOpenBetModalOpen"
+  (onOpenBets)="handleOpenBets($event)"
+  (onClose)="closeOpenBetModal()">
+</app-open-bet-modal>
+
+<app-close-bet-modal *ngIf="isCloseBetModalOpen"
+  [numeroPelea]="numeroPelea"
+  (onCloseBets)="handleCloseBets()"
+  (onClose)="closeCloseBetModal()">
+</app-close-bet-modal>
+
+<app-choose-winner-modal *ngIf="isChooseModalOpen"
+  [numeroPelea]="rondaSeleccionada"
+  (onCloseBets)="handleChooseWinner($event)"
+  (onClose)="closeChooseModal()">
+</app-choose-winner-modal>
+
+<!-- Popup usuarios conectados -->
+<div *ngIf="isPopupOpen" class="popup-overlay">
+  <div class="popup">
+    <button class="close-button" (click)="closePopup()">&#10005;</button>
+    <h3>Usuarios Conectados</h3>
+    <div class="user-list">
+      <div *ngFor="let user of users" class="user-item">
+        <img [src]="getUserPhoto(user.name)" alt="User Photo" class="user-photo">
+        <p>{{ user.name }}</p>
+      </div>
+    </div>
   </div>
+</div>
+
+<!-- Modal finalizar stream -->
+<div class="modal-overlay" *ngIf="mostrarModalFinalizar" style="z-index: 9999;">
+  <div class="modal-content-finalize">
+    <h3>¿Finalizar el Stream?</h3>
+    <p>Se guardará el saldo actual como saldo final.</p>
+    <div class="modal-actions-finalize">
+      <button class="btn-cancel-finalize" (click)="cancelarFinalizar()">Cancelar</button>
+      <button class="btn-confirm-finalize" (click)="finalizarStream()">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal chat -->
+<app-chat-modal *ngIf="isChatModalOpen" (closeModal)="closeChatModal()"></app-chat-modal>

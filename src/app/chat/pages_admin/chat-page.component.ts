@@ -21,6 +21,8 @@ import { ChatModalComponent } from '../components/chat-modal/chat-modal.componen
 import { NotificacionGlobalService } from '../notification.service';
 import { TablaPuntosComponent } from 'src/app/tabla-puntos/tabla-puntos.component';
 import { map } from 'rxjs/operators'; // Ya lo tienes
+import { RecipesService } from 'src/app/services/recipes.service';
+import { RetirosService } from 'src/app/services/retiros.service';
 @Component({
   selector: 'app-chat-page',
   templateUrl: './chat-page.component.html',
@@ -56,6 +58,29 @@ export class ChatAdminPageComponent implements OnInit, OnDestroy {
   public greenTeamName: string = '';
   public redPoints: number = 0;
   public greenPoints: number = 0;
+  // Usuarios
+public totalUsuariosRegistrados: number = 0;
+ 
+// Balance (Debería de Haber / Hay Actualmente)
+public deberiaDeHaber: number = 0;
+public hayActualmente: number = 0;
+ 
+// Saldo Inicio / En Vivo
+public saldoInicio: number = 0;
+public saldoEnVivo: number = 0;
+ 
+// Depósitos pendientes
+public depositosPendientes: any[] = [];
+public totalDepositosPendientes: number = 0;
+ 
+// Retiros pendientes
+public retirosPendientes: any[] = [];
+public totalRetirosPendientes: number = 0;
+ 
+// Montos cazados (calculados desde chat$)
+public montoCazadoRojo: number = 0;
+public montoCazadoVerde: number = 0;
+ 
   // Notificaciones
   notificaciones: any[] = [];
   mostrarNotificaciones: boolean = false;
@@ -67,7 +92,9 @@ export class ChatAdminPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute, private router: Router,
     private apuestaService: apuestaService,
     private chatService: ChatService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private recipesService: RecipesService,
+    private retirosService: RetirosService,
   ) {
     this.route.params.subscribe(params => {
       this.salaActual = params['sala'];
@@ -323,6 +350,35 @@ export class ChatAdminPageComponent implements OnInit, OnDestroy {
     document.addEventListener('mouseup', () => this.onMouseUp());
     document.addEventListener('touchend', () => this.onTouchEnd());
 
+    // ══════════════════════════════════════════════════════════════════
+    // NUEVAS SUSCRIPCIONES (AGREGADAS)
+    // ══════════════════════════════════════════════════════════════════
+
+  this.recipesService.getAll().subscribe((data: any) => {
+  this.depositosPendientes = data ?? [];
+
+  this.totalDepositosPendientes = this.depositosPendientes
+    .filter((d: any) => d.estado === 'pendiente')
+    .reduce((s: number, d: any) => s + (d.monto ?? 0), 0);
+});
+this.recipesService.getAll().subscribe((data: any) => {
+  this.depositosPendientes = data ?? [];
+
+  this.totalDepositosPendientes = this.depositosPendientes
+    .filter((d: any) => d.estado === 'pendiente')
+    .reduce((s: number, d: any) => s + (d.monto ?? 0), 0);
+});
+
+    this.apuestaService.chat$.subscribe((bets: any[]) => {
+      this.montoCazadoRojo = bets
+        .filter(b => !b.verde && b.estado === 'cazada')
+        .reduce((sum, b) => sum + (b.cantidad ?? 0), 0);
+
+      this.montoCazadoVerde = bets
+        .filter(b => !!b.verde && b.estado === 'cazada')
+        .reduce((sum, b) => sum + (b.cantidad ?? 0), 0);
+    });
+
     this.route.params.subscribe(params => {
       this.salaActual = params['sala'];
       this.portActual = params['port'];
@@ -570,6 +626,26 @@ export class ChatAdminPageComponent implements OnInit, OnDestroy {
 
   cancelarFinalizar() {
     this.mostrarModalFinalizar = false;
+  }
+
+  irVerDepositos(): void {
+    this.router.navigate(['/ver-recipes']);
+  }
+
+  irVerRetiros(): void {
+    this.router.navigate(['/ver-retiros']);
+  }
+
+  verReciboDeposito(dep: any): void {
+    if (dep?.reciboUrl) {
+      window.open(dep.reciboUrl, '_blank');
+    }
+  }
+
+  verReciboRetiro(ret: any): void {
+    if (ret?.reciboUrl) {
+      window.open(ret.reciboUrl, '_blank');
+    }
   }
 
   finalizarStream() {
