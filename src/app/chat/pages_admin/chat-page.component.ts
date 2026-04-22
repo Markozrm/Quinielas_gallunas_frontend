@@ -629,7 +629,7 @@ this.recipesService.getAll().subscribe((data: any) => {
   }
 
   irVerDepositos(): void {
-    this.router.navigate(['/ver-recipes']);
+    this.router.navigate(['/Ver-recibos']);
   }
 
   irVerRetiros(): void {

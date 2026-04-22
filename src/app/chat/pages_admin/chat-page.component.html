@@ -27,232 +27,158 @@
 
     <!-- ── Stats Bar ── -->
     <div class="stats-bar">
-
-      <!-- ABRIR APUESTA (solo cuando corresponde) -->
       <button *ngIf="esAdmin() && !estadoApuesta && textButton === 'Abrir Apuestas'"
               class="btn-abrir" (click)="toggleBooleanState()">
         ABRIR APUESTA
       </button>
-
-      <!--
-        USUARIOS CONECTADOS (socket en tiempo real)
-        Usa connectedUsers del servicio de socket
-      -->
-      <button *ngIf="esAdmin()" class="stat-btn" (click)="openPopup()" title="Usuarios conectados ahora">
-        <!-- Ícono persona individual -->
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+      <button *ngIf="esAdmin()" class="stat-btn" (click)="openPopup()" title="Usuarios conectados">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
           <path d="M7.5 6.5C7.5 8.981 9.519 11 12 11s4.5-2.019 4.5-4.5S14.481 2 12 2 7.5 4.019 7.5 6.5zM20 21h1v-1c0-3.859-3.141-7-7-7h-4c-3.86 0-7 3.141-7 7v1h17z"/>
         </svg>
         <span>{{ connectedUsers }}</span>
       </button>
-
-      <!--
-        USUARIOS REGISTRADOS TOTALES
-        Necesitas agregar en el TS:
-          public totalUsuariosRegistrados: number = 0;
-        y en ngOnInit:
-          this.usersService.getTotalUsers().subscribe(total => this.totalUsuariosRegistrados = total);
-        (o el método equivalente que uses en usersService para contar usuarios)
-      -->
-      <div class="stat-item" title="Usuarios registrados en la plataforma">
-        <!-- Ícono grupo de personas -->
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+      <div class="stat-item" title="Usuarios registrados">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
           <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
         </svg>
         <span>{{ totalUsuariosRegistrados }}</span>
       </div>
-
-      <!--
-        NÚMERO DE PELEA ACTUAL
-        Usa numeroPelea del TS
-      -->
-      <div class="stat-item" title="Número de pelea actual">
-        <!-- Ícono documento/lista -->
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+      <div class="stat-item" title="Pelea actual">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
           <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 7V3.5L18.5 9H13z"/>
         </svg>
         <span>{{ numeroPelea }}</span>
       </div>
-
-    </div><!-- /stats-bar -->
-
-    <!-- ── Balance Box: Debería de Haber | Hay Actualmente | Dio de Más ──
-         Los valores reales deben venir de tu servicio.
-         Agrega en el TS:
-           public deberiaDeHaber: number = 0;
-           public hayActualmente: number = 0;
-         y suscríbete a usersService.getBalanceStream() o equivalente.
-         "Dio de Más" = deberiaDeHaber - hayActualmente
-    -->
-    <div *ngIf="esAdmin()" class="balance-box">
-      <div class="balance-item">
-        <span class="balance-label">DEBERIA DE HABER</span>
-        <span class="balance-value rojo">${{ deberiaDeHaber | number:'1.2-2' }}</span>
-      </div>
-      <span class="balance-sep">-</span>
-      <div class="balance-item">
-        <span class="balance-label">HAY ACTUALMENTE</span>
-        <span class="balance-value azul">${{ hayActualmente | number:'1.2-2' }}</span>
-      </div>
-      <span class="balance-sep igual">=</span>
-      <div class="balance-item">
-        <span class="balance-label">DIO DE MAS</span>
-        <span class="balance-value oro">${{ (deberiaDeHaber - hayActualmente) | number:'1.2-2' }}</span>
-      </div>
     </div>
 
-    <!-- ── Saldo Inicio / Saldo en Vivo ──
-         Agrega en el TS:
-           public saldoInicio: number = 0;
-           public saldoEnVivo: number = 0;
-         y suscríbete al servicio correspondiente.
-    -->
-    <div *ngIf="esAdmin()" class="saldo-box">
-      <div class="saldo-item">
-        <span class="saldo-label">SALDO DE INICIO</span>
-        <span class="saldo-value verde">${{ saldoInicio | number:'1.2-2' }}</span>
+    <!-- ── Métricas admin en grid 2x2 compacto ── -->
+    <div *ngIf="esAdmin()" class="metricas-grid">
+
+      <!-- Balance box compacto -->
+      <div class="metrica-card balance-card">
+        <div class="metrica-row">
+          <div class="metrica-item">
+            <span class="metrica-label">DEBERÍA HABER</span>
+            <span class="metrica-val rojo">${{ deberiaDeHaber | number:'1.2-2' }}</span>
+          </div>
+          <span class="metrica-op">−</span>
+          <div class="metrica-item">
+            <span class="metrica-label">HAY ACTUALMENTE</span>
+            <span class="metrica-val azul">${{ hayActualmente | number:'1.2-2' }}</span>
+          </div>
+          <span class="metrica-op igual">=</span>
+          <div class="metrica-item">
+            <span class="metrica-label">DIO DE MÁS</span>
+            <span class="metrica-val oro">${{ (deberiaDeHaber - hayActualmente) | number:'1.2-2' }}</span>
+          </div>
+        </div>
       </div>
-      <span class="saldo-sep">-</span>
-      <div class="saldo-item">
-        <span class="saldo-label">SALDO EN VIVO</span>
-        <span class="saldo-value rojo">${{ saldoEnVivo | number:'1.2-2' }}</span>
+
+      <!-- Saldo compacto -->
+      <div class="metrica-card saldo-card">
+        <div class="metrica-row">
+          <div class="metrica-item">
+            <span class="metrica-label">SALDO INICIO</span>
+            <span class="metrica-val verde">${{ saldoInicio | number:'1.2-2' }}</span>
+          </div>
+          <span class="metrica-op igual">−</span>
+          <div class="metrica-item">
+            <span class="metrica-label">SALDO EN VIVO</span>
+            <span class="metrica-val rojo">${{ saldoEnVivo | number:'1.2-2' }}</span>
+          </div>
+        </div>
       </div>
+
     </div>
 
-    <!-- ══ DEPÓSITOS PENDIENTES ══
-         Los depósitos reales vienen de tu servicio backend.
-         Agrega en el TS:
-           public depositosPendientes: any[] = [];
-           public totalDepositosPendientes: number = 0;
-         y en ngOnInit:
-           this.usersService.getDepositosPendientes().subscribe(data => {
-             this.depositosPendientes = data.depositos;
-             this.totalDepositosPendientes = data.total;
-           });
-         El botón "VER TODOS" navega a /ver-depositos (tu página existente).
-    -->
-    <div *ngIf="esAdmin()" class="pending-block">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div class="pending-title">
-          Depositos Pendientes: ${{ totalDepositosPendientes | number:'1.2-2' }}
+    <!-- ══ DEPÓSITOS + RETIROS lado a lado ══ -->
+    <div *ngIf="esAdmin()" class="pending-grid">
+
+      <!-- Depósitos -->
+      <div class="pending-col">
+        <div class="pending-header">
+          <span class="pending-title">💰 Dep: ${{ totalDepositosPendientes | number:'1.0-0' }}</span>
+          <button class="btn-ver-todos" (click)="irVerDepositos()">VER →</button>
         </div>
-        <button class="btn-ver-todos" (click)="irVerDepositos()">VER TODOS →</button>
+        <div class="pending-table-card">
+          <ng-container *ngIf="(depositosPendientes?.length || 0) > 0; else sinDepositos">
+            <div class="pending-row" *ngFor="let dep of depositosPendientes | slice:0:2">
+              <span class="prow-user">{{ dep.usuario }}</span>
+              <span class="prow-amount">${{ dep.cantidad | number:'1.0-0' }}</span>
+              <button class="btn-recibo" (click)="verReciboDeposito(dep)">VER</button>
+            </div>
+          </ng-container>
+          <ng-template #sinDepositos>
+            <div class="pending-empty">Sin pendientes</div>
+          </ng-template>
+        </div>
       </div>
 
-      <div class="pending-table-card">
-        <div class="pending-header-row">
-          <span>FECHA</span>
-          <span>HORA</span>
-          <span>USUARIO</span>
-          <span>CANTIDAD</span>
-          <span></span>
+      <!-- Retiros -->
+      <div class="pending-col">
+        <div class="pending-header">
+          <span class="pending-title">💸 Ret: ${{ totalRetirosPendientes | number:'1.0-0' }}</span>
+          <button class="btn-ver-todos" (click)="irVerRetiros()">VER →</button>
         </div>
-        <!-- Máximo 2 depósitos recientes visibles; el resto en /ver-depositos -->
-<ng-container *ngIf="(depositosPendientes?.length || 0) > 0; else sinDepositos">          <div class="pending-data-row"
-               *ngFor="let dep of depositosPendientes | slice:0:2">
-            <span>{{ dep.fecha | date:'dd/MM/yy' }}</span>
-            <span>{{ dep.hora }}</span>
-            <span>{{ dep.usuario }}</span>
-            <span>${{ dep.cantidad | number:'1.0-0' }}</span>
-            <button class="btn-ver-recibo" (click)="verReciboDeposito(dep)">VER RECIBO</button>
-          </div>
-        </ng-container>
-        <ng-template #sinDepositos>
-          <div class="pending-data-row" style="color:#aaa; font-style:italic; grid-template-columns:1fr;">
-            <span>Sin depósitos pendientes</span>
-          </div>
-        </ng-template>
+        <div class="pending-table-card">
+          <ng-container *ngIf="(retirosPendientes?.length || 0) > 0; else sinRetiros">
+            <div class="pending-row" *ngFor="let ret of retirosPendientes | slice:0:2">
+              <span class="prow-user">{{ ret.usuario }}</span>
+              <span class="prow-amount">${{ ret.cantidad | number:'1.0-0' }}</span>
+              <button class="btn-recibo" (click)="verReciboRetiro(ret)">VER</button>
+            </div>
+          </ng-container>
+          <ng-template #sinRetiros>
+            <div class="pending-empty">Sin pendientes</div>
+          </ng-template>
+        </div>
       </div>
+
     </div>
 
-    <!-- ══ RETIROS PENDIENTES ══
-         Igual que depósitos, datos reales del servicio.
-         Agrega en el TS:
-           public retirosPendientes: any[] = [];
-           public totalRetirosPendientes: number = 0;
-         y en ngOnInit:
-           this.usersService.getRetirosPendientes().subscribe(data => {
-             this.retirosPendientes = data.retiros;
-             this.totalRetirosPendientes = data.total;
-           });
-         El botón "VER TODOS" navega a /ver-retiros (tu página existente).
-    -->
-    <div *ngIf="esAdmin()" class="pending-block">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div class="pending-title">
-          Retiros Pendientes: ${{ totalRetirosPendientes | number:'1.2-2' }}
-        </div>
-        <button class="btn-ver-todos" (click)="irVerRetiros()">VER TODOS →</button>
-      </div>
-
-      <div class="pending-table-card">
-        <div class="pending-header-row">
-          <span>FECHA</span>
-          <span>HORA</span>
-          <span>USUARIO</span>
-          <span>CANTIDAD</span>
-          <span></span>
-        </div>
-<ng-container *ngIf="(retirosPendientes?.length || 0) > 0; else sinRetiros">          <div class="pending-data-row"
-               *ngFor="let ret of retirosPendientes | slice:0:2">
-            <span>{{ ret.fecha | date:'dd/MM/yy' }}</span>
-            <span>{{ ret.hora }}</span>
-            <span>{{ ret.usuario }}</span>
-            <span>${{ ret.cantidad | number:'1.0-0' }}</span>
-            <button class="btn-ver-recibo" (click)="verReciboRetiro(ret)">VER RECIBO</button>
-          </div>
-        </ng-container>
-        <ng-template #sinRetiros>
-          <div class="pending-data-row" style="color:#aaa; font-style:italic; grid-template-columns:1fr;">
-            <span>Sin retiros pendientes</span>
-          </div>
-        </ng-template>
-      </div>
-    </div>
-
-    <!-- ── Botones de control admin ── -->
+    <!-- ── Botones admin en una sola fila compacta ── -->
     <div *ngIf="esAdmin()" class="admin-controls">
 
       <button *ngIf="estadoApuesta"
               class="admin-btn btn-cerrar" (click)="toggleBooleanState()">
-        Cerrar Apuestas
+        ⛔ Cerrar
       </button>
 
       <button *ngIf="!estadoApuesta && textButton === 'Abrir Apuestas'"
               class="admin-btn btn-abrir-ap" (click)="toggleBooleanState()">
-        Abrir Apuestas
+        ✅ Abrir
       </button>
 
       <button *ngIf="!estadoApuesta && textButton === 'Escoger Ganador'"
               class="admin-btn btn-ganador" (click)="toggleBooleanState()">
-        Escoger Ganador Ronda {{ numeroPelea }}
+        🏆 Ganador R{{ numeroPelea }}
       </button>
 
       <button *ngIf="!estadoApuesta && textButton === 'Escoger Ganador'"
               class="admin-btn btn-nueva" (click)="abrirNuevaRonda()">
-        Abrir Nueva Ronda
+        ➕ Nueva Ronda
       </button>
 
       <button class="chat-button" (click)="openChatModal()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
           <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
         </svg>
         Chat
       </button>
 
       <button class="admin-btn btn-finalizar" (click)="confirmarFinalizar()">
-        FINALIZAR STREAM
+        🔴 FINALIZAR
       </button>
 
     </div>
 
     <!-- Rondas en espera -->
     <div *ngIf="esAdmin() && rondasEnEspera.length > 0" class="rondas-espera">
-      <h4>Rondas pendientes de ganador:</h4>
+      <h4>Pendientes de ganador:</h4>
       <div class="rondas-list">
         <button *ngFor="let ronda of rondasEnEspera"
                 class="ronda-espera-btn" (click)="seleccionarRonda(ronda)">
-          Ronda {{ ronda }}
+          R{{ ronda }}
         </button>
       </div>
     </div>
@@ -284,19 +210,16 @@
   ────────────────────────────────────────── -->
   <div class="col-right">
 
-    <!-- Header Pelea -->
     <div class="pelea-header">
       <div class="pelea-titulo">PELEA {{ numeroPelea }}</div>
     </div>
 
-    <!-- Labels Partido -->
     <div class="partido-labels">
       <span class="partido-label">PARTIDO ROJO</span>
       <span></span>
       <span class="partido-label">PARTIDO VERDE</span>
     </div>
 
-    <!-- Fila VS con amounts -->
     <div class="vs-row">
       <span class="pts-num">{{ redPoints }}</span>
       <div class="partido-pill rojo">${{ cantidadApostadaRojo | number:'1.2-2' }}</div>
@@ -305,11 +228,6 @@
       <span class="pts-num">{{ greenPoints }}</span>
     </div>
 
-    <!-- ══ TABLA APOSTADORES (dos lados) ══
-         chat$ ya viene procesado (agrupado por usuario+ronda+estado) del TS.
-         Separamos rojo (izquierda) y verde (derecha) con el separador.
-         Los estados "cazada"/"devuelta"/"pagada" se usan para estilos.
-    -->
     <div class="apuestas-tabla-wrap">
 
       <!-- LADO ROJO -->
@@ -324,15 +242,12 @@
             <span class="fila-monto-der">{{ bet.cantidad }}</span>
           </div>
         </ng-container>
-
-        <!-- Total rojo -->
         <div class="fila-total">
           <span class="total-word">Total</span>
           <span class="total-num">{{ cantidadApostadaRojo }}</span>
         </div>
       </div>
 
-      <!-- Separador vertical -->
       <div class="separador-centro"></div>
 
       <!-- LADO VERDE -->
@@ -347,37 +262,15 @@
             <span class="fila-monto-der">{{ bet.cantidad }}</span>
           </div>
         </ng-container>
-
-        <!-- Total verde -->
         <div class="fila-total">
           <span class="total-num">{{ cantidadApostadaVerde }}</span>
           <span class="total-word">Total</span>
         </div>
       </div>
 
-    </div><!-- /apuestas-tabla-wrap -->
+    </div>
 
-    <!-- ══ FOOTER: APOSTARON / CAZADO / NO CAZADO ══
-
-         APOSTADO  = cantidadApostadaRojo + cantidadApostadaVerde
-                     (todo lo que se apostó en ambos bandos)
-
-         CAZADO    = suma de apuestas con estado === 'cazada'
-                     Se calcula en el TS con:
-                       public montoCazadoRojo: number = 0;
-                       public montoCazadoVerde: number = 0;
-                     Suscríbete a chat$ y filtra estado === 'cazada':
-                       this.apuestaService.chat$.subscribe(bets => {
-                         this.montoCazadoRojo  = bets.filter(b => !b.verde && b.estado === 'cazada').reduce((s,b) => s+b.cantidad, 0);
-                         this.montoCazadoVerde = bets.filter(b => b.verde  && b.estado === 'cazada').reduce((s,b) => s+b.cantidad, 0);
-                       });
-
-         NO CAZADO = apostado − cazado (por bando)
-                       public montoNoCazadoRojo  = cantidadApostadaRojo  - montoCazadoRojo;
-                       public montoNoCazadoVerde = cantidadApostadaVerde - montoCazadoVerde;
-    -->
     <div class="apuestas-footer">
-
       <span class="footer-label">APOSTARON</span>
       <span class="footer-val rojo-text">${{ cantidadApostadaRojo | number:'1.2-2' }}</span>
       <span class="footer-val verde-text">${{ cantidadApostadaVerde | number:'1.2-2' }}</span>
@@ -389,7 +282,6 @@
       <span class="footer-label">NO CAZADO</span>
       <span class="footer-val rojo-text">${{ (cantidadApostadaRojo - montoCazadoRojo) | number:'1.2-2' }}</span>
       <span class="footer-val verde-text">${{ (cantidadApostadaVerde - montoCazadoVerde) | number:'1.2-2' }}</span>
-
     </div>
 
   </div><!-- /col-right -->
@@ -417,7 +309,6 @@
   (onClose)="closeChooseModal()">
 </app-choose-winner-modal>
 
-<!-- Popup usuarios conectados -->
 <div *ngIf="isPopupOpen" class="popup-overlay">
   <div class="popup">
     <button class="close-button" (click)="closePopup()">&#10005;</button>
@@ -431,7 +322,6 @@
   </div>
 </div>
 
-<!-- Modal finalizar stream -->
 <div class="modal-overlay" *ngIf="mostrarModalFinalizar" style="z-index: 9999;">
   <div class="modal-content-finalize">
     <h3>¿Finalizar el Stream?</h3>
@@ -443,5 +333,4 @@
   </div>
 </div>
 
-<!-- Modal chat -->
 <app-chat-modal *ngIf="isChatModalOpen" (closeModal)="closeChatModal()"></app-chat-modal>
