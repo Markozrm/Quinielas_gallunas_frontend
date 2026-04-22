@@ -38,11 +38,12 @@
 }
 
 .confirm-button {
-  background-color: #f44336; /* Rojo para eliminar */
+  background-color: #f44336;
 }
 .cancel-button {
-  background-color: #FD9E00; /* Rojo para eliminar */
+  background-color: #FD9E00;
 }
+
 .chat-div {
   display: flex;
   flex-direction: column;
@@ -64,10 +65,9 @@
   height: 100%;
   min-height: 0;
   scrollbar-width: thin;
-  scrollbar-color: #666 #242526; /* Ajusta el valor según la altura de tu barra de enviar */
+  scrollbar-color: #666 #242526;
 }
 
-/* Estilos para la barra de scroll en WebKit */
 .chat-index::-webkit-scrollbar {
   width: 6px;
 }
@@ -85,13 +85,13 @@
   background: #888;
 }
 
-.delete-container{
+.delete-container {
   justify-content: flex-end;
 }
+
 .delete-link {
   color: red;
   cursor: pointer;
-
   margin-right: 0;
 }
 
@@ -100,35 +100,33 @@
   padding: 0;
   margin: 0;
 }
-.mensajes-padding img{
+
+.mensajes-padding img {
   border-radius: 100%;
   height: 50px;
   width: 50px;
 }
+
 .mensajes-padding li {
   display: flex;
   flex-direction: row;
   margin: 2%;
-
 }
-.message-content{
+
+.message-content {
   width: 100%;
   margin-left: 2%;
-  margin-left: 2%;
-
   overflow-wrap: break-word;
   overflow-y: auto;
-
-
-
 }
 
-.user-info{
+.user-info {
   display: flex;
   align-items: top;
   gap: 4px;
 }
-.user-info p{
+
+.user-info p {
   margin-top: 0;
 }
 
@@ -136,60 +134,65 @@
   font-size: var(--fontSizeMessage);
   color: white;
   padding: 0.5rem 0.75rem;
-  background-color: #3a3b3c; /* Color de fondo de cada mensaje */
-  border-radius: 8px; /* Bordes redondeados para los mensajes */
-  word-wrap: break-word; /* Permite que las palabras largas se dividan en líneas */
+  border-radius: 8px;
+  word-wrap: break-word;
   overflow-wrap: break-word;
 }
-.chat-message h1{
 
+/* Colores alternos para los mensajes */
+.mensaje-par {
+  background-color: #3a3b3c;
+}
+
+.mensaje-impar {
+  background-color: #2d3a4a;
+}
+
+.chat-message h1 {
   font-size: 0.8rem;
   margin-block-start: 0;
   margin-block-end: 0;
 }
+
 .message-link-content {
-  /* Agrega los estilos personalizados para tus enlaces aquí */
-  color: #00ff33 !important; /* Color de texto rojo */
-  text-decoration: underline; /* Subrayado opcional */
+  color: #00ff33 !important;
+  text-decoration: underline;
 }
 
-
-.mensajes-padding .img-content-msg{
+.mensajes-padding .img-content-msg {
   border-radius: 0%;
   width: 100%;
 }
 
- * {
+* {
   box-sizing: border-box;
 }
 
-@media screen and (max-width: 600px){
-  .body{
+@media screen and (max-width: 600px) {
+  .body {
     background-color: #242526;
   }
-  .chat-index{
+
+  .chat-index {
     margin-top: 2%;
     margin-left: 0%;
     margin-right: 0%;
     width: 100%;
     max-width: 100%;
     max-height: 100%;
-
   }
-  .chat-message h1{
+
+  .chat-message h1 {
     font-size: 0.7rem;
-
   }
-  .mensajes-padding img{
 
+  .mensajes-padding img {
     height: 15%;
     width: 15%;
   }
-  .chat-div{
-  
+
+  .chat-div {
     margin-left: 2%;
     margin-right: 2%;
-  
   }
-  
 }

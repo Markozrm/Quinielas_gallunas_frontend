@@ -376,6 +376,20 @@ fromEvent(this.socket, 'update_ultima_ronda').subscribe((numero: number) => {
   public obtenerMontosCazados(sala: string): Observable<any> {
   return this.httpClient.get(`${this.baseUrl}/montos-cazados/${sala}`);
 }
+public obtenerAlertasAuditoria(sala?: string): Observable<any> {
+  const params = sala ? `?sala=${sala}` : '';
+  return this.httpClient.get(`${this.baseUrl}/auditoria/alertas${params}`);
+}
+ 
+// Detalle de una ronda específica
+public obtenerAuditoriaRonda(sala: string, ronda: number): Observable<any> {
+  return this.httpClient.get(`${this.baseUrl}/auditoria/ronda/${sala}/${ronda}`);
+}
+ 
+// Resumen completo de un stream — qué rondas cuadran y cuáles no
+public obtenerAuditoriaStream(sala: string): Observable<any> {
+  return this.httpClient.get(`${this.baseUrl}/auditoria/stream/${sala}`);
+}
 }
 
 interface UserType {

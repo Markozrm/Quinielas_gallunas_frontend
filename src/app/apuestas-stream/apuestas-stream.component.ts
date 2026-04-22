@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 import { Subscription,of,Observable } from 'rxjs';
 import { SharedService } from 'src/app/services/shared.service';
 import { take } from 'rxjs/operators';
-
+import { AuditoriaRondasComponent } from '../auditoria-rondas/auditoria-rondas.component';
 
 @Component({
     selector: 'app-apuestas-stream',
@@ -21,7 +21,7 @@ import { take } from 'rxjs/operators';
     styleUrls: ['./apuestas-stream.component.css'],
     standalone: true,
     imports: [UsersRoomsComponent,CommonModule,ReactiveFormsModule,
-      UsersChatComponent,VideoPlayerComponent,MenuComponent],
+      UsersChatComponent,VideoPlayerComponent,MenuComponent, AuditoriaRondasComponent],
 })
 export class ApuestasStreamComponent implements OnInit,OnDestroy{
   
@@ -37,6 +37,7 @@ export class ApuestasStreamComponent implements OnInit,OnDestroy{
   private intervaloActualizacion: any; // Intervalo para actualización automática
   public totalStream: number = 0;
   public totalRondaActual: number = 0;
+  public isAuditoriaOpen = false;
   public resumenRondas: any[] = [];
     public columnasTabla = [
     { nombre: 'Pelea', propiedad: 'ronda' },

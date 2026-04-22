@@ -3,8 +3,8 @@
     <div class="mensajes-padding">
   <ng-container *ngIf="!isPrivate && (chat$ | async) as messages">
     <ul>
-      <ng-container *ngFor="let chat of messages">
-        <li *ngIf="!isPrivateMessage(chat.message)" class="chat-message">
+      <ng-container *ngFor="let chat of messages; let i = index">
+        <li *ngIf="!isPrivateMessage(chat.message)" class="chat-message" [ngClass]="i % 2 === 0 ? 'mensaje-par' : 'mensaje-impar'">
           <div class="message-content">
             <div class="user-info">
               <p class="date">{{ chat.date | date:'HH:mm' }} </p>
@@ -30,14 +30,13 @@
       <em>No hay mensajes para mostrar.</em>
     </div>
   </ng-container>
-
   <!-- Chat privado -->
   <ng-container *ngIf="isPrivate && (privateChat$ | async) as privateMessages">
     <div class="chat-debug-info">
       <strong>Mensajes privados:</strong> {{ privateMessages.length }}
     </div>
     <ul>
-      <li *ngFor="let chat of privateMessages" class="chat-message">
+      <li *ngFor="let chat of privateMessages; let i = index" class="chat-message" [ngClass]="i % 2 === 0 ? 'mensaje-par' : 'mensaje-impar'">
         <div class="message-content">
           <div class="user-info">
             <h1>{{ chat.user.name }}</h1>
@@ -58,7 +57,6 @@
   </ng-container>
 </div>
 </div>
-
   <!-- Modal de confirmación -->
   <div class="modal-overlay" *ngIf="showDeleteModal">
     <div class="modal-content">
@@ -68,7 +66,3 @@
       <button (click)="closeDeleteModal()" class="cancel-button">Cancelar</button>
     </div>
   </div>
-
-
-
-

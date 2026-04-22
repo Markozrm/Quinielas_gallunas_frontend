@@ -1,0 +1,161 @@
+<div class="auditoria-overlay" (click)="onOverlayClick($event)">
+  <div class="auditoria-modal">
+
+    <!-- ── Header ── -->
+    <div class="auditoria-header">
+      <h2>🔍 Auditoría de Rondas</h2>
+      <div class="auditoria-header-actions">
+        <button class="btn-refresh" (click)="cargar()" [disabled]="cargando">
+          {{ cargando ? '⏳' : '🔄' }} Actualizar
+        </button>
+        <button class="btn-close-auditoria" (click)="cerrar.emit()">✕</button>
+      </div>
+    </div>
+
+    <!-- ── Input manual de sala (solo si no viene por @Input) ── -->
+    <div class="auditoria-sala-input" *ngIf="!sala">
+      <input
+        [(ngModel)]="salaManual"
+        placeholder="Escribe el código del stream..."
+        class="sala-input"
+        (keyup.enter)="cargar()">
+      <button class="btn-buscar" (click)="cargar()">Buscar</button>
+    </div>
+
+    <!-- ── Sala activa + resumen rápido ── -->
+    <div class="auditoria-sala-info" *ngIf="salaActiva">
+      <span class="sala-badge">📺 {{ salaActiva }}</span>
+      <span class="total-badge" [ngClass]="totalProblemas > 0 ? 'badge-error' : 'badge-ok'">
+        {{ totalProblemas > 0
+          ? '⚠️ ' + totalProblemas + ' ronda(s) con problema'
+          : '✅ Todo cuadra' }}
+      </span>
+    </div>
+
+    <!-- ── Loading ── -->
+    <div class="auditoria-loading" *ngIf="cargando">
+      <div class="spinner"></div>
+      <p>Verificando rondas...</p>
+    </div>
+
+    <!-- ── Error ── -->
+    <div class="auditoria-error" *ngIf="error && !cargando">
+      <p>❌ {{ error }}</p>
+    </div>
+
+    <!-- ── Tabs ── -->
+    <div class="auditoria-tabs" *ngIf="!cargando && salaActiva && !error">
+      <button [ngClass]="{'tab-active': tabActivo === 'resumen'}" (click)="tabActivo = 'resumen'">
+        📊 Resumen stream
+      </button>
+      <button [ngClass]="{'tab-active': tabActivo === 'alertas'}" (click)="tabActivo = 'alertas'">
+        ⚠️ Alertas ({{ alertas.length }})
+      </button>
+    </div>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- TAB: RESUMEN POR RONDA                       -->
+    <!-- ════════════════════════════════════════════ -->
+    <div class="auditoria-tab-content" *ngIf="tabActivo === 'resumen' && !cargando && salaActiva">
+
+      <!-- Estadísticas globales -->
+      <div class="resumen-stats">
+        <div class="stat-box stat-total">
+          <span class="stat-label">Total rondas</span>
+          <span class="stat-value">{{ rondas.length }}</span>
+        </div>
+        <div class="stat-box stat-ok">
+          <span class="stat-label">✅ Cuadran</span>
+          <span class="stat-value">{{ rondas.length - totalProblemas }}</span>
+        </div>
+        <div class="stat-box stat-error">
+          <span class="stat-label">❌ Problemas</span>
+          <span class="stat-value">{{ totalProblemas }}</span>
+        </div>
+      </div>
+
+      <!-- Tabla de rondas -->
+      <div class="rondas-tabla-wrapper" *ngIf="rondas.length > 0">
+        <table class="rondas-tabla">
+          <thead>
+            <tr>
+              <th>Ronda</th>
+              <th>Pagada</th>
+              <th>Perdida</th>
+              <th>Diferencia</th>
+              <th>Devuelta</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let r of rondas"
+                [ngClass]="{'fila-problema': !r.cuadra, 'fila-ok': r.cuadra}">
+              <td><strong>P{{ r.ronda }}</strong></td>
+              <td>${{ r.pagada | number:'1.0-0' }}</td>
+              <td>${{ r.perdida | number:'1.0-0' }}</td>
+              <td [ngClass]="r.diferencia !== 0 ? 'diff-error' : 'diff-ok'">
+                <strong>
+                  {{ r.diferencia > 0 ? '+' : '' }}${{ r.diferencia | number:'1.0-0' }}
+                </strong>
+              </td>
+              <td>${{ r.devuelta | number:'1.0-0' }}</td>
+              <td>
+                <span class="estado-badge" [ngClass]="r.cuadra ? 'badge-ok' : 'badge-error'">
+                  <ng-container *ngIf="r.cuadra">✅ OK</ng-container>
+                  <ng-container *ngIf="!r.cuadra && r.diferencia > 0">❌ Pagó ${{ r.diferencia | number:'1.0-0' }} de más</ng-container>
+                  <ng-container *ngIf="!r.cuadra && r.diferencia < 0">⚠️ Banca cobró ${{ absNum(r.diferencia) | number:'1.0-0' }} de más</ng-container>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Sin rondas aún -->
+      <div class="auditoria-empty" *ngIf="rondas.length === 0">
+        <p>Sin rondas registradas en este stream todavía.</p>
+        <p class="sub">Las rondas aparecerán aquí automáticamente después del primer pago.</p>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- TAB: ALERTAS                                 -->
+    <!-- ════════════════════════════════════════════ -->
+    <div class="auditoria-tab-content" *ngIf="tabActivo === 'alertas' && !cargando && salaActiva">
+
+      <!-- Sin alertas -->
+      <div class="alertas-vacias" *ngIf="alertas.length === 0">
+        <p>✅ Sin alertas registradas para este stream.</p>
+        <p class="sub">Todas las rondas auditadas cuadraron correctamente.</p>
+      </div>
+
+      <!-- Lista de alertas -->
+      <div *ngFor="let a of alertas" class="alerta-card"
+           [ngClass]="(a.diferencia || 0) > 0 ? 'alerta-pagado' : 'alerta-cobrado'">
+        <div class="alerta-header">
+          <span class="alerta-ronda"><strong>Ronda {{ a.ronda }}</strong></span>
+          <span class="alerta-tipo">
+            <ng-container *ngIf="(a.diferencia || 0) > 0">
+              ⚠️ Pagó ${{ a.diferencia | number:'1.0-0' }} de más
+            </ng-container>
+            <ng-container *ngIf="(a.diferencia || 0) < 0">
+              ⚠️ Banca cobró ${{ absNum(a.diferencia) | number:'1.0-0' }} de más
+            </ng-container>
+          </span>
+        </div>
+        <div class="alerta-body">
+          <span>Pagada: ${{ (a.total_pagada || a.pagada || 0) | number:'1.0-0' }}</span>
+          <span>Perdida: ${{ (a.total_perdida || a.perdida || 0) | number:'1.0-0' }}</span>
+          <span *ngIf="a.fecha">{{ a.fecha | date:'dd/MM HH:mm' }}</span>
+        </div>
+        <div class="alerta-detalle" *ngIf="a.detalle">{{ a.detalle }}</div>
+      </div>
+    </div>
+
+    <!-- Sin sala activa -->
+    <div class="auditoria-empty" *ngIf="!cargando && !salaActiva && !error">
+      <p>Ingresa el código del stream para ver la auditoría.</p>
+    </div>
+
+  </div>
+</div>

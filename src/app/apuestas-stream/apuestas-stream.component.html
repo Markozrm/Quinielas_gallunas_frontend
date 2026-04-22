@@ -79,4 +79,10 @@
       </div>
     </div>
   </div>
+  <app-auditoria-rondas
+  *ngIf="isAuditoriaOpen"
+  [sala]="streamActual"
+  [plataforma]="'galluno'"
+  (cerrar)="isAuditoriaOpen = false">
+</app-auditoria-rondas>
 </div>

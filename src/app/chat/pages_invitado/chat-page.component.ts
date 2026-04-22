@@ -6,7 +6,7 @@ import { UsersService } from 'src/app/services/users.service';
 import { QuinielaService } from 'src/app/services/quiniela.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http'; // AGREGAR ESTA LÍNEA
+import { HttpClient } from '@angular/common/http';
 import { Subscription, firstValueFrom } from 'rxjs';
 import { take, switchMap, filter } from 'rxjs/operators';
 import { MenuComponent } from '../../menu/menu.component';
@@ -38,7 +38,6 @@ import { TablaPuntosComponent } from 'src/app/tabla-puntos/tabla-puntos.componen
   ],
 })
 export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
-  // Helper para formatear fechas de mensajes
   formatMessageDate(dateInput: Date | string): string {
     try {
       const date = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
@@ -79,6 +78,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
       return '--/--/----';
     }
   }
+
   public estadoActualApuesta = '';
   public rondaActual = 0;
   public cantidadApostadaRojo = 0;
@@ -144,7 +144,6 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
 
   isChatModalOpen = false;
 
-  // Propiedades para el botón flotante arrastrable (chat)
   isDragging = false;
   buttonPosition = { x: 20, y: 20 };
   dragOffset = { x: 0, y: 0 };
@@ -153,19 +152,14 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
   isCasinoPopupOpen = false;
   casinoOptions = ['QUINIELA', 'RULETA', 'RIFA', 'VENTAJA'];
 
-  // ...existing code...
-
-
-
   constructor(
     private usersService: UsersService,
     private route: ActivatedRoute,
     private router: Router,
     private apuestaService: apuestaService,
-    private chatService: ChatService, // VERIFICAR QUE ESTÉ AQUÍ
+    private chatService: ChatService,
     private quinielaService: QuinielaService,
-    // RuletaService eliminado
-    private http: HttpClient // AGREGAR ESTA LÍNEA
+    private http: HttpClient
   ) {
   }
 
@@ -183,10 +177,10 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
       const port = params['port'];
       this.salaActual = variableValue;
 
-      // Establece la sala en el servicio de quiniela para que otros componentes la conozcan
       this.quinielaService.setRoom(this.salaActual);
 
-      this.verificarVIP(port);
+      // ✅ Se llama con variableValue (sala) en lugar de port
+      this.verificarVIP(variableValue);
       this.cargarDatosDeLocalStorage();
 
       this.apuestaService.leaveRoom();
@@ -194,23 +188,15 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
       const username: string = localStorage.getItem('nombreUsuario') || '';
       this.apuestaService.joinRoom(variableValue, username);
 
-
-
-      // --- LOGICA DE CHAT CON PRIORIDAD DE FECHA EN URL ---
-
       let roomClave = '';
 
-      // 1. Verificar si la URL ya trae una fecha (ej: "Stream1-25-01-2026")
-      // Regex para detectar formato: ID + "-" + DD + "-" + MM + "-" + YYYY
       const formatoFechaRegex = /(Stream\d+)-(\d{2}-\d{2}-\d{4})/;
       const matchFecha = variableValue.match(formatoFechaRegex);
 
       if (matchFecha) {
-        // CASO A: La URL es específica de una fecha (Historial) -> Usar esa sala
         roomClave = variableValue;
         console.log(`[ChatInvitado] URL con fecha detectada. Usando sala histórica: ${roomClave}`);
       } else {
-        // CASO B: La URL es genérica (ej: "Stream1" o "1") -> Generar sala con fecha de HOY
         let streamId = variableValue;
         const matchId = variableValue.match(/Stream(\d+)|(^(\d+)$)/i);
         if (matchId) {
@@ -229,18 +215,8 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
 
       this.chatService.leaveRoom();
       this.chatService.initChat();
-      // IMPORTANTE: Unirse a la sala determinada
       this.chatService.joinRoom(roomClave, this.username);
-
-      // Solicitar historial de ESA sala
       this.chatService.emitirGetMensajesHistorial(roomClave);
-
-
-
-
-
-
-
 
       this.apuestaService.getCantidades().subscribe((data: any) => {
         console.log('Cantidades actualizadas:', data);
@@ -263,7 +239,6 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
 
     this.apuestaService.rondaActual.subscribe((ronda: number) => {
       this.rondaActual = ronda;
-      // Al cambiar de ronda, revisa si ya apostó en esta ronda (por si recarga)
       this.yaApostoEstaRonda = this.consultarApuestaRondaActual();
       if (ronda !== 0) {
         this.guardarDatosEnLocalStorage();
@@ -320,8 +295,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
     this.apuestaService.getSaldoActualizado().subscribe((nuevoSaldo: number) => {
       this.balance = nuevoSaldo;
     });
-    // Eliminado: event listener y referencias a rifas/rifaSeleccionada
-    // Al iniciar, recupera la imagen si existe
+
     const savedImage = localStorage.getItem('imagenStreamUrl');
     if (savedImage) {
       this.imagenStreamUrl = savedImage;
@@ -343,7 +317,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  streamTitle: string = 'QUINIELAS GALLISTICAS'; // Default fallback
+  streamTitle: string = 'QUINIELAS GALLISTICAS';
 
   actualizarSaldo() {
     this.usersService.getSaldo(this.username).subscribe((data: any) => {
@@ -491,7 +465,6 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
       };
       this.mostrarNotificacion(notificacion);
 
-      // Guardar que ya apostó en esta ronda
       this.marcarApuestaRondaActual();
       this.yaApostoEstaRonda = true;
     });
@@ -557,7 +530,6 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
     this.isChatModalOpen = false;
   }
 
-  // --- CHAT FLOATING BUTTON DRAG LOGIC (igual que ruleta) ---
   onMouseDown(event: MouseEvent): void {
     this.isDragging = false;
     this.dragStartTime = Date.now();
@@ -724,25 +696,34 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
     localStorage.removeItem(`apuestas_${this.username}_${this.salaActual}`);
   }
 
+  // ✅ CORREGIDO: eliminada la condición bloqueoPorSaldo que impedía funcionar
   async verificarVIP(sala: string) {
-    if (await this.esStreamVIP(sala) && !(await this.tieneSaldoSuficiente()) && this.bloqueoPorSaldo) {
-      alert("No tienes saldo suficiente para acceder a este stream");
-      this.router.navigate(['/mi-perfil']);
+    const esVIP = await this.esStreamVIP(sala);
+    if (esVIP) {
+      const tieneSaldo = await this.tieneSaldoSuficiente();
+      if (!tieneSaldo) {
+        alert("No tienes saldo suficiente para acceder a este stream VIP");
+        this.router.navigate(['/mi-perfil']);
+      }
     }
   }
 
+  // ✅ CORREGIDO: detecta el stream por el parámetro 'sala' (ej: "Stream1", "Stream1-08-04-2026", "1")
   async esStreamVIP(claveStream: string): Promise<boolean> {
     try {
       let streamId = '';
       if (claveStream) {
-        if (claveStream.includes('440')) streamId = '1';
-        else if (claveStream.includes('442')) streamId = '2';
-        else if (claveStream.includes('441')) streamId = '3';
+        // Detectar por formato "Stream1", "Stream2", etc. o número directo
+        const match = claveStream.match(/Stream(\d+)/i) || claveStream.match(/^(\d+)$/);
+        if (match) {
+          streamId = match[1];
+        }
       }
       if (!streamId) return false;
+
       return new Promise((resolve) => {
         this.usersService.getClaveStream(streamId).subscribe(
-          (resultado: any) => resolve(resultado.stream.esVIP === true),
+          (resultado: any) => resolve(resultado?.stream?.esVIP === true),
           (error: any) => {
             console.error('Error al verificar si es stream VIP:', error);
             resolve(false);
@@ -847,8 +828,6 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
     localStorage.removeItem(this.TIEMPO_GRACIA_KEY);
   }
 
-  // --- MÉTODOS DE QUINIELA ---
-
   seleccionarOpcion(opcion: string) {
     this.isCasinoPopupOpen = false;
     if (opcion === 'QUINIELA') {
@@ -865,7 +844,6 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
     return userRole === 'superUsuario' || userRole === 'administrador';
   }
 
-  // --- NUEVOS MÉTODOS PARA PERSISTENCIA POR RONDA Y USUARIO ---
   private getApuestaRondaKey(): string {
     return `apuesta_realizada_${this.username}_${this.salaActual}_ronda_${this.rondaActual}`;
   }
@@ -903,7 +881,6 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
 
       console.log('Navegando a target:', target);
       if (window.location.pathname === target) {
-        // Force full reload if already on the correct page
         console.log('Ya estamos en la página correcta. Forzando recarga...');
         window.location.reload();
       } else {
@@ -919,9 +896,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
   public disponibleColor: 'rojo' | 'verde' | null = null;
   public yaApostoEstaRonda: boolean = false;
 
-  // Llama este método cada vez que cambien las apuestas
   actualizarMontoDisponible() {
-    // Usamos tus variables de ejemplo
     const rojo = this.cantidadApostadaRojo;
     const verde = this.cantidadApostadaVerde;
 

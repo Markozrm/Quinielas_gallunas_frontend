@@ -20,7 +20,7 @@ export const environment = {
 
   // CONFIGURACIÓN LOCAL (DESCOMENTA si quieres usar local en este mismo archivo)
   //production: false,
-  //apiUrl: 'http://localhost ',
+ // apiUrl: 'http://localhost:444',
   //PORT: '444',
   //apiUrl_apuestas: 'http://localhost',
   //apuesta_PORT: '3448',
