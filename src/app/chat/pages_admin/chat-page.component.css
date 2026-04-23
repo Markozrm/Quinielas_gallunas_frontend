@@ -420,7 +420,7 @@ html, body {
 /* ── Tabla de puntos ── */
 .tabla-puntos-admin-wrapper {
   width: 100%;
-  background: #ffffff !important;
+  background: #555555 !important;
   border-radius: 8px;
   padding: 6px;
 }
@@ -777,6 +777,142 @@ html, body {
   font-weight: 700;
 }
 .btn-confirm-finalize:hover { background: #1b5e20 !important; }
+/* ════════════════════════════════════════════════════════════════
+   TABLA DE USUARIOS — RESUMEN POR USUARIO
+════════════════════════════════════════════════════════════════ */
+
+.tabla-usuarios-wrap {
+  width: 100%;
+  margin-top: 15px;
+  padding: 0 10px;
+}
+
+.tabla-usuarios-titulo {
+  text-align: center;
+  color: #1565c0;
+  font-size: 0.9em;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.tabla-usuarios-contenedor {
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  overflow-x: auto;
+  overflow-y: auto;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.tabla-usuarios {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #1a1a1a;
+  font-size: 0.75em;
+  color: #bca35b;
+  text-align: center;
+}
+
+.tabla-usuarios thead {
+  background-color: #0d0d0d;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.tabla-usuarios th {
+  padding: 8px 4px;
+  border-bottom: 2px solid #1565c0;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  color: #1565c0;
+}
+
+.tabla-usuarios td {
+  padding: 6px 4px;
+  border-bottom: 1px solid #333;
+  white-space: nowrap;
+  color: #1565c0;
+}
+
+.tabla-usuarios tbody tr:hover {
+  background-color: rgba(188, 163, 91, 0.08);
+}
+
+.tabla-usuarios tbody tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.usuario-nombre {
+  font-weight: bold;
+  text-align: left;
+  min-width: 100px;
+  color: #00ff00;
+}
+
+.celda-gana {
+  color: #00ff00;
+  font-weight: bold;
+}
+
+.celda-pierde {
+  color: #ff4444;
+  font-weight: bold;
+}
+
+.celda-aposto {
+  background-color: rgba(188, 163, 91, 0.15);
+  font-weight: bold;
+  color: #ffd700;
+}
+
+.tienedemas-negativo {
+  color: #ff4444;
+  font-weight: bold;
+  background-color: rgba(255, 68, 68, 0.1);
+}
+
+.tienedemas-positivo {
+  color: #00ff00;
+  font-weight: bold;
+  background-color: rgba(0, 255, 0, 0.1);
+}
+
+.sin-usuarios-msg {
+  padding: 20px;
+  text-align: center;
+  color: #1565c0;
+  font-size: 0.9em;
+  background-color: #1a1a1a;
+  border-radius: 6px;
+}
+
+/* Responsivo: scroll horizontal en pantallas pequeñas */
+@media screen and (max-width: 1400px) {
+  .tabla-usuarios {
+    font-size: 0.7em;
+  }
+
+  .tabla-usuarios th,
+  .tabla-usuarios td {
+    padding: 4px 2px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .tabla-usuarios-contenedor {
+    max-height: 250px;
+  }
+
+  .tabla-usuarios {
+    font-size: 0.65em;
+  }
+}
 
 /* ══════════════════════════════
    RESPONSIVE

@@ -269,6 +269,7 @@
       </div>
 
     </div>
+ 
 
     <div class="apuestas-footer">
       <span class="footer-label">APOSTARON</span>
@@ -283,10 +284,71 @@
       <span class="footer-val rojo-text">${{ (cantidadApostadaRojo - montoCazadoRojo) | number:'1.2-2' }}</span>
       <span class="footer-val verde-text">${{ (cantidadApostadaVerde - montoCazadoVerde) | number:'1.2-2' }}</span>
     </div>
+       <!-- ════════════════════════════════════════════════════════════════
+         TABLA DE RESUMEN POR USUARIO
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="tabla-usuarios-wrap">
+      <h4 class="tabla-usuarios-titulo">TABLA DE USUARIOS QUE APOSTARON EN VIVO</h4>
+      <div class="tabla-usuarios-contenedor">
+        <table class="tabla-usuarios" *ngIf="usuariosResumen.length > 0; else sinUsuarios">
+          <thead>
+            <tr>
+              <th>USUARIO</th>
+              <th>SALDO INICIAL</th>
+              <th>GANA</th>
+              <th>PIERDE</th>
+              <th>DEPÓSITOS</th>
+              <th>RETIROS</th>
+              <th>AUM MANUAL</th>
+              <th>RESTA MAN</th>
+              <th>TIENE</th>
+              <th>DEBERÍA TENER</th>
+              <th>TIENE DE MAS</th>
+              <th>APOSTÓ</th>
+              <th>VA JUGANDO</th>
+              <th>EN ESPERA</th>
+              <th>DEVUELTO</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let usuario of usuariosResumen" class="usuario-row">
+              <td class="usuario-nombre">{{ usuario.usuario }}</td>
+              <td>${{ usuario.saldoInicial | number:'1.2-2' }}</td>
+              <td class="celda-gana">${{ usuario.gana | number:'1.2-2' }}</td>
+              <td class="celda-pierde">${{ usuario.pierde | number:'1.2-2' }}</td>
+              <td>${{ usuario.depositos | number:'1.2-2' }}</td>
+              <td>${{ usuario.retiros | number:'1.2-2' }}</td>
+              <td>${{ usuario.aumManual | number:'1.2-2' }}</td>
+              <td>${{ usuario.restaMan | number:'1.2-2' }}</td>
+              <td>${{ usuario.tiene | number:'1.2-2' }}</td>
+              <td>${{ usuario.deberiaTener | number:'1.2-2' }}</td>
+              <td [class.tienedemas-negativo]="usuario.tieneDeMas < 0"
+                  [class.tienedemas-positivo]="usuario.tieneDeMas > 0">
+                ${{ usuario.tieneDeMas | number:'1.2-2' }}
+              </td>
+              <td class="celda-aposto"><strong>${{ usuario.aposto | number:'1.2-2' }}</strong></td>
+              <td>${{ usuario.vaJugando | number:'1.2-2' }}</td>
+              <td>${{ usuario.enEspera | number:'1.2-2' }}</td>
+              <td>${{ usuario.devuelto | number:'1.2-2' }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div *ngIf="!usuariosResumen.length; else: sinUsuarios" class="sin-usuarios-msg">
+          <p>No hay usuarios apostando en este momento</p>
+        </div>
+      </div>
+    </div>
 
+    <ng-template #sinUsuarios>
+      <div class="sin-usuarios-msg">
+        <p>No hay usuarios apostando en este momento</p>
+      </div>
+    </ng-template>
   </div><!-- /col-right -->
+  
 
 </div><!-- /main-layout -->
+
 
 
 <!-- ══════════════════════════════════════════
