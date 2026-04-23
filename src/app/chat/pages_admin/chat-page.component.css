@@ -830,14 +830,14 @@ html, body {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   white-space: nowrap;
-  color: #1565c0;
+  color: #fff;
 }
 
 .tabla-usuarios td {
   padding: 6px 4px;
   border-bottom: 1px solid #333;
   white-space: nowrap;
-  color: #1565c0;
+  color: #ffff;
 }
 
 .tabla-usuarios tbody tr:hover {
