@@ -500,28 +500,42 @@ this.recipesService.getAll().subscribe((data: any) => {
 
     // Procesar el stream de chat para agrupar las apuestas por estado
     this.chat$ = this.apuestaService.chat$.pipe(
-      map((bets: any[]) => {
-        const betsAgrupadas = new Map<string, any>();
+  map((bets: any[]) => {
+    const usuariosMap = new Map<string, any>();
 
-        // Recorremos todas las apuestas que llegan del servicio
-        for (const bet of bets) {
-          // Creamos una clave única por usuario, ronda y estado ('cazada' o 'cazando')
-          const key = `${bet.user.name}-${bet.ronda}-${bet.estado}`;
+    for (const bet of bets) {
+      // Agrupar SOLO por usuario + ronda, sin importar estado
+      const key = `${bet.user.name}-${bet.ronda}`;
 
-          if (betsAgrupadas.has(key)) {
-            // Si ya existe una entrada para este usuario, ronda y estado, sumamos la cantidad
-            const existingBet = betsAgrupadas.get(key);
-            existingBet.cantidad += bet.cantidad;
-          } else {
-            // Si no existe, creamos una nueva entrada
-            betsAgrupadas.set(key, { ...bet });
-          }
-        }
+      if (!usuariosMap.has(key)) {
+        usuariosMap.set(key, {
+          ...bet,
+          cantidadTotal: 0,    // lo que apostó (suma de todo)
+          cantidadCazada: 0,   // lo que ya fue cazado
+        });
+      }
 
-        // Convertimos el mapa de nuevo a un array para mostrarlo en la tabla
-        return Array.from(betsAgrupadas.values());
-      })
-    );
+      const entry = usuariosMap.get(key)!;
+
+      // Izquierda: suma de TODO lo que apostó sin importar estado
+      entry.cantidadTotal += bet.cantidad;
+
+      // Derecha: solo lo que está cazado
+      if (bet.estado === 'cazada') {
+        entry.cantidadCazada += bet.cantidad;
+      }
+
+      // El estado final del bloque = el más relevante
+      // prioridad: cazada > en_espera > devuelta > pagada
+      const prioridad: any = { cazada: 4, en_espera: 3, devuelta: 2, pagada: 1, perdida: 0 };
+      if ((prioridad[bet.estado] ?? 0) > (prioridad[entry.estado] ?? 0)) {
+        entry.estado = bet.estado;
+      }
+    }
+
+    return Array.from(usuariosMap.values());
+  })
+);
   }
 
   ngOnDestroy() {

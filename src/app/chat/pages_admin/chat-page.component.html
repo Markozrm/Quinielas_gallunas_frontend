@@ -234,13 +234,13 @@
       <div class="apuestas-lado rojo-lado">
         <ng-container *ngFor="let bet of chat$ | async">
           <div *ngIf="!esVerde(bet.verde)"
-               class="apuesta-fila"
-               [class.fila-tachado]="bet.estado === 'devuelta' || bet.estado === 'pagada'"
-               [class.fila-highlight]="bet.estado === 'cazada'">
-            <span class="fila-monto-izq">{{ bet.cantidad }}</span>
-            <span class="fila-nombre">{{ bet.user.name }}</span>
-            <span class="fila-monto-der">{{ bet.cantidad }}</span>
-          </div>
+     class="apuesta-fila"
+     [class.fila-tachado]="bet.estado === 'devuelta' || bet.estado === 'pagada'"
+     [class.fila-highlight]="bet.estado === 'cazada'">
+  <span class="fila-monto-izq">{{ bet.cantidadTotal }}</span>
+  <span class="fila-nombre">{{ bet.user.name }}</span>
+  <span class="fila-monto-der">{{ bet.cantidadCazada }}</span>
+</div>
         </ng-container>
         <div class="fila-total">
           <span class="total-word">Total</span>
@@ -254,13 +254,13 @@
       <div class="apuestas-lado verde-lado">
         <ng-container *ngFor="let bet of chat$ | async">
           <div *ngIf="esVerde(bet.verde)"
-               class="apuesta-fila"
-               [class.fila-tachado]="bet.estado === 'devuelta' || bet.estado === 'pagada'"
-               [class.fila-highlight]="bet.estado === 'cazada'">
-            <span class="fila-monto-izq">{{ bet.cantidad }}</span>
-            <span class="fila-nombre">{{ bet.user.name }}</span>
-            <span class="fila-monto-der">{{ bet.cantidad }}</span>
-          </div>
+     class="apuesta-fila"
+     [class.fila-tachado]="bet.estado === 'devuelta' || bet.estado === 'pagada'"
+     [class.fila-highlight]="bet.estado === 'cazada'">
+  <span class="fila-monto-izq">{{ bet.cantidadTotal }}</span>
+  <span class="fila-nombre">{{ bet.user.name }}</span>
+  <span class="fila-monto-der">{{ bet.cantidadCazada }}</span>
+</div>
         </ng-container>
         <div class="fila-total">
           <span class="total-num">{{ cantidadApostadaVerde }}</span>
