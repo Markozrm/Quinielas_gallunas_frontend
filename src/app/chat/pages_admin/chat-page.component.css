@@ -579,7 +579,7 @@ html, body {
 
 .apuesta-fila {
   display: grid;
-  grid-template-columns: 52px 1fr 52px;
+  grid-template-columns: 70px 52px 1fr 52px; /* detalle | apostó | nombre | cazado */
   border-bottom: 1px solid #e5e5e5;
   padding: 5px 10px;
   align-items: center;
@@ -587,6 +587,16 @@ html, body {
   font-size: 0.9rem;
   color: #000000 !important;
   background: #ffffff !important;
+}
+.fila-detalle {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #1565c0 !important;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .fila-nombre {
@@ -655,6 +665,79 @@ html, body {
   font-weight: 900;
   color: #000000 !important;
   text-transform: uppercase;
+}
+.fila-clickeable {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.fila-clickeable:hover {
+  background: #f0f4ff !important;
+}
+
+.popup-detalle {
+  background: #111111 !important;
+  border: 2px solid #1565c0;
+  border-radius: 12px;
+  padding: 24px;
+  position: relative;
+  width: 320px;
+  max-height: 70vh;
+  overflow-y: auto;
+  color: #dddddd !important;
+}
+.popup-detalle h3 {
+  font-family: 'Anton', sans-serif;
+  letter-spacing: 2px;
+  color: #fbc02d !important;
+  text-align: center;
+  margin-bottom: 12px;
+}
+.detalle-info {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 14px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.9rem;
+  color: #cccccc !important;
+}
+.detalle-info strong {
+  color: #ffffff !important;
+  font-size: 1rem;
+}
+.detalle-titulo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #888888 !important;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.detalle-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid #222222;
+  font-family: 'Barlow Condensed', sans-serif;
+}
+.detalle-num {
+  font-size: 0.72rem;
+  color: #666666 !important;
+  width: 20px;
+  text-align: center;
+}
+.detalle-monto {
+  font-family: 'Anton', sans-serif;
+  font-size: 1rem;
+  color: #fbc02d !important;
+}
+.detalle-vacio {
+  text-align: center;
+  color: #555555 !important;
+  font-style: italic;
+  padding: 12px 0;
+  font-family: 'Barlow Condensed', sans-serif;
 }
 .footer-val {
   font-size: 0.9rem;

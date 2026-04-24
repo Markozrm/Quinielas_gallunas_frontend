@@ -58,6 +58,8 @@ export class ChatAdminPageComponent implements OnInit, OnDestroy {
   public greenTeamName: string = '';
   public redPoints: number = 0;
   public greenPoints: number = 0;
+  public betDetalleSeleccionado: any = null;
+
   // Usuarios
 public totalUsuariosRegistrados: number = 0;
  
@@ -284,6 +286,15 @@ public usuariosResumen: any[] = [];
     this.isDragging = false;
     this.saveButtonPosition();
   }
+  abrirDetalleApuesta(bet: any): void {
+  this.betDetalleSeleccionado = bet;
+}
+
+cerrarDetalleApuesta(event: MouseEvent): void {
+  if ((event.target as HTMLElement).classList.contains('popup-overlay')) {
+    this.betDetalleSeleccionado = null;
+  }
+}
 
   onTouchStart(event: TouchEvent): void {
     this.isDragging = false; // Inicialmente no está arrastrando
@@ -340,6 +351,22 @@ public usuariosResumen: any[] = [];
     }
   }
 
+  private cargarDepositos(): void {
+  this.recipesService.getAll().subscribe((data: any) => {
+    const todos = Array.isArray(data) ? data : (data.recibos ?? data.data ?? []);
+    
+    this.depositosPendientes = todos.filter((d: any) => {
+      const estado = (d.estado || '').toLowerCase();
+      return estado === 'pendiente' || 
+             estado === 'pendiente por aceptar' ||
+             estado === 'por aceptar' ||
+             estado === 'en espera';
+    });
+    
+    this.totalDepositosPendientes = this.depositosPendientes
+      .reduce((s: number, d: any) => s + (Number(d.monto) || 0), 0);
+  });
+}
   private saveButtonPosition(): void {
     localStorage.setItem('chatButtonPosition', JSON.stringify(this.buttonPosition));
   }
@@ -355,20 +382,22 @@ public usuariosResumen: any[] = [];
     // NUEVAS SUSCRIPCIONES (AGREGADAS)
     // ══════════════════════════════════════════════════════════════════
 
-  this.recipesService.getAll().subscribe((data: any) => {
-  this.depositosPendientes = data ?? [];
-
+ this.recipesService.getAll().subscribe((data: any) => {
+  const todos = Array.isArray(data) ? data : (data.recibos ?? data.data ?? []);
+  console.log('Estado del primer recibo:', todos[0]?.estado); // Ver valor exacto
+  
+  this.depositosPendientes = todos.filter((d: any) => {
+    const estado = (d.estado || '').toLowerCase();
+    return estado === 'pendiente' || 
+           estado === 'pendiente por aceptar' || 
+           estado === 'por aceptar' ||
+           estado === 'en espera';
+  });
+  
   this.totalDepositosPendientes = this.depositosPendientes
-    .filter((d: any) => d.estado === 'pendiente')
-    .reduce((s: number, d: any) => s + (d.monto ?? 0), 0);
+    .reduce((s: number, d: any) => s + (Number(d.monto) || 0), 0);
 });
-this.recipesService.getAll().subscribe((data: any) => {
-  this.depositosPendientes = data ?? [];
 
-  this.totalDepositosPendientes = this.depositosPendientes
-    .filter((d: any) => d.estado === 'pendiente')
-    .reduce((s: number, d: any) => s + (d.monto ?? 0), 0);
-});
 
     this.apuestaService.chat$.subscribe((bets: any[]) => {
       this.montoCazadoRojo = bets
@@ -487,6 +516,14 @@ this.recipesService.getAll().subscribe((data: any) => {
     this.apuestaService.cantidadApuestasVerde.subscribe((cantidad: number) => {
       this.cantidadApostadaVerde = cantidad;
     });
+    this.retirosService.getAllSolicitudes().subscribe((data: any) => {
+  const todos = Array.isArray(data) ? data : (data.retiros ?? data.solicitudes ?? []);
+  
+  this.retirosPendientes = todos.filter((r: any) => r.estado === 'pendiente');
+  
+  this.totalRetirosPendientes = this.retirosPendientes
+    .reduce((s: number, r: any) => s + (r.cantidad ?? r.monto ?? 0), 0);
+});
 
     // Suscripción a los nombres y puntos de equipos
     this.apuestaService.getEstadoApuesta().subscribe((data: any) => {
@@ -504,29 +541,25 @@ this.recipesService.getAll().subscribe((data: any) => {
     const usuariosMap = new Map<string, any>();
 
     for (const bet of bets) {
-      // Agrupar SOLO por usuario + ronda, sin importar estado
       const key = `${bet.user.name}-${bet.ronda}`;
 
       if (!usuariosMap.has(key)) {
         usuariosMap.set(key, {
           ...bet,
-          cantidadTotal: 0,    // lo que apostó (suma de todo)
-          cantidadCazada: 0,   // lo que ya fue cazado
+          cantidadTotal: 0,
+          cantidadCazada: 0,
+          cazadasDetalle: [], // ← NUEVO: array con cada parcial cazado
         });
       }
 
       const entry = usuariosMap.get(key)!;
-
-      // Izquierda: suma de TODO lo que apostó sin importar estado
       entry.cantidadTotal += bet.cantidad;
 
-      // Derecha: solo lo que está cazado
       if (bet.estado === 'cazada') {
         entry.cantidadCazada += bet.cantidad;
+        entry.cazadasDetalle.push(bet.cantidad); // ← guarda cada parcial
       }
 
-      // El estado final del bloque = el más relevante
-      // prioridad: cazada > en_espera > devuelta > pagada
       const prioridad: any = { cazada: 4, en_espera: 3, devuelta: 2, pagada: 1, perdida: 0 };
       if ((prioridad[bet.estado] ?? 0) > (prioridad[entry.estado] ?? 0)) {
         entry.estado = bet.estado;
@@ -536,6 +569,9 @@ this.recipesService.getAll().subscribe((data: any) => {
     return Array.from(usuariosMap.values());
   })
 );
+this.cargarDepositos();
+setInterval(() => this.cargarDepositos(), 30000);
+
   }
 
   ngOnDestroy() {
@@ -555,6 +591,8 @@ this.recipesService.getAll().subscribe((data: any) => {
   public getImage(username: string): any {
     return this.usersService.getImageUrl(username);
   }
+  private depositosInterval: any;
+
 
   selectTeam(team: 'rojo' | 'verde' | 'empate'): void {
     if (team === 'rojo') {

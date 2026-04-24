@@ -10,22 +10,14 @@
   </button>
 </div>
 
-<!-- ══════════════════════════════════════════
-     LAYOUT PRINCIPAL
-══════════════════════════════════════════ -->
 <div class="main-layout">
 
-  <!-- ────────────────────────────────────────
-       COLUMNA IZQUIERDA
-  ────────────────────────────────────────── -->
   <div class="col-left">
 
-    <!-- Video -->
     <div class="video-wrapper">
       <app-video-player></app-video-player>
     </div>
 
-    <!-- ── Stats Bar ── -->
     <div class="stats-bar">
       <button *ngIf="esAdmin() && !estadoApuesta && textButton === 'Abrir Apuestas'"
               class="btn-abrir" (click)="toggleBooleanState()">
@@ -51,10 +43,7 @@
       </div>
     </div>
 
-    <!-- ── Métricas admin en grid 2x2 compacto ── -->
     <div *ngIf="esAdmin()" class="metricas-grid">
-
-      <!-- Balance box compacto -->
       <div class="metrica-card balance-card">
         <div class="metrica-row">
           <div class="metrica-item">
@@ -73,8 +62,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Saldo compacto -->
       <div class="metrica-card saldo-card">
         <div class="metrica-row">
           <div class="metrica-item">
@@ -88,13 +75,9 @@
           </div>
         </div>
       </div>
-
     </div>
 
-    <!-- ══ DEPÓSITOS + RETIROS lado a lado ══ -->
     <div *ngIf="esAdmin()" class="pending-grid">
-
-      <!-- Depósitos -->
       <div class="pending-col">
         <div class="pending-header">
           <span class="pending-title">💰 Dep: ${{ totalDepositosPendientes | number:'1.0-0' }}</span>
@@ -103,8 +86,8 @@
         <div class="pending-table-card">
           <ng-container *ngIf="(depositosPendientes?.length || 0) > 0; else sinDepositos">
             <div class="pending-row" *ngFor="let dep of depositosPendientes | slice:0:2">
-              <span class="prow-user">{{ dep.usuario }}</span>
-              <span class="prow-amount">${{ dep.cantidad | number:'1.0-0' }}</span>
+              <span class="prow-user">{{ dep.username }}</span>
+              <span class="prow-amount">${{ dep.monto | number:'1.0-0' }}</span>
               <button class="btn-recibo" (click)="verReciboDeposito(dep)">VER</button>
             </div>
           </ng-container>
@@ -113,8 +96,6 @@
           </ng-template>
         </div>
       </div>
-
-      <!-- Retiros -->
       <div class="pending-col">
         <div class="pending-header">
           <span class="pending-title">💸 Ret: ${{ totalRetirosPendientes | number:'1.0-0' }}</span>
@@ -123,7 +104,7 @@
         <div class="pending-table-card">
           <ng-container *ngIf="(retirosPendientes?.length || 0) > 0; else sinRetiros">
             <div class="pending-row" *ngFor="let ret of retirosPendientes | slice:0:2">
-              <span class="prow-user">{{ ret.usuario }}</span>
+              <span class="prow-user">{{ ret.username }}</span>
               <span class="prow-amount">${{ ret.cantidad | number:'1.0-0' }}</span>
               <button class="btn-recibo" (click)="verReciboRetiro(ret)">VER</button>
             </div>
@@ -133,71 +114,50 @@
           </ng-template>
         </div>
       </div>
-
     </div>
 
-    <!-- ── Botones admin en una sola fila compacta ── -->
     <div *ngIf="esAdmin()" class="admin-controls">
-
-      <button *ngIf="estadoApuesta"
-              class="admin-btn btn-cerrar" (click)="toggleBooleanState()">
+      <button *ngIf="estadoApuesta" class="admin-btn btn-cerrar" (click)="toggleBooleanState()">
         ⛔ Cerrar
       </button>
-
-      <button *ngIf="!estadoApuesta && textButton === 'Abrir Apuestas'"
-              class="admin-btn btn-abrir-ap" (click)="toggleBooleanState()">
+      <button *ngIf="!estadoApuesta && textButton === 'Abrir Apuestas'" class="admin-btn btn-abrir-ap" (click)="toggleBooleanState()">
         ✅ Abrir
       </button>
-
-      <button *ngIf="!estadoApuesta && textButton === 'Escoger Ganador'"
-              class="admin-btn btn-ganador" (click)="toggleBooleanState()">
+      <button *ngIf="!estadoApuesta && textButton === 'Escoger Ganador'" class="admin-btn btn-ganador" (click)="toggleBooleanState()">
         🏆 Ganador R{{ numeroPelea }}
       </button>
-
-      <button *ngIf="!estadoApuesta && textButton === 'Escoger Ganador'"
-              class="admin-btn btn-nueva" (click)="abrirNuevaRonda()">
+      <button *ngIf="!estadoApuesta && textButton === 'Escoger Ganador'" class="admin-btn btn-nueva" (click)="abrirNuevaRonda()">
         ➕ Nueva Ronda
       </button>
-
       <button class="chat-button" (click)="openChatModal()">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
           <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
         </svg>
         Chat
       </button>
-
       <button class="admin-btn btn-finalizar" (click)="confirmarFinalizar()">
         🔴 FINALIZAR
       </button>
-
     </div>
 
-    <!-- Rondas en espera -->
     <div *ngIf="esAdmin() && rondasEnEspera.length > 0" class="rondas-espera">
       <h4>Pendientes de ganador:</h4>
       <div class="rondas-list">
-        <button *ngFor="let ronda of rondasEnEspera"
-                class="ronda-espera-btn" (click)="seleccionarRonda(ronda)">
+        <button *ngFor="let ronda of rondasEnEspera" class="ronda-espera-btn" (click)="seleccionarRonda(ronda)">
           R{{ ronda }}
         </button>
       </div>
     </div>
 
-    <!-- Tabla de puntos -->
     <div *ngIf="esAdmin()" class="tabla-puntos-admin-wrapper">
       <app-tabla-puntos [isSuperUser]="true"></app-tabla-puntos>
     </div>
 
-    <!-- ── Apuesta para invitados ── -->
     <div *ngIf="esInvitado()" class="apuesta-invitado">
       <input #cantidadApuesta type="number" placeholder="Ingresar cantidad" />
       <div class="equipos-row">
-        <button class="btn-equipo rojo"
-                [class.selected]="selectedTeam === 'rojo'"
-                (click)="selectTeam('rojo')">Voy Rojo</button>
-        <button class="btn-equipo verde"
-                [class.selected]="selectedTeam === 'verde'"
-                (click)="selectTeam('verde')">Voy Verde</button>
+        <button class="btn-equipo rojo" [class.selected]="selectedTeam === 'rojo'" (click)="selectTeam('rojo')">Voy Rojo</button>
+        <button class="btn-equipo verde" [class.selected]="selectedTeam === 'verde'" (click)="selectTeam('verde')">Voy Verde</button>
       </div>
       <button class="btn-apostar" (click)="apostar(cantidadApuesta.value)">APOSTAR</button>
     </div>
@@ -205,9 +165,6 @@
   </div><!-- /col-left -->
 
 
-  <!-- ────────────────────────────────────────
-       COLUMNA DERECHA — TABLERO
-  ────────────────────────────────────────── -->
   <div class="col-right">
 
     <div class="pelea-header">
@@ -234,13 +191,17 @@
       <div class="apuestas-lado rojo-lado">
         <ng-container *ngFor="let bet of chat$ | async">
           <div *ngIf="!esVerde(bet.verde)"
-     class="apuesta-fila"
-     [class.fila-tachado]="bet.estado === 'devuelta' || bet.estado === 'pagada'"
-     [class.fila-highlight]="bet.estado === 'cazada'">
-  <span class="fila-monto-izq">{{ bet.cantidadTotal }}</span>
-  <span class="fila-nombre">{{ bet.user.name }}</span>
-  <span class="fila-monto-der">{{ bet.cantidadCazada }}</span>
-</div>
+               class="apuesta-fila fila-clickeable"
+               [class.fila-tachado]="bet.estado === 'devuelta' || bet.estado === 'pagada'"
+               [class.fila-highlight]="bet.estado === 'cazada'"
+               (click)="abrirDetalleApuesta(bet)">
+            <span class="fila-detalle">
+              {{ bet.cazadasDetalle?.length > 0 ? bet.cazadasDetalle.slice(0,2).join('+') + (bet.cazadasDetalle.length > 2 ? '...' : '') : '-' }}
+            </span>
+            <span class="fila-monto-izq">{{ bet.cantidadTotal }}</span>
+            <span class="fila-nombre">{{ bet.user.name }}</span>
+            <span class="fila-monto-der">{{ bet.cantidadCazada }}</span>
+          </div>
         </ng-container>
         <div class="fila-total">
           <span class="total-word">Total</span>
@@ -254,13 +215,17 @@
       <div class="apuestas-lado verde-lado">
         <ng-container *ngFor="let bet of chat$ | async">
           <div *ngIf="esVerde(bet.verde)"
-     class="apuesta-fila"
-     [class.fila-tachado]="bet.estado === 'devuelta' || bet.estado === 'pagada'"
-     [class.fila-highlight]="bet.estado === 'cazada'">
-  <span class="fila-monto-izq">{{ bet.cantidadTotal }}</span>
-  <span class="fila-nombre">{{ bet.user.name }}</span>
-  <span class="fila-monto-der">{{ bet.cantidadCazada }}</span>
-</div>
+               class="apuesta-fila fila-clickeable"
+               [class.fila-tachado]="bet.estado === 'devuelta' || bet.estado === 'pagada'"
+               [class.fila-highlight]="bet.estado === 'cazada'"
+               (click)="abrirDetalleApuesta(bet)">
+            <span class="fila-detalle">
+              {{ bet.cazadasDetalle?.length > 0 ? bet.cazadasDetalle.slice(0,2).join('+') + (bet.cazadasDetalle.length > 2 ? '...' : '') : '-' }}
+            </span>
+            <span class="fila-monto-izq">{{ bet.cantidadTotal }}</span>
+            <span class="fila-nombre">{{ bet.user.name }}</span>
+            <span class="fila-monto-der">{{ bet.cantidadCazada }}</span>
+          </div>
         </ng-container>
         <div class="fila-total">
           <span class="total-num">{{ cantidadApostadaVerde }}</span>
@@ -268,88 +233,106 @@
         </div>
       </div>
 
-    </div>
- 
+    </div><!-- /apuestas-tabla-wrap -->
 
     <div class="apuestas-footer">
       <span class="footer-label">APOSTARON</span>
       <span class="footer-val rojo-text">${{ cantidadApostadaRojo | number:'1.2-2' }}</span>
       <span class="footer-val verde-text">${{ cantidadApostadaVerde | number:'1.2-2' }}</span>
-
       <span class="footer-label">CAZADO</span>
       <span class="footer-val rojo-text">${{ montoCazadoRojo | number:'1.2-2' }}</span>
       <span class="footer-val verde-text">${{ montoCazadoVerde | number:'1.2-2' }}</span>
-
       <span class="footer-label">NO CAZADO</span>
       <span class="footer-val rojo-text">${{ (cantidadApostadaRojo - montoCazadoRojo) | number:'1.2-2' }}</span>
       <span class="footer-val verde-text">${{ (cantidadApostadaVerde - montoCazadoVerde) | number:'1.2-2' }}</span>
     </div>
-       <!-- ════════════════════════════════════════════════════════════════
-         TABLA DE RESUMEN POR USUARIO
-    ════════════════════════════════════════════════════════════════ -->
+
     <div class="tabla-usuarios-wrap">
       <h4 class="tabla-usuarios-titulo">TABLA DE USUARIOS QUE APOSTARON EN VIVO</h4>
       <div class="tabla-usuarios-contenedor">
-        <table class="tabla-usuarios" *ngIf="usuariosResumen.length > 0; else sinUsuarios">
-          <thead>
-            <tr>
-              <th>USUARIO</th>
-              <th>SALDO INICIAL</th>
-              <th>GANA</th>
-              <th>PIERDE</th>
-              <th>DEPÓSITOS</th>
-              <th>RETIROS</th>
-              <th>AUM MANUAL</th>
-              <th>RESTA MAN</th>
-              <th>TIENE</th>
-              <th>DEBERÍA TENER</th>
-              <th>TIENE DE MAS</th>
-              <th>APOSTÓ</th>
-              <th>VA JUGANDO</th>
-              <th>EN ESPERA</th>
-              <th>DEVUELTO</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let usuario of usuariosResumen" class="usuario-row">
-              <td class="usuario-nombre">{{ usuario.usuario }}</td>
-              <td>${{ usuario.saldoInicial | number:'1.2-2' }}</td>
-              <td class="celda-gana">${{ usuario.gana | number:'1.2-2' }}</td>
-              <td class="celda-pierde">${{ usuario.pierde | number:'1.2-2' }}</td>
-              <td>${{ usuario.depositos | number:'1.2-2' }}</td>
-              <td>${{ usuario.retiros | number:'1.2-2' }}</td>
-              <td>${{ usuario.aumManual | number:'1.2-2' }}</td>
-              <td>${{ usuario.restaMan | number:'1.2-2' }}</td>
-              <td>${{ usuario.tiene | number:'1.2-2' }}</td>
-              <td>${{ usuario.deberiaTener | number:'1.2-2' }}</td>
-              <td [class.tienedemas-negativo]="usuario.tieneDeMas < 0"
-                  [class.tienedemas-positivo]="usuario.tieneDeMas > 0">
-                ${{ usuario.tieneDeMas | number:'1.2-2' }}
-              </td>
-              <td class="celda-aposto"><strong>${{ usuario.aposto | number:'1.2-2' }}</strong></td>
-              <td>${{ usuario.vaJugando | number:'1.2-2' }}</td>
-              <td>${{ usuario.enEspera | number:'1.2-2' }}</td>
-              <td>${{ usuario.devuelto | number:'1.2-2' }}</td>
-            </tr>
-          </tbody>
-        </table>
-        <div *ngIf="!usuariosResumen.length; else: sinUsuarios" class="sin-usuarios-msg">
-          <p>No hay usuarios apostando en este momento</p>
-        </div>
+        <ng-container *ngIf="usuariosResumen.length > 0; else sinUsuarios">
+          <table class="tabla-usuarios">
+            <thead>
+              <tr>
+                <th>USUARIO</th>
+                <th>SALDO INICIAL</th>
+                <th>GANA</th>
+                <th>PIERDE</th>
+                <th>DEPÓSITOS</th>
+                <th>RETIROS</th>
+                <th>AUM MANUAL</th>
+                <th>RESTA MAN</th>
+                <th>TIENE</th>
+                <th>DEBERÍA TENER</th>
+                <th>TIENE DE MAS</th>
+                <th>APOSTÓ</th>
+                <th>VA JUGANDO</th>
+                <th>EN ESPERA</th>
+                <th>DEVUELTO</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let usuario of usuariosResumen" class="usuario-row">
+                <td class="usuario-nombre">{{ usuario.usuario }}</td>
+                <td>${{ usuario.saldoInicial | number:'1.2-2' }}</td>
+                <td class="celda-gana">${{ usuario.gana | number:'1.2-2' }}</td>
+                <td class="celda-pierde">${{ usuario.pierde | number:'1.2-2' }}</td>
+                <td>${{ usuario.depositos | number:'1.2-2' }}</td>
+                <td>${{ usuario.retiros | number:'1.2-2' }}</td>
+                <td>${{ usuario.aumManual | number:'1.2-2' }}</td>
+                <td>${{ usuario.restaMan | number:'1.2-2' }}</td>
+                <td>${{ usuario.tiene | number:'1.2-2' }}</td>
+                <td>${{ usuario.deberiaTener | number:'1.2-2' }}</td>
+                <td [class.tienedemas-negativo]="usuario.tieneDeMas < 0"
+                    [class.tienedemas-positivo]="usuario.tieneDeMas > 0">
+                  ${{ usuario.tieneDeMas | number:'1.2-2' }}
+                </td>
+                <td class="celda-aposto"><strong>${{ usuario.aposto | number:'1.2-2' }}</strong></td>
+                <td>${{ usuario.vaJugando | number:'1.2-2' }}</td>
+                <td>${{ usuario.enEspera | number:'1.2-2' }}</td>
+                <td>${{ usuario.devuelto | number:'1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-container>
+        <ng-template #sinUsuarios>
+          <div class="sin-usuarios-msg">
+            <p>No hay usuarios apostando en este momento</p>
+          </div>
+        </ng-template>
       </div>
     </div>
 
-    <ng-template #sinUsuarios>
-      <div class="sin-usuarios-msg">
-        <p>No hay usuarios apostando en este momento</p>
-      </div>
-    </ng-template>
   </div><!-- /col-right -->
-  
 
 </div><!-- /main-layout -->
 
 
+<!-- ══════════════════════════════════════════
+     MODAL DETALLE CAZADAS
+══════════════════════════════════════════ -->
+<div *ngIf="betDetalleSeleccionado" class="popup-overlay" (click)="cerrarDetalleApuesta($event)">
+  <div class="popup-detalle">
+    <button class="close-button" (click)="betDetalleSeleccionado = null">&#10005;</button>
+    <h3>{{ betDetalleSeleccionado.user.name }}</h3>
+    <div class="detalle-info">
+      <span>Apostó: <strong>${{ betDetalleSeleccionado.cantidadTotal }}</strong></span>
+      <span>Cazado: <strong>${{ betDetalleSeleccionado.cantidadCazada }}</strong></span>
+    </div>
+    <div class="detalle-lista">
+      <div class="detalle-titulo">Desglose de cazadas:</div>
+      <ng-container *ngFor="let monto of betDetalleSeleccionado.cazadasDetalle; let i = index">
+        <div class="detalle-item">
+          <span class="detalle-num">{{ i + 1 }}</span>
+          <span class="detalle-monto">${{ monto }}</span>
+        </div>
+      </ng-container>
+      <div *ngIf="betDetalleSeleccionado.cazadasDetalle.length === 0" class="detalle-vacio">
+        Sin cazadas aún
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ══════════════════════════════════════════
      MODALES
