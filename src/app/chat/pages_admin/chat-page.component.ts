@@ -408,8 +408,12 @@ cerrarDetalleApuesta(event: MouseEvent): void {
         .filter(b => !!b.verde && b.estado === 'cazada')
         .reduce((sum, b) => sum + (b.cantidad ?? 0), 0);
     });
-     this.apuestaService.chat$.subscribe((bets: any[]) => {
-      this.calcularResumenPorUsuario(bets);
+     let resumenTimeout: any = null;
+    this.apuestaService.chat$.subscribe(() => {
+      clearTimeout(resumenTimeout);
+      resumenTimeout = setTimeout(() => {
+        this.cargarResumenUsuarios();
+      }, 1500); // Espera 1.5s tras el último cambio para llamar al backend
     });
 
     this.route.params.subscribe(params => {
@@ -429,6 +433,8 @@ cerrarDetalleApuesta(event: MouseEvent): void {
       this.chatService.leaveRoom();
       this.chatService.initChat();
       this.chatService.joinRoom(this.salaActual, username);
+      setTimeout(() => this.cargarResumenUsuarios(), 2000);
+
     });
 
     this.apuestaSubscription = this.apuestaService.getEstadoApuesta().subscribe((data: any) => {
@@ -706,64 +712,20 @@ setInterval(() => this.cargarDepositos(), 30000);
     /**
    * Calcula el resumen de apuestas para cada usuario que ha apostado
    */
-  private calcularResumenPorUsuario(apuestas: any[]): void {
-    // Agrupar apuestas por usuario
-    const usuariosMap = new Map<string, any>();
-
-    apuestas.forEach(bet => {
-      const username = bet.user?.name || bet.username || 'Desconocido';
-      
-      if (!usuariosMap.has(username)) {
-        usuariosMap.set(username, {
-          usuario: username,
-          saldoInicial: 0,
-          gana: 0,
-          pierde: 0,
-          depositos: 0,
-          retiros: 0,
-          aumManual: 0,
-          restaMan: 0,
-          tiene: 0,
-          deberiaTener: 0,
-          tieneDeMas: 0,
-          aposto: 0,
-          vaJugando: 0,
-          enEspera: 0,
-          devuelto: 0
-        });
-      }
-
-      const userRecord = usuariosMap.get(username)!;
-      const cantidad = bet.cantidad || 0;
-
-      // Contar total apostado
-      userRecord.aposto += cantidad;
-
-      // Calcular ganancias (apuestas pagadas con 90% de comisión)
-      if (bet.estado === 'pagada') {
-        userRecord.gana += Math.floor(cantidad * 0.9);
-      }
-      
-      // Calcular pérdidas
-      if (bet.estado === 'cazada' || bet.estado === 'perdida') {
-        userRecord.pierde += cantidad;
-      }
-
-      // Calcular estados actuales
-      if (bet.estado === 'cazada') {
-        userRecord.vaJugando += cantidad;
-      } else if (bet.estado === 'en_espera') {
-        userRecord.enEspera += cantidad;
-      } else if (bet.estado === 'devuelta') {
-        userRecord.devuelto += cantidad;
-      }
-    });
-
-    // Convertir a array y filtrar solo usuarios que han apostado
-    this.usuariosResumen = Array.from(usuariosMap.values())
-      .filter(u => u.aposto > 0)
-      .sort((a, b) => b.aposto - a.aposto); // Ordenar por mayor apostado
+   private cargarResumenUsuarios(): void {
+    if (!this.salaActual) return;
+ 
+    this.apuestaService.getResumenUsuariosStream(this.salaActual)
+      .subscribe({
+        next: (data: any) => {
+          this.usuariosResumen = data.resumen ?? [];
+        },
+        error: (err: any) => {
+          console.error('[resumen-usuarios] Error al cargar:', err);
+        }
+      });
   }
+ 
 
   finalizarStream() {
     let streamId = this.salaActual;

@@ -1,3 +1,6 @@
+/* The `AuditoriaRondasComponent` class is an Angular component that displays audit information for
+rounds in a gaming platform, with the ability to switch between different platforms and
+automatically refresh data. */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';

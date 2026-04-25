@@ -389,6 +389,11 @@ public obtenerAuditoriaStream(sala: string): Observable<any> {
 public obtenerAuditoriaRonda(sala: string, ronda: number): Observable<any> {
   return this.httpClient.get(`${this.baseUrl}/auditoria/ronda/${sala}/${ronda}`);
 }
+  getResumenUsuariosStream(sala: string): Observable<any> {
+    return this.httpClient.get(`${this.baseUrl}/apuestas/resumen-usuarios-stream/${sala}`);
+    // Ajusta this.apiUrl a la variable de entorno que uses en tu servicio,
+    // por ejemplo: environment.apiUrl o this.baseUrl, etc.
+  }
 }
 
 interface UserType {
