@@ -524,11 +524,19 @@ cerrarDetalleApuesta(event: MouseEvent): void {
     });
     this.retirosService.getAllSolicitudes().subscribe((data: any) => {
   const todos = Array.isArray(data) ? data : (data.retiros ?? data.solicitudes ?? []);
-  
+ 
   this.retirosPendientes = todos.filter((r: any) => r.estado === 'pendiente');
   
-  this.totalRetirosPendientes = this.retirosPendientes
-    .reduce((s: number, r: any) => s + (r.cantidad ?? r.monto ?? 0), 0);
+    this.totalRetirosPendientes = this.retirosPendientes
+    .reduce((s: number, r: any) => {
+      let cantidad = 0;
+      if (typeof r.cantidad === 'string') {
+        cantidad = Number(r.cantidad.replace(/[^0-9.]/g, ''));
+      } else {
+        cantidad = Number(r.cantidad || 0);
+      }
+      return s + (isNaN(cantidad) ? 0 : cantidad);
+    }, 0);
 });
 
     // Suscripción a los nombres y puntos de equipos

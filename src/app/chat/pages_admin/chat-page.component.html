@@ -78,14 +78,23 @@
     </div>
 
     <div *ngIf="esAdmin()" class="pending-grid">
+
+      <!-- ── DEPÓSITOS PENDIENTES ── -->
       <div class="pending-col">
         <div class="pending-header">
           <span class="pending-title">💰 Dep: ${{ totalDepositosPendientes | number:'1.0-0' }}</span>
           <button class="btn-ver-todos" (click)="irVerDepositos()">VER →</button>
         </div>
         <div class="pending-table-card">
+          <!-- Cabecera fija (nueva) -->
+          <div class="pending-header-row">
+            <span>USUARIO</span>
+            <span>MONTO</span>
+            <span></span>
+          </div>
           <ng-container *ngIf="(depositosPendientes?.length || 0) > 0; else sinDepositos">
-            <div class="pending-row" *ngFor="let dep of depositosPendientes | slice:0:2">
+            <!-- CAMBIO: quitado | slice:0:2 → muestra todos -->
+            <div class="pending-row" *ngFor="let dep of depositosPendientes">
               <span class="prow-user">{{ dep.username }}</span>
               <span class="prow-amount">${{ dep.monto | number:'1.0-0' }}</span>
               <button class="btn-recibo" (click)="verReciboDeposito(dep)">VER</button>
@@ -96,14 +105,28 @@
           </ng-template>
         </div>
       </div>
+
+      <!-- ── RETIROS PENDIENTES ── -->
       <div class="pending-col">
         <div class="pending-header">
+          <!--
+            totalRetirosPendientes — IMPORTANTE: calculado en el TS igual que ver-retiros.
+            Ver fix-retiros-conteo.ts: usa Number(r.cantidad || 0) con parse de string,
+            NO r.cantidad ?? r.monto, para que el número sea idéntico al de ver-retiros.
+          -->
           <span class="pending-title">💸 Ret: ${{ totalRetirosPendientes | number:'1.0-0' }}</span>
           <button class="btn-ver-todos" (click)="irVerRetiros()">VER →</button>
         </div>
         <div class="pending-table-card">
+          <!-- Cabecera fija (nueva) -->
+          <div class="pending-header-row">
+            <span>USUARIO</span>
+            <span>MONTO</span>
+            <span></span>
+          </div>
           <ng-container *ngIf="(retirosPendientes?.length || 0) > 0; else sinRetiros">
-            <div class="pending-row" *ngFor="let ret of retirosPendientes | slice:0:2">
+            <!-- CAMBIO: quitado | slice:0:2 → muestra todos -->
+            <div class="pending-row" *ngFor="let ret of retirosPendientes">
               <span class="prow-user">{{ ret.username }}</span>
               <span class="prow-amount">${{ ret.cantidad | number:'1.0-0' }}</span>
               <button class="btn-recibo" (click)="verReciboRetiro(ret)">VER</button>
@@ -114,6 +137,7 @@
           </ng-template>
         </div>
       </div>
+
     </div>
 
     <div *ngIf="esAdmin()" class="admin-controls">
@@ -274,7 +298,7 @@
             <tbody>
               <tr *ngFor="let usuario of usuariosResumen" class="usuario-row">
                 <td class="usuario-nombre">{{ usuario.usuario }}</td>
-                <td>${{ usuario.saldoInicial | number:'1.2-2' }}</td>
+                <td>${{ usuario.saldoInicio | number:'1.2-2' }}</td>
                 <td class="celda-gana">${{ usuario.gana | number:'1.2-2' }}</td>
                 <td class="celda-pierde">${{ usuario.pierde | number:'1.2-2' }}</td>
                 <td>${{ usuario.depositos | number:'1.2-2' }}</td>
