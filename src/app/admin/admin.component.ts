@@ -143,7 +143,8 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
   }
   // NUEVO: Método para detectar usuario "blanco"
   isUsuarioBlanco(): boolean {
-    return (this.username || '').toLowerCase() === 'blanco';
+    const u = (this.username || '').toLowerCase();
+    return u === 'blanco' || u === 'quinielasgallisticas';
   }
 
   isCristianQuiroz(): boolean {
