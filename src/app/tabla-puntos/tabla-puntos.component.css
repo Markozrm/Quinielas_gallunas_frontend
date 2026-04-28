@@ -486,16 +486,24 @@ button[title="Marcar T"] {
 /* Mantener ID lo más estrecha posible SOLO para invitados */
 .tabla-puntos:not(.admin-view) tbody td.id,
 .tabla-puntos:not(.admin-view) thead th.id {
-  width: 28px !important;
-  min-width: 28px !important;
-  max-width: 28px !important;
-  padding: 4px 6px !important;
-  font-size: 10px !important;
-  text-align: center;
+  width: 42px !important;
+  min-width: 42px !important;
+  max-width: 42px !important;
+  padding: 4px 4px !important;
+  font-size: 11px !important;
+  text-align: right;
   vertical-align: middle;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow: visible;
+  text-overflow: clip;
+}
+.tabla-puntos:not(.admin-view) thead th.id,
+.tabla-puntos:not(.admin-view) tbody td.id {
+  width: 42px !important;
+  min-width: 42px !important;
+  max-width: 42px !important;
+  padding: 4px 4px !important;
+  box-sizing: border-box;
 }
 /* ====== fin overrides invitados ====== */
 
@@ -556,30 +564,34 @@ button[title="Marcar T"] {
   box-sizing: border-box;
 }
 
-/* Columnas pequeñas con ancho fijo para que "partido" reciba el resto */
+/* ← CAMBIO: 28px → 42px para que quepan números de 2 dígitos */
 .tabla-puntos:not(.admin-view) thead th.id,
 .tabla-puntos:not(.admin-view) tbody td.id {
-  width: 28px !important;
-  min-width: 28px !important;
-  max-width: 28px !important;
-  padding: 4px 6px !important;
+  width: 32px !important;
+  min-width: 32px !important;
+  max-width: 32px !important;
+  padding: 4px 2px !important;
+  font-size: 10px;
   box-sizing: border-box;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: nowrap;
 }
 
 .tabla-puntos:not(.admin-view) thead th.celda,
 .tabla-puntos:not(.admin-view) tbody td.celda {
-  width: 30px !important;
-  min-width: 30px !important;
-  max-width: 30px !important;
-  padding: 4px 4px !important;
+  width: 22px !important;
+  min-width: 22px !important;
+  max-width: 22px !important;
+  padding: 2px!important;
   box-sizing: border-box;
 }
 
 .tabla-puntos:not(.admin-view) thead th.w,
 .tabla-puntos:not(.admin-view) tbody td.w {
-  width: 36px !important;
-  min-width: 36px !important;
-  max-width: 36px !important;
+  width: 28px !important;
+  min-width: 28px !important;
+  max-width: 28px !important;
 }
 
 /* La columna "partido" toma el espacio restante: no debe solaparse ni cambiar
