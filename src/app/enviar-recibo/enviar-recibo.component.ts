@@ -82,11 +82,11 @@ export class EnviarReciboComponent implements OnInit{
         // Mostrar notificación si es posible, si no, alert
         if (Notification.permission === 'granted') {
           new Notification('Límite de recibos alcanzado', {
-            body: 'Por el momento ya no puedes mandar más recibos',
+            body: 'El recibo fue enviado exitosamente',
             icon: 'assets/logoPrincipal.PNG'
           });
         }
-        alert('Por el momento ya no puedes mandar más recibos');
+        alert('El recibo fue enviado exitosamente');
         return;
       }
 
