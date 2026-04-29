@@ -254,10 +254,21 @@
 
   .search-container {
     flex-direction: column; /* Apila búsqueda y selector */
+    gap: 10px;
+    padding: 0 12px;
+    box-sizing: border-box;
   }
 
   .sort-selector, .search-bar {
     width: 100%; /* Inputs al 100% del ancho */
+    box-sizing: border-box;
+    font-size: 1rem;
+  }
+
+  /* Input más alto y con padding cómodo para que el texto sea legible */
+  .search-bar {
+    padding: 12px 16px;
+    flex: none;
   }
 }
 
