@@ -578,4 +578,4 @@ interface rifaData {
   sala: string;
   // otras propiedades si las hay
 }
-//Prueba de commitss
+//Prueba de commitss  

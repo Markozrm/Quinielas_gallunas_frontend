@@ -239,7 +239,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
 
     this.apuestaService.rondaActual.subscribe((ronda: number) => {
       this.rondaActual = ronda;
-      this.yaApostoEstaRonda = this.consultarApuestaRondaActual();
+      //this.yaApostoEstaRonda = this.consultarApuestaRondaActual();
       if (ronda !== 0) {
         this.guardarDatosEnLocalStorage();
       }
@@ -465,8 +465,8 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
       };
       this.mostrarNotificacion(notificacion);
 
-      this.marcarApuestaRondaActual();
-      this.yaApostoEstaRonda = true;
+      //this.marcarApuestaRondaActual();
+      //this.yaApostoEstaRonda = true;
     });
   }
 
