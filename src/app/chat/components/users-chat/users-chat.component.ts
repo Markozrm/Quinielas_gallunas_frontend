@@ -33,6 +33,18 @@ export class UsersChatComponent implements OnInit, OnDestroy {
   @Input() isPrivate: boolean = false;
   @Input() targetUser: any = null;
 
+  // Lista de usuarios conectados (con su rol). Se mantiene viva vía suscripción
+  // a chatService.users$ para resolver el rol por nombre — necesario porque el
+  // payload de cada mensaje del socket NO incluye `rol` (solo username).
+  private connectedUsers: any[] = [];
+  private usersSubscription: Subscription | undefined;
+
+  // Fallback para mensajes históricos cuyo autor admin ya no esté conectado.
+  private readonly ADMIN_USERNAMES = [
+    'BANCA', 'QuinielasGallisticas', 'admin', 'administrador',
+    'Admin1', 'MARCOSADMIN'
+  ];
+
   constructor(
     private chatService: ChatService,
     private usersService: UsersService,
@@ -74,12 +86,42 @@ export class UsersChatComponent implements OnInit, OnDestroy {
       // Removed scrollToBottom() as newest messages are now at the top
       this.cd.detectChanges(); // Detectar cambios manualmente
     });
+
+    // Mantener actualizada la lista de usuarios conectados con su rol
+    // para distinguir admins en el chat.
+    this.usersSubscription = this.chatService.users$.subscribe((users: any[]) => {
+      this.connectedUsers = Array.isArray(users) ? users : [];
+      this.cd.detectChanges();
+    });
   }
 
   ngOnDestroy(): void {
     if (this.chatSubscription) {
       this.chatSubscription.unsubscribe();
     }
+    if (this.usersSubscription) {
+      this.usersSubscription.unsubscribe();
+    }
+  }
+
+  // Determina si un username corresponde a un admin.
+  // 1) Mira el chat.user.rol embebido (por si llega del backend).
+  // 2) Busca el rol del usuario en la lista de usuarios conectados.
+  // 3) Cae a la lista de nombres conocidos (incluye BANCA).
+  public esAdmin(user: any): boolean {
+    if (!user) return false;
+    if (user.rol === 'administrador' || user.rol === 'superUsuario') return true;
+    const name: string = user.name || '';
+    if (!name) return false;
+    const u = (this.connectedUsers || []).find(
+      (x: any) => x?.name && x.name.toLowerCase() === name.toLowerCase()
+    );
+    if (u && u.rol) {
+      return u.rol === 'administrador' || u.rol === 'superUsuario';
+    }
+    return this.ADMIN_USERNAMES.some(
+      a => a.toLowerCase() === name.toLowerCase()
+    );
   }
 
   sanitizeMessage(message: string): string {

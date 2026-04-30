@@ -4,12 +4,15 @@
   <ng-container *ngIf="!isPrivate && (chat$ | async) as messages">
     <ul>
       <ng-container *ngFor="let chat of messages; let i = index">
-        <li *ngIf="!isPrivateMessage(chat.message)" class="chat-message" [ngClass]="i % 2 === 0 ? 'mensaje-par' : 'mensaje-impar'">
-          <div class="message-content">
+<li *ngIf="!isPrivateMessage(chat.message)" class="chat-message"
+    [ngClass]="esAdmin(chat.user) ? 'mensaje-admin' : 'mensaje-normal'">          <div class="message-content">
             <div class="user-info">
               <p class="date">{{ chat.date | date:'HH:mm' }} </p>
-              <h1>{{ chat.user.name }}: </h1>
-              <div class="message-link" *ngIf="isValidLink(chat.message); else notALink">
+<h1>
+  {{ chat.user.name }}
+  <span *ngIf="esAdmin(chat.user)" class="admin-badge">ADMIN</span>
+  <span *ngIf="!esAdmin(chat.user)">: </span>
+</h1>              <div class="message-link" *ngIf="isValidLink(chat.message); else notALink">
               <a class="message-link-content" [href]='sanitizeMessage(chat.message)' target="_blank">{{sanitizeMessage(chat.message)}}</a>
               </div>
             </div>

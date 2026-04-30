@@ -139,13 +139,104 @@
   overflow-wrap: break-word;
 }
 
-/* Colores alternos para los mensajes */
-.mensaje-par {
-  background-color: #3a3b3c;
+/* Mensaje normal - gris uniforme */
+.mensaje-normal:hover {
+  background-color: #444546;
 }
 
-.mensaje-impar {
-  background-color: #2d3a4a;
+/* =====================================================
+   Mensaje de ADMIN — tarjeta dorada distintiva
+   Pensado para destacar fuerte sobre el fondo oscuro
+   #242526 de los mensajes normales.
+   ===================================================== */
+.mensaje-admin {
+  background: linear-gradient(135deg, #fff4cc 0%, #ffe98a 50%, #ffd23f 100%) !important;
+  border: 2px solid #b8860b !important;
+  border-left: 6px solid #b8860b !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 8px rgba(184, 134, 11, 0.5),
+              0 0 14px rgba(255, 215, 0, 0.35),
+              inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+  padding-top: 24px !important;
+  margin: 8px 4px !important;
+  position: relative;
+  color: #2a1c00 !important;
+}
+
+/* Banda superior con leyenda "👑 MENSAJE DE ADMINISTRADOR" */
+.mensaje-admin::before {
+  content: "👑 MENSAJE DE ADMINISTRADOR";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 18px;
+  background: linear-gradient(90deg, #8b6508, #b8860b, #d4a017, #b8860b, #8b6508);
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+  border-radius: 8px 8px 0 0;
+}
+
+.mensaje-admin:hover {
+  background: linear-gradient(135deg, #fff8d6 0%, #ffec9a 50%, #ffd95a 100%) !important;
+  box-shadow: 0 3px 12px rgba(184, 134, 11, 0.7),
+              0 0 20px rgba(255, 215, 0, 0.55) !important;
+}
+
+/* Texto, nombre y fecha del mensaje admin: oscuros sobre dorado */
+.mensaje-admin h1 {
+  color: #2a1c00 !important;
+  font-weight: 900 !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.mensaje-admin .date {
+  color: #6b4d00 !important;
+  font-weight: 700 !important;
+}
+
+.mensaje-admin .message-content,
+.mensaje-admin .message-content * {
+  color: #2a1c00 !important;
+}
+
+.mensaje-admin .message-link-content {
+  color: #6b4d00 !important;
+  font-weight: 700 !important;
+  text-decoration: underline;
+}
+
+.mensaje-admin .delete-link {
+  color: #a00 !important;
+  font-weight: 700;
+}
+
+/* Badge ADMIN junto al nombre — invertido (oscuro con texto dorado) */
+.admin-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #4a3000, #2a1c00);
+  color: #FFD700;
+  font-size: 0.6rem;
+  padding: 2px 7px;
+  border-radius: 4px;
+  margin-left: 6px;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  vertical-align: middle;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4),
+              inset 0 0 0 1px rgba(255, 215, 0, 0.6);
+  text-transform: uppercase;
+}
+
+.admin-badge::before {
+  content: "👑 ";
+  font-size: 0.7rem;
 }
 
 .chat-message h1 {
