@@ -65,6 +65,15 @@ export class UsersService {
   getStreamLiveData(streamId: string): any {
     return this.httpClient.get<any>(`${this.apiUrl}/api/streams/liveData/${streamId}`);
   }
+  getStreamData(streamId: string): any {
+  return this.httpClient.get <any>(`${environment.apiUrl}/api/streams/data/${streamId}`);
+}
+adminChangePassword(userId: string, newPassword: string):any {
+  return this.httpClient.put(`${environment.apiUrl}/api/users/admin-change-password`, {
+    userId,
+    newPassword
+  });
+}
   getClaveStream(id: string): any {
     return this.httpClient.get<any>(`${this.apiUrl}/api/streams/getClave/${id}`);
   }

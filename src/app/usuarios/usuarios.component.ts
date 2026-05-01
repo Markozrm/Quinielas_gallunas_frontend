@@ -171,33 +171,50 @@ export class UsuariosComponent implements OnInit {
     // }
   }
 
-  saveChanges(user: any): void {
-    // Llama a tu servicio para guardar los cambios en el usuario
-    if (this.image != null) {
-      this.userService.editUserImage(user._id, this.editedUser,this.image).subscribe(() => {
-        this.editingUser = null;
-          this.userService.getUsers().subscribe(users => {
-            this.users = users;
-            this.filteredUsers = this.users;
-            this.calcularSaldoTotal();
-            this.updatePagination();
-          });
-          alert("Usuario actualizado!");
-      });
-    }
-    else{
+ saveChanges(user: any): void {
+  // Si se ingresó nueva contraseña, cambiarla con endpoint de admin
+  if (this.editedUser.newPassword && this.editedUser.newPassword.trim() !== '') {
+    this.userService.adminChangePassword(user._id, this.editedUser.newPassword).subscribe({
+      next: () => {
+        // Contraseña cambiada, ahora actualizar el resto de datos
+        this.guardarDatosUsuario(user);
+      },
+error: (err: any) => {
+        console.error('Error al cambiar contraseña:', err);
+        alert('Error al cambiar la contraseña');
+      }
+    });
+  } else {
+    // Sin cambio de contraseña
+    this.guardarDatosUsuario(user);
+  }
+}
+
+private guardarDatosUsuario(user: any): void {
+  if (this.image != null) {
+    this.userService.editUserImage(user._id, this.editedUser, this.image).subscribe(() => {
+      this.editingUser = null;
+      this.image = null;
+      this.refreshUsers();
+      alert("Usuario actualizado!");
+    });
+  } else {
     this.userService.editUser(user._id, this.editedUser).subscribe(() => {
       this.editingUser = null;
-        this.userService.getUsers().subscribe(users => {
-          this.users = users;
-          this.filteredUsers = this.users;
-          this.calcularSaldoTotal();
-          this.updatePagination();
-        });
-        alert("Usuario actualizado!");
+      this.refreshUsers();
+      alert("Usuario actualizado!");
     });
   }
-  }
+}
+
+private refreshUsers(): void {
+  this.userService.getUsers().subscribe(users => {
+    this.users = users;
+    this.filteredUsers = [...users];
+    this.calcularSaldoTotal();
+    this.updatePagination();
+  });
+}
 
   cancelEdit(): void {
     this.editingUser = null;
