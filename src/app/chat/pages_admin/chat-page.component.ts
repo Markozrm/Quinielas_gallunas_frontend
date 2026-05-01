@@ -550,9 +550,12 @@ cerrarDetalleApuesta(event: MouseEvent): void {
     });
 
     // Procesar el stream de chat para agrupar las apuestas por estado
-    this.chat$ = this.apuestaService.chat$.pipe(
+  this.chat$ = this.apuestaService.chat$.pipe(
   map((bets: any[]) => {
     const usuariosMap = new Map<string, any>();
+
+    // NUEVO: Primero recolectamos todas las apuestas individuales cazadas
+    const apuestasCazadas: any[] = bets.filter(b => b.estado === 'cazada');
 
     for (const bet of bets) {
       const key = `${bet.user.name}-${bet.ronda}`;
@@ -562,7 +565,8 @@ cerrarDetalleApuesta(event: MouseEvent): void {
           ...bet,
           cantidadTotal: 0,
           cantidadCazada: 0,
-          cazadasDetalle: [], // ← NUEVO: array con cada parcial cazado
+          cazadasDetalle: [],
+          cazadasCon: [], // ← NUEVO: array de { usuario, monto }
         });
       }
 
@@ -571,7 +575,26 @@ cerrarDetalleApuesta(event: MouseEvent): void {
 
       if (bet.estado === 'cazada') {
         entry.cantidadCazada += bet.cantidad;
-        entry.cazadasDetalle.push(bet.cantidad); // ← guarda cada parcial
+        entry.cazadasDetalle.push(bet.cantidad);
+
+        // NUEVO: Buscar quién cazó ESTA apuesta específica
+        // Una apuesta ROJA se caza con apuestas VERDES, y viceversa
+        const colorOpuesto = bet.verde ? 'rojo' : 'verde';
+        
+        // Buscar todas las apuestas cazadas del color opuesto en la misma ronda
+        const oponentes = apuestasCazadas.filter(a =>
+          a.user.name !== bet.user.name &&
+          a.ronda === bet.ronda &&
+          ((colorOpuesto === 'rojo' && !a.verde) || (colorOpuesto === 'verde' && !!a.verde))
+        );
+
+        // Para cada oponente, agregarlo a la lista de "cazado con"
+        for (const op of oponentes) {
+          entry.cazadasCon.push({
+            usuario: op.user.name,
+            monto: op.cantidad  // ← el monto de ESA apuesta específica del oponente
+          });
+        }
       }
 
       const prioridad: any = { cazada: 4, en_espera: 3, devuelta: 2, pagada: 1, perdida: 0 };

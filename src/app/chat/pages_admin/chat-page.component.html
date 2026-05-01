@@ -260,16 +260,24 @@
     </div><!-- /apuestas-tabla-wrap -->
 
     <div class="apuestas-footer">
-      <span class="footer-label">APOSTARON</span>
-      <span class="footer-val rojo-text">${{ cantidadApostadaRojo | number:'1.2-2' }}</span>
-      <span class="footer-val verde-text">${{ cantidadApostadaVerde | number:'1.2-2' }}</span>
-      <span class="footer-label">CAZADO</span>
-      <span class="footer-val rojo-text">${{ montoCazadoRojo | number:'1.2-2' }}</span>
-      <span class="footer-val verde-text">${{ montoCazadoVerde | number:'1.2-2' }}</span>
-      <span class="footer-label">NO CAZADO</span>
-      <span class="footer-val rojo-text">${{ (cantidadApostadaRojo - montoCazadoRojo) | number:'1.2-2' }}</span>
-      <span class="footer-val verde-text">${{ (cantidadApostadaVerde - montoCazadoVerde) | number:'1.2-2' }}</span>
-    </div>
+  <span class="footer-label">APOSTARON</span>
+  <span class="footer-val rojo-text">${{ cantidadApostadaRojo | number:'1.2-2' }}</span>
+  <span class="footer-val verde-text">${{ cantidadApostadaVerde | number:'1.2-2' }}</span>
+  <span class="footer-label">CAZADO</span>
+  <span class="footer-val rojo-text" [class.cazado-descuadre]="montoCazadoRojo !== montoCazadoVerde">
+    ${{ montoCazadoRojo | number:'1.2-2' }}
+  </span>
+  <span class="footer-val verde-text" [class.cazado-descuadre]="montoCazadoRojo !== montoCazadoVerde">
+    ${{ montoCazadoVerde | number:'1.2-2' }}
+  </span>
+  <span class="footer-label">NO CAZADO</span>
+  <span class="footer-val rojo-text">${{ (cantidadApostadaRojo - montoCazadoRojo) | number:'1.2-2' }}</span>
+  <span class="footer-val verde-text">${{ (cantidadApostadaVerde - montoCazadoVerde) | number:'1.2-2' }}</span>
+  <!-- NUEVO: alerta de descuadre -->
+  <span class="footer-alerta" *ngIf="montoCazadoRojo !== montoCazadoVerde">
+    ⚠️ DESC: ${{ (montoCazadoRojo - montoCazadoVerde) | number:'1.2-2' }}
+  </span>
+</div>
 
     <div class="tabla-usuarios-wrap">
       <h4 class="tabla-usuarios-titulo">TABLA DE USUARIOS QUE APOSTARON EN VIVO</h4>
@@ -335,6 +343,9 @@
 <!-- ══════════════════════════════════════════
      MODAL DETALLE CAZADAS
 ══════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════
+     MODAL DETALLE CAZADAS
+══════════════════════════════════════════ -->
 <div *ngIf="betDetalleSeleccionado" class="popup-overlay" (click)="cerrarDetalleApuesta($event)">
   <div class="popup-detalle">
     <button class="close-button" (click)="betDetalleSeleccionado = null">&#10005;</button>
@@ -343,12 +354,21 @@
       <span>Apostó: <strong>${{ betDetalleSeleccionado.cantidadTotal }}</strong></span>
       <span>Cazado: <strong>${{ betDetalleSeleccionado.cantidadCazada }}</strong></span>
     </div>
-    <div class="detalle-lista">
+    
+    <!-- NUEVO: Mostrar con quién se cazó CADA apuesta -->
+    <div class="detalle-lista" *ngIf="betDetalleSeleccionado.cazadasDetalle.length > 0">
       <div class="detalle-titulo">Desglose de cazadas:</div>
       <ng-container *ngFor="let monto of betDetalleSeleccionado.cazadasDetalle; let i = index">
         <div class="detalle-item">
           <span class="detalle-num">{{ i + 1 }}</span>
           <span class="detalle-monto">${{ monto }}</span>
+          <!-- Mostrar con quién se cazó esta apuesta específica -->
+          <span class="detalle-con" *ngIf="betDetalleSeleccionado.cazadasCon?.[i]">
+            → {{ betDetalleSeleccionado.cazadasCon[i].usuario }} (${{ betDetalleSeleccionado.cazadasCon[i].monto }})
+          </span>
+          <span class="detalle-con" *ngIf="!betDetalleSeleccionado.cazadasCon?.[i]" style="color: #666;">
+            → esperando match
+          </span>
         </div>
       </ng-container>
       <div *ngIf="betDetalleSeleccionado.cazadasDetalle.length === 0" class="detalle-vacio">

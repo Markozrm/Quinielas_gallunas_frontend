@@ -593,6 +593,52 @@ html, body {
 .btn-confirm-finalize { background: #2e7d32 !important; color: white !important; border: none; padding: 10px 22px; border-radius: 6px; cursor: pointer; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; }
 .btn-confirm-finalize:hover { background: #1b5e20 !important; }
 
+.cazado-descuadre {
+  background: rgba(255, 0, 0, 0.3) !important;
+  border: 2px solid #ff0000 !important;
+  color: #ff4444 !important;
+  font-weight: bold;
+  animation: blink 0.5s infinite alternate;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+@keyframes blink {
+  from { opacity: 1; }
+  to { opacity: 0.5; }
+}
+
+.footer-alerta {
+  color: #ff0000;
+  font-weight: bold;
+  font-size: 14px;
+  background: rgba(255, 0, 0, 0.1);
+  padding: 4px 12px;
+  border-radius: 4px;
+  border: 1px solid #ff0000;
+}
+
+.detalle-usuario {
+  color: #ffd700;
+  font-weight: bold;
+  flex: 1;
+}
+.detalle-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid #333;
+}
+
+.detalle-con {
+  color: #ffd700;
+  font-size: 12px;
+  background: rgba(255, 215, 0, 0.1);
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+
 @media screen and (max-width: 1400px) {
   .tabla-usuarios { font-size: 0.7em; }
   .tabla-usuarios th, .tabla-usuarios td { padding: 4px 2px; }
