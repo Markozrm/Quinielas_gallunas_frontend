@@ -72,8 +72,7 @@
       <label for="editedUsername">Nombre de Usuario:</label>
       <input type="text" id="editedUsername" [(ngModel)]="editedUser.username">
       <label for="newPassword">Nueva Contraseña:</label>
-      <input type="password" id="newPassword" [(ngModel)]="editedUser.newPassword" placeholder="Nueva Contraseña">
-      <button (click)="saveChanges(user)" class="save-button">Guardar</button>
+<input type="password" id="newPassword" [(ngModel)]="editedUser.newPassword" placeholder="Nueva Contraseña (mínimo 6 caracteres)" minlength="6">      <button (click)="saveChanges(user)" class="save-button">Guardar</button>
       <button (click)="cancelEdit()" class="cancel-button">Cancelar</button>
     </div>
     <button (click)="banearUsuario(user)" class="cancel-button">{{estadoBan(user)}}</button>
