@@ -6,6 +6,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MenuComponent } from '../menu/menu.component';
 import { UsersService } from '../services/users.service';
 import { firstValueFrom } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+
+interface StreamData {
+  titulo: string;
+  subtitulo: string;
+  pozo?: string;
+}
+
 
 @Component({
   selector: 'app-mi-perfil',
@@ -15,10 +24,15 @@ import { firstValueFrom } from 'rxjs';
   imports: [CommonModule, FormsModule, ReactiveFormsModule, MenuComponent]
 })
 export class MiPerfilComponent implements OnInit {
-  saldoUsuario: string = '0.00$'; 
+  saldoUsuario: string = '0.00$';
   nombreUsuario: string = '';
   userPhoto: string = '';
   balance: number = 0;
+  // Imagen del banner del stream activo (la que sube el admin desde el panel).
+  // Reemplaza al PNG estático Ahora_en_vivo.png que tenía texto DERBY/ENTREN
+  // horneado y que el admin no podía editar.
+  streamImageUrl: string = '';
+  mostrarStreamImage: boolean = false;
   mostrarCambioFoto : boolean = false;
   showChangePhoto: boolean = false;
   fotoSeleccionada: File | null = null;
@@ -31,9 +45,15 @@ export class MiPerfilComponent implements OnInit {
     cambiarContrasena(): void {
     this.router.navigate(['/cambiar-contrasena']);
   }
+  streamData: StreamData = {
+  titulo: 'PALENQUE',
+  subtitulo: 'EN VIVO',
+  pozo: ''
+};
+  
 
 
-  constructor(private router: Router, private usersService: UsersService) {
+  constructor(private router: Router, private usersService: UsersService,private http: HttpClient) {
     this.cambioPasswordForm = new FormGroup({
       nuevaPassword: new FormControl('', [Validators.required, Validators.minLength(6)])
     });
@@ -64,6 +84,16 @@ irAdmin() {
 
     // Obtener la foto del usuario
     this.userPhoto = this.usersService.getImageUrl(this.nombreUsuario);
+
+    // Banner del stream activo: lo sube el admin desde el panel iniciador-streams.
+    // El cache-bust con timestamp asegura que al subir una nueva imagen se vea
+    // sin tener que limpiar caché. Si el stream 1 no tiene imagen, el handler
+    // onerror del <img> oculta el botón para no mostrar ícono roto.
+    this.streamImageUrl = `${this.usersService.getImagenStream('1')}?t=${Date.now()}`;
+    this.mostrarStreamImage = true;
+     this.cargarDatosStream();
+  
+  this.actualizarSaldo();
 
     // Obtener el saldo del usuario
     this.actualizarSaldo();
@@ -143,7 +173,19 @@ irAdmin() {
   verHistorialRetiros() {
   this.router.navigate(['/historial-retiros']);
 }
-
+// Método para cargar datos del stream
+cargarDatosStream(): void {
+  this.http.get<any>(`${environment.apiUrl}/api/settings/title`).subscribe({
+    next: (res) => {
+      if (res && res.title) {
+        this.streamData.titulo = res.title;
+      }
+    },
+    error: () => {
+      this.streamData.titulo = 'PALENQUE DE LEON';
+    }
+  });
+}
   verHistorialPeleas(): void {
     // Navegar a la página de historial de peleas
     this.router.navigate(['/Ver-apuestas']);
@@ -257,4 +299,10 @@ guardarCambios(): void {
   retorno(): void {
   this.router.navigate(['/mi-perfil']);
 }
+
+  // Si la imagen del banner del stream no existe (admin no la subió aún),
+  // ocultamos el botón en vez de mostrar un ícono roto.
+  ocultarStreamImage(): void {
+    this.mostrarStreamImage = false;
+  }
 }

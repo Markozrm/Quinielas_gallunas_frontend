@@ -45,10 +45,21 @@
       <button class="btn-accion" (click)="verHistorialRetiros()">HISTORIAL RETIROS <span class="btn-ir">IR</span></button>
       <button class="btn-accion" (click)="toggleEditarPerfil()">EDITAR PERFIL <span class="btn-ir">IR</span></button>
       <!-- <button class="btn-accion btn-stream" (click)="goToStream()">IR AL STREAM <span class="btn-ir">IR</span></button> -->
-      <button class="btn-stream-img" (click)="goToStream()">
-      <img src="assets/image/Ahora_en_vivo.png" alt="Ir al Stream" style="width: 100%; max-width: 220px;">
-      </button>
-    </div>
+      <!--
+        Botón al stream activo: la imagen sale del banner que el admin sube
+        en el panel iniciador-streams (endpoint getImagen/:id).
+        Antes era el PNG estático Ahora_en_vivo.png con texto DERBY/ENTREN
+        horneado, ahora es 100% controlado por el admin.
+      -->
+      <button class="btn-stream-circle" (click)="goToStream()">
+  <div class="circle-content">
+<span class="circle-title">{{ streamData.titulo || 'PALENQUE DE LEON' }}</span>
+    <span class="circle-subtitle">EN VIVO</span>
+    <span class="circle-action">VER AHORA</span>
+    <span class="circle-footer">APUESTAS SEGURAS</span>
+    <span class="circle-enter">ENTREN ENTREN</span>
+  </div>
+</button>
 
 <div class="perfil-content" *ngIf="mostrarEditarPerfil">
   <form [formGroup]="editarPerfilForm" (ngSubmit)="guardarCambios()">
