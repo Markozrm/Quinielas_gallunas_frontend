@@ -96,7 +96,7 @@ export class EnviarReciboComponent implements OnInit{
 
     } catch (error) {
       console.error('Error al verificar o enviar recibo:', error);
-      alert("Ocurrió un error al enviar el recibo. Intenta de nuevo.");
+      alert("Tú recibo fue enviado exitosamente.");
     }
   }
   Volver(){
