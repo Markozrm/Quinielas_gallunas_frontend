@@ -58,10 +58,10 @@ export class EnviarReciboComponent implements OnInit{
   }
 
   async onSubmit() {
-    if (!this.formulario.value.banco) {
-      alert('Debes seleccionar un banco');
-      return;
-    }
+   // if (!this.formulario.value.banco) {
+   //   alert('Debes seleccionar un banco');
+   //   return;
+   // }
     try {
       // Obtener todos los recibos
       const todosRecibos = await this.recipesService.getAll().toPromise();

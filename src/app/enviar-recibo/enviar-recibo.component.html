@@ -23,21 +23,22 @@
       <div *ngIf="imagePreview" class="image-preview-container">
         <img [src]="imagePreview" alt="Vista previa de la imagen" class="profile-image">
       </div>
-      <p>¿A qué banco depositaste?</p>
-      <label>Banco:</label>
-      <div style="display: flex; gap: 10px; margin-bottom: 16px;">
-        <label>
-          <input type="radio" formControlName="banco" value="Bancopel" required>
-          Bancopel
-        </label>
-        <label>
-          <input type="radio" formControlName="banco" value="BanBajío" required>
-          BanBajío
-        </label>
-      </div>
-      <div *ngIf="formulario.get('banco')?.invalid && formulario.get('banco')?.touched" style="color: red;">
-        Debes seleccionar un banco.
-      </div>
+      <!-- COMENTAR ESTO -->
+<!-- <p>¿A qué banco depositaste?</p>
+<label>Banco:</label>
+<div style="display: flex; gap: 10px; margin-bottom: 16px;">
+  <label>
+    <input type="radio" formControlName="banco" value="Bancopel" required>
+    Bancopel
+  </label>
+  <label>
+    <input type="radio" formControlName="banco" value="BanBajío" required>
+    BanBajío
+  </label>
+</div>
+<div *ngIf="formulario.get('banco')?.invalid && formulario.get('banco')?.touched" style="color: red;">
+  Debes seleccionar un banco.
+</div> -->
 
       <button type="submit" class="btn-iniciar"> Enviar </button>
     </form>

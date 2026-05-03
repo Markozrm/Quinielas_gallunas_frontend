@@ -23,6 +23,13 @@
     <option value="highToLow">Saldo: Mayor a menor</option>
     <option value="lowToHigh">Saldo: Menor a mayor</option>
   </select>
+   <button
+        class="filtro-credito-btn"
+        [class.active]="soloUsuariosCredito"
+        (click)="toggleFiltroSoloCredito()"
+        title="Mostrar solo usuarios con crédito">
+        💳 {{ soloUsuariosCredito ? 'Mostrando: solo crédito' : 'Solo con crédito' }}
+      </button>
 </div>
 
 <!-- Pagination controls -->
@@ -49,8 +56,11 @@
 <div class="users-list">
   <div *ngFor="let user of paginatedUsers" class="user-item">
     <!-- Nombre de usuario (username) arriba del saldo -->
-    <h3 class="username">{{ user.username }}</h3>
-    <h3 class="username">Saldo: {{ user.saldo }}</h3>
+<h3 class="username">
+  {{ user.username }}
+  <span *ngIf="user.creditoActivo" class="credito-badge" title="Usuario con crédito">💳 CRÉDITO</span>
+</h3>
+<h3 class="username">Saldo: {{ user.saldo }}</h3>
     <div class="user-info">
       <img [src]="getImage(user.username)" alt="User Image" class="user-image">
     </div>
@@ -67,6 +77,11 @@
     <button (click)="openEditMenu(user)" class="edit-button">Editar</button>
     <button (click)="openSaldoModal(user)" class="saldo-button">Modificar Saldo</button>
     <button (click)="verHistorial(user)" class="historial-button">Ver Historial</button>
+    <button (click)="toggleCreditoUsuario(user)"
+                class="credito-button"
+                [class.activo]="user.creditoActivo">
+          {{ user.creditoActivo ? 'Desactivar Crédito' : 'Activar Usuario con Crédito' }}
+        </button>
     <div *ngIf="editingUser === user" class="edit-menu">
       <input type="file" id="userImage" name="userImage" accept="image/*" (change)="handleImageChange($event)" >
       <label for="editedUsername">Nombre de Usuario:</label>
@@ -77,9 +92,8 @@
     </div>
     <button (click)="banearUsuario(user)" class="cancel-button">{{estadoBan(user)}}</button>
     <button (click)="openDeleteConfirm(user)" class="borrar-btn">Borrar</button>
-  </div>
-</div>
-  
+    </div> 
+  </div> 
   <!-- Modal de confirmación -->
 <div class="modal-overlay" *ngIf="showDeleteModal">
   <div class="modal-content">

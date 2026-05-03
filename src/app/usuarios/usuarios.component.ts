@@ -43,6 +43,8 @@ export class UsuariosComponent implements OnInit {
   mostrandoPorStream: boolean = false;
   streamSeleccionado: string = '';
   fechaActual: string = '';
+  soloUsuariosCredito: boolean = false;
+
 
 
   constructor(
@@ -126,9 +128,11 @@ export class UsuariosComponent implements OnInit {
 
   // Función para filtrar usuarios
   filterUsers(): void {
-    this.filteredUsers = this.users.filter(user =>
-      user.username.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
+     this.filteredUsers = this.users.filter(user => {
+      const matchesSearch = user.username.toLowerCase().includes(this.searchTerm.toLowerCase());
+      const matchesCredito = this.soloUsuariosCredito ? !!user.creditoActivo : true;
+      return matchesSearch && matchesCredito;
+    });
     this.sortUsers();
     this.currentPage = 1; // Reset to first page when filtering
     this.updatePagination();
@@ -335,6 +339,11 @@ private refreshUsers(): void {
       //   console.log('Clave stream vacía, no se puede continuar');
       //   return; 
       // }
+          // Detectar palabra clave "credito" en el concepto (insensible a mayúsculas/acentos)
+      const conceptoNormalizado = concepto
+        .normalize('NFD').replace(/[̀-ͯ]/g, '') // quita acentos
+        .toLowerCase();
+      const esConceptoCredito = /\bcredito\b/.test(conceptoNormalizado);
       this.userService.updateSaldo(
         this.selectedUser.username,
         this.saldoAmount,
@@ -342,7 +351,24 @@ private refreshUsers(): void {
         "modificacion_admin",
         claveStream // puede ir vacío si tu backend lo permite
       )
+
       .then(async (result) => {
+          // Si el concepto contiene "credito" y el usuario aún no lo tiene activo,
+        // activamos automáticamente la marca "Usuario con crédito".
+        if (esConceptoCredito && !this.selectedUser.creditoActivo) {
+          this.userService.toggleCredito(this.selectedUser.username, true).subscribe({
+            next: () => {
+              // Reflejar el cambio en memoria (el getUsers de abajo también lo refresca)
+              this.selectedUser.creditoActivo = true;
+              const idx = this.users.findIndex(u => u._id === this.selectedUser._id);
+              if (idx !== -1) this.users[idx].creditoActivo = true;
+            },
+            error: (err) => {
+              console.warn('No se pudo activar crédito automáticamente:', err);
+            }
+          });
+        }
+
         console.log('Resultado updateSaldo:', result);
         if (this.mostrarEnHistorialRecibo) {
           console.log('Creando recibo manual...');
@@ -417,5 +443,31 @@ private refreshUsers(): void {
  getClaveStream(): string {
   if (!this.streamSeleccionado || !this.fechaActual) return '';
   return `${this.streamSeleccionado}-${this.fechaActual}`;
+}
+// Activa/desactiva la marca "Usuario con crédito" para un usuario.
+// El backend persiste el valor; aquí actualizamos el array local sin recargar todo.
+toggleCreditoUsuario(user: any): void {
+  const nuevoValor = !user.creditoActivo;
+  this.userService.toggleCredito(user.username, nuevoValor).subscribe({
+    next: (resp: any) => {
+      // Actualizar localmente para reflejar el cambio sin volver a pedir todo
+      user.creditoActivo = nuevoValor;
+      const idx = this.users.findIndex(u => u._id === user._id);
+      if (idx !== -1) this.users[idx].creditoActivo = nuevoValor;
+      // Si el filtro de "solo crédito" está activo y se desactivó, refrescar lista
+      if (this.soloUsuariosCredito) {
+        this.filterUsers();}
+      alert(nuevoValor ? '✅ Crédito activado' : '✅ Crédito desactivado');
+    },
+    error: (err) => {
+      alert('❌ Error al actualizar crédito: ' + (err?.error?.error || err?.message || 'desconocido'));
+    }
+  });
+}
+
+// Activa/desactiva el filtro que muestra solo usuarios con crédito.
+toggleFiltroSoloCredito(): void {
+  this.soloUsuariosCredito = !this.soloUsuariosCredito;
+  this.filterUsers();
 }
 }

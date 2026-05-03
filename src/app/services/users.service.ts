@@ -168,6 +168,12 @@ adminChangePassword(userId: string, newPassword: string):any {
       this.httpClient.post<any>(`${this.baseUrl}/verificar-codigo`, { email, codigo })
     );
   }
+   // Activa/desactiva la marca "Usuario con crédito".
+  // Si se pasa creditoActivo, fuerza ese valor; si no, el backend hace toggle.
+  toggleCredito(username: string, creditoActivo?: boolean){
+    const body = (typeof creditoActivo === 'boolean') ? { creditoActivo } : {};
+    return this.httpClient.put<any>(`${this.baseUrl}/toggle-credito/${username}`, body);
+  }
 
   getUser(username: string) {
     return this.httpClient.get(`/api/users/get-all-users`).pipe(

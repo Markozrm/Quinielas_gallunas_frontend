@@ -409,3 +409,78 @@
   font-size: 0.97em;
   color: #fff;
 }
+/* ============================================================
+   Marca "Usuario con Crédito" — badge, botón y filtro
+   ============================================================ */
+
+/* Badge identificador en la tarjeta del usuario */
+.credito-badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  font-size: 0.65em;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #1a1a1a;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  border-radius: 10px;
+  vertical-align: middle;
+  box-shadow: 0 1px 3px rgba(255, 165, 0, 0.5);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Resalta sutilmente la tarjeta cuando el usuario tiene crédito activo */
+.user-item:has(.credito-badge) {
+  border: 2px solid #FFA500;
+  box-shadow: 0 0 8px rgba(255, 165, 0, 0.35);
+}
+
+/* Botón "Activar / Desactivar Crédito" dentro de las acciones */
+.credito-button {
+  background-color: #f59e0b;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.credito-button:hover {
+  background-color: #d97706;
+}
+
+.credito-button.activo {
+  background-color: #6b7280;
+}
+
+.credito-button.activo:hover {
+  background-color: #4b5563;
+}
+
+/* Botón de filtro "Solo con crédito" en la cabecera */
+.filtro-credito-btn {
+  margin-left: 8px;
+  padding: 6px 12px;
+  border: 2px solid #FFA500;
+  background: transparent;
+  color: #FFA500;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85em;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.filtro-credito-btn:hover {
+  background: rgba(255, 165, 0, 0.1);
+}
+
+.filtro-credito-btn.active {
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  color: #1a1a1a;
+  border-color: #FFD700;
+}
