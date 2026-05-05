@@ -48,6 +48,27 @@ export class HistorialSaldosComponent implements OnInit {
   Math = Math;
 
   constructor(private http: HttpClient) {}
+  
+// Tipos y conceptos que NO deben aparecer en el historial
+private readonly OCULTAR_TIPOS = [
+  'restar_saldo',
+  'saldo_devuelto',
+  'apuesta_ganada',
+  'balance_ronda',
+];
+ 
+private readonly OCULTAR_CONCEPTOS_CONTIENE = [
+  'Aumento automático al ganar',
+  'Aumento automatico al ganar',
+  'Aumento automatico al devolver',
+  'Aumento automático al devolver',
+  'devolver la apuesta',
+  'apuesta no cazada',
+  'apuesta por empate',
+  'Descuento automático',
+  'Descuento automatico',
+  'Apuesta P',   // registros internos de cada apuesta individual
+];
 
   ngOnInit() {
     this.loadRecords();
@@ -72,7 +93,13 @@ export class HistorialSaldosComponent implements OnInit {
     this.http.get<SaldoRecord[]>(apiUrl)
       .subscribe({
         next: (data) => {
-          this.allRecords = data.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+          this.allRecords = data
+            .filter((r: SaldoRecord) => {
+              if (this.OCULTAR_TIPOS.includes(r.tipo)) return false;
+              const concepto = (r.concepto || '').toLowerCase();
+              return !this.OCULTAR_CONCEPTOS_CONTIENE.some(f => concepto.includes(f.toLowerCase()));
+            })
+            .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
           this.extractUniqueValues();
           this.applyFilters();
           this.loading = false;
@@ -91,35 +118,48 @@ export class HistorialSaldosComponent implements OnInit {
   }
 
   applyFilters() {
-    this.filteredRecords = this.allRecords.filter(record => {
-      const recordDate = new Date(record.fecha);
-      
-      // Date filtering
-      if (this.startDate && recordDate < new Date(this.startDate)) {
-        return false;
-      }
-      if (this.endDate && recordDate > new Date(this.endDate + 'T23:59:59')) {
-        return false;
-      }
-      
-      // User filtering
-      if (this.selectedUser && record.usuario !== this.selectedUser) {
-        return false;
-      }
-      
-      // Type filtering
-      if (this.selectedType && record.tipo !== this.selectedType) {
-        return false;
-      }
-      
-      return true;
-    });
-    
-    this.totalPages = Math.ceil(this.filteredRecords.length / this.itemsPerPage);
-    this.currentPage = 1;
-    this.updatePagination();
-  }
-
+  this.filteredRecords = this.allRecords.filter(record => {
+ 
+    // ── 1. Ocultar tipos automáticos internos ──────────────────
+    if (this.OCULTAR_TIPOS.includes(record.tipo)) {
+      return false;
+    }
+ 
+    // ── 2. Ocultar por concepto (mensajes automáticos) ─────────
+    const concepto = (record.concepto || '').toLowerCase();
+    const ocultarPorConcepto = this.OCULTAR_CONCEPTOS_CONTIENE.some(
+      frase => concepto.includes(frase.toLowerCase())
+    );
+    if (ocultarPorConcepto) {
+      return false;
+    }
+ 
+    // ── 3. Filtros de fecha ────────────────────────────────────
+    const recordDate = new Date(record.fecha);
+    if (this.startDate && recordDate < new Date(this.startDate)) {
+      return false;
+    }
+    if (this.endDate && recordDate > new Date(this.endDate + 'T23:59:59')) {
+      return false;
+    }
+ 
+    // ── 4. Filtro de usuario ───────────────────────────────────
+    if (this.selectedUser && record.usuario !== this.selectedUser) {
+      return false;
+    }
+ 
+    // ── 5. Filtro de tipo ──────────────────────────────────────
+    if (this.selectedType && record.tipo !== this.selectedType) {
+      return false;
+    }
+ 
+    return true;
+  });
+ 
+  this.totalPages = Math.ceil(this.filteredRecords.length / this.itemsPerPage);
+  this.currentPage = 1;
+  this.updatePagination();
+}
   updatePagination() {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
@@ -216,4 +256,4 @@ export class HistorialSaldosComponent implements OnInit {
     
     return pages;
   }
-} 
+}
