@@ -63,15 +63,60 @@ export class VerHistorialUsuariosComponent implements OnInit {
         this.usersService.getUserSaldoRecords(this.username).subscribe({
           next: (saldoResponse) => {
             if (Array.isArray(saldoResponse)) {
-              historialSaldos = saldoResponse.map((item: any) => ({
-                fecha: item.fecha,
-                concepto: item.concepto,
-                cantidad: item.saldo,
-                cantidadFinal: item.saldo, // El signo se conserva
-                tipoMovimiento: item.saldo < 0 ? 'descuento' : 'aumento', // Opcional, para estilos o textos
-                color: '',
-                resultado: ''
-              }));
+              // -------------------------------------------------------------
+              // FILTRO: ocultar movimientos automáticos derivados de apuestas.
+              // Solo se muestran modificaciones manuales del admin / recargas
+              // / retiros. Los registros tipo "Aumento automático al ganar",
+              // "Aumento automatico al devolver", "Apuesta P{N}", etc., son
+              // movimientos internos que ya están reflejados en las filas
+              // agregadas P{N} de getUserHistoryByRounds.
+              //
+              // Misma lista que usa el componente admin (historial-saldos).
+              // -------------------------------------------------------------
+              const OCULTAR_TIPOS = [
+                'restar_saldo',
+                'saldo_devuelto',
+                'apuesta_ganada',
+                'apuesta_creada',
+                'apuesta_devuelta',
+                'comision_banca',
+                'balance_ronda'
+              ];
+              const OCULTAR_CONCEPTOS_CONTIENE = [
+                'aumento automático al ganar',
+                'aumento automatico al ganar',
+                'aumento automatico al devolver',
+                'aumento automático al devolver',
+                'devolver la apuesta',
+                'apuesta no cazada',
+                'apuesta por empate',
+                'descuento automático',
+                'descuento automatico',
+                'apuesta p',         // "Apuesta P1", "Apuesta P62", etc.
+                'pago con ajuste',
+                'comisión',
+                'comision',
+                'devolución',
+                'devolucion'
+              ];
+
+              historialSaldos = saldoResponse
+                .filter((item: any) => {
+                  const tipo = (item.tipo || '').toString().toLowerCase();
+                  const concepto = (item.concepto || '').toString().toLowerCase();
+                  if (OCULTAR_TIPOS.includes(tipo)) return false;
+                  if (OCULTAR_CONCEPTOS_CONTIENE.some(c => concepto.includes(c))) return false;
+                  return true;
+                })
+                .map((item: any) => ({
+                  fecha: item.fecha,
+                  concepto: item.concepto,
+                  cantidad: item.saldo,
+                  cantidadFinal: item.saldo, // El signo se conserva
+                  tipoMovimiento: item.saldo < 0 ? 'descuento' : 'aumento',
+                  color: '',
+                  resultado: ''
+                }));
             }
             const historialUnido = [...historialApuestas, ...historialSaldos].sort((a, b) => {
               return new Date(b.fecha).getTime() - new Date(a.fecha).getTime();
