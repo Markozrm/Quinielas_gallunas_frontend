@@ -103,6 +103,21 @@ export class IndexComponent implements OnInit {
 
     return esSuperAdmin;
   }
+  private static readonly TIEMPO_GRACIA_MS = 25 * 60 * 60 * 1000;
+
+  private estaEnPeriodoGracia(): boolean {
+    try {
+      const datos = localStorage.getItem('tiempoGraciaData');
+      if (!datos) return false;
+      const { inicio, bloqueo } = JSON.parse(datos);
+      if (bloqueo) return false;
+      if (!inicio) return false;
+      return (Date.now() - inicio) < IndexComponent.TIEMPO_GRACIA_MS;
+    } catch {
+      return false;
+    }
+  }
+
   async irStream1() {
     var claveStream = '';
     await this.userService.getClaveStream('1').subscribe(
@@ -114,7 +129,7 @@ export class IndexComponent implements OnInit {
           this.userService.getSaldo(this.username).subscribe(
             (saldoObj: any) => {
               const saldo = saldoObj.saldo; // Acceder a la propiedad saldo del objeto
-              if (resultado.stream.esVIP && (Number(saldo) < 1)) {
+              if (resultado.stream.esVIP && (Number(saldo) < 1) && !this.estaEnPeriodoGracia()) {
                 alert("No tienes saldo suficiente para acceder a este stream");       
                 this.router.navigate(['/mi-perfil']);    
               }
@@ -151,7 +166,7 @@ export class IndexComponent implements OnInit {
             (saldoObj: any) => {
               const saldo = saldoObj.saldo; // Acceder a la propiedad saldo del objeto
               
-              if (resultado.stream.esVIP && (Number(saldo) < 1)) {
+              if (resultado.stream.esVIP && (Number(saldo) < 1) && !this.estaEnPeriodoGracia()) {
                 alert("No tienes saldo suficiente para acceder a este stream");
                 this.router.navigate(['/mi-perfil']);
               }
@@ -189,7 +204,7 @@ export class IndexComponent implements OnInit {
             (saldoObj: any) => {
               const saldo = saldoObj.saldo; // Acceder a la propiedad saldo del objeto
               
-              if (resultado.stream.esVIP && (Number(saldo) < 1)) {
+              if (resultado.stream.esVIP && (Number(saldo) < 1) && !this.estaEnPeriodoGracia()) {
                 alert("No tienes saldo suficiente para acceder a este stream");
                 this.router.navigate(['/mi-perfil']);
               }

@@ -699,12 +699,17 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
   // ✅ CORREGIDO: eliminada la condición bloqueoPorSaldo que impedía funcionar
   async verificarVIP(sala: string) {
     const esVIP = await this.esStreamVIP(sala);
-    if (esVIP) {
-      const tieneSaldo = await this.tieneSaldoSuficiente();
-      if (!tieneSaldo) {
-        alert("No tienes saldo suficiente para acceder a este stream VIP");
-        this.router.navigate(['/mi-perfil']);
-      }
+    if (!esVIP) return;
+    const tieneSaldo = await this.tieneSaldoSuficiente();
+    if (tieneSaldo) return;
+    this.cargarEstadoTiempoGracia();
+    if (this.bloqueoPorSaldo) {
+      alert("No tienes saldo suficiente para acceder a este stream VIP");
+      this.router.navigate(['/mi-perfil']);
+      return;
+    }
+    if (!this.tiempoGraciaInicio) {
+      this.iniciarTiempoGracia();
     }
   }
 
@@ -768,10 +773,12 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
     }
   }
 
+  private static readonly TIEMPO_GRACIA_MS = 25 * 60 * 60 * 1000;
+
   private iniciarTiempoGracia(): void {
     if (this.tiempoGraciaInicio) return;
     this.tiempoGraciaInicio = Date.now();
-    this.tiempoGraciaRestante = 5 * 60 * 60 * 1000;
+    this.tiempoGraciaRestante = (this.constructor as any).TIEMPO_GRACIA_MS;
     this.guardarEstadoTiempoGracia();
     this.intervaloGracia = setInterval(() => this.verificarTiempoGracia(), 60000);
   }
@@ -779,7 +786,7 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
   private verificarTiempoGracia(): void {
     if (!this.tiempoGraciaInicio) return;
     const tiempoTranscurrido = Date.now() - this.tiempoGraciaInicio;
-    this.tiempoGraciaRestante = Math.max(0, 5 * 60 * 60 * 1000 - tiempoTranscurrido);
+    this.tiempoGraciaRestante = Math.max(0, (this.constructor as any).TIEMPO_GRACIA_MS - tiempoTranscurrido);
     if (this.tiempoGraciaRestante <= 0) {
       this.finalizarTiempoGracia();
     }
@@ -804,8 +811,8 @@ export class ChatInvitadoPageComponent implements OnInit, OnDestroy {
       this.bloqueoPorSaldo = bloqueo;
       if (inicio && !bloqueo) {
         const tiempoTranscurrido = Date.now() - inicio;
-        if (tiempoTranscurrido < 5 * 60 * 60 * 1000) {
-          this.tiempoGraciaRestante = 5 * 60 * 60 * 1000 - tiempoTranscurrido;
+        if (tiempoTranscurrido < (this.constructor as any).TIEMPO_GRACIA_MS) {
+          this.tiempoGraciaRestante = (this.constructor as any).TIEMPO_GRACIA_MS - tiempoTranscurrido;
           this.iniciarTiempoGracia();
         } else {
           this.bloqueoPorSaldo = true;
