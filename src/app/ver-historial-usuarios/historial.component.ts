@@ -74,7 +74,6 @@ export class VerHistorialUsuariosComponent implements OnInit {
               // Misma lista que usa el componente admin (historial-saldos).
               // -------------------------------------------------------------
               const OCULTAR_TIPOS = [
-                'restar_saldo',
                 'saldo_devuelto',
                 'apuesta_ganada',
                 'apuesta_creada',
@@ -82,6 +81,9 @@ export class VerHistorialUsuariosComponent implements OnInit {
                 'comision_banca',
                 'balance_ronda'
               ];
+              // 'restar_saldo' se trata aparte: se muestra si el admin puso un
+              // concepto manual, se oculta si no hay concepto (o si es un
+              // concepto automático ya filtrado por OCULTAR_CONCEPTOS_CONTIENE).
               const OCULTAR_CONCEPTOS_CONTIENE = [
                 'aumento automático al ganar',
                 'aumento automatico al ganar',
@@ -106,6 +108,8 @@ export class VerHistorialUsuariosComponent implements OnInit {
                   const concepto = (item.concepto || '').toString().toLowerCase();
                   if (OCULTAR_TIPOS.includes(tipo)) return false;
                   if (OCULTAR_CONCEPTOS_CONTIENE.some(c => concepto.includes(c))) return false;
+                  // restar_saldo manual: solo se ve si el admin escribió un concepto
+                  if (tipo === 'restar_saldo' && !concepto.trim()) return false;
                   return true;
                 })
                 .map((item: any) => ({
