@@ -21,6 +21,7 @@ export class RetirarSaldoComponent implements OnInit {
   loading: boolean = false;
   mensajeExito: string = '';
   mensajeError: string = '';
+  expresHabilitado: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -33,22 +34,48 @@ export class RetirarSaldoComponent implements OnInit {
       banco: ['', Validators.required],
       cantidad: ['', [Validators.required, Validators.min(1)]],
       nombreTitular: ['', Validators.required],
-      numeroTarjeta: ['', Validators.required]
+      numeroTarjeta: ['', Validators.required],
+      tipo: ['normal', Validators.required]
     });
   }
 
+  get esExpres(): boolean {
+    return this.retiroForm.get('tipo')?.value === 'expres';
+  }
+
+  get comisionExpres(): number {
+    const c = Number(this.retiroForm.get('cantidad')?.value || 0);
+    return this.esExpres ? +(c * 0.03).toFixed(2) : 0;
+  }
+
+  get montoEntregar(): number {
+    const c = Number(this.retiroForm.get('cantidad')?.value || 0);
+    return +(c - this.comisionExpres).toFixed(2);
+  }
+
   ngOnInit(): void {
-    // Obtener el nombre de usuario del localStorage
     this.username = localStorage.getItem('nombreUsuario') || '';
-    
-    // Si no hay usuario, redirigir al login
+
     if (!this.username) {
       this.router.navigate(['/login']);
       return;
     }
-    
-    // Cargar el saldo actual del usuario
+
     this.cargarSaldo();
+    this.cargarConfiguracion();
+  }
+
+  cargarConfiguracion(): void {
+    this.retirosService.getConfiguracion().subscribe(
+      (cfg) => {
+        this.expresHabilitado = !!cfg.expresHabilitado;
+        // Si el admin desactivó exprés, forzamos el tipo a "normal".
+        if (!this.expresHabilitado && this.retiroForm.get('tipo')?.value === 'expres') {
+          this.retiroForm.patchValue({ tipo: 'normal' });
+        }
+      },
+      (error) => { console.error('Error cargando configuración de retiros:', error); }
+    );
   }
 
   cargarSaldo(): void {
@@ -69,8 +96,7 @@ export class RetirarSaldoComponent implements OnInit {
     }
 
     const cantidad = this.retiroForm.value.cantidad;
-    
-    // Validar que la cantidad sea menor o igual al saldo disponible
+
     if (cantidad > this.saldoActual) {
       this.mensajeError = 'La cantidad solicitada excede tu saldo disponible';
       return;
@@ -89,19 +115,16 @@ export class RetirarSaldoComponent implements OnInit {
       (respuesta) => {
         this.loading = false;
         this.mensajeExito = 'Solicitud de retiro enviada exitosamente';
-        // Actualizar el saldo después de la solicitud exitosa
         this.cargarSaldo();
-        // Limpiar el formulario
-        this.retiroForm.reset();
-        
-        // Mostrar el mensaje de éxito por 3 segundos y luego redirigir
+        this.retiroForm.reset({ tipo: 'normal' });
+
         setTimeout(() => {
           this.router.navigate(['/mi-perfil']);
         }, 3000);
       },
       (error) => {
         this.loading = false;
-        this.mensajeError = error.error.error || 'Error al procesar la solicitud. Inténtalo de nuevo.';
+        this.mensajeError = error.error?.error || 'Error al procesar la solicitud. Inténtalo de nuevo.';
         console.error('Error al solicitar retiro:', error);
       }
     );

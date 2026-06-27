@@ -4,6 +4,21 @@
   <h1>Solicitudes de Retiro</h1>
 </div>
 
+<!-- Toggle global: activar/desactivar retiros EXPRÉS -->
+<div class="config-expres" [class.config-expres--off]="!expresHabilitado">
+  <div class="config-expres__info">
+    <strong>Retiros EXPRÉS:</strong>
+    <span class="config-expres__estado">{{ expresHabilitado ? 'ACTIVADOS' : 'DESACTIVADOS' }}</span>
+  </div>
+  <button
+    class="btn-toggle-expres"
+    [class.btn-toggle-expres--off]="expresHabilitado"
+    (click)="toggleExpres()"
+    [disabled]="togglingExpres">
+    {{ togglingExpres ? 'Guardando...' : (expresHabilitado ? 'Desactivar' : 'Activar') }}
+  </button>
+</div>
+
 <div *ngIf="loading" class="loading">
   Cargando solicitudes...
 </div>
@@ -28,13 +43,24 @@
   <div *ngFor="let retiro of retiros" class="retiro-item" [ngClass]="getEstadoClase(retiro.estado)">
     <div class="retiro-header">
       <h4 class="username">{{ retiro.username }}</h4>
+      <span class="tipo-tag" [class.tipo-expres]="retiro.tipo === 'expres'" [class.tipo-normal]="retiro.tipo !== 'expres'">
+        {{ (retiro.tipo === 'expres' ? 'EXPRÉS' : 'NORMAL') }}
+      </span>
       <span class="estado-tag" [ngClass]="getEstadoClase(retiro.estado)">{{ retiro.estado | uppercase }}</span>
     </div>
-    
+
     <div class="retiro-info">
       <div class="info-row">
         <span class="label">Cantidad:</span>
         <span class="value">{{ retiro.cantidad }}$</span>
+      </div>
+      <div class="info-row" *ngIf="retiro.tipo === 'expres'">
+        <span class="label">Comisión 3%:</span>
+        <span class="value">{{ retiro.comision }}$</span>
+      </div>
+      <div class="info-row" *ngIf="retiro.tipo === 'expres'">
+        <span class="label">A entregar:</span>
+        <span class="value"><strong>{{ retiro.montoEntregar }}$</strong></span>
       </div>
       <div class="info-row">
         <span class="label">Banco:</span>
@@ -53,7 +79,7 @@
         <span class="value">{{ formatoFecha(retiro.fechaSolicitud) }}</span>
       </div>
     </div>
-    
+
     <div class="retiro-actions" *ngIf="retiro.estado === 'pendiente'">
       <button (click)="aprobar(retiro._id)" class="btn-aprobar">Aprobar</button>
       <button (click)="rechazar(retiro._id)" class="btn-rechazar">Rechazar</button>

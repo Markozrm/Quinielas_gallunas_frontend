@@ -22,6 +22,7 @@ export class RetirosService {
     cantidad: number;
     nombreTitular: string;
     numeroTarjeta: string;
+    tipo: 'normal' | 'expres';
   }): Observable<any> {
     return this.httpClient.post<any>(`${this.baseUrl}/solicitar`, datos);
   }
@@ -50,4 +51,13 @@ export class RetirosService {
   eliminarSolicitud(id: string): Observable<any> {
     return this.httpClient.delete<any>(`${this.baseUrl}/${id}`);
   }
-} 
+
+  // Configuración global de retiros (toggle EXPRÉS).
+  getConfiguracion(): Observable<{ expresHabilitado: boolean; actualizadoEn?: string }> {
+    return this.httpClient.get<any>(`${this.baseUrl}/configuracion`);
+  }
+
+  setExpresHabilitado(expresHabilitado: boolean): Observable<any> {
+    return this.httpClient.put<any>(`${this.baseUrl}/configuracion`, { expresHabilitado });
+  }
+}

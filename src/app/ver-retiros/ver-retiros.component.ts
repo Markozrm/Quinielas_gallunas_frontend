@@ -20,7 +20,9 @@ export class VerRetirosComponent implements OnInit {
   retiroSeleccionado: any = null;
   retirosPendientes: number = 0;
   cantidadAcumulada: number = 0;
-  
+  expresHabilitado: boolean = true;
+  togglingExpres: boolean = false;
+
   constructor(
     private retirosService: RetirosService,
     private router: Router,
@@ -29,6 +31,32 @@ export class VerRetirosComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarRetiros();
+    this.cargarConfiguracion();
+  }
+
+  cargarConfiguracion(): void {
+    this.retirosService.getConfiguracion().subscribe(
+      (cfg) => { this.expresHabilitado = !!cfg.expresHabilitado; },
+      (error) => { console.error('Error cargando configuración de retiros:', error); }
+    );
+  }
+
+  toggleExpres(): void {
+    const nuevoValor = !this.expresHabilitado;
+    const accion = nuevoValor ? 'ACTIVAR' : 'DESACTIVAR';
+    if (!confirm(`¿${accion} los retiros EXPRÉS para todos los usuarios?`)) return;
+
+    this.togglingExpres = true;
+    this.retirosService.setExpresHabilitado(nuevoValor).subscribe(
+      (cfg) => {
+        this.expresHabilitado = !!cfg.expresHabilitado;
+        this.togglingExpres = false;
+      },
+      (error) => {
+        this.togglingExpres = false;
+        alert('Error al cambiar la configuración: ' + (error?.error?.error || error.message));
+      }
+    );
   }
 
   cargarRetiros(): void {
@@ -36,12 +64,10 @@ export class VerRetirosComponent implements OnInit {
     this.retirosService.getAllSolicitudes().subscribe(
       (data) => {
         this.retiros = this.ordenarRetiros(data);
-        // Calcula retiros pendientes y cantidad acumulada
         this.retirosPendientes = this.retiros.filter(r => r.estado === 'pendiente').length;
         this.cantidadAcumulada = this.retiros
           .filter(r => r.estado === 'pendiente')
           .reduce((acc, r) => {
-            // Si por alguna razón cantidad viene como string, límpialo
             let cantidad = 0;
             if (typeof r.cantidad === 'string') {
               cantidad = Number(r.cantidad.replace(/[^0-9.]/g, ''));
@@ -60,12 +86,10 @@ export class VerRetirosComponent implements OnInit {
   }
 
   ordenarRetiros(retiros: any[]): any[] {
-    // Primero ordenamos por fecha de más reciente a más antigua
     const porFecha = retiros.sort((a, b) => {
       return new Date(b.fechaSolicitud).getTime() - new Date(a.fechaSolicitud).getTime();
     });
-    
-    // Luego ordenamos por estado, colocando 'pendiente' primero
+
     return porFecha.sort((a, b) => {
       if (a.estado === 'pendiente' && b.estado !== 'pendiente') return -1;
       if (a.estado !== 'pendiente' && b.estado === 'pendiente') return 1;
@@ -124,19 +148,16 @@ export class VerRetirosComponent implements OnInit {
     }
   }
 
-  // Método para iniciar el proceso de eliminación
   confirmarEliminar(retiro: any): void {
     this.retiroSeleccionado = retiro;
     this.mostrarModalConfirmar = true;
   }
 
-  // Primera confirmación
   confirmarPrimerPaso(): void {
     this.mostrarModalConfirmar = false;
     this.mostrarModalDobleConfirmar = true;
   }
 
-  // Segunda confirmación y eliminación definitiva
   confirmarSegundoPaso(): void {
     if (this.retiroSeleccionado) {
       this.retirosService.eliminarSolicitud(this.retiroSeleccionado._id).subscribe(
@@ -154,7 +175,6 @@ export class VerRetirosComponent implements OnInit {
     }
   }
 
-  // Cerrar todos los modales
   cerrarModales(): void {
     this.mostrarModalConfirmar = false;
     this.mostrarModalDobleConfirmar = false;
