@@ -34,7 +34,7 @@
           </label>
           <label class="tipo-opcion" *ngIf="expresHabilitado">
             <input type="radio" formControlName="tipo" value="expres">
-            <span><strong>Exprés</strong> — entrega en 10 min tras aceptación, comisión 3%</span>
+            <span><strong>Exprés</strong> — comisión 3%</span>
           </label>
           <div class="aviso-expres-off" *ngIf="!expresHabilitado">
             Los retiros <strong>Exprés</strong> están temporalmente deshabilitados. Solo puedes solicitar retiros <strong>Normales</strong>.
@@ -45,7 +45,6 @@
           <p *ngIf="retiroForm.get('cantidad')?.value > 0">
             Comisión: <strong>{{ comisionExpres | number:'1.2-2' }}$</strong> · Recibirás: <strong>{{ montoEntregar | number:'1.2-2' }}$</strong>
           </p>
-          <p>El pago se entrega 10 minutos después de la aceptación del admin.</p>
         </div>
       </div>
 
@@ -91,7 +90,7 @@
       <h3>Información importante</h3>
       <ul>
         <li>Los retiros <strong>Normales</strong> se procesan en un plazo de 1-3 días hábiles, sin comisión.</li>
-        <li>Los retiros <strong>Exprés</strong> se entregan 10 minutos después de la aceptación, con una comisión del 3%.</li>
+        <li>Los retiros <strong>Exprés</strong> tienen una comisión del 3%.</li>
         <li>La cantidad mínima para retirar es de $100.</li>
         <li>Por favor verifica que la información bancaria sea correcta.</li>
       </ul>
