@@ -86,8 +86,8 @@ const routes: Routes = [
   },
   {
     path: 'Register',
-    component: RegisterComponent
-
+    component: RegisterComponent,
+    canActivate: [PanelGuard]
   },
   {
     path: 'RegistroInvitado',
