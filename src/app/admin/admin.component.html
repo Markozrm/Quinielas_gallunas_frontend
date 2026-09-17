@@ -231,7 +231,7 @@
     <!-- SOLO superUsuario puede ver estos apartados -->
     <div *ngIf="isSuperAdmin() || isCristianQuiroz()" class="admin-panel-casino-row">
       <!-- Servidor -->
-      <div class="admin-panel-casino-col">
+      <div class="admin-panel-casino-col" *ngIf="!isQuinielaStream()">
         <h3>Servidor</h3>
         <a (click)="irPM2()" class="casino-btn casino-btn-blue">Reiniciar servidor</a>
       </div>
@@ -246,7 +246,7 @@
         <a (click)="openTitleModal()" class="casino-btn casino-btn-green">Titulo</a>
       </div>
       <!-- Usuarios -->
-      <div class="admin-panel-casino-col">
+      <div class="admin-panel-casino-col" *ngIf="!isQuinielaStream()">
         <h3>Usuarios</h3>
         <a *ngIf="isSuperAdmin()" (click)="irRegistro()" class="casino-btn casino-btn-purple">Registrar usuario</a>
         <a (click)="irUsuarios()" class="casino-btn casino-btn-purple">Ver usuarios</a>

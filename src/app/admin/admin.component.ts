@@ -151,6 +151,11 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
     return (this.username || '').toLowerCase() === 'cristianquiroz';
   }
 
+  // Usuario dedicado SOLO al stream: ve únicamente los botones "Iniciar stream" y "Titulo"
+  isQuinielaStream(): boolean {
+    return (this.username || '').toLowerCase() === 'quinielastream';
+  }
+
   // Modifica los métodos de permisos para incluir a "blanco"
   isSuperAdmin() {
     const rol = localStorage.getItem("Rol") || "";
