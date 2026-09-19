@@ -73,7 +73,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('streamClave', claveBackend);
         console.log('Clave obtenida desde backend y guardada:', claveBackend);
         const rol = localStorage.getItem('Rol');
-        const target = (rol === 'superUsuario' || rol === 'administrador')
+        const target = (rol === 'superUsuario' || rol === 'administrador' || rol === 'streamer')
           ? `/live-admin/${claveBackend}/${puerto}`
           : `/live-inv/${claveBackend}/${puerto}`;
         if (window.location.pathname !== target) {
@@ -90,7 +90,7 @@ export class LoginComponent implements OnInit {
     const claveLocal = localStorage.getItem('streamClave');
     if (claveLocal) {
       const rol = localStorage.getItem('Rol');
-      const target = (rol === 'superUsuario' || rol === 'administrador')
+      const target = (rol === 'superUsuario' || rol === 'administrador' || rol === 'streamer')
         ? `/live-admin/${claveLocal}/${puerto}`
         : `/live-inv/${claveLocal}/${puerto}`;
       if (window.location.pathname !== target) {

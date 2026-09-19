@@ -20,9 +20,9 @@ export const environment = {
 
   // CONFIGURACIÓN LOCAL (DESCOMENTA si quieres usar local en este mismo archivo)
   //production: false,
- // apiUrl: 'http://localhost:444',
+ //apiUrl: 'http://localhost:444',
   //PORT: '444',
-  //apiUrl_apuestas: 'http://localhost',
+  //apiUrl_apuestas: 'http://localhost:3448',
   //apuesta_PORT: '3448',
   //apiUrl_quiniela: 'http://localhost',
   //quiniela_PORT: '3449',

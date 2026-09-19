@@ -56,6 +56,11 @@
                           (click)="formulario.get('tipoUsuario')?.patchValue('controladorBanca')">
                     ADMIN BANCA
                   </button>
+                  <button type="button" class="tipo-btn streamer-btn"
+                          [class.selected]="formulario.get('tipoUsuario')?.value === 'streamer'"
+                          (click)="formulario.get('tipoUsuario')?.patchValue('streamer')">
+                    STREAMER
+                  </button>
                 </div>
               </div>
             </div>

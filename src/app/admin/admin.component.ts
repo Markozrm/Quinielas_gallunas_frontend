@@ -156,6 +156,11 @@ export class AdminComponent implements OnInit { // ← Agregar implements OnInit
     return (this.username || '').toLowerCase() === 'quinielastream';
   }
 
+  // Rol dedicado al stream (creado desde "Registrar usuario"): solo puede controlar el stream.
+  isStreamer(): boolean {
+    return (localStorage.getItem('Rol') || '') === 'streamer';
+  }
+
   // Modifica los métodos de permisos para incluir a "blanco"
   isSuperAdmin() {
     const rol = localStorage.getItem("Rol") || "";

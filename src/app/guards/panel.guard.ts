@@ -6,9 +6,10 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from
 })
 export class PanelGuard implements CanActivate {
 
-  // Rutas permitidas para el usuario dedicado al stream (QUINIELASTREAM):
-  // solo puede llegar al panel admin y a las pantallas de stream.
-  private readonly quinielaStreamAllowedPaths = new Set<string>([
+  // Rutas permitidas para el usuario dedicado al stream (QUINIELASTREAM
+  // o cualquier usuario con rol 'streamer'): solo puede llegar al panel admin
+  // y a las pantallas de stream.
+  private readonly streamOnlyAllowedPaths = new Set<string>([
     'Admin',
     'IniciarStream',
     'iniciardor-streams',
@@ -24,17 +25,28 @@ export class PanelGuard implements CanActivate {
     }
 
     const rol = localStorage.getItem('Rol') || '';
+    const username = (localStorage.getItem('nombreUsuario') || '').toLowerCase();
+    const path = route.routeConfig?.path || '';
+
+    // Rol 'streamer': acceso permitido, pero SOLO a las rutas de stream.
+    if (rol === 'streamer') {
+      if (!this.streamOnlyAllowedPaths.has(path)) {
+        this.router.navigate([`/Admin`]);
+        return false;
+      }
+      return true;
+    }
+
     const esSuperAdmin = rol === 'superUsuario' || rol === 'administrador' || rol === 'controladorBanca';
     if (!esSuperAdmin) {
       return false;
     }
 
-    // Restricción específica del usuario QUINIELASTREAM: solo puede acceder a
-    // las rutas de la lista blanca (nada de registro, usuarios, PM2, etc.).
-    const username = (localStorage.getItem('nombreUsuario') || '').toLowerCase();
+    // Restricción específica del usuario QUINIELASTREAM (mismo criterio que
+    // el rol 'streamer', pero por username porque fue configurado antes de
+    // existir el rol): solo puede acceder a las rutas de stream.
     if (username === 'quinielastream') {
-      const path = route.routeConfig?.path || '';
-      if (!this.quinielaStreamAllowedPaths.has(path)) {
+      if (!this.streamOnlyAllowedPaths.has(path)) {
         this.router.navigate([`/Admin`]);
         return false;
       }

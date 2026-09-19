@@ -101,6 +101,22 @@ html, body {
   align-items: stretch;
 }
 
+/* Layout dedicado al rol STREAMER: sin col-right, una sola columna a todo el ancho
+   para que el video pueda crecer y no se vea el hueco azul. */
+.main-layout.streamer-layout {
+  grid-template-columns: 1fr;
+}
+
+.main-layout.streamer-layout .col-left {
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.main-layout.streamer-layout .video-wrapper {
+  height: min(70vh, 720px);
+}
+
 /* ══════════════════════════════
    COLUMNA IZQUIERDA
 ══════════════════════════════ */

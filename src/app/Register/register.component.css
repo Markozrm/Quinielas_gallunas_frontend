@@ -199,6 +199,17 @@ label[for="saldo"] {
   color: white;
 }
 
+.streamer-btn {
+  grid-column: 1 / -1;
+  margin-top: 10px;
+}
+
+.streamer-btn.selected {
+  background: #e91e63;
+  border-color: #e91e63;
+  color: white;
+}
+
 .image-section {
   display: flex;
   flex-direction: column;

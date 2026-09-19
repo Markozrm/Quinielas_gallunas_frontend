@@ -672,6 +672,18 @@ setInterval(() => this.cargarDepositos(), 30000);
     return esInvitado;
   }
 
+  // Rol "streamer": solo controla el stream (Ganador / Nueva Ronda / Chat / Finalizar / Tabla de puntos + video).
+  // No ve métricas de banca, depósitos/retiros pendientes ni la tabla de apuestas en vivo.
+  esStreamer(): boolean {
+    const rol = localStorage.getItem("Rol") || "";
+    return rol === 'streamer';
+  }
+
+  // Controles compartidos que sí ve el streamer y también el admin normal.
+  puedeControlarStream(): boolean {
+    return this.esAdmin() || this.esStreamer();
+  }
+
   openPopup() {
     if (this.esAdmin()) {
       this.isPopupOpen = true;

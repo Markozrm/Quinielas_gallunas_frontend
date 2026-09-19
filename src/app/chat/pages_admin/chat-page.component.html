@@ -10,7 +10,7 @@
   </button>
 </div>
 
-<div class="main-layout">
+<div class="main-layout" [class.streamer-layout]="esStreamer()">
 
   <div class="col-left">
 
@@ -18,7 +18,7 @@
       <app-video-player></app-video-player>
     </div>
 
-    <div class="stats-bar">
+    <div class="stats-bar" *ngIf="!esStreamer()">
       <button *ngIf="esAdmin() && !estadoApuesta && textButton === 'Abrir Apuestas'"
               class="btn-abrir" (click)="toggleBooleanState()">
         ABRIR APUESTA
@@ -140,17 +140,17 @@
 
     </div>
 
-    <div *ngIf="esAdmin()" class="admin-controls">
-      <button *ngIf="estadoApuesta" class="admin-btn btn-cerrar" (click)="toggleBooleanState()">
+    <div *ngIf="puedeControlarStream()" class="admin-controls">
+      <button *ngIf="estadoApuesta && !esStreamer()" class="admin-btn btn-cerrar" (click)="toggleBooleanState()">
         ⛔ Cerrar
       </button>
-      <button *ngIf="!estadoApuesta && textButton === 'Abrir Apuestas'" class="admin-btn btn-abrir-ap" (click)="toggleBooleanState()">
+      <button *ngIf="!estadoApuesta && textButton === 'Abrir Apuestas' && !esStreamer()" class="admin-btn btn-abrir-ap" (click)="toggleBooleanState()">
         ✅ Abrir
       </button>
-      <button *ngIf="!estadoApuesta && textButton === 'Escoger Ganador'" class="admin-btn btn-ganador" (click)="toggleBooleanState()">
+      <button *ngIf="esStreamer() || (!estadoApuesta && textButton === 'Escoger Ganador')" class="admin-btn btn-ganador" (click)="toggleBooleanState()">
         🏆 Ganador R{{ numeroPelea }}
       </button>
-      <button *ngIf="!estadoApuesta && textButton === 'Escoger Ganador'" class="admin-btn btn-nueva" (click)="abrirNuevaRonda()">
+      <button *ngIf="esStreamer() || (!estadoApuesta && textButton === 'Escoger Ganador')" class="admin-btn btn-nueva" (click)="abrirNuevaRonda()">
         ➕ Nueva Ronda
       </button>
       <button class="chat-button" (click)="openChatModal()">
@@ -164,7 +164,7 @@
       </button>
     </div>
 
-    <div *ngIf="esAdmin() && rondasEnEspera.length > 0" class="rondas-espera">
+    <div *ngIf="puedeControlarStream() && rondasEnEspera.length > 0" class="rondas-espera">
       <h4>Pendientes de ganador:</h4>
       <div class="rondas-list">
         <button *ngFor="let ronda of rondasEnEspera" class="ronda-espera-btn" (click)="seleccionarRonda(ronda)">
@@ -173,7 +173,7 @@
       </div>
     </div>
 
-    <div *ngIf="esAdmin()" class="tabla-puntos-admin-wrapper">
+    <div *ngIf="puedeControlarStream()" class="tabla-puntos-admin-wrapper">
       <app-tabla-puntos [isSuperUser]="true"></app-tabla-puntos>
     </div>
 
@@ -189,7 +189,7 @@
   </div><!-- /col-left -->
 
 
-  <div class="col-right">
+  <div class="col-right" *ngIf="!esStreamer()">
 
     <div class="pelea-header">
       <div class="pelea-titulo">PELEA {{ numeroPelea }}</div>

@@ -224,7 +224,18 @@
     </div>
   </div>
 </div>
-<div *ngIf="isSuperAdmin() || isControladorBanca() || isCristianQuiroz()">
+<!-- Vista dedicada para el rol STREAMER: solo un acceso rápido al stream -->
+<div *ngIf="isStreamer()" class="admin-panel-casino">
+  <h2>PANEL STREAMER</h2>
+  <div class="admin-panel-casino-row">
+    <div class="admin-panel-casino-col">
+      <h3>Stream</h3>
+      <a (click)="irIniciarStream()" class="casino-btn casino-btn-green">Iniciar stream</a>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!isStreamer() && (isSuperAdmin() || isControladorBanca() || isCristianQuiroz())">
   <div class="admin-panel-casino">
     <h2>PANEL ADMIN</h2>
     <!-- SOLO superUsuario puede ver estos apartados -->
