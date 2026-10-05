@@ -141,19 +141,30 @@
     </div>
 
     <div *ngIf="puedeControlarStream()" class="admin-controls">
-      <button *ngIf="estadoApuesta && !esStreamer()" class="admin-btn btn-cerrar" (click)="toggleBooleanState()">
+      <!-- Admin normal: botones dependientes del estado de apuesta -->
+      <button *ngIf="!esStreamer() && estadoApuesta" class="admin-btn btn-cerrar" (click)="toggleBooleanState()">
         ⛔ Cerrar
       </button>
-      <button *ngIf="!estadoApuesta && textButton === 'Abrir Apuestas' && !esStreamer()" class="admin-btn btn-abrir-ap" (click)="toggleBooleanState()">
+      <button *ngIf="!esStreamer() && !estadoApuesta && textButton === 'Abrir Apuestas'" class="admin-btn btn-abrir-ap" (click)="toggleBooleanState()">
         ✅ Abrir
       </button>
-      <button *ngIf="esStreamer() || (!estadoApuesta && textButton === 'Escoger Ganador')" class="admin-btn btn-ganador" (click)="toggleBooleanState()">
+      <button *ngIf="!esStreamer() && !estadoApuesta && textButton === 'Escoger Ganador'" class="admin-btn btn-ganador" (click)="toggleBooleanState()">
         🏆 Ganador R{{ numeroPelea }}
       </button>
-      <button *ngIf="esStreamer() || (!estadoApuesta && textButton === 'Escoger Ganador')" class="admin-btn btn-nueva" (click)="abrirNuevaRonda()">
+      <button *ngIf="!esStreamer() && !estadoApuesta && textButton === 'Escoger Ganador'" class="admin-btn btn-nueva" (click)="abrirNuevaRonda()">
         ➕ Nueva Ronda
       </button>
-      <button class="chat-button" (click)="openChatModal()">
+
+      <!-- Streamer: acciones directas, siempre disponibles, no dependen del estado -->
+      <button *ngIf="esStreamer()" class="admin-btn btn-ganador" (click)="streamerPickWinner()">
+        🏆 Ganador R{{ numeroPelea }}
+      </button>
+      <button *ngIf="esStreamer()" class="admin-btn btn-nueva" (click)="abrirNuevaRonda()">
+        ➕ Nueva Ronda
+      </button>
+
+      <!-- Chat botón: solo para admins. El streamer tiene el chat embebido abajo. -->
+      <button *ngIf="!esStreamer()" class="chat-button" (click)="openChatModal()">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
           <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
         </svg>
@@ -175,6 +186,19 @@
 
     <div *ngIf="puedeControlarStream()" class="tabla-puntos-admin-wrapper">
       <app-tabla-puntos [isSuperUser]="true"></app-tabla-puntos>
+    </div>
+
+    <!-- Chat embebido siempre visible para el STREAMER (aprovecha el espacio libre
+         que deja al no mostrarse la columna derecha). En móvil queda debajo
+         de los controles; en PC también va dentro de la col-left. -->
+    <div *ngIf="esStreamer()" class="streamer-chat-inline">
+      <div class="streamer-chat-header">💬 CHAT EN VIVO</div>
+      <div class="streamer-chat-messages">
+        <app-users-chat></app-users-chat>
+      </div>
+      <div class="streamer-chat-input">
+        <app-users-type></app-users-type>
+      </div>
     </div>
 
     <div *ngIf="esInvitado()" class="apuesta-invitado">

@@ -110,14 +110,14 @@ export class UsersChatComponent implements OnInit, OnDestroy {
   // 3) Cae a la lista de nombres conocidos (incluye BANCA).
   public esAdmin(user: any): boolean {
     if (!user) return false;
-    if (user.rol === 'administrador' || user.rol === 'superUsuario') return true;
+    if (user.rol === 'administrador' || user.rol === 'superUsuario' || user.rol === 'streamer') return true;
     const name: string = user.name || '';
     if (!name) return false;
     const u = (this.connectedUsers || []).find(
       (x: any) => x?.name && x.name.toLowerCase() === name.toLowerCase()
     );
     if (u && u.rol) {
-      return u.rol === 'administrador' || u.rol === 'superUsuario';
+      return u.rol === 'administrador' || u.rol === 'superUsuario' || u.rol === 'streamer';
     }
     return this.ADMIN_USERNAMES.some(
       a => a.toLowerCase() === name.toLowerCase()

@@ -126,7 +126,7 @@ export class UsersTypeComponent implements OnInit {
 
   esAdmin(): boolean {
     const rol = localStorage.getItem("Rol") || "";
-    const esSuperAdmin = rol === 'superUsuario' || rol === 'administrador';
+    const esSuperAdmin = rol === 'superUsuario' || rol === 'administrador' || rol === 'streamer';
     return esSuperAdmin;
   }
 }

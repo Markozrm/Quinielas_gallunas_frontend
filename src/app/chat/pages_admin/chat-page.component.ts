@@ -175,6 +175,16 @@ public usuariosResumen: any[] = [];
     this.isChooseModalOpen = false;
   }
 
+  // Método específico para el rol STREAMER:
+  // abre directamente el modal de "Escoger Ganador" para la ronda actual,
+  // sin depender del toggle que requiere el ciclo abrir/cerrar apuestas.
+  streamerPickWinner() {
+    this.rondaSeleccionada = this.numeroPelea;
+    this.isChooseModalOpen = true;
+    this.isOpenBetModalOpen = false;
+    this.isCloseBetModalOpen = false;
+  }
+
   handleOpenBets(data: { fightNumber: number, redTeamName: string, greenTeamName: string, redPoints: number, greenPoints: number }) {
     if (data.fightNumber <= this.ultimaRondaValida) {
       alert(`Error: La ronda ${data.fightNumber} debe ser mayor a ${this.ultimaRondaValida}`);
