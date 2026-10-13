@@ -175,6 +175,17 @@ fromEvent(this.socket, 'update_ultima_ronda').subscribe((numero: number) => {
       console.log("GANADOR!: ", data);
       this._ganador.next(data.ganador);
     });
+
+    // Nuevo: escuchar errores del backend al escoger ganador. Antes si el
+    // backend fallaba al llamar a repartirGanancias, el admin veía "nada
+    // pasa" porque el emit publicarGanador nunca llegaba y no había señal
+    // de que algo salió mal. Ahora alertamos para que reintente o nos avise.
+    fromEvent(this.socket, 'error_ganador').subscribe((data: any) => {
+      console.error('[error_ganador]', data);
+      const msj = (data && data.mensaje) ? data.mensaje : 'Error al escoger ganador. Reintenta.';
+      const ronda = data && data.ronda != null ? ` (R${data.ronda})` : '';
+      try { alert(`⚠️ Error al pagar${ronda}: ${msj}`); } catch (_) {}
+    });
     
     fromEvent(this.socket, 'leave_user').subscribe(() => {
       this.getUsersCount();
