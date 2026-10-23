@@ -41,10 +41,10 @@ export class NotificacionGlobalService {
 
   // Llama a este método al iniciar para obtener el número real de pendientes
   private actualizarPendientes() {
-    fetch(`${environment.apiUrl}/api/recipes/get-all-recipes`)
+    fetch(`${environment.apiUrl}/api/recipes/count-pendientes`)
       .then(res => res.json())
-      .then((recibos: any[]) => {
-        this.pendientes = recibos.filter(r => r.estado === 'pendiente' || !r.estado).length;
+      .then((data: any) => {
+        this.pendientes = Number(data?.count) || 0;
       });
   }
 

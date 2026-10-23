@@ -24,7 +24,9 @@ export class UsuariosComponent implements OnInit {
   sortOrder: string = 'default';
   showSaldoModal: boolean = false;
   saldoAmount: number = 0;
-  public saldoTotal: number = 0; // Nueva propiedad para el saldo global
+  public saldoTotal: number = 0;
+  totalUsers: number = 0;
+  private searchTimer: any;
   
   // Pagination properties
   currentPage: number = 1;
@@ -54,44 +56,58 @@ export class UsuariosComponent implements OnInit {
     private recipeService: RecipesService // NUEVO: inyecta el servicio de recibos
   ) { }
   ngOnInit(): void {
-    this.userService.getUsers().subscribe(users => {
-      this.users = this.sortUsersAlphabetically(users);
-      this.filteredUsers = this.users; // Inicializa filteredUsers con todos los usuarios
-      this.calcularSaldoTotal(); // Calcula el saldo total al cargar los usuarios
-      this.updatePagination();
+    this.loadUsers();
+    this.loadSaldoTotal();
+  }
+
+  loadUsers(): void {
+    this.userService.getUsers(this.currentPage, this.itemsPerPage, this.searchTerm, this.sortOrder)
+      .subscribe((data) => {
+        let lista = data?.users || [];
+        if (this.soloUsuariosCredito) {
+          lista = lista.filter((user: any) => !!user.creditoActivo);
+        }
+        this.users = lista;
+        this.filteredUsers = lista;
+        this.paginatedUsers = lista;
+        this.totalUsers = data?.total || 0;
+        this.totalPages = data?.pages || 1;
+      });
+  }
+
+  loadSaldoTotal(): void {
+    this.userService.getSaldoTotal().subscribe((data) => {
+      this.saldoTotal = data?.total || 0;
     });
   }
   
   // Pagination methods
   updatePagination(): void {
-    this.totalPages = Math.ceil(this.filteredUsers.length / this.itemsPerPage);
-    this.updatePaginatedUsers();
+    this.loadUsers();
   }
   
   updatePaginatedUsers(): void {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
-    this.paginatedUsers = this.filteredUsers.slice(startIndex, endIndex);
+    this.loadUsers();
   }
   
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
-      this.updatePaginatedUsers();
+      this.loadUsers();
     }
   }
   
   nextPage(): void {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
-      this.updatePaginatedUsers();
+      this.loadUsers();
     }
   }
   
   previousPage(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
-      this.updatePaginatedUsers();
+      this.loadUsers();
     }
   }
   
@@ -112,46 +128,21 @@ export class UsuariosComponent implements OnInit {
     return array;
   }
 
-   // Nueva función para calcular el saldo total
   private calcularSaldoTotal(): void {
-  this.saldoTotal = this.users.reduce((total, user) => {
-    // Excluir al usuario con username "BANCA"
-    if (user.username !== 'BANCA') {
-      return total + (user.saldo || 0);
-    }else{
-      console.log("saldo de BANCA: ",user.saldo);
-    }
-    return total;
-  }, 0);
-}
-
-
-  // Función para filtrar usuarios
-  filterUsers(): void {
-     this.filteredUsers = this.users.filter(user => {
-      const matchesSearch = user.username.toLowerCase().includes(this.searchTerm.toLowerCase());
-      const matchesCredito = this.soloUsuariosCredito ? !!user.creditoActivo : true;
-      return matchesSearch && matchesCredito;
-    });
-    this.sortUsers();
-    this.currentPage = 1; // Reset to first page when filtering
-    this.updatePagination();
+    this.loadSaldoTotal();
   }
 
-  // Función para ordenar usuarios según el criterio seleccionado
+  filterUsers(): void {
+    clearTimeout(this.searchTimer);
+    this.searchTimer = setTimeout(() => {
+      this.currentPage = 1;
+      this.loadUsers();
+    }, 300);
+  }
+
   sortUsers(): void {
-    switch (this.sortOrder) {
-      case 'highToLow':
-        this.filteredUsers = [...this.filteredUsers].sort((a, b) => b.saldo - a.saldo);
-        break;
-      case 'lowToHigh':
-        this.filteredUsers = [...this.filteredUsers].sort((a, b) => a.saldo - b.saldo);
-        break;
-      default:
-        this.filteredUsers = this.sortUsersAlphabetically([...this.filteredUsers]);
-        break;
-    }
-    this.updatePagination();
+    this.currentPage = 1;
+    this.loadUsers();
   }
 
   openEditMenu(user: any): void {
@@ -175,21 +166,18 @@ export class UsuariosComponent implements OnInit {
     // }
   }
 
- saveChanges(user: any): void {
-  // Si se ingresó nueva contraseña, cambiarla con endpoint de admin
+  saveChanges(user: any): void {
   if (this.editedUser.newPassword && this.editedUser.newPassword.trim() !== '') {
     this.userService.adminChangePassword(user._id, this.editedUser.newPassword).subscribe({
       next: () => {
-        // Contraseña cambiada, ahora actualizar el resto de datos
         this.guardarDatosUsuario(user);
       },
-error: (err: any) => {
+      error: (err: any) => {
         console.error('Error al cambiar contraseña:', err);
         alert('Error al cambiar la contraseña');
       }
     });
   } else {
-    // Sin cambio de contraseña
     this.guardarDatosUsuario(user);
   }
 }
@@ -199,25 +187,18 @@ private guardarDatosUsuario(user: any): void {
     this.userService.editUserImage(user._id, this.editedUser, this.image).subscribe(() => {
       this.editingUser = null;
       this.image = null;
-      this.refreshUsers();
+      this.loadUsers();
+      this.loadSaldoTotal();
       alert("Usuario actualizado!");
     });
   } else {
     this.userService.editUser(user._id, this.editedUser).subscribe(() => {
       this.editingUser = null;
-      this.refreshUsers();
+      this.loadUsers();
+      this.loadSaldoTotal();
       alert("Usuario actualizado!");
     });
   }
-}
-
-private refreshUsers(): void {
-  this.userService.getUsers().subscribe(users => {
-    this.users = users;
-    this.filteredUsers = [...users];
-    this.calcularSaldoTotal();
-    this.updatePagination();
-  });
 }
 
   cancelEdit(): void {
@@ -254,23 +235,13 @@ private refreshUsers(): void {
   async banearUsuario(user:any){
     if (user.rol === 'baneado'){
       this.userService.desBanUser(user.username).subscribe(() => {
-        this.userService.getUsers().subscribe(users => {
-          this.users = users;
-          this.filteredUsers = this.users;
-          this.calcularSaldoTotal();
-          this.updatePagination();
-        });
+        this.loadUsers();
         alert("Usuario desbaneado!");
       });
     }
     else{
       this.userService.banUser(user.username).subscribe(() => {
-        this.userService.getUsers().subscribe(users => {
-          this.users = users;
-          this.filteredUsers = this.users;
-          this.calcularSaldoTotal();
-          this.updatePagination();
-        });
+        this.loadUsers();
         alert("Usuario baneado!");
       });
     }
@@ -280,7 +251,8 @@ private refreshUsers(): void {
 
       this.userService.deleteUser(user.username).subscribe(() => {
         alert("usuario eliminado");
-        this.userService.getUsers().subscribe(users => this.users = users);
+        this.loadUsers();
+        this.loadSaldoTotal();
         
       });
   }
@@ -298,12 +270,8 @@ private refreshUsers(): void {
     if (this.selectedUser) {
       this.userService.deleteUser(this.selectedUser.username).subscribe(() => {
         alert("Usuario eliminado");
-        this.userService.getUsers().subscribe(users => {
-          this.users = users;
-          this.filteredUsers = this.users;
-          this.calcularSaldoTotal();
-          this.updatePagination();
-        });
+        this.loadUsers();
+        this.loadSaldoTotal();
         this.closeDeleteModal();
       });
     }
@@ -382,11 +350,8 @@ private refreshUsers(): void {
           }).toPromise();
         }
         alert(`Saldo actualizado. Nuevo saldo: ${result.user.saldo}`);
-        this.userService.getUsers().subscribe(users => {
-          this.users = users;
-          this.filterUsers();
-          this.calcularSaldoTotal();
-        });
+        this.loadUsers();
+        this.loadSaldoTotal();
         this.closeSaldoModal();
       })
       .catch(error => {
@@ -420,11 +385,8 @@ private refreshUsers(): void {
         .then((result) => {
           console.log('Resultado restarSaldo:', result);
           alert(`Saldo actualizado. Nuevo saldo: ${result.user.saldo}`);
-          this.userService.getUsers().subscribe(users => {
-            this.users = users;
-            this.filterUsers();
-            this.calcularSaldoTotal();
-          });
+          this.loadUsers();
+          this.loadSaldoTotal();
           this.closeSaldoModal();
         })
         .catch(error => {

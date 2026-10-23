@@ -99,8 +99,8 @@ irAdmin() {
     this.actualizarSaldo();
 
     // Obtener los datos completos del usuario SIN afectar la imagen
-    this.usersService.getUsers().subscribe((users: any[]) => {
-      this.usuario = users.find(u => u.username === this.nombreUsuario) || {};
+    this.usersService.getUser(this.nombreUsuario).subscribe((user: any) => {
+      this.usuario = user || {};
       this.editarPerfilForm.patchValue({
         nombre: this.usuario.nombre || '',
         apellido: this.usuario.apellido || '',

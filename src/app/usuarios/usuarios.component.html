@@ -3,11 +3,11 @@
 
 <!-- Contador de usuarios -->
 <div class="user-counter">
-  Total de usuarios: {{ users.length }}
+  Total de usuarios: {{ totalUsers }}
 </div>
 <!--Template para saldo Global -->
 <div class="saldo-global-container">
-  <h2>USUARIOS: {{ users.length }} | SALDO GLOBAL: ${{ saldoTotal | number:'1.2-2' }}</h2>
+  <h2>USUARIOS: {{ totalUsers }} | SALDO GLOBAL: ${{ saldoTotal | number:'1.2-2' }}</h2>
 </div>
 <!-- Barra de búsqueda y selector de ordenamiento -->
 <div class="search-container">
@@ -35,7 +35,7 @@
 <!-- Pagination controls -->
 <div class="pagination-controls">
   <div class="pagination-info">
-    <span>Mostrando {{ ((currentPage - 1) * itemsPerPage) + 1 }} - {{ Math.min(currentPage * itemsPerPage, filteredUsers.length) }} de {{ filteredUsers.length }} usuarios</span>
+    <span>Mostrando {{ totalUsers === 0 ? 0 : ((currentPage - 1) * itemsPerPage) + 1 }} - {{ Math.min(currentPage * itemsPerPage, totalUsers) }} de {{ totalUsers }} usuarios</span>
   </div>
   
   <div class="pagination-buttons">

@@ -43,11 +43,11 @@ export class NotificacionGlobalService {
 
   private async actualizarPendientes() {
     const base = (environment.apiUrl || '').trim();
-    const url = `${base.replace(/\/$/, '')}/api/recipes/get-all-recipes`;
+    const url = `${base.replace(/\/$/, '')}/api/recipes/count-pendientes`;
     try {
       const res = await fetch(url);
-      const recibos: any[] = await res.json();
-      this.pendientes = recibos.filter(r => r.estado === 'pendiente' || !r.estado).length;
+      const data = await res.json();
+      this.pendientes = Number(data?.count) || 0;
     } catch {
       // silencioso en fallo de fetch
     }

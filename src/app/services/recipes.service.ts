@@ -34,8 +34,25 @@ export class RecipesService {
     return `${this.baseUrl}/get-image/${id}?t=${Date.now()}`;
   }
 
-  getAll() {
-    return this.httpClient.get<any>(`${this.baseUrl}/get-all-recipes`);
+  getAll(estado?: string) {
+    const params: any = {};
+    if (estado) params.estado = estado;
+    return this.httpClient.get<any>(`${this.baseUrl}/get-all-recipes`, { params });
+  }
+
+  getResumen() {
+    return this.httpClient.get<any>(`${this.baseUrl}/resumen`);
+  }
+
+  countPendientes() {
+    return this.httpClient.get<any>(`${this.baseUrl}/count-pendientes`);
+  }
+
+  getRecientes(username: string, horas = 2) {
+    return this.httpClient.get<any>(
+      `${this.baseUrl}/recientes/${encodeURIComponent(username)}`,
+      { params: { horas } }
+    );
   }
 
   delete(id: string) {

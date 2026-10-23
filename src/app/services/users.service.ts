@@ -2,7 +2,6 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
@@ -89,9 +88,14 @@ adminChangePassword(userId: string, newPassword: string):any {
     return this.httpClient.post<any>(`${this.apiUrl}/api/streams/reset/${streamId}`, {});
   }
 
+  getUsers(page = 1, limit = 20, q = '', sort = 'default'){
+    return this.httpClient.get<any>(`${this.baseUrl}/get-all-users`, {
+      params: { page, limit, q, sort }
+    });
+  }
 
-  getUsers() {
-    return this.httpClient.get<any>(`${this.baseUrl}/get-all-users`);
+  getSaldoTotal() {
+    return this.httpClient.get<any>(`${this.baseUrl}/saldo-total`);
   }
   editUser(id: any, editedUser: any) {
     return this.httpClient.put<any>(`${this.baseUrl}/edit-user/${id}`, editedUser);
@@ -176,8 +180,6 @@ adminChangePassword(userId: string, newPassword: string):any {
   }
 
   getUser(username: string) {
-    return this.httpClient.get(`/api/users/get-all-users`).pipe(
-      map((users: any) => users.find((u: any) => u.username === username))
-    );
+    return this.httpClient.get<any>(`${this.baseUrl}/get-user/${encodeURIComponent(username)}`);
   }
 }

@@ -102,35 +102,33 @@ export class VerReciboComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.recipeService.getAll().subscribe(recipes => {
-      this.recipes = this.sortRecipesAlphabetically(recipes)
-        .filter(r => r.estado === 'pendiente' || !r.estado) // Solo pendientes
+    this.loadPendientes();
+    this.actualizarResumen();
+    this.resumenInterval = setInterval(() => this.actualizarResumen(), 30000);
+  }
+
+  loadPendientes(): void {
+    this.recipeService.getAll('pendiente').subscribe(recipes => {
+      this.recipes = this.sortRecipesAlphabetically(recipes || [])
         .map(r => ({
           ...r,
           estado: r.estado || 'pendiente'
         }));
     });
-
-    // NUEVO: Actualización en tiempo real del resumen
-    this.actualizarResumen();
-    this.resumenInterval = setInterval(() => this.actualizarResumen(), 2000);
   }
 
-  // NUEVO: Método para actualizar el resumen
   actualizarResumen() {
-    this.recipeService.getAll().subscribe((recibos: any[]) => {
-      this.recibosAceptadosHistorial = recibos
-        .filter((r: any) => r.estado === 'aprobado')
+    this.recipeService.getResumen().subscribe((resumen: any) => {
+      this.recibosAceptadosHistorial = (resumen?.aprobado?.items || [])
         .map((r: any) => ({
           _id: r._id,
-          fecha: r.fechaAprobacion || r.fecha || '', // usa fechaAprobacion si existe
+          fecha: r.fechaAprobacion || r.fecha || '',
           username: r.username,
           monto: r.monto,
           banco: r.banco,
         }))
-        .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime()); // Ordena descendente por fecha
+        .sort((a: any, b: any) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
 
-      // NUEVO: Agrupar por día operativo
       const dias = new Set<string>();
       this.recibosAceptadosHistorial.forEach(recibo => {
         const fecha = new Date(recibo.fecha);
@@ -139,30 +137,20 @@ export class VerReciboComponent implements OnInit {
         const diaOperativo = fechaAjustada.toISOString().split('T')[0];
         dias.add(diaOperativo);
       });
-      this.diasOperativos = Array.from(dias); // Ya está ordenado por la naturaleza del sort previo
+      this.diasOperativos = Array.from(dias);
 
       if (!this.diaSeleccionado && this.diasOperativos.length > 0) {
         this.diaSeleccionado = this.diasOperativos[0];
       }
 
-      this.recibosAceptados = recibos
-        .filter((r: any) => r.estado === 'aprobado')
-        .reduce((acc: number, r: any) => acc + (Number(r.monto) || 0), 0);
-
-      this.recibosRechazados = recibos
-        .filter((r: any) => r.estado === 'rechazado')
-        .reduce((acc: number, r: any) => acc + (Number(r.monto) || 0), 0);
-
-      this.montoAcumulado = recibos
-        .filter((r: any) => r.estado === 'pendiente' || !r.estado)
-        .reduce((acc: number, r: any) => acc + (Number(r.monto) || 0), 0);
+      this.recibosAceptados = Number(resumen?.aprobado?.monto) || 0;
+      this.recibosRechazados = Number(resumen?.rechazado?.monto) || 0;
+      this.montoAcumulado = Number(resumen?.pendiente?.monto) || 0;
     });
   }
 
   loadRecipes(): void {
-    this.recipeService.getAll().subscribe(recipes => {
-      this.recipes = this.sortRecipesAlphabetically(recipes);
-    });
+    this.loadPendientes();
   }
 
   verRecibo(recipe: any) {

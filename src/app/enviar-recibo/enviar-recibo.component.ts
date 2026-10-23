@@ -63,19 +63,10 @@ export class EnviarReciboComponent implements OnInit{
    //   return;
    // }
     try {
-      // Obtener todos los recibos
-      const todosRecibos = await this.recipesService.getAll().toPromise();
-      const ahora = new Date();
-
-      // Filtrar recibos del usuario en las últimas 2 horas
-      const recibosDelUsuario = todosRecibos.filter((recibo: any) => {
-        if (recibo.username !== this.username) return false;
-        if (!recibo.fecha) return false;
-        if (recibo.estado === 'aprobado') return false;
-        const fechaRecibo = new Date(recibo.fecha);
-        const diferenciaHoras = (ahora.getTime() - fechaRecibo.getTime()) / (1000 * 60 * 60);
-        return diferenciaHoras <= 2;
-      });
+      const recientes = await this.recipesService.getRecientes(this.username, 2).toPromise();
+      const recibosDelUsuario = (recientes?.recibos || []).filter(
+        (recibo: any) => recibo.estado !== 'aprobado'
+      );
 
       // SIEMPRE bloquear si supera el límite, sin importar notificaciones
       if (recibosDelUsuario.length >= this.maxRecibos) {
