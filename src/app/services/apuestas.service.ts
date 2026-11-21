@@ -184,7 +184,7 @@ fromEvent(this.socket, 'update_ultima_ronda').subscribe((numero: number) => {
       console.error('[error_ganador]', data);
       const msj = (data && data.mensaje) ? data.mensaje : 'Error al escoger ganador. Reintenta.';
       const ronda = data && data.ronda != null ? ` (R${data.ronda})` : '';
-      try { alert(`⚠️ Error al pagar${ronda}: ${msj}`); } catch (_) {}
+      try { alert(`Error al pagar${ronda}: ${msj}`); } catch (_) {}
     });
     
     fromEvent(this.socket, 'leave_user').subscribe(() => {

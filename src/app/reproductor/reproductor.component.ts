@@ -3,6 +3,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import HLS from 'hls.js';
 import { environment } from 'src/environments/environment';
+import { StreamAuthService } from '../services/stream-auth.service';
 
 @Component({
   selector: 'app-video-player',
@@ -21,7 +22,7 @@ export class VideoPlayerComponent implements OnInit {
   private playing: boolean = false;
   @ViewChild('video', { static: true }) private readonly video: ElementRef<HTMLVideoElement> | any;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private streamAuth: StreamAuthService) {
   }
 
   public ngOnInit() {
@@ -37,17 +38,22 @@ export class VideoPlayerComponent implements OnInit {
       this.video.nativeElement.setAttribute('x5-video-player-fullscreen', 'false');
 
       // Suscribirse a cambios en los parámetros de la URL
-      this.route.paramMap.subscribe(params => {
+      this.route.paramMap.subscribe(async params => {
         this.user = params.get('sala') || 'HOME';
         this.port = params.get('port') || '443';
 
-        if (this.port == '443') {
-          this.load(`${this.apiUrl_live}/live/${this.user}/index.m3u8`);
-        } else if (this.port == '442') {
-          this.load(`${this.apiUrl_live_2}/live/${this.user}/index.m3u8`);
-        } else {
-          this.load(`${this.apiUrl_live_3}/live/${this.user}/index.m3u8`);
-        }
+        // Pedir el sign al server login. Si STREAM_SECRET no esta
+        // configurado en el server, devuelve string vacio y la URL queda
+        // sin query (compatible hacia atras).
+        const sala = this.user;
+        const sign = await this.streamAuth.getSign(sala);
+
+        let baseUrl = this.apiUrl_live;
+        if (this.port == '442') baseUrl = this.apiUrl_live_2;
+        else if (this.port != '443') baseUrl = this.apiUrl_live_3;
+
+        const url = this.streamAuth.buildHlsUrl(baseUrl, sala, sign);
+        this.load(url);
         console.log("Cargando stream para:", this.user, "Puerto:", this.port);
       });
 
