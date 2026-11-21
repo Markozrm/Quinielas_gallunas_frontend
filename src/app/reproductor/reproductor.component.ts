@@ -16,7 +16,8 @@ export class VideoPlayerComponent implements OnInit {
   private apiUrl_live: string = environment.apiUrl_live;
   private apiUrl_live_2: string = environment.apiUrl_live_2;
   private apiUrl_live_3: string = environment.apiUrl_live_3;
-  private hls = new HLS();
+  private hls: HLS | null = null;
+  private currentSign: string = '';
   public user: string | null = 'HOME' //TODO: User que se pasa por la url como parametro !
   public port: string | null = '443'
   private playing: boolean = false;
@@ -47,6 +48,7 @@ export class VideoPlayerComponent implements OnInit {
         // sin query (compatible hacia atras).
         const sala = this.user;
         const sign = await this.streamAuth.getSign(sala);
+        this.currentSign = sign;
 
         let baseUrl = this.apiUrl_live;
         if (this.port == '442') baseUrl = this.apiUrl_live_2;
@@ -147,14 +149,32 @@ export class VideoPlayerComponent implements OnInit {
   }
 
   private async loadVideoWithHLS(currentVideo: string) {
+    // Destruir instancia previa si existe (evita fugas al cambiar de sala)
+    if (this.hls) {
+      try { this.hls.destroy(); } catch (e) { /* noop */ }
+    }
+
+    // HLS.js por defecto NO propaga la query string del .m3u8 a los .ts,
+    // asi que si Traefik exige ?sign= en cada request, los segmentos
+    // fallan con 401 y el video queda en negro. xhrSetup intercepta cada
+    // peticion y agrega el sign vigente. Usa la URL ya reescrita de xhr
+    // (no la original) para que HLS.js reciba la respuesta correcta.
+    const sign = this.currentSign;
+    this.hls = new HLS({
+      xhrSetup: (xhr: XMLHttpRequest, url: string) => {
+        if (sign && !/[?&]sign=/.test(url)) {
+          const sep = url.includes('?') ? '&' : '?';
+          const finalUrl = `${url}${sep}sign=${encodeURIComponent(sign)}`;
+          xhr.open('GET', finalUrl, true);
+        }
+      }
+    });
+
     this.hls.loadSource(currentVideo);
     this.hls.attachMedia(this.video.nativeElement);
     this.video.nativeElement.addEventListener('loadedmetadata', () => {
-      // Aquí puedes buscar el segmento más reciente y establecer el tiempo actual del video
+      // Saltar al segmento mas reciente (live edge)
       this.video.nativeElement.currentTime = this.video.nativeElement.duration;
-
-      // Iniciar la reproducción después de configurar el tiempo actual
-      //this.video.nativeElement.play();
     });
 
   }
